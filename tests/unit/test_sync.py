@@ -325,3 +325,123 @@ class TestGrantSync:
 
         eng.sync(slack, now=NOW)
         assert not AccessFilter(grants, sam).allows("slack:channel:C0ENG", INTERNAL)
+
+
+class TestDepartureClassification:
+    """Absence is not one signal.
+
+    Drive's changes feed says `removed` means "removed from this list of
+    changes, for example by deletion or loss of access" — so an enumeration
+    diff cannot tell a delete from an unshare. Treating both as deletion
+    tombstones every file someone stops sharing, and under the §14 Q3 default
+    that purges a body which was never deleted.
+
+    The asymmetry decides the default: a late delete is a bounded freshness-SLA
+    problem; a false delete with a purged body cannot be undone.
+    """
+
+    def test_a_confirmed_delete_tombstones_and_purges(self, engine, slack) -> None:
+        eng, repo, _ = engine
+        eng.sync(slack, now=NOW)
+        node_id = node_in(repo, "C0LEAD")
+
+        for ts in list(slack.channels["C0LEAD"].messages):
+            slack.delete("C0LEAD", ts)
+        report = eng.sync(slack, now=NOW)
+
+        assert report.deleted == 1
+        node = repo.get(node_id)
+        assert node.frontmatter.status is NodeStatus.DELETED
+        assert node.frontmatter.content_retained is False
+        assert "Compensation bands" not in node.body
+
+    def test_an_unclassifiable_departure_does_not_destroy_the_document(
+        self, engine, slack
+    ) -> None:
+        """The case that would have been catastrophic.
+
+        The channel disappears entirely — which in real Slack is
+        indistinguishable from being removed from it. The connector says
+        UNKNOWN, and the engine must leave the document alone rather than
+        tombstone and purge a file that still exists upstream.
+        """
+        eng, repo, _ = engine
+        eng.sync(slack, now=NOW)
+        node_id = node_in(repo, "C0LEAD")
+        body_before = repo.get(node_id).body
+
+        del slack.channels["C0LEAD"]  # gone from enumeration; reason unknowable
+        report = eng.sync(slack, now=NOW)
+
+        assert report.deleted == 0
+        assert report.access_lost == 1
+        node = repo.get(node_id)
+        assert node.frontmatter.status is NodeStatus.ACTIVE
+        assert node.body == body_before
+
+    def test_a_trashed_document_is_tombstoned_but_keeps_its_body(
+        self, engine, slack, monkeypatch
+    ) -> None:
+        """Drive keeps trash for ~30 days. Leave retrieval immediately, but
+        keep the text — it may come back, and re-extraction is neither free nor
+        deterministic."""
+        from company_brain.connectors.base import Disappearance
+
+        eng, repo, _ = engine
+        eng.sync(slack, now=NOW)
+        node_id = node_in(repo, "C0LEAD")
+
+        for ts in list(slack.channels["C0LEAD"].messages):
+            slack.delete("C0LEAD", ts)
+        monkeypatch.setattr(slack, "classify_departure", lambda _id: Disappearance.TRASHED)
+        report = eng.sync(slack, now=NOW)
+
+        assert report.trashed == 1
+        node = repo.get(node_id)
+        assert node.frontmatter.status is NodeStatus.DELETED
+        assert node.frontmatter.content_retained is True
+        assert "Compensation bands" in node.body
+
+    def test_a_retained_trashed_body_is_still_unretrievable(
+        self, engine, slack, monkeypatch
+    ) -> None:
+        """Retention is a storage decision, never a visibility one. This is the
+        property that makes keeping the body safe at all."""
+        from company_brain.connectors.base import Disappearance
+        from company_brain.index.base import IndexedNode
+        from company_brain.index.memory import MemoryIndex
+
+        eng, repo, _ = engine
+        eng.sync(slack, now=NOW)
+        node_id = node_in(repo, "C0LEAD")
+        for ts in list(slack.channels["C0LEAD"].messages):
+            slack.delete("C0LEAD", ts)
+        monkeypatch.setattr(slack, "classify_departure", lambda _id: Disappearance.TRASHED)
+        eng.sync(slack, now=NOW)
+
+        index = MemoryIndex()
+        index.rebuild(
+            [
+                (
+                    IndexedNode(
+                        id=n.id,
+                        type=str(n.frontmatter.type),
+                        title=n.frontmatter.title,
+                        acl_ref=n.frontmatter.acl.ref,
+                        sensitivity=n.frontmatter.acl.sensitivity,
+                        status=str(n.frontmatter.status),
+                        content_sha256="a" * 64,
+                        edges=n.frontmatter.relations,
+                    ),
+                    n.body,
+                )
+                for n in repo.walk()
+            ]
+        )
+        grants = GrantTable()
+        grants.grant("ceo", "slack:channel:C0LEAD", RESTRICTED)
+        access = AccessFilter(
+            grants, Principal(id="ceo", kind=PrincipalKind.USER, display="CEO")
+        )
+        hits = index.search_lexical("compensation bands", access, 10)
+        assert not [h for h in hits if h.chunk.node_id == node_id]

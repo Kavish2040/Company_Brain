@@ -18,7 +18,13 @@ from collections.abc import Iterator
 from dataclasses import dataclass, field
 from datetime import UTC, datetime, timedelta
 
-from company_brain.connectors.base import Connector, Grant, Page, SourceRecord
+from company_brain.connectors.base import (
+    Connector,
+    Disappearance,
+    Grant,
+    Page,
+    SourceRecord,
+)
 from company_brain.schemas.acl import AclRef, Sensitivity
 
 EPOCH = datetime(2024, 5, 1, 9, 0, tzinfo=UTC)
@@ -149,6 +155,20 @@ class SimulatedSlack:
         return {
             self._external_id(cid) for cid, channel in self.channels.items() if channel.messages
         }
+
+    def classify_departure(self, external_id: str) -> Disappearance:
+        """Slack genuinely cannot distinguish these.
+
+        `conversations.history` on a channel you left returns the same
+        not_in_channel error as one that was archived, so absence is ambiguous.
+        The simulation is honest about that: it reports DELETED only when the
+        channel is still visible and simply has no messages left.
+        """
+        cid = external_id.split("/")[0]
+        channel = self.channels.get(cid)
+        if channel is None:
+            return Disappearance.UNKNOWN  # channel itself vanished: could be either
+        return Disappearance.DELETED if not channel.messages else Disappearance.UNKNOWN
 
     def grants(self) -> Iterator[Grant]:
         for cid, channel in sorted(self.channels.items()):

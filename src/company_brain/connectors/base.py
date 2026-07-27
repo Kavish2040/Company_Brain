@@ -26,6 +26,7 @@ import json
 from collections.abc import Iterator
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
+from enum import StrEnum
 from typing import Protocol, runtime_checkable
 
 from company_brain.schemas.acl import AclRef, Sensitivity
@@ -44,6 +45,11 @@ class SourceRecord:
     suffix: str
     raw: bytes
     acl: AclRef
+    # Logical directory under the node type, owned by the source: a Slack
+    # connector wants `slack/<channel>` so a channel's days sit together, the
+    # way the corpus ingest already lays them out. Empty means "use the
+    # connector name", which is the flat default.
+    path: str = ""
     # Only set when the source can tell us; never a local mtime, which changes
     # on checkout and would break byte-identical re-ingestion (invariant 4).
     created: datetime | None = None
@@ -57,6 +63,44 @@ class Grant:
     principal_id: str
     acl_ref: str
     sensitivity: Sensitivity
+
+
+class Disappearance(StrEnum):
+    """Why an external id stopped appearing.
+
+    Absence is not one signal. Google's changes feed is explicit that `removed`
+    means "removed from this list of changes, *for example* by deletion or loss
+    of access" — so an enumeration diff alone cannot tell a delete from an
+    unshare. Collapsing them tombstones every file someone stops sharing, and
+    under the §14 Q3 default that purges a body which was never deleted.
+
+    The asymmetry is what makes this worth a type: a late delete is a bounded
+    freshness-SLA problem, a false delete with a purged body is unrecoverable.
+    """
+
+    DELETED = "deleted"
+    """Gone for good upstream. Tombstone; purge the body unless the connector
+    opts into retention."""
+
+    TRASHED = "trashed"
+    """Recoverable upstream for a window (Drive: ~30 days). Tombstone, but
+    retain the body — it may come back, and re-extracting is not free."""
+
+    ACCESS_LOST = "access_lost"
+    """The artifact still exists; this principal can no longer see it. NOT a
+    delete — a grant change. Tombstoning here would destroy a live document."""
+
+    UNKNOWN = "unknown"
+    """The source cannot say. Fail safe: treat as access_lost and let the next
+    enumeration decide, rather than purge on a guess."""
+
+
+@dataclass(frozen=True, slots=True)
+class Departure:
+    """One external id that is no longer visible, and why."""
+
+    external_id: str
+    reason: Disappearance = Disappearance.UNKNOWN
 
 
 @dataclass(frozen=True, slots=True)
@@ -82,6 +126,17 @@ class Connector(Protocol):
 
         Used for delete detection. Expensive by nature — a full enumeration —
         which is why deletion freshness is an SLA rather than immediate.
+        """
+        ...
+
+    def classify_departure(self, external_id: str) -> Disappearance:
+        """Why did this id stop appearing?
+
+        A connector that cannot distinguish deletion from loss of access must
+        return UNKNOWN, which is treated as access_lost — the artifact is
+        hidden, not destroyed. Slack's enumeration genuinely cannot tell the
+        two apart; Drive can, via `files.get(fields="trashed")` plus the error
+        code on a 404-vs-403.
         """
         ...
 

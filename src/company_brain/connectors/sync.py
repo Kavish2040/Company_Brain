@@ -23,7 +23,12 @@ from dataclasses import dataclass, field
 from datetime import UTC, datetime
 
 from company_brain.acl.grants import GrantTable
-from company_brain.connectors.base import Connector, SourceRecord, SyncState
+from company_brain.connectors.base import (
+    Connector,
+    Disappearance,
+    SourceRecord,
+    SyncState,
+)
 from company_brain.extract.base import CachedExtractor, ExtractionRequest
 from company_brain.normalize.base import Registry, content_sha256
 from company_brain.schemas.edges import Edge, EdgeStatus
@@ -48,6 +53,8 @@ class SyncReport:
     updated: int = 0
     unchanged: int = 0
     deleted: int = 0
+    trashed: int = 0
+    access_lost: int = 0
     stale_edges: int = 0
     grants_added: int = 0
     grants_revoked: int = 0
@@ -60,7 +67,9 @@ class SyncReport:
     def summary(self) -> str:
         return (
             f"+{self.added} ~{self.updated} -{self.deleted} "
-            f"={self.unchanged} · {self.stale_edges} edges stale · "
+            f"={self.unchanged} · {self.trashed} trashed, "
+            f"{self.access_lost} hidden (not deleted) · "
+            f"{self.stale_edges} edges stale · "
             f"grants +{self.grants_added}/-{self.grants_revoked}"
         )
 
@@ -105,9 +114,9 @@ class SyncEngine:
             live = connector.enumerate_ids()
             for gone in sorted(state.seen - live):
                 node_id = self._node_id_for(connector.name, gone)
-                if node_id and self.repo.exists(node_id):
-                    self.repo.tombstone(node_id, deleted_at=moment, retain_content=False)
-                    report.deleted += 1
+                if not node_id or not self.repo.exists(node_id):
+                    continue
+                self._depart(connector, gone, node_id, moment, report)
             state.seen = live
         else:
             state.seen |= {r.external_id for r in page.records}
@@ -118,6 +127,45 @@ class SyncEngine:
         state.cursor = cursor
         state.save(self.repo.backend, now=moment)
         return report
+
+    def _depart(
+        self,
+        connector: Connector,
+        external_id: str,
+        node_id: str,
+        moment: datetime,
+        report: SyncReport,
+    ) -> None:
+        """Act on *why* something vanished, not merely that it did.
+
+        An enumeration diff cannot tell a deletion from an unshare — Drive's
+        changes feed says as much in its own documentation. Treating both as
+        deletion tombstones every file someone stops sharing, and under the
+        §14 Q3 default that purges a body which was never deleted.
+
+        The asymmetry decides the default: a late delete is a bounded
+        freshness-SLA problem; a false delete with a purged body cannot be
+        undone. So anything the connector cannot classify is left alone.
+        """
+        reason = connector.classify_departure(external_id)
+
+        if reason is Disappearance.DELETED:
+            self.repo.tombstone(node_id, deleted_at=moment, retain_content=False)
+            report.deleted += 1
+        elif reason is Disappearance.TRASHED:
+            # Recoverable upstream for a window. Tombstone so it leaves
+            # retrieval immediately, but keep the body — it may come back, and
+            # re-extraction is neither free nor deterministic.
+            self.repo.tombstone(
+                node_id, deleted_at=moment, retain_content=True, reason="moved to trash"
+            )
+            report.trashed += 1
+        else:
+            # ACCESS_LOST or UNKNOWN. The artifact still exists; we simply
+            # cannot see it. That is a grant change, and the grant sync below
+            # handles it. Destroying a live document here would be the one
+            # unrecoverable mistake in this whole path.
+            report.access_lost += 1
 
     # ---- content ---------------------------------------------------------
 

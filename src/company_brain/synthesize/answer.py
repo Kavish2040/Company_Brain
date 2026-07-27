@@ -88,6 +88,13 @@ def validate(answer: Answer, retrieval: Retrieval, access: AccessFilter, index: 
         indexed = index.get_node(node_id)
         if indexed is None:
             raise UncitedAnswerError(f"answer cites {node_id!r}, which is not indexed")
+        if indexed.status != "active":
+            # Belt and braces: retrieval already excludes tombstones, so
+            # reaching here means a synthesizer invented the id or the index
+            # and store disagree. Either way the answer must not ship.
+            raise UncitedAnswerError(
+                f"answer cites {node_id!r}, whose source was deleted upstream"
+            )
         if not access.allows(indexed.acl_ref, indexed.sensitivity):
             raise CitationLeakError(
                 f"answer cites {node_id!r}, which principal {access.principal.id!r} cannot read"

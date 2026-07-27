@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import json
 import random
+from collections.abc import Iterator
 from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
@@ -147,6 +148,73 @@ CHANNELS: Final[tuple[tuple[str, str, str], ...]] = (
     ("C0GEN", "general", "public"),
     ("C0LEAD", "leadership-comp", "restricted"),
 )
+
+SLACK_DAYS: Final = 19
+
+# Channel membership, canonically, keyed by channel name.
+#
+# This is the *only* declaration of who is in which channel. `app.build_grants`
+# reads it to seed the grant table and `connectors.simulated` reads it to build
+# the workspace the sync engine reconciles against. They used to hold separate
+# hardcoded copies that happened to agree; nothing detected disagreement, and a
+# silent disagreement here reads as a mass grant revocation on the next sync.
+#
+# Note the vocabulary: these are *principal* ids (app.PRINCIPALS), not the
+# corpus's `PEOPLE` slugs. The synthetic principals are roles that stand in for
+# people; keeping them here rather than in `app.py` is what lets the connector
+# see the same table without importing the composition root.
+CHANNEL_MEMBERS: Final[dict[str, frozenset[str]]] = {
+    "general": frozenset({"ceo", "support-lead", "eng-ic", "contractor"}),
+    "engineering": frozenset({"ceo", "support-lead", "eng-ic"}),
+    "support": frozenset({"ceo", "support-lead"}),
+    "finance": frozenset({"ceo"}),
+    # The canary: only the CEO. The acceptance suite's leak test turns on it.
+    "leadership-comp": frozenset({"ceo"}),
+}
+
+
+def channel_id(name: str) -> str:
+    """The Slack id for a channel name."""
+    return next(cid for cid, channel, _ in CHANNELS if channel == name)
+
+
+def channel_tier(name: str) -> str:
+    return next(tier for _, channel, tier in CHANNELS if channel == name)
+
+
+def channels_for(principal_id: str) -> tuple[str, ...]:
+    """Every channel name `principal_id` is a member of, sorted."""
+    return tuple(
+        sorted(name for name, members in CHANNEL_MEMBERS.items() if principal_id in members)
+    )
+
+
+def slack_export_path(channel: str, date: str) -> str:
+    """Corpus-relative path of one channel-day export."""
+    return f"slack/{channel}/{date}.json"
+
+
+def slack_export_uri(channel: str, date: str) -> str:
+    """The artifact URI for one channel-day export.
+
+    The simulated connector serves the *same* URI as the on-disk corpus, because
+    in the simulation they are the same artifact seen two ways: `cb ingest` reads
+    the export file, `cb sync` reads the workspace that produced it. Node IDs
+    derive from this URI (invariant 12), so sharing it is what makes a sync over
+    an already-ingested corpus a no-op instead of a second copy of every channel.
+    A real Slack connector would serve `slack://…` and own its nodes outright.
+    """
+    return f"file://corpus/{slack_export_path(channel, date)}"
+
+
+def slack_export_bytes(messages: list[dict[str, object]]) -> bytes:
+    """Serialize a channel-day. The one place these bytes are produced.
+
+    Both the corpus writer and the simulated connector go through here: the
+    content hash is what change detection turns on, so two encoders would mean
+    phantom updates and a busted extraction cache.
+    """
+    return json.dumps(messages, indent=2, sort_keys=True).encode() + b"\n"
 
 
 def normalize_zip(data: bytes) -> bytes:
@@ -286,6 +354,30 @@ def _slack_day(
     return messages
 
 
+def slack_days(
+    rng: random.Random | None = None,
+) -> Iterator[tuple[str, str, str, list[dict[str, object]]]]:
+    """Every `(channel, tier, date, messages)` in the workspace's history.
+
+    Shared by `generate()`, which writes these to disk, and by
+    `connectors.simulated`, which serves them as a live workspace. One producer
+    is the point: the simulated source used to fabricate its own one-line
+    messages at its own epoch, so `cb sync` bolted a second, junk copy of every
+    channel onto a store that already held the real ones.
+
+    `rng` exists because the corpus generator's later sections continue the same
+    PRNG stream; callers who only want the Slack half get a fresh one, which
+    yields the same days because Slack is generated first.
+    """
+    stream = rng if rng is not None else random.Random(SEED)
+    for _cid, channel, tier in CHANNELS:
+        for day in range(SLACK_DAYS):
+            messages = _slack_day(channel, tier, day, stream)
+            if not messages:
+                continue
+            yield channel, tier, _stamp(day).date().isoformat(), messages
+
+
 def generate(out_dir: Path) -> list[Path]:
     """Write the corpus. Returns every path written, sorted."""
     rng = random.Random(SEED)
@@ -297,17 +389,9 @@ def generate(out_dir: Path) -> list[Path]:
         path.write_bytes(data)
         written.append(path)
 
-    # --- Slack: 5 channels x 12 days -----------------------------------
-    for _cid, channel, tier in CHANNELS:
-        for day in range(19):
-            messages = _slack_day(channel, tier, day, rng)
-            if not messages:
-                continue
-            date = _stamp(day).date().isoformat()
-            write(
-                f"slack/{channel}/{date}.json",
-                json.dumps(messages, indent=2, sort_keys=True).encode() + b"\n",
-            )
+    # --- Slack: 5 channels x 19 days -----------------------------------
+    for channel, _tier, date, messages in slack_days(rng):
+        write(slack_export_path(channel, date), slack_export_bytes(messages))
 
     # --- Markdown: one page per process, plus team pages ---------------
     for slug, name, owner_slug, team in PROCESSES:

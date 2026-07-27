@@ -27,6 +27,7 @@ from company_brain.index.base import (
     tokenize,
 )
 from company_brain.schemas.edges import EdgeStatus
+from company_brain.schemas.nodes import NodeStatus
 
 _K1 = 1.5
 _B = 0.75
@@ -57,6 +58,20 @@ class MemoryIndex:
         pending: list[Chunk] = []
         for node, body in nodes:
             self._nodes[node.id] = node
+
+            # A tombstone stays *resolvable* — get_node returns it, so an
+            # answer issued before the delete resolves to "deleted on <date>"
+            # rather than a dangling id (§9.3). It is never *retrievable*: no
+            # chunks, so it cannot be a search hit, and `neighbours` will not
+            # expand into it.
+            #
+            # Until this existed, `retain_content=False` was the only thing
+            # keeping deleted text out of answers — an accidental safety
+            # mechanism that would have failed the moment retention was opted
+            # into.
+            if node.status != str(NodeStatus.ACTIVE):
+                continue
+
             for edge in node.edges:
                 if edge.status is not EdgeStatus.ACCEPTED:
                     continue
@@ -134,6 +149,11 @@ class MemoryIndex:
         out: list[str] = []
         for predicate, other in self._out.get(node_id, []) + self._in.get(node_id, []):
             if predicates and predicate not in predicates:
+                continue
+            # Inbound edges to a tombstone are preserved in the store, but a
+            # graph walk must not surface deleted content.
+            target = self._nodes.get(other)
+            if target is not None and target.status != str(NodeStatus.ACTIVE):
                 continue
             if other not in out:
                 out.append(other)
