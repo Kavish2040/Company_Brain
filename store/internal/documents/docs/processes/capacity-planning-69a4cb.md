@@ -16,40 +16,85 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: eb4113437e60badb7c9da5b4a8a07686
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 788a3f789b63a18bc72f2bbc647f20c0
   status: accepted
 relations:
   - predicate: handoff_to
     subject: teams/engineering
     object: teams/finance
-    confidence: 0.95
+    confidence: 0.6
     provenance: llm
     status: proposed
     evidence:
       - node: self
-        span: [478, 544]
-        quote: Engineering hands off to Finance when a cost approval is required.
+        span: [478, 510]
+        quote: Engineering hands off to Finance
   - predicate: handoff_to
     subject: teams/support
     object: teams/engineering
-    confidence: 0.95
+    confidence: 0.6
     provenance: llm
     status: proposed
     evidence:
       - node: self
-        span: [547, 620]
-        quote: Support hands off to Engineering when the root cause is a product defect.
+        span: [547, 579]
+        quote: Support hands off to Engineering
+  - predicate: mentions
+    object: people/owen-fitz
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [49, 70]
+        quote: owen@meridian.example
+  - predicate: mentions
+    object: processes/capacity-planning
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [2, 19]
+        quote: Capacity planning
   - predicate: mentions
     object: teams/engineering
-    confidence: 0.7
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [72, 93]
-        quote: '**Team:** Engineering'
+        span: [82, 93]
+        quote: Engineering
+  - predicate: mentions
+    object: teams/finance
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [503, 510]
+        quote: Finance
+  - predicate: mentions
+    object: teams/product
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [605, 612]
+        quote: product
+  - predicate: mentions
+    object: teams/support
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [547, 554]
+        quote: Support
   - predicate: mentions
     object: tools/datadog
     confidence: 0.9
@@ -57,18 +102,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [245, 274]
-        quote: Request is raised in Datadog.
-  - predicate: owns
-    subject: people/owen-fitz
-    object: processes/capacity-planning
-    confidence: 0.95
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [21, 71]
-        quote: '**Owner:** Owen Fitzgerald (owen@meridian.example)'
+        span: [266, 273]
+        quote: Datadog
 ---
 
 # Capacity planning

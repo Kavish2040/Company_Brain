@@ -22,9 +22,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 612bee75923a99b7cbf3048e4867c3a6
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 4a6da27bf8e85a7ae5fb5820add808c2
   status: accepted
 relations:
   - predicate: authored_by
@@ -37,35 +37,51 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
-  - predicate: depends_on
-    subject: processes/data-request
-    object: tools/snowflake
-    confidence: 0.85
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [160, 237]
-        quote: Mei Tanaka owns this process, but the Snowflake step is blocked on your team.
   - predicate: mentions
     object: people/dev-oyelaran
-    confidence: 0.6
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [239, 265]
-        quote: Can you confirm by Friday?
-  - predicate: owns
-    subject: people/mei-tanaka
+        span: [53, 73]
+        quote: dev@meridian.example
+  - predicate: mentions
+    object: people/mei-tanaka
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [160, 170]
+        quote: Mei Tanaka
+  - predicate: mentions
+    object: people/zoe-ravel
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [22, 42]
+        quote: zoe@meridian.example
+  - predicate: mentions
     object: processes/data-request
-    confidence: 0.95
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [160, 237]
-        quote: Mei Tanaka owns this process, but the Snowflake step is blocked on your team.
+        span: [137, 158]
+        quote: customer data request
+  - predicate: mentions
+    object: tools/snowflake
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [198, 207]
+        quote: Snowflake
 ---
 
 **From:** Zo�� Ravel <zoe@meridian.example>

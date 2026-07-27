@@ -19,30 +19,56 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 530074fb4830b9b1407cce1605cf7166
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: f19d73729dc38b3853a475abda55d395
   status: accepted
 relations:
-  - predicate: depends_on
-    subject: processes/incident-response
-    object: processes/release-signoff
-    confidence: 0.9
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [23, 101]
-        quote: Deploy for the Incident response change is queued behind the release sign-off.
   - predicate: mentions
-    object: tools/netsuite
-    confidence: 0.85
+    object: people/tom-whelan
+    confidence: 0.9
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [127, 191]
-        quote: The NetSuite alert fired again overnight — third time this week.
+        span: [105, 115]
+        quote: Tom Whelan
+  - predicate: mentions
+    object: people/zoe-ravel
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [2, 11]
+        quote: Zoë Ravel
+  - predicate: mentions
+    object: processes/incident-response
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [38, 55]
+        quote: Incident response
+  - predicate: mentions
+    object: processes/release-signoff
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [84, 100]
+        quote: release sign-off
+  - predicate: mentions
+    object: tools/netsuite
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [131, 139]
+        quote: NetSuite
 ---
 
 **Zoë Ravel** (12:55): Deploy for the Incident response change is queued behind the release sign-off.

@@ -16,30 +16,92 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: d56a8181b444508f6f8c89c9c90dffac
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 78efe0fdde6af2764d60a15e32f0acc2
   status: accepted
 relations:
   - predicate: mentions
     object: people/nadia-hassan
-    confidence: 0.85
+    confidence: 0.9
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [337, 383]
-        quote: Nadia Hassan to document the handoff boundary.
-  - predicate: owns
-    subject: people/owen-fitz
-    object: processes/capacity-planning
-    confidence: 0.8
+        span: [87, 99]
+        quote: Nadia Hassan
+  - predicate: mentions
+    object: people/owen-fitz
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [187, 234]
-        quote: Owen Fitzgerald confirmed they own the process.
+        span: [187, 202]
+        quote: Owen Fitzgerald
+  - predicate: mentions
+    object: people/sam-kaur
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [65, 73]
+        quote: Sam Kaur
+  - predicate: mentions
+    object: people/sam-kelly
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [54, 63]
+        quote: Sam Kelly
+  - predicate: mentions
+    object: people/tom-whelan
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [75, 85]
+        quote: Tom Whelan
+  - predicate: mentions
+    object: processes/capacity-planning
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [2, 19]
+        quote: Capacity planning
+  - predicate: mentions
+    object: teams/engineering
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [261, 272]
+        quote: Engineering
+  - predicate: mentions
+    object: teams/finance
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [250, 257]
+        quote: Finance
+  - predicate: mentions
+    object: tools/pagerduty
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [174, 183]
+        quote: PagerDuty
 ---
 
 # Capacity planning sync — 2024-01-24

@@ -19,21 +19,29 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 1c650b3ae0345d29ae72d7cccf31efab
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 39d919a63289745448f28923b58408c0
   status: accepted
 relations:
-  - predicate: depends_on
-    subject: processes/vendor-renewal
-    object: processes/security-review
-    confidence: 0.85
+  - predicate: mentions
+    object: people/ana-brito
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [217, 294]
-        quote: Vendor renewal is blocked until Engineering signs off on the security review.
+        span: [2, 11]
+        quote: Ana Brito
+  - predicate: mentions
+    object: people/sam-kaur
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [197, 205]
+        quote: Sam Kaur
   - predicate: mentions
     object: processes/quarterly-close
     confidence: 0.9
@@ -41,8 +49,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [23, 63]
-        quote: 'Reminder: Quarterly close closes Friday.'
+        span: [33, 48]
+        quote: Quarterly close
   - predicate: mentions
     object: processes/release-signoff
     confidence: 0.9
@@ -50,8 +58,17 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [152, 193]
-        quote: 'Reminder: Release sign-off closes Friday.'
+        span: [162, 178]
+        quote: Release sign-off
+  - predicate: mentions
+    object: processes/security-review
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [278, 293]
+        quote: security review
   - predicate: mentions
     object: processes/vendor-renewal
     confidence: 0.9
@@ -59,17 +76,17 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [88, 127]
-        quote: 'Reminder: Vendor renewal closes Friday.'
+        span: [98, 112]
+        quote: Vendor renewal
   - predicate: mentions
     object: teams/engineering
-    confidence: 0.7
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [217, 294]
-        quote: Vendor renewal is blocked until Engineering signs off on the security review.
+        span: [249, 260]
+        quote: Engineering
 ---
 
 **Ana Brito** (13:33): Reminder: Quarterly close closes Friday.

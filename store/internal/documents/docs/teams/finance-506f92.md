@@ -16,41 +16,65 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 80af3d5f0fa3086057d67f64f3e9a234
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: fbb87161bb5c06eb62ed35b10a4cec93
   status: accepted
 relations:
-  - predicate: owns
-    subject: people/ana-brito
+  - predicate: mentions
+    object: people/ana-brito
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [103, 123]
+        quote: ana@meridian.example
+  - predicate: mentions
+    object: people/sam-kaur
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [50, 75]
+        quote: sam.kaur@meridian.example
+  - predicate: mentions
     object: processes/quarterly-close
-    confidence: 0.98
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [183, 217]
-        quote: 'Quarterly close (owner: Ana Brito)'
-  - predicate: owns
-    subject: people/ana-brito
+        span: [183, 198]
+        quote: Quarterly close
+  - predicate: mentions
     object: processes/refund-approval
-    confidence: 0.98
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [220, 254]
-        quote: 'Refund approval (owner: Ana Brito)'
-  - predicate: owns
-    subject: people/sam-kaur
+        span: [220, 235]
+        quote: Refund approval
+  - predicate: mentions
     object: processes/vendor-renewal
-    confidence: 0.98
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [148, 180]
-        quote: 'Vendor renewal (owner: Sam Kaur)'
+        span: [148, 162]
+        quote: Vendor renewal
+  - predicate: mentions
+    object: teams/finance
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [2, 9]
+        quote: Finance
 ---
 
 # Finance

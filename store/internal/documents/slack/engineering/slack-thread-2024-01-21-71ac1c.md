@@ -19,14 +19,14 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: fa400b2cfac3e1090e9a6231d588dd8b
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 74199cdee1abc972c447a72799f8a2b9
   status: accepted
 relations:
   - predicate: mentions
     object: people/owen-fitz
-    confidence: 0.95
+    confidence: 0.9
     provenance: llm
     status: accepted
     evidence:
@@ -35,7 +35,7 @@ relations:
         quote: Owen Fitzgerald
   - predicate: mentions
     object: people/zoe-ravel
-    confidence: 0.95
+    confidence: 0.9
     provenance: llm
     status: accepted
     evidence:
@@ -43,23 +43,14 @@ relations:
         span: [2, 11]
         quote: Zoë Ravel
   - predicate: mentions
-    object: processes/vendor-renewal
-    confidence: 0.6
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [23, 81]
-        quote: Can someone from Finance confirm the Zendesk renewal date?
-  - predicate: mentions
     object: teams/finance
     confidence: 0.9
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [23, 81]
-        quote: Can someone from Finance confirm the Zendesk renewal date?
+        span: [40, 47]
+        quote: Finance
   - predicate: mentions
     object: tools/datadog
     confidence: 0.9
@@ -67,8 +58,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [112, 170]
-        quote: Can someone from Finance confirm the Datadog renewal date?
+        span: [149, 156]
+        quote: Datadog
   - predicate: mentions
     object: tools/zendesk
     confidence: 0.9
@@ -76,8 +67,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [23, 81]
-        quote: Can someone from Finance confirm the Zendesk renewal date?
+        span: [60, 67]
+        quote: Zendesk
 ---
 
 **Zoë Ravel** (12:09): Can someone from Finance confirm the Zendesk renewal date?

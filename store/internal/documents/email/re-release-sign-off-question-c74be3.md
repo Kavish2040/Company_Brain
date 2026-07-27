@@ -22,9 +22,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: d55498041e72ad0d84bba57159aa1a9e
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: f620202c51cdad8ebea986949437f1c6
   status: accepted
 relations:
   - predicate: authored_by
@@ -37,16 +37,6 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
-  - predicate: depends_on
-    subject: processes/release-signoff
-    object: tools/datadog
-    confidence: 0.6
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [164, 240]
-        quote: Priya Raman owns this process, but the Datadog step is blocked on your team.
   - predicate: mentions
     object: people/priya-raman
     confidence: 0.9
@@ -54,8 +44,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [164, 240]
-        quote: Priya Raman owns this process, but the Datadog step is blocked on your team.
+        span: [164, 175]
+        quote: Priya Raman
   - predicate: mentions
     object: people/sam-kaur
     confidence: 0.9
@@ -63,8 +53,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [0, 46]
-        quote: '**From:** Sam Kaur <sam.kaur@meridian.example>'
+        span: [20, 45]
+        quote: sam.kaur@meridian.example
   - predicate: mentions
     object: people/sam-kelly
     confidence: 0.9
@@ -72,8 +62,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [48, 82]
-        quote: '**To:** sam.kelly@meridian.example'
+        span: [56, 82]
+        quote: sam.kelly@meridian.example
   - predicate: mentions
     object: processes/release-signoff
     confidence: 0.9
@@ -81,8 +71,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [130, 163]
-        quote: Following up on release sign-off.
+        span: [146, 162]
+        quote: release sign-off
   - predicate: mentions
     object: tools/datadog
     confidence: 0.9
@@ -90,18 +80,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [164, 240]
-        quote: Priya Raman owns this process, but the Datadog step is blocked on your team.
-  - predicate: owns
-    subject: people/priya-raman
-    object: processes/release-signoff
-    confidence: 0.9
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [164, 240]
-        quote: Priya Raman owns this process, but the Datadog step is blocked on your team.
+        span: [203, 210]
+        quote: Datadog
 ---
 
 **From:** Sam Kaur <sam.kaur@meridian.example>

@@ -19,9 +19,9 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 160aabeb12259c2ed819f157c775841d
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 62305860e7cb98e20191c14ab47da8da
   status: accepted
 relations:
   - predicate: mentions
@@ -31,8 +31,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [136, 201]
-        quote: '**Ana Brito** (12:24): Reminder: Capacity planning closes Friday.'
+        span: [138, 147]
+        quote: Ana Brito
   - predicate: mentions
     object: people/sam-kaur
     confidence: 0.9
@@ -40,26 +40,26 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [0, 66]
-        quote: '**Sam Kaur** (12:10): Reminder: Employee onboarding closes Friday.'
+        span: [2, 10]
+        quote: Sam Kaur
   - predicate: mentions
     object: processes/capacity-planning
-    confidence: 0.6
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [159, 201]
-        quote: 'Reminder: Capacity planning closes Friday.'
+        span: [169, 186]
+        quote: Capacity planning
   - predicate: mentions
     object: processes/onboarding
-    confidence: 0.6
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [22, 66]
-        quote: 'Reminder: Employee onboarding closes Friday.'
+        span: [32, 51]
+        quote: Employee onboarding
 ---
 
 **Sam Kaur** (12:10): Reminder: Employee onboarding closes Friday.

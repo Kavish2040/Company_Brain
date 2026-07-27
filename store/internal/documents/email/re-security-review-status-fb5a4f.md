@@ -21,9 +21,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 2433726a669a91dec8d025e244a61cb9
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 67a3aedbc05d55f3d3bb7b610b4f6b62
   status: accepted
 relations:
   - predicate: authored_by
@@ -31,35 +31,42 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
-  - predicate: depends_on
-    subject: processes/security-review
-    object: tools/pagerduty
-    confidence: 0.8
+  - predicate: mentions
+    object: people/ana-brito
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [153, 230]
-        quote: Tom Whelan owns this process, but the PagerDuty step is blocked on your team.
+        span: [21, 41]
+        quote: ana@meridian.example
+  - predicate: mentions
+    object: people/tom-whelan
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [153, 163]
+        quote: Tom Whelan
   - predicate: mentions
     object: processes/security-review
-    confidence: 0.7
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [120, 152]
-        quote: Following up on security review.
-  - predicate: owns
-    subject: people/tom-whelan
-    object: processes/security-review
-    confidence: 0.95
+        span: [136, 151]
+        quote: security review
+  - predicate: mentions
+    object: tools/pagerduty
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [153, 230]
-        quote: Tom Whelan owns this process, but the PagerDuty step is blocked on your team.
+        span: [191, 200]
+        quote: PagerDuty
 ---
 
 **From:** Ana Brito <ana@meridian.example>

@@ -264,10 +264,11 @@ export const api = {
       body: JSON.stringify({ question, limit }),
     }),
   overview: (p: string) => request<Overview>("/overview", p),
-  nodes: (p: string, type?: string, q?: string) => {
+  nodes: (p: string, type?: string, q?: string, limit: number = 200) => {
     const params = new URLSearchParams();
     if (type) params.set("type", type);
     if (q) params.set("q", q);
+    params.set("limit", String(limit));
     return request<NodeSummary[]>(`/nodes?${params}`, p);
   },
   node: (p: string, id: string) => request<NodeDetail>(`/nodes/${id}`, p),
@@ -317,7 +318,7 @@ export const api = {
       `/gmail/triage${forceRefresh ? "?force_refresh=true" : ""}`,
       "",
     ),
-  gmailOauthStart: () => "/api/gmail/oauth/start",
+  gmailOauthStart: () => `${window.location.protocol}//${window.location.hostname}:8000/api/gmail/oauth/start`,
   gmailLogout: () =>
     request<{ status: string }>("/gmail/oauth/logout", "", {
       method: "POST",

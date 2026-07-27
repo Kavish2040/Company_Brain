@@ -19,9 +19,9 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 3a5694f031f614062c2ccf750a685be2
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: b3f12201f134b5fd63193b7bc6cd7bb4
   status: accepted
 relations:
   - predicate: mentions
@@ -31,8 +31,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [75, 128]
-        quote: '**Priya Raman** (10:44): All-hands moved to Thursday.'
+        span: [77, 88]
+        quote: Priya Raman
   - predicate: mentions
     object: people/sam-kelly
     confidence: 0.9
@@ -40,17 +40,17 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [0, 73]
-        quote: '**Sam Kelly** (10:37): Reminder that Quarterly close kicks off next week.'
+        span: [2, 11]
+        quote: Sam Kelly
   - predicate: mentions
     object: processes/quarterly-close
-    confidence: 0.8
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [23, 73]
-        quote: Reminder that Quarterly close kicks off next week.
+        span: [37, 52]
+        quote: Quarterly close
 ---
 
 **Sam Kelly** (10:37): Reminder that Quarterly close kicks off next week.

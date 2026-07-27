@@ -19,29 +19,56 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 04875193516d44e6406d7d29a92b9189
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 61fbee9bd3fadd3b29c4ab93cb9f5a6e
   status: accepted
 relations:
   - predicate: mentions
-    object: processes/onboarding
-    confidence: 0.7
+    object: people/ana-brito
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [78, 132]
-        quote: Reminder that Employee onboarding kicks off next week.
+        span: [136, 145]
+        quote: Ana Brito
+  - predicate: mentions
+    object: people/priya-raman
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [55, 66]
+        quote: Priya Raman
+  - predicate: mentions
+    object: people/sam-kelly
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [2, 11]
+        quote: Sam Kelly
+  - predicate: mentions
+    object: processes/onboarding
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [92, 111]
+        quote: Employee onboarding
   - predicate: mentions
     object: processes/quarterly-close
-    confidence: 0.7
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [157, 207]
-        quote: Reminder that Quarterly close kicks off next week.
+        span: [171, 186]
+        quote: Quarterly close
 ---
 
 **Sam Kelly** (10:43): All-hands moved to Thursday.

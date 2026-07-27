@@ -19,39 +19,74 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 44ab79beabafc2d33a3de7782869d813
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 4e2e6325c1f5a4424e7e4544d1313d99
   status: accepted
 relations:
-  - predicate: handoff_to
-    subject: processes/onboarding
-    object: teams/finance
-    confidence: 0.75
+  - predicate: mentions
+    object: people/ana-brito
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [112, 174]
-        quote: Looping in Finance for the refund side of Employee onboarding.
+        span: [91, 100]
+        quote: Ana Brito
+  - predicate: mentions
+    object: people/nadia-hassan
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [178, 190]
+        quote: Nadia Hassan
+  - predicate: mentions
+    object: people/zoe-ravel
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [2, 11]
+        quote: Zoë Ravel
   - predicate: mentions
     object: processes/data-request
-    confidence: 0.7
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [202, 283]
-        quote: This is the fourth ticket bounced back from Engineering on Customer data request.
+        span: [65, 86]
+        quote: Customer data request
+  - predicate: mentions
+    object: processes/onboarding
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [154, 173]
+        quote: Employee onboarding
   - predicate: mentions
     object: teams/engineering
-    confidence: 0.7
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [202, 283]
-        quote: This is the fourth ticket bounced back from Engineering on Customer data request.
+        span: [246, 257]
+        quote: Engineering
+  - predicate: mentions
+    object: teams/finance
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [34, 41]
+        quote: Finance
 ---
 
 **Zoë Ravel** (12:22): Looping in Finance for the refund side of Customer data request.

@@ -22,9 +22,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 8eaeb04d80fe0ae7e7f1178ecc334e5c
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 8e616388f53215bca4469bcff601373d
   status: accepted
 relations:
   - predicate: authored_by
@@ -37,53 +37,51 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
-  - predicate: depends_on
-    subject: processes/security-review
-    object: tools/pagerduty
-    confidence: 0.75
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [158, 235]
-        quote: Tom Whelan owns this process, but the PagerDuty step is blocked on your team.
   - predicate: mentions
     object: people/dev-oyelaran
-    confidence: 0.6
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [116, 123]
-        quote: Hi Dev,
+        span: [57, 77]
+        quote: dev@meridian.example
   - predicate: mentions
-    object: processes/security-review
-    confidence: 0.8
+    object: people/nadia-hassan
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [125, 157]
-        quote: Following up on security review.
+        span: [24, 46]
+        quote: nadia@meridian.example
   - predicate: mentions
-    object: tools/pagerduty
-    confidence: 0.7
+    object: people/tom-whelan
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [192, 234]
-        quote: the PagerDuty step is blocked on your team
-  - predicate: owns
-    subject: people/tom-whelan
+        span: [158, 168]
+        quote: Tom Whelan
+  - predicate: mentions
     object: processes/security-review
     confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [158, 235]
-        quote: Tom Whelan owns this process, but the PagerDuty step is blocked on your team.
+        span: [141, 156]
+        quote: security review
+  - predicate: mentions
+    object: tools/pagerduty
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [196, 205]
+        quote: PagerDuty
 ---
 
 **From:** Nadia Hassan <nadia@meridian.example>

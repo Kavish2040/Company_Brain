@@ -19,50 +19,74 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 2e0ee3415e667b65db5588bbd1720d5d
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 335896f2b017603ee697ed2c1bbed372
   status: accepted
 relations:
-  - predicate: depends_on
-    subject: processes/quarterly-close
-    object: processes/release-signoff
-    confidence: 0.9
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [23, 99]
-        quote: Deploy for the Quarterly close change is queued behind the release sign-off.
-  - predicate: handoff_to
-    subject: processes/customer-escalation
-    object: teams/support
-    confidence: 0.85
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [215, 269]
-        quote: Handing the Customer escalation ticket over to Support
   - predicate: mentions
-    object: tools/netsuite
-    confidence: 0.85
+    object: people/ana-brito
+    confidence: 0.9
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [124, 188]
-        quote: The NetSuite alert fired again overnight — third time this week.
-  - predicate: owns
-    subject: teams/support
-    object: processes/customer-escalation
-    confidence: 0.6
+        span: [2, 11]
+        quote: Ana Brito
+  - predicate: mentions
+    object: people/priya-raman
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [271, 298]
-        quote: they own the customer comms
+        span: [192, 203]
+        quote: Priya Raman
+  - predicate: mentions
+    object: processes/customer-escalation
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [227, 246]
+        quote: Customer escalation
+  - predicate: mentions
+    object: processes/quarterly-close
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [38, 53]
+        quote: Quarterly close
+  - predicate: mentions
+    object: processes/release-signoff
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [82, 98]
+        quote: release sign-off
+  - predicate: mentions
+    object: teams/support
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [262, 269]
+        quote: Support
+  - predicate: mentions
+    object: tools/netsuite
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [128, 136]
+        quote: NetSuite
 ---
 
 **Ana Brito** (14:44): Deploy for the Quarterly close change is queued behind the release sign-off.

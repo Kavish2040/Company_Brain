@@ -16,21 +16,29 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 736aeff32eb0bf2cc24998fd0923d158
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: b493a2e772c10c7b4eccdd5db80ea3dc
   status: accepted
 relations:
-  - predicate: owns
-    subject: teams/support
-    object: tools/datadog
-    confidence: 0.98
+  - predicate: mentions
+    object: teams/support
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [40, 66]
-        quote: Owned by the Support team.
+        span: [53, 60]
+        quote: Support
+  - predicate: mentions
+    object: tools/datadog
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [2, 9]
+        quote: Datadog
 ---
 
 # Datadog

@@ -16,58 +16,56 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 831fc2b559bc1c56cf5b9f914431fb91
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: bc66a25d8aab76a521e93eef3de21a2a
   status: accepted
 relations:
   - predicate: mentions
     object: people/sam-kaur
-    confidence: 0.98
+    confidence: 0.9
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [59, 118]
-        quote: Sam Kaur (sam.kaur@meridian.example), Finance Lead, Finance
+        span: [69, 94]
+        quote: sam.kaur@meridian.example
   - predicate: mentions
     object: people/sam-kelly
-    confidence: 0.98
+    confidence: 0.9
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [121, 190]
-        quote: Sam Kelly (sam.kelly@meridian.example), Backend Engineer, Engineering
+        span: [132, 158]
+        quote: sam.kelly@meridian.example
   - predicate: mentions
     object: teams/engineering
-    confidence: 0.85
+    confidence: 0.9
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [121, 190]
-        quote: Sam Kelly (sam.kelly@meridian.example), Backend Engineer, Engineering
+        span: [179, 190]
+        quote: Engineering
   - predicate: mentions
     object: teams/finance
-    confidence: 0.85
+    confidence: 0.9
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [59, 118]
-        quote: Sam Kaur (sam.kaur@meridian.example), Finance Lead, Finance
+        span: [97, 104]
+        quote: Finance
   - predicate: mentions
     object: tools/snowflake
-    confidence: 0.5
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [192, 289]
-        quote: 'They work together on Project Snowflake, so context alone is often not enough
-
-          to tell them apart.'
+        span: [222, 231]
+        quote: Snowflake
 ---
 
 # Note on names

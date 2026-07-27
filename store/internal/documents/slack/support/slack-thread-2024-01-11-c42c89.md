@@ -19,11 +19,47 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 187c950915ebd19f3258b0a8e9be7177
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 1b4aab503e1d9b209664865e613a4024
   status: accepted
 relations:
+  - predicate: mentions
+    object: people/ana-brito
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [2, 11]
+        quote: Ana Brito
+  - predicate: mentions
+    object: people/tom-whelan
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [87, 97]
+        quote: Tom Whelan
+  - predicate: mentions
+    object: people/zoe-ravel
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [192, 201]
+        quote: Zoë Ravel
+  - predicate: mentions
+    object: processes/onboarding
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [168, 187]
+        quote: Employee onboarding
   - predicate: mentions
     object: processes/refund-approval
     confidence: 0.9
@@ -31,17 +67,26 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [23, 83]
-        quote: Customer is asking about the Refund approval timeline again.
+        span: [52, 67]
+        quote: Refund approval
   - predicate: mentions
     object: teams/engineering
-    confidence: 0.85
+    confidence: 0.9
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [109, 188]
-        quote: This is the fourth ticket bounced back from Engineering on Employee onboarding.
+        span: [153, 164]
+        quote: Engineering
+  - predicate: mentions
+    object: tools/zendesk
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [253, 260]
+        quote: Zendesk
 ---
 
 **Ana Brito** (12:52): Customer is asking about the Refund approval timeline again.

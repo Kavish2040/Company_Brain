@@ -16,59 +16,92 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 370ed3cf230e0a315454907d8eef0141
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 855c36a9683d93a0e38af03ca87a1315
   status: accepted
 relations:
-  - predicate: depends_on
-    subject: processes/capacity-planning
+  - predicate: mentions
+    object: people/ana-brito
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [54, 63]
+        quote: Ana Brito
+  - predicate: mentions
+    object: people/mei-tanaka
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [88, 98]
+        quote: Mei Tanaka
+  - predicate: mentions
+    object: people/owen-fitz
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [186, 201]
+        quote: Owen Fitzgerald
+  - predicate: mentions
+    object: people/priya-raman
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [75, 86]
+        quote: Priya Raman
+  - predicate: mentions
+    object: people/sam-kaur
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [65, 73]
+        quote: Sam Kaur
+  - predicate: mentions
+    object: processes/capacity-planning
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [2, 19]
+        quote: Capacity planning
+  - predicate: mentions
+    object: teams/engineering
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [260, 271]
+        quote: Engineering
+  - predicate: mentions
+    object: teams/finance
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [249, 256]
+        quote: Finance
+  - predicate: mentions
     object: tools/snowflake
     confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [134, 183]
-        quote: "capacity planning is still blocked on\n Snowflake."
-  - predicate: handoff_to
-    subject: teams/finance
-    object: teams/engineering
-    confidence: 0.75
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [236, 320]
-        quote: "Handoff from Finance to Engineering is unclear; two\n tickets bounced back last week."
-  - predicate: mentions
-    object: people/mei-tanaka
-    confidence: 0.7
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [336, 380]
-        quote: Mei Tanaka to document the handoff boundary.
-  - predicate: mentions
-    object: processes/capacity-planning
-    confidence: 0.6
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [336, 380]
-        quote: Mei Tanaka to document the handoff boundary.
-  - predicate: owns
-    subject: people/owen-fitz
-    object: processes/capacity-planning
-    confidence: 0.85
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [186, 233]
-        quote: Owen Fitzgerald confirmed they own the process.
+        span: [173, 182]
+        quote: Snowflake
 ---
 
 # Capacity planning sync — 2024-02-13

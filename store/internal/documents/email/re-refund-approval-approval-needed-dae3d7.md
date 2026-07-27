@@ -22,9 +22,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 8f33d5ace776eca9bc309e45b602c593
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 8dd1b028469b23bf028879aa09e798e4
   status: accepted
 relations:
   - predicate: authored_by
@@ -37,16 +37,6 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
-  - predicate: depends_on
-    subject: processes/refund-approval
-    object: tools/zendesk
-    confidence: 0.6
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [196, 236]
-        quote: the Zendesk step is blocked on your team
   - predicate: mentions
     object: people/ana-brito
     confidence: 0.9
@@ -54,20 +44,20 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [163, 190]
-        quote: Ana Brito owns this process
+        span: [163, 172]
+        quote: Ana Brito
   - predicate: mentions
     object: people/sam-kaur
-    confidence: 0.95
+    confidence: 0.9
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [10, 18]
-        quote: Sam Kaur
+        span: [20, 45]
+        quote: sam.kaur@meridian.example
   - predicate: mentions
     object: people/sam-kelly
-    confidence: 0.95
+    confidence: 0.9
     provenance: llm
     status: accepted
     evidence:
@@ -81,8 +71,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [130, 162]
-        quote: Following up on refund approval.
+        span: [146, 161]
+        quote: refund approval
   - predicate: mentions
     object: tools/zendesk
     confidence: 0.9
@@ -90,18 +80,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [196, 236]
-        quote: the Zendesk step is blocked on your team
-  - predicate: owns
-    subject: people/ana-brito
-    object: processes/refund-approval
-    confidence: 0.9
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [163, 237]
-        quote: Ana Brito owns this process, but the Zendesk step is blocked on your team.
+        span: [200, 207]
+        quote: Zendesk
 ---
 
 **From:** Sam Kaur <sam.kaur@meridian.example>

@@ -16,33 +16,42 @@ normalizer:
   name: pdf
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: b98462e7e0003f8a6aab977684ce3001
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: a5b5167e82e9edfc74e2f32fc4df9c96
   status: accepted
 relations:
   - predicate: mentions
-    object: processes/vendor-renewal
-    confidence: 0.8
+    object: people/sam-kaur
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [52, 109]
-        quote: This policy governs vendor renewal at Meridian Logistics.
+        span: [29, 37]
+        quote: Sam Kaur
+  - predicate: mentions
+    object: processes/vendor-renewal
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [0, 14]
+        quote: Vendor renewal
   - predicate: mentions
     object: teams/finance
-    confidence: 0.6
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [38, 51]
-        quote: 'Team: Finance'
+        span: [44, 51]
+        quote: Finance
   - predicate: owns
     subject: people/sam-kaur
     object: processes/vendor-renewal
-    confidence: 0.9
+    confidence: 0.75
     provenance: llm
     status: proposed
     evidence:

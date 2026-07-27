@@ -16,21 +16,75 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: b1b6d108023c91250b15034c476fcc28
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 3358444f3ec8a4e1b91a52c79b59490c
   status: accepted
 relations:
   - predicate: handoff_to
     subject: teams/support
     object: teams/engineering
-    confidence: 0.9
+    confidence: 0.6
     provenance: llm
     status: proposed
     evidence:
       - node: self
-        span: [516, 589]
-        quote: Support hands off to Engineering when the root cause is a product defect.
+        span: [516, 548]
+        quote: Support hands off to Engineering
+  - predicate: mentions
+    object: people/sam-kaur
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [39, 64]
+        quote: sam.kaur@meridian.example
+  - predicate: mentions
+    object: processes/vendor-renewal
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [2, 16]
+        quote: Vendor renewal
+  - predicate: mentions
+    object: teams/engineering
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [537, 548]
+        quote: Engineering
+  - predicate: mentions
+    object: teams/finance
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [76, 83]
+        quote: Finance
+  - predicate: mentions
+    object: teams/product
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [574, 581]
+        quote: product
+  - predicate: mentions
+    object: teams/support
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [516, 523]
+        quote: Support
   - predicate: mentions
     object: tools/datadog
     confidence: 0.9
@@ -38,18 +92,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [229, 258]
-        quote: Request is raised in Datadog.
-  - predicate: owns
-    subject: teams/finance
-    object: processes/vendor-renewal
-    confidence: 0.75
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [66, 83]
-        quote: '**Team:** Finance'
+        span: [250, 257]
+        quote: Datadog
 ---
 
 # Vendor renewal

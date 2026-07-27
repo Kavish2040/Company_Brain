@@ -67,10 +67,9 @@ api.add_middleware(
 
 @lru_cache(maxsize=1)
 def _app(store: str = str(STORE_ROOT)) -> App:
-    """Build once and reuse. The index is rebuilt from markdown at startup;
-    for M1 that is fast enough to do eagerly and simpler than invalidation."""
+    """Build once and reuse. The index is rebuilt from markdown on first use
+    (to detect store changes made by `cb ingest`/`cb sync` after API startup)."""
     instance = build_app(Path(store))
-    instance.load_index()
     return instance
 
 
@@ -116,7 +115,8 @@ def _modified_times(instance: App) -> dict[str, str]:
 
 
 def get_app() -> App:
-    """The app, with a fresh index if a decision invalidated it.
+    """The app, with a fresh index if a decision invalidated it or if the store
+    changed (e.g., `cb ingest` or `cb sync` was run after API startup).
 
     Review and audit routes never call this path's rebuild — they read the store
     directly — so clearing a queue costs no reindexing at all until the reviewer
@@ -124,7 +124,9 @@ def get_app() -> App:
     """
     global _index_stale
     instance = _app()
-    if _index_stale:
+    # Rebuild if marked stale (e.g., a review decision was made) or if empty
+    # (e.g., store was populated by `cb ingest` after API startup).
+    if _index_stale or instance.index.stats()["nodes"] == 0:
         instance.load_index()
         _index_stale = False
     return instance

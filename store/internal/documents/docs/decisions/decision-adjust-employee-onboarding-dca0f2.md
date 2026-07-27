@@ -16,20 +16,38 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: a9b0f4761d563c82c8500344d1cf863e
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 1845ee56b460248ccb14a9eaed02e73a
   status: accepted
 relations:
-  - predicate: supersedes
-    object: teams/product
-    confidence: 0.7
+  - predicate: mentions
+    object: people/zoe-ravel
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [315, 385]
-        quote: The previous informal arrangement documented in the Product team page.
+        span: [77, 86]
+        quote: Zoë Ravel
+  - predicate: mentions
+    object: processes/onboarding
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [19, 38]
+        quote: employee onboarding
+  - predicate: mentions
+    object: teams/product
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [367, 374]
+        quote: Product
 ---
 
 # Decision: adjust employee onboarding

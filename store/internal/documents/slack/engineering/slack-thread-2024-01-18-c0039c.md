@@ -19,48 +19,56 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 8bcf7012fbe2e7daa08752d4cd6e1f5b
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: f8c907324c97f232e8036a1a9d00e684
   status: accepted
 relations:
-  - predicate: handoff_to
-    subject: people/dev-oyelaran
-    object: teams/support
-    confidence: 0.8
+  - predicate: mentions
+    object: people/dev-oyelaran
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [26, 112]
-        quote: Handing the Customer data request ticket over to Support, they own the customer comms.
+        span: [2, 14]
+        quote: Dev Oyelaran
   - predicate: mentions
     object: processes/data-request
-    confidence: 0.7
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [26, 112]
-        quote: Handing the Customer data request ticket over to Support, they own the customer comms.
+        span: [38, 59]
+        quote: Customer data request
   - predicate: mentions
     object: teams/finance
-    confidence: 0.8
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [140, 200]
-        quote: Can someone from Finance confirm the Snowflake renewal date?
+        span: [157, 164]
+        quote: Finance
+  - predicate: mentions
+    object: teams/support
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [75, 82]
+        quote: Support
   - predicate: mentions
     object: tools/snowflake
-    confidence: 0.8
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [140, 200]
-        quote: Can someone from Finance confirm the Snowflake renewal date?
+        span: [177, 186]
+        quote: Snowflake
 ---
 
 **Dev Oyelaran** (13:17): Handing the Customer data request ticket over to Support, they own the customer comms.

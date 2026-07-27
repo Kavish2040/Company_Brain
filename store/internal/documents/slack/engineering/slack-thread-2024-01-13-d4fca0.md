@@ -19,58 +19,83 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 7d838bec148063ab15f2736e34e8e526
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 0f2c20799daf7c558aa9800f783ea28c
   status: accepted
 relations:
-  - predicate: depends_on
-    subject: processes/data-request
+  - predicate: mentions
+    object: people/nadia-hassan
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [108, 120]
+        quote: Nadia Hassan
+  - predicate: mentions
+    object: people/owen-fitz
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [285, 300]
+        quote: Owen Fitzgerald
+  - predicate: mentions
+    object: people/sam-kaur
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [201, 209]
+        quote: Sam Kaur
+  - predicate: mentions
+    object: people/sam-kelly
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [2, 11]
+        quote: Sam Kelly
+  - predicate: mentions
+    object: processes/data-request
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [327, 348]
+        quote: Customer data request
+  - predicate: mentions
     object: processes/release-signoff
     confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [312, 394]
-        quote: Deploy for the Customer data request change is queued behind the release sign-off.
-  - predicate: handoff_to
-    subject: people/sam-kelly
+        span: [35, 51]
+        quote: Release sign-off
+  - predicate: mentions
+    object: teams/finance
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [238, 245]
+        quote: Finance
+  - predicate: mentions
     object: teams/support
     confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [23, 104]
-        quote: Handing the Release sign-off ticket over to Support, they own the customer comms.
-  - predicate: mentions
-    object: processes/release-signoff
-    confidence: 0.8
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [23, 104]
-        quote: Handing the Release sign-off ticket over to Support, they own the customer comms.
-  - predicate: mentions
-    object: processes/vendor-renewal
-    confidence: 0.6
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [221, 281]
-        quote: Can someone from Finance confirm the Snowflake renewal date?
-  - predicate: mentions
-    object: teams/finance
-    confidence: 0.8
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [221, 281]
-        quote: Can someone from Finance confirm the Snowflake renewal date?
+        span: [67, 74]
+        quote: Support
   - predicate: mentions
     object: tools/pagerduty
     confidence: 0.9
@@ -78,17 +103,17 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [132, 197]
-        quote: The PagerDuty alert fired again overnight — third time this week.
+        span: [136, 145]
+        quote: PagerDuty
   - predicate: mentions
     object: tools/snowflake
-    confidence: 0.8
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [221, 281]
-        quote: Can someone from Finance confirm the Snowflake renewal date?
+        span: [258, 267]
+        quote: Snowflake
 ---
 
 **Sam Kelly** (14:19): Handing the Release sign-off ticket over to Support, they own the customer comms.

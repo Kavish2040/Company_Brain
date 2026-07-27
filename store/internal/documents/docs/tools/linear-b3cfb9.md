@@ -16,21 +16,29 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 9836f67c9447cafabe7cf3131308d72f
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: b01a9405f76424bde0fd68acbaa87935
   status: accepted
 relations:
-  - predicate: owns
-    subject: teams/engineering
-    object: tools/linear
-    confidence: 0.98
+  - predicate: mentions
+    object: teams/engineering
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [39, 69]
-        quote: Owned by the Engineering team.
+        span: [10, 21]
+        quote: Engineering
+  - predicate: mentions
+    object: tools/linear
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [2, 8]
+        quote: Linear
 ---
 
 # Linear

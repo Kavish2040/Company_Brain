@@ -16,31 +16,83 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 97e90372f3621479ca8004ccce119ef0
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 6c1f5a69f88071eea6dbe8047e9a27de
   status: accepted
 relations:
-  - predicate: depends_on
-    subject: processes/refund-approval
-    object: tools/netsuite
-    confidence: 0.85
+  - predicate: mentions
+    object: people/ana-brito
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [112, 181]
-        quote: "Tom Whelan raised that refund approval is still blocked on\n NetSuite."
-  - predicate: owns
-    subject: people/ana-brito
+        span: [89, 98]
+        quote: Ana Brito
+  - predicate: mentions
+    object: people/nadia-hassan
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [64, 76]
+        quote: Nadia Hassan
+  - predicate: mentions
+    object: people/sam-kelly
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [78, 87]
+        quote: Sam Kelly
+  - predicate: mentions
+    object: people/tom-whelan
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [52, 62]
+        quote: Tom Whelan
+  - predicate: mentions
     object: processes/refund-approval
     confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [184, 225]
-        quote: Ana Brito confirmed they own the process.
+        span: [2, 17]
+        quote: Refund approval
+  - predicate: mentions
+    object: teams/engineering
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [252, 263]
+        quote: Engineering
+  - predicate: mentions
+    object: teams/product
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [241, 248]
+        quote: Product
+  - predicate: mentions
+    object: tools/netsuite
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [172, 180]
+        quote: NetSuite
 ---
 
 # Refund approval sync — 2024-01-26

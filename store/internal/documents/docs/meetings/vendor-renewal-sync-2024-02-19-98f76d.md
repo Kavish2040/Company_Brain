@@ -16,31 +16,11 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 4fb6b0dd674a6893c2485c75249b82e9
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 33b1de9271e6c2a2714a812791d5b616
   status: accepted
 relations:
-  - predicate: depends_on
-    subject: processes/vendor-renewal
-    object: tools/pagerduty
-    confidence: 0.85
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [117, 188]
-        quote: "Nadia Hassan raised that vendor renewal is still blocked on\n PagerDuty."
-  - predicate: handoff_to
-    subject: teams/product
-    object: teams/support
-    confidence: 0.7
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [234, 314]
-        quote: "Handoff from Product to Support is unclear; two\n tickets bounced back last week."
   - predicate: mentions
     object: people/mei-tanaka
     confidence: 0.9
@@ -48,8 +28,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [51, 103]
-        quote: Nadia Hassan, Zoë Ravel, Mei Tanaka, Owen Fitzgerald
+        span: [76, 86]
+        quote: Mei Tanaka
   - predicate: mentions
     object: people/nadia-hassan
     confidence: 0.9
@@ -57,8 +37,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [51, 103]
-        quote: Nadia Hassan, Zoë Ravel, Mei Tanaka, Owen Fitzgerald
+        span: [51, 63]
+        quote: Nadia Hassan
   - predicate: mentions
     object: people/owen-fitz
     confidence: 0.9
@@ -66,8 +46,17 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [51, 103]
-        quote: Nadia Hassan, Zoë Ravel, Mei Tanaka, Owen Fitzgerald
+        span: [88, 103]
+        quote: Owen Fitzgerald
+  - predicate: mentions
+    object: people/sam-kaur
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [191, 199]
+        quote: Sam Kaur
   - predicate: mentions
     object: people/zoe-ravel
     confidence: 0.9
@@ -75,18 +64,44 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [51, 103]
-        quote: Nadia Hassan, Zoë Ravel, Mei Tanaka, Owen Fitzgerald
-  - predicate: owns
-    subject: people/sam-kaur
+        span: [65, 74]
+        quote: Zoë Ravel
+  - predicate: mentions
     object: processes/vendor-renewal
-    confidence: 0.75
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [191, 231]
-        quote: Sam Kaur confirmed they own the process.
+        span: [2, 16]
+        quote: Vendor renewal
+  - predicate: mentions
+    object: teams/product
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [247, 254]
+        quote: Product
+  - predicate: mentions
+    object: teams/support
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [258, 265]
+        quote: Support
+  - predicate: mentions
+    object: tools/pagerduty
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [178, 187]
+        quote: PagerDuty
 ---
 
 # Vendor renewal sync — 2024-02-19

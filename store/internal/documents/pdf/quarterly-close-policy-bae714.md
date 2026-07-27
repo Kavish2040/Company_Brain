@@ -16,21 +16,48 @@ normalizer:
   name: pdf
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 6c6f47c05535848b394c6c87289bfcaf
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 19e5c323021825b5c1c43d484d3059e3
   status: accepted
 relations:
-  - predicate: owns
-    subject: teams/finance
+  - predicate: mentions
+    object: people/ana-brito
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [30, 39]
+        quote: Ana Brito
+  - predicate: mentions
     object: processes/quarterly-close
-    confidence: 0.8
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [0, 15]
+        quote: Quarterly close
+  - predicate: mentions
+    object: teams/finance
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [46, 53]
+        quote: Finance
+  - predicate: owns
+    subject: people/ana-brito
+    object: processes/quarterly-close
+    confidence: 0.75
     provenance: llm
     status: proposed
     evidence:
       - node: self
-        span: [40, 53]
-        quote: 'Team: Finance'
+        span: [23, 39]
+        quote: 'Owner: Ana Brito'
 ---
 
 Quarterly close Policy

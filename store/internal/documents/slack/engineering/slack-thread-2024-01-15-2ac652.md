@@ -19,31 +19,56 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: cb8785348e566c2b864bc9ea498ebed2
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 03cdb40acc0a8c6a9e8f0b37127df02d
   status: accepted
 relations:
-  - predicate: depends_on
-    subject: processes/quarterly-close
+  - predicate: mentions
+    object: people/priya-raman
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [2, 13]
+        quote: Priya Raman
+  - predicate: mentions
+    object: people/sam-kelly
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [213, 222]
+        quote: Sam Kelly
+  - predicate: mentions
+    object: processes/quarterly-close
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [148, 163]
+        quote: Quarterly close
+  - predicate: mentions
     object: processes/release-signoff
     confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [133, 209]
-        quote: Deploy for the Quarterly close change is queued behind the release sign-off.
-  - predicate: handoff_to
-    subject: processes/release-signoff
+        span: [37, 53]
+        quote: Release sign-off
+  - predicate: mentions
     object: teams/support
-    confidence: 0.85
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [25, 106]
-        quote: Handing the Release sign-off ticket over to Support, they own the customer comms.
+        span: [69, 76]
+        quote: Support
   - predicate: mentions
     object: tools/netsuite
     confidence: 0.9
@@ -51,8 +76,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [234, 298]
-        quote: The NetSuite alert fired again overnight — third time this week.
+        span: [238, 246]
+        quote: NetSuite
 ---
 
 **Priya Raman** (12:58): Handing the Release sign-off ticket over to Support, they own the customer comms.

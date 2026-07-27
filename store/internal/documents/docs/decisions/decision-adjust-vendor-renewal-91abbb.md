@@ -16,9 +16,9 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 9ff04cc6317a00adc4925cc626419acc
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 97f0e0c809d01a34d77539c031ba61b1
   status: accepted
 relations:
   - predicate: mentions
@@ -28,8 +28,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [56, 80]
-        quote: '**Decided by:** Sam Kaur'
+        span: [72, 80]
+        quote: Sam Kaur
   - predicate: mentions
     object: processes/vendor-renewal
     confidence: 0.9
@@ -37,29 +37,17 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [115, 171]
-        quote: The existing vendor renewal process was taking too long.
-  - predicate: owns
-    subject: people/sam-kaur
-    object: processes/vendor-renewal
-    confidence: 0.95
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [186, 281]
-        quote: 'Sam Kaur will own vendor renewal going forward, and the
-
-          sign-off step moves to the owning team.'
-  - predicate: supersedes
+        span: [19, 33]
+        quote: vendor renewal
+  - predicate: mentions
     object: teams/finance
-    confidence: 0.6
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [298, 368]
-        quote: The previous informal arrangement documented in the Finance team page.
+        span: [350, 357]
+        quote: Finance
 ---
 
 # Decision: adjust vendor renewal

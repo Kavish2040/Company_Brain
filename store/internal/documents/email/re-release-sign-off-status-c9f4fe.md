@@ -21,9 +21,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 0a99423569bf89aa3108dbb1b14825ae
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 863940d78e06e157d87e3f6fc4239540
   status: accepted
 relations:
   - predicate: authored_by
@@ -32,24 +32,41 @@ relations:
     provenance: structural
     status: accepted
   - predicate: mentions
-    object: tools/linear
-    confidence: 0.8
+    object: people/nadia-hassan
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [163, 238]
-        quote: Priya Raman owns this process, but the Linear step is blocked on your team.
-  - predicate: owns
-    subject: people/priya-raman
+        span: [24, 46]
+        quote: nadia@meridian.example
+  - predicate: mentions
+    object: people/priya-raman
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [163, 174]
+        quote: Priya Raman
+  - predicate: mentions
     object: processes/release-signoff
-    confidence: 0.95
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [163, 238]
-        quote: Priya Raman owns this process, but the Linear step is blocked on your team.
+        span: [145, 161]
+        quote: release sign-off
+  - predicate: mentions
+    object: tools/linear
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [202, 208]
+        quote: Linear
 ---
 
 **From:** Nadia Hassan <nadia@meridian.example>

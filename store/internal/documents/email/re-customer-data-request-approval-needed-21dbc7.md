@@ -22,9 +22,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 610bd64586b831a49b64e3974ae1b46b
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 76004f30bd555819ec167152758f4143
   status: accepted
 relations:
   - predicate: authored_by
@@ -37,16 +37,6 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
-  - predicate: depends_on
-    subject: processes/data-request
-    object: tools/datadog
-    confidence: 0.7
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [164, 239]
-        quote: Mei Tanaka owns this process, but the Datadog step is blocked on your team.
   - predicate: mentions
     object: people/mei-tanaka
     confidence: 0.9
@@ -54,13 +44,13 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [164, 239]
-        quote: Mei Tanaka owns this process, but the Datadog step is blocked on your team.
+        span: [164, 174]
+        quote: Mei Tanaka
   - predicate: mentions
     object: people/priya-raman
-    confidence: 0.8
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
         span: [53, 75]
@@ -72,8 +62,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [10, 20]
-        quote: Tom Whelan
+        span: [22, 42]
+        quote: tom@meridian.example
   - predicate: mentions
     object: processes/data-request
     confidence: 0.9
@@ -81,8 +71,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [125, 163]
-        quote: Following up on customer data request.
+        span: [141, 162]
+        quote: customer data request
   - predicate: mentions
     object: tools/datadog
     confidence: 0.9
@@ -90,18 +80,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [198, 238]
-        quote: the Datadog step is blocked on your team
-  - predicate: owns
-    subject: people/mei-tanaka
-    object: processes/data-request
-    confidence: 0.9
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [164, 239]
-        quote: Mei Tanaka owns this process, but the Datadog step is blocked on your team.
+        span: [202, 209]
+        quote: Datadog
 ---
 
 **From:** Tom Whelan <tom@meridian.example>

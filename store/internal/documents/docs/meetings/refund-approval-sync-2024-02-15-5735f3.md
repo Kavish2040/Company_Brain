@@ -16,11 +16,38 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: aba0fa7474f6d708e760205dceb9c2fa
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 9310323666c2c34808964c6ed26cf2b6
   status: accepted
 relations:
+  - predicate: mentions
+    object: people/ana-brito
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [75, 84]
+        quote: Ana Brito
+  - predicate: mentions
+    object: people/mei-tanaka
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [63, 73]
+        quote: Mei Tanaka
+  - predicate: mentions
+    object: people/nadia-hassan
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [86, 98]
+        quote: Nadia Hassan
   - predicate: mentions
     object: people/zoe-ravel
     confidence: 0.9
@@ -28,18 +55,44 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [112, 178]
-        quote: "Zoë Ravel raised that refund approval is still blocked on\n Linear."
-  - predicate: owns
-    subject: people/ana-brito
+        span: [52, 61]
+        quote: Zoë Ravel
+  - predicate: mentions
     object: processes/refund-approval
-    confidence: 0.95
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [181, 222]
-        quote: Ana Brito confirmed they own the process.
+        span: [2, 17]
+        quote: Refund approval
+  - predicate: mentions
+    object: teams/finance
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [249, 256]
+        quote: Finance
+  - predicate: mentions
+    object: teams/support
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [238, 245]
+        quote: Support
+  - predicate: mentions
+    object: tools/linear
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [171, 177]
+        quote: Linear
 ---
 
 # Refund approval sync — 2024-02-15

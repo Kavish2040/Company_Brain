@@ -16,21 +16,11 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: e4fd647a96fb7a65df65ef50f6548b79
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 7e307eb53abe2fdbca7bd3bd170a7389
   status: accepted
 relations:
-  - predicate: depends_on
-    subject: processes/incident-response
-    object: tools/netsuite
-    confidence: 0.85
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [116, 186]
-        quote: "Ana Brito raised that incident response is still blocked on\n NetSuite."
   - predicate: mentions
     object: people/ana-brito
     confidence: 0.9
@@ -38,8 +28,80 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [116, 186]
-        quote: "Ana Brito raised that incident response is still blocked on\n NetSuite."
+        span: [54, 63]
+        quote: Ana Brito
+  - predicate: mentions
+    object: people/dev-oyelaran
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [65, 77]
+        quote: Dev Oyelaran
+  - predicate: mentions
+    object: people/nadia-hassan
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [90, 102]
+        quote: Nadia Hassan
+  - predicate: mentions
+    object: people/owen-fitz
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [189, 204]
+        quote: Owen Fitzgerald
+  - predicate: mentions
+    object: people/zoe-ravel
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [79, 88]
+        quote: Zoë Ravel
+  - predicate: mentions
+    object: processes/incident-response
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [2, 19]
+        quote: Incident response
+  - predicate: mentions
+    object: teams/product
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [263, 270]
+        quote: Product
+  - predicate: mentions
+    object: teams/support
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [252, 259]
+        quote: Support
+  - predicate: mentions
+    object: tools/netsuite
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [177, 185]
+        quote: NetSuite
 ---
 
 # Incident response sync — 2024-02-21

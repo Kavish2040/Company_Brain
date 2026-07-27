@@ -19,9 +19,9 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 3c8c9428f972b8af477fc65af4b84d6e
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 83df5cc1f2ad518f44b411295247a90e
   status: accepted
 relations:
   - predicate: mentions
@@ -31,8 +31,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [26, 85]
-        quote: Can someone from Finance confirm the NetSuite renewal date?
+        span: [2, 14]
+        quote: Nadia Hassan
   - predicate: mentions
     object: people/priya-raman
     confidence: 0.9
@@ -40,26 +40,17 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [112, 172]
-        quote: Can someone from Finance confirm the Snowflake renewal date?
-  - predicate: mentions
-    object: processes/vendor-renewal
-    confidence: 0.6
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [26, 85]
-        quote: Can someone from Finance confirm the NetSuite renewal date?
+        span: [89, 100]
+        quote: Priya Raman
   - predicate: mentions
     object: teams/finance
-    confidence: 0.85
+    confidence: 0.9
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [26, 85]
-        quote: Can someone from Finance confirm the NetSuite renewal date?
+        span: [43, 50]
+        quote: Finance
   - predicate: mentions
     object: tools/netsuite
     confidence: 0.9
@@ -67,8 +58,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [26, 85]
-        quote: Can someone from Finance confirm the NetSuite renewal date?
+        span: [63, 71]
+        quote: NetSuite
   - predicate: mentions
     object: tools/snowflake
     confidence: 0.9
@@ -76,8 +67,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [112, 172]
-        quote: Can someone from Finance confirm the Snowflake renewal date?
+        span: [149, 158]
+        quote: Snowflake
 ---
 
 **Nadia Hassan** (14:28): Can someone from Finance confirm the NetSuite renewal date?

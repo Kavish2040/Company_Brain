@@ -16,9 +16,9 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: d32660cd952ad28b1133f3296eabf0ac
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 8d5357d45918354dc89c87e55ff92fb3
   status: accepted
 relations:
   - predicate: mentions
@@ -28,8 +28,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [164, 182]
-        quote: Led by Tom Whelan.
+        span: [171, 181]
+        quote: Tom Whelan
   - predicate: mentions
     object: tools/snowflake
     confidence: 0.9
@@ -37,10 +37,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [71, 163]
-        quote: 'Not to be confused with Snowflake the vendor, which is the target
-
-          platform for this project.'
+        span: [10, 19]
+        quote: Snowflake
 ---
 
 # Project Snowflake

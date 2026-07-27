@@ -16,9 +16,9 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 96d91d2f2e31011b6443220431e7dc57
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 5e430cdf0e524bce365cbdc0ebc39ddb
   status: accepted
 relations:
   - predicate: mentions
@@ -28,8 +28,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [21, 62]
-        quote: 'Attendees: Sam K., Priya Raman, Ana Brito'
+        span: [53, 62]
+        quote: Ana Brito
   - predicate: mentions
     object: people/priya-raman
     confidence: 0.9
@@ -37,17 +37,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [21, 62]
-        quote: 'Attendees: Sam K., Priya Raman, Ana Brito'
-  - predicate: mentions
-    object: processes/vendor-renewal
-    confidence: 0.75
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [64, 124]
-        quote: Sam K. confirmed the NetSuite renewal is on track for April.
+        span: [40, 51]
+        quote: Priya Raman
   - predicate: mentions
     object: tools/netsuite
     confidence: 0.9
@@ -55,19 +46,17 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [64, 124]
-        quote: Sam K. confirmed the NetSuite renewal is on track for April.
+        span: [85, 93]
+        quote: NetSuite
   - predicate: mentions
     object: tools/snowflake
-    confidence: 0.85
+    confidence: 0.9
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [125, 178]
-        quote: 'Sam is also
-
-          picking up the Snowflake contract review.'
+        span: [152, 161]
+        quote: Snowflake
 ---
 
 # Vendor sync notes

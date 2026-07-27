@@ -16,49 +16,38 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 97b334f20f377b048b6a6f7e6d6d2537
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 7f4d8091c8d655f0c52d9e7f024b0e0d
   status: accepted
 relations:
-  - predicate: depends_on
-    subject: processes/customer-escalation
-    object: tools/datadog
-    confidence: 0.75
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [119, 192]
-        quote: "Priya Raman raised that customer escalation is still blocked on\n Datadog."
-  - predicate: handoff_to
-    subject: teams/engineering
-    object: teams/finance
-    confidence: 0.6
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [242, 326]
-        quote: "Handoff from Engineering to Finance is unclear; two\n tickets bounced back last week."
   - predicate: mentions
     object: people/ana-brito
-    confidence: 0.8
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [56, 105]
-        quote: Priya Raman, Owen Fitzgerald, Ana Brito, Sam Kaur
+        span: [86, 95]
+        quote: Ana Brito
+  - predicate: mentions
+    object: people/dev-oyelaran
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [195, 207]
+        quote: Dev Oyelaran
   - predicate: mentions
     object: people/owen-fitz
-    confidence: 0.8
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [56, 105]
-        quote: Priya Raman, Owen Fitzgerald, Ana Brito, Sam Kaur
+        span: [69, 84]
+        quote: Owen Fitzgerald
   - predicate: mentions
     object: people/priya-raman
     confidence: 0.9
@@ -66,8 +55,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [119, 192]
-        quote: "Priya Raman raised that customer escalation is still blocked on\n Datadog."
+        span: [56, 67]
+        quote: Priya Raman
   - predicate: mentions
     object: people/sam-kaur
     confidence: 0.9
@@ -75,54 +64,44 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [342, 384]
-        quote: Sam Kaur to document the handoff boundary.
+        span: [97, 105]
+        quote: Sam Kaur
   - predicate: mentions
     object: processes/customer-escalation
-    confidence: 0.7
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [342, 384]
-        quote: Sam Kaur to document the handoff boundary.
-  - predicate: mentions
-    object: teams/engineering
-    confidence: 0.75
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [242, 326]
-        quote: "Handoff from Engineering to Finance is unclear; two\n tickets bounced back last week."
-  - predicate: mentions
-    object: teams/finance
-    confidence: 0.75
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [242, 326]
-        quote: "Handoff from Engineering to Finance is unclear; two\n tickets bounced back last week."
-  - predicate: mentions
-    object: tools/datadog
-    confidence: 0.85
+    confidence: 0.9
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [119, 192]
-        quote: "Priya Raman raised that customer escalation is still blocked on\n Datadog."
-  - predicate: owns
-    subject: people/dev-oyelaran
-    object: processes/customer-escalation
-    confidence: 0.85
+        span: [2, 21]
+        quote: Customer escalation
+  - predicate: mentions
+    object: teams/engineering
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [195, 239]
-        quote: Dev Oyelaran confirmed they own the process.
+        span: [255, 266]
+        quote: Engineering
+  - predicate: mentions
+    object: teams/finance
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [270, 277]
+        quote: Finance
+  - predicate: mentions
+    object: tools/datadog
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [184, 191]
+        quote: Datadog
 ---
 
 # Customer escalation sync — 2024-02-23

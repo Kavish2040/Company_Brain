@@ -19,29 +19,47 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 083809a00b7995a3e1c2f09ad5df4bfb
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: e1c23eda9d3e2673332bf69e861812cf
   status: accepted
 relations:
   - predicate: mentions
-    object: processes/customer-escalation
-    confidence: 0.8
+    object: people/priya-raman
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [22, 76]
-        quote: Reminder that Customer escalation kicks off next week.
+        span: [156, 167]
+        quote: Priya Raman
   - predicate: mentions
-    object: processes/onboarding
-    confidence: 0.7
+    object: people/sam-kaur
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [123, 152]
-        quote: Onboarding docs are in Drive.
+        span: [2, 10]
+        quote: Sam Kaur
+  - predicate: mentions
+    object: people/tom-whelan
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [80, 90]
+        quote: Tom Whelan
+  - predicate: mentions
+    object: processes/customer-escalation
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [36, 55]
+        quote: Customer escalation
 ---
 
 **Sam Kaur** (10:16): Reminder that Customer escalation kicks off next week.

@@ -16,31 +16,11 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: f112760757821af34cce84ca788c081e
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 70c2100869fbf045259e99d79c2636f6
   status: accepted
 relations:
-  - predicate: depends_on
-    subject: processes/customer-escalation
-    object: tools/datadog
-    confidence: 0.85
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [113, 186]
-        quote: "Priya Raman raised that customer escalation is still blocked on\n Datadog."
-  - predicate: handoff_to
-    subject: teams/product
-    object: teams/finance
-    confidence: 0.6
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [236, 316]
-        quote: "Handoff from Product to Finance is unclear; two\n tickets bounced back last week."
   - predicate: mentions
     object: people/ana-brito
     confidence: 0.9
@@ -48,8 +28,17 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [41, 99]
-        quote: '**Attendees:** Priya Raman, Zoë Ravel, Sam Kaur, Ana Brito'
+        span: [90, 99]
+        quote: Ana Brito
+  - predicate: mentions
+    object: people/dev-oyelaran
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [189, 201]
+        quote: Dev Oyelaran
   - predicate: mentions
     object: people/priya-raman
     confidence: 0.9
@@ -57,8 +46,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [41, 99]
-        quote: '**Attendees:** Priya Raman, Zoë Ravel, Sam Kaur, Ana Brito'
+        span: [56, 67]
+        quote: Priya Raman
   - predicate: mentions
     object: people/sam-kaur
     confidence: 0.9
@@ -66,8 +55,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [41, 99]
-        quote: '**Attendees:** Priya Raman, Zoë Ravel, Sam Kaur, Ana Brito'
+        span: [80, 88]
+        quote: Sam Kaur
   - predicate: mentions
     object: people/zoe-ravel
     confidence: 0.9
@@ -75,36 +64,44 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [41, 99]
-        quote: '**Attendees:** Priya Raman, Zoë Ravel, Sam Kaur, Ana Brito'
+        span: [69, 78]
+        quote: Zoë Ravel
   - predicate: mentions
     object: processes/customer-escalation
-    confidence: 0.95
+    confidence: 0.9
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [113, 186]
-        quote: "Priya Raman raised that customer escalation is still blocked on\n Datadog."
+        span: [2, 21]
+        quote: Customer escalation
+  - predicate: mentions
+    object: teams/finance
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [260, 267]
+        quote: Finance
+  - predicate: mentions
+    object: teams/product
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [249, 256]
+        quote: Product
   - predicate: mentions
     object: tools/datadog
-    confidence: 0.95
+    confidence: 0.9
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [113, 186]
-        quote: "Priya Raman raised that customer escalation is still blocked on\n Datadog."
-  - predicate: owns
-    subject: people/dev-oyelaran
-    object: processes/customer-escalation
-    confidence: 0.75
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [189, 233]
-        quote: Dev Oyelaran confirmed they own the process.
+        span: [178, 185]
+        quote: Datadog
 ---
 
 # Customer escalation sync — 2024-02-03

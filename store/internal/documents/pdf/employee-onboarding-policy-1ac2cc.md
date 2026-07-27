@@ -16,32 +16,29 @@ normalizer:
   name: pdf
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 26c3831f0afb7b6d4e6082268e03b0c1
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 1a0912ad47f3995155a5d8046893df9c
   status: accepted
 relations:
   - predicate: mentions
-    object: teams/product
-    confidence: 0.8
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [44, 57]
-        quote: 'Team: Product'
-  - predicate: owns
-    subject: people/zoe-ravel
     object: processes/onboarding
     confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [0, 43]
-        quote: 'Employee onboarding Policy
-
-          Owner: Zo? Ravel'
+        span: [0, 19]
+        quote: Employee onboarding
+  - predicate: mentions
+    object: teams/product
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [50, 57]
+        quote: Product
 ---
 
 Employee onboarding Policy

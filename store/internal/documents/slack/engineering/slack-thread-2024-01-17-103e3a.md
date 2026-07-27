@@ -19,30 +19,29 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: f9d417822507ac29862630050555224a
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 9f63423d03a2b240be7f488331ec69a9
   status: accepted
 relations:
-  - predicate: handoff_to
-    subject: processes/onboarding
-    object: teams/support
+  - predicate: mentions
+    object: people/priya-raman
     confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [109, 193]
-        quote: Handing the Employee onboarding ticket over to Support, they own the customer comms.
+        span: [2, 13]
+        quote: Priya Raman
   - predicate: mentions
-    object: processes/vendor-renewal
-    confidence: 0.6
+    object: processes/onboarding
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [25, 82]
-        quote: Can someone from Finance confirm the Linear renewal date?
+        span: [121, 140]
+        quote: Employee onboarding
   - predicate: mentions
     object: teams/finance
     confidence: 0.9
@@ -50,8 +49,17 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [25, 82]
-        quote: Can someone from Finance confirm the Linear renewal date?
+        span: [42, 49]
+        quote: Finance
+  - predicate: mentions
+    object: teams/support
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [156, 163]
+        quote: Support
   - predicate: mentions
     object: tools/linear
     confidence: 0.9
@@ -59,8 +67,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [25, 82]
-        quote: Can someone from Finance confirm the Linear renewal date?
+        span: [62, 68]
+        quote: Linear
 ---
 
 **Priya Raman** (09:29): Can someone from Finance confirm the Linear renewal date?

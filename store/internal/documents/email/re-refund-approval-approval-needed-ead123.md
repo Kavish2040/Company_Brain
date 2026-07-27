@@ -22,9 +22,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 72b0a4aaaa7ea061ec618a51852fcbe1
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 1c990702d1139f3bef897b1d6ff000e7
   status: accepted
 relations:
   - predicate: authored_by
@@ -37,44 +37,42 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
-  - predicate: depends_on
-    subject: processes/refund-approval
-    object: tools/linear
-    confidence: 0.6
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [193, 232]
-        quote: the Linear step is blocked on your team
   - predicate: mentions
-    object: processes/refund-approval
-    confidence: 0.85
+    object: people/ana-brito
+    confidence: 0.9
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [127, 159]
-        quote: Following up on refund approval.
+        span: [59, 79]
+        quote: ana@meridian.example
   - predicate: mentions
-    object: tools/linear
-    confidence: 0.8
+    object: people/owen-fitz
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [193, 232]
-        quote: the Linear step is blocked on your team
-  - predicate: owns
-    subject: people/ana-brito
+        span: [27, 48]
+        quote: owen@meridian.example
+  - predicate: mentions
     object: processes/refund-approval
     confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [160, 233]
-        quote: Ana Brito owns this process, but the Linear step is blocked on your team.
+        span: [143, 158]
+        quote: refund approval
+  - predicate: mentions
+    object: tools/linear
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [197, 203]
+        quote: Linear
 ---
 
 **From:** Owen Fitzgerald <owen@meridian.example>

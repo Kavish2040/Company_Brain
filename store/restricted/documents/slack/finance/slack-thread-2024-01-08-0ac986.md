@@ -19,39 +19,47 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 0f0d36b25c72379677ef52082eee1bd2
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 9223ba95a1d8037bb9bc019a949b4cfe
   status: accepted
 relations:
-  - predicate: depends_on
-    subject: processes/incident-response
-    object: processes/security-review
-    confidence: 0.9
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [23, 103]
-        quote: Incident response is blocked until Engineering signs off on the security review.
   - predicate: mentions
-    object: processes/security-review
-    confidence: 0.85
+    object: people/ana-brito
+    confidence: 0.9
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [128, 168]
-        quote: 'Reminder: Security review closes Friday.'
+        span: [2, 11]
+        quote: Ana Brito
   - predicate: mentions
-    object: teams/engineering
-    confidence: 0.8
+    object: processes/incident-response
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [23, 103]
-        quote: Incident response is blocked until Engineering signs off on the security review.
+        span: [23, 40]
+        quote: Incident response
+  - predicate: mentions
+    object: processes/security-review
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [87, 102]
+        quote: security review
+  - predicate: mentions
+    object: teams/engineering
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [58, 69]
+        quote: Engineering
 ---
 
 **Ana Brito** (14:00): Incident response is blocked until Engineering signs off on the security review.

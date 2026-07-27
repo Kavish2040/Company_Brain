@@ -21,9 +21,9 @@ normalizer:
   name: docx
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 0ec90053d7b2b1ada8ba3ea04027cbd5
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 541b612ec871261a601d2601cef790c4
   status: accepted
 relations:
   - predicate: authored_by
@@ -31,16 +31,43 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
-  - predicate: owns
-    subject: teams/finance
+  - predicate: mentions
+    object: people/ana-brito
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [47, 67]
+        quote: ana@meridian.example
+  - predicate: mentions
     object: processes/refund-approval
-    confidence: 0.95
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [2, 17]
+        quote: Refund approval
+  - predicate: mentions
+    object: teams/finance
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [83, 90]
+        quote: Finance
+  - predicate: owns
+    subject: people/ana-brito
+    object: processes/refund-approval
+    confidence: 0.75
     provenance: llm
     status: proposed
     evidence:
       - node: self
-        span: [70, 90]
-        quote: 'Owning team: Finance'
+        span: [29, 46]
+        quote: 'Owner: Ana Brito'
 ---
 
 # Refund approval — runbook

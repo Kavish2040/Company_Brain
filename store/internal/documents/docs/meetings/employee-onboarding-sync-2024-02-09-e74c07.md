@@ -16,11 +16,29 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 5f08cb6b1f2e1782bcbf312703fb7511
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: a6e0218546f59c5fba92253ebf1e59d1
   status: accepted
 relations:
+  - predicate: mentions
+    object: people/ana-brito
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [56, 65]
+        quote: Ana Brito
+  - predicate: mentions
+    object: people/sam-kaur
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [78, 86]
+        quote: Sam Kaur
   - predicate: mentions
     object: people/sam-kelly
     confidence: 0.9
@@ -28,27 +46,53 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [327, 370]
-        quote: Sam Kelly to document the handoff boundary.
+        span: [88, 97]
+        quote: Sam Kelly
+  - predicate: mentions
+    object: people/zoe-ravel
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [67, 76]
+        quote: Zoë Ravel
   - predicate: mentions
     object: processes/onboarding
-    confidence: 0.5
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [327, 370]
-        quote: Sam Kelly to document the handoff boundary.
-  - predicate: owns
-    subject: people/zoe-ravel
-    object: processes/onboarding
-    confidence: 0.75
+        span: [2, 21]
+        quote: Employee onboarding
+  - predicate: mentions
+    object: teams/finance
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [187, 228]
-        quote: Zoë Ravel confirmed they own the process.
+        span: [255, 262]
+        quote: Finance
+  - predicate: mentions
+    object: teams/product
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [244, 251]
+        quote: Product
+  - predicate: mentions
+    object: tools/pagerduty
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [174, 183]
+        quote: PagerDuty
 ---
 
 # Employee onboarding sync — 2024-02-09

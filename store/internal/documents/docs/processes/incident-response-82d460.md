@@ -16,53 +16,85 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 23d5b74f432dc724cfe2bbce58857f45
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 62be14947b298c0d1e3221b46142529d
   status: accepted
 relations:
   - predicate: handoff_to
     subject: teams/engineering
     object: teams/finance
-    confidence: 0.95
+    confidence: 0.6
     provenance: llm
     status: proposed
     evidence:
       - node: self
-        span: [480, 546]
-        quote: Engineering hands off to Finance when a cost approval is required.
+        span: [480, 512]
+        quote: Engineering hands off to Finance
   - predicate: handoff_to
     subject: teams/support
     object: teams/engineering
-    confidence: 0.95
+    confidence: 0.6
     provenance: llm
     status: proposed
     evidence:
       - node: self
-        span: [549, 622]
-        quote: Support hands off to Engineering when the root cause is a product defect.
+        span: [549, 581]
+        quote: Support hands off to Engineering
+  - predicate: mentions
+    object: people/owen-fitz
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [49, 70]
+        quote: owen@meridian.example
+  - predicate: mentions
+    object: processes/incident-response
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [2, 19]
+        quote: Incident response
   - predicate: mentions
     object: teams/engineering
-    confidence: 0.7
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [641, 743]
-        quote: 'Tickets frequently bounce between Support and Engineering when ownership of the
-
-          root cause is unclear.'
+        span: [82, 93]
+        quote: Engineering
+  - predicate: mentions
+    object: teams/finance
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [505, 512]
+        quote: Finance
+  - predicate: mentions
+    object: teams/product
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [607, 614]
+        quote: product
   - predicate: mentions
     object: teams/support
-    confidence: 0.7
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [641, 743]
-        quote: 'Tickets frequently bounce between Support and Engineering when ownership of the
-
-          root cause is unclear.'
+        span: [549, 556]
+        quote: Support
   - predicate: mentions
     object: tools/pagerduty
     confidence: 0.9
@@ -70,18 +102,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [245, 276]
-        quote: Request is raised in PagerDuty.
-  - predicate: owns
-    subject: teams/engineering
-    object: processes/incident-response
-    confidence: 0.6
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [72, 93]
-        quote: '**Team:** Engineering'
+        span: [266, 275]
+        quote: PagerDuty
 ---
 
 # Incident response

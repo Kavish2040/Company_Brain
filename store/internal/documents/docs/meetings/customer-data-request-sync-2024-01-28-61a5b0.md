@@ -16,40 +16,20 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 7c36b63dbb2e10878a41af3fa4857c8b
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: fe5629cab12bb740961633a907ca8411
   status: accepted
 relations:
-  - predicate: depends_on
-    subject: processes/data-request
-    object: tools/datadog
-    confidence: 0.85
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [125, 197]
-        quote: "Sam Kaur raised that customer data request is still blocked on\n Datadog."
-  - predicate: handoff_to
-    subject: teams/engineering
-    object: teams/support
-    confidence: 0.75
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [245, 329]
-        quote: "Handoff from Engineering to Support is unclear; two\n tickets bounced back last week."
   - predicate: mentions
     object: people/dev-oyelaran
-    confidence: 0.8
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [43, 111]
-        quote: '**Attendees:** Sam Kaur, Owen Fitzgerald, Dev Oyelaran, Nadia Hassan'
+        span: [85, 97]
+        quote: Dev Oyelaran
   - predicate: mentions
     object: people/mei-tanaka
     confidence: 0.9
@@ -57,53 +37,62 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [200, 242]
-        quote: Mei Tanaka confirmed they own the process.
+        span: [200, 210]
+        quote: Mei Tanaka
   - predicate: mentions
     object: people/nadia-hassan
-    confidence: 0.8
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [43, 111]
-        quote: '**Attendees:** Sam Kaur, Owen Fitzgerald, Dev Oyelaran, Nadia Hassan'
-  - predicate: mentions
-    object: people/owen-fitz
-    confidence: 0.8
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [43, 111]
-        quote: '**Attendees:** Sam Kaur, Owen Fitzgerald, Dev Oyelaran, Nadia Hassan'
-  - predicate: mentions
-    object: people/sam-kaur
-    confidence: 0.95
+    confidence: 0.9
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [125, 197]
-        quote: "Sam Kaur raised that customer data request is still blocked on\n Datadog."
+        span: [99, 111]
+        quote: Nadia Hassan
+  - predicate: mentions
+    object: people/owen-fitz
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [68, 83]
+        quote: Owen Fitzgerald
+  - predicate: mentions
+    object: people/sam-kaur
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [58, 66]
+        quote: Sam Kaur
+  - predicate: mentions
+    object: processes/data-request
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [2, 23]
+        quote: Customer data request
   - predicate: mentions
     object: teams/engineering
-    confidence: 0.8
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [245, 329]
-        quote: "Handoff from Engineering to Support is unclear; two\n tickets bounced back last week."
+        span: [258, 269]
+        quote: Engineering
   - predicate: mentions
     object: teams/support
-    confidence: 0.8
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [245, 329]
-        quote: "Handoff from Engineering to Support is unclear; two\n tickets bounced back last week."
+        span: [273, 280]
+        quote: Support
   - predicate: mentions
     object: tools/datadog
     confidence: 0.9
@@ -111,18 +100,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [125, 197]
-        quote: "Sam Kaur raised that customer data request is still blocked on\n Datadog."
-  - predicate: owns
-    subject: people/mei-tanaka
-    object: processes/data-request
-    confidence: 0.75
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [200, 242]
-        quote: Mei Tanaka confirmed they own the process.
+        span: [189, 196]
+        quote: Datadog
 ---
 
 # Customer data request sync — 2024-01-28

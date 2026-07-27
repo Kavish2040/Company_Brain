@@ -16,9 +16,9 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: aa4875c683458a61a2ea9b99383ae59b
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: fc6b96e939dff3a3e2b6a453aca2e97c
   status: accepted
 relations:
   - predicate: mentions
@@ -28,8 +28,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [58, 85]
-        quote: '**Decided by:** Priya Raman'
+        span: [74, 85]
+        quote: Priya Raman
   - predicate: mentions
     object: processes/release-signoff
     confidence: 0.9
@@ -37,17 +37,17 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [120, 178]
-        quote: The existing release sign-off process was taking too long.
+        span: [19, 35]
+        quote: release sign-off
   - predicate: mentions
     object: teams/engineering
-    confidence: 0.75
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [310, 384]
-        quote: The previous informal arrangement documented in the Engineering team page.
+        span: [362, 373]
+        quote: Engineering
 ---
 
 # Decision: adjust release sign-off

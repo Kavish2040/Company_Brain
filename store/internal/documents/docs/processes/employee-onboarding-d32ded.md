@@ -16,40 +16,85 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 47955c9304421c7d930a31463c33e8bc
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 7ce1ce54d431b5822aee8be2fbe8b373
   status: accepted
 relations:
   - predicate: handoff_to
     subject: teams/product
     object: teams/finance
-    confidence: 0.9
+    confidence: 0.6
     provenance: llm
     status: proposed
     evidence:
       - node: self
-        span: [465, 527]
-        quote: Product hands off to Finance when a cost approval is required.
+        span: [465, 493]
+        quote: Product hands off to Finance
   - predicate: handoff_to
     subject: teams/support
     object: teams/engineering
+    confidence: 0.6
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [530, 562]
+        quote: Support hands off to Engineering
+  - predicate: mentions
+    object: people/zoe-ravel
     confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [530, 603]
-        quote: Support hands off to Engineering when the root cause is a product defect.
+        span: [45, 65]
+        quote: zoe@meridian.example
+  - predicate: mentions
+    object: processes/onboarding
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [2, 21]
+        quote: Employee onboarding
+  - predicate: mentions
+    object: teams/engineering
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [551, 562]
+        quote: Engineering
+  - predicate: mentions
+    object: teams/finance
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [486, 493]
+        quote: Finance
   - predicate: mentions
     object: teams/product
-    confidence: 0.7
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [67, 84]
-        quote: '**Team:** Product'
+        span: [77, 84]
+        quote: Product
+  - predicate: mentions
+    object: teams/support
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [530, 537]
+        quote: Support
   - predicate: mentions
     object: tools/pagerduty
     confidence: 0.9
@@ -57,18 +102,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [240, 271]
-        quote: Request is raised in PagerDuty.
-  - predicate: owns
-    subject: people/zoe-ravel
-    object: processes/onboarding
-    confidence: 0.95
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [23, 66]
-        quote: '**Owner:** Zoë Ravel (zoe@meridian.example)'
+        span: [261, 270]
+        quote: PagerDuty
 ---
 
 # Employee onboarding

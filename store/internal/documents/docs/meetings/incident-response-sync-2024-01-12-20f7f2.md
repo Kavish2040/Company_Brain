@@ -16,49 +16,38 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 908ee4a97573ef67f5bc75faca969a50
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 5925f623e8aee5c6fe3114d917dd36ca
   status: accepted
 relations:
-  - predicate: depends_on
-    subject: processes/incident-response
-    object: tools/datadog
-    confidence: 0.85
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [115, 186]
-        quote: "Priya Raman raised that incident response is still blocked on\n Datadog."
-  - predicate: handoff_to
-    subject: teams/engineering
-    object: teams/support
-    confidence: 0.85
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [239, 323]
-        quote: "Handoff from Engineering to Support is unclear; two\n tickets bounced back last week."
   - predicate: mentions
     object: people/ana-brito
-    confidence: 0.85
+    confidence: 0.9
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [339, 382]
-        quote: Ana Brito to document the handoff boundary.
+        span: [92, 101]
+        quote: Ana Brito
   - predicate: mentions
     object: people/dev-oyelaran
-    confidence: 0.7
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [39, 101]
-        quote: '**Attendees:** Priya Raman, Sam Kelly, Dev Oyelaran, Ana Brito'
+        span: [78, 90]
+        quote: Dev Oyelaran
+  - predicate: mentions
+    object: people/owen-fitz
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [189, 204]
+        quote: Owen Fitzgerald
   - predicate: mentions
     object: people/priya-raman
     confidence: 0.9
@@ -66,17 +55,17 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [115, 186]
-        quote: "Priya Raman raised that incident response is still blocked on\n Datadog."
+        span: [54, 65]
+        quote: Priya Raman
   - predicate: mentions
     object: people/sam-kelly
-    confidence: 0.7
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [39, 101]
-        quote: '**Attendees:** Priya Raman, Sam Kelly, Dev Oyelaran, Ana Brito'
+        span: [67, 76]
+        quote: Sam Kelly
   - predicate: mentions
     object: processes/incident-response
     confidence: 0.9
@@ -84,8 +73,26 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [115, 186]
-        quote: "Priya Raman raised that incident response is still blocked on\n Datadog."
+        span: [2, 19]
+        quote: Incident response
+  - predicate: mentions
+    object: teams/engineering
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [252, 263]
+        quote: Engineering
+  - predicate: mentions
+    object: teams/support
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [267, 274]
+        quote: Support
   - predicate: mentions
     object: tools/datadog
     confidence: 0.9
@@ -93,18 +100,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [115, 186]
-        quote: "Priya Raman raised that incident response is still blocked on\n Datadog."
-  - predicate: owns
-    subject: people/owen-fitz
-    object: processes/incident-response
-    confidence: 0.8
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [189, 236]
-        quote: Owen Fitzgerald confirmed they own the process.
+        span: [178, 185]
+        quote: Datadog
 ---
 
 # Incident response sync — 2024-01-12

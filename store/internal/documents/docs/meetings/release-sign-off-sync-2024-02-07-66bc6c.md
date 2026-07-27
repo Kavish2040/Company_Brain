@@ -16,48 +16,92 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 080ec2b25429e458f590a511c7070c18
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 433086cdd5ce40adf02f20b6f0c529bc
   status: accepted
 relations:
   - predicate: mentions
     object: people/dev-oyelaran
-    confidence: 0.7
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [38, 100]
-        quote: '**Attendees:** Mei Tanaka, Tom Whelan, Dev Oyelaran, Sam Kelly'
+        span: [77, 89]
+        quote: Dev Oyelaran
+  - predicate: mentions
+    object: people/mei-tanaka
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [53, 63]
+        quote: Mei Tanaka
+  - predicate: mentions
+    object: people/priya-raman
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [186, 197]
+        quote: Priya Raman
   - predicate: mentions
     object: people/sam-kelly
-    confidence: 0.75
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [332, 375]
-        quote: Sam Kelly to document the handoff boundary.
+        span: [91, 100]
+        quote: Sam Kelly
   - predicate: mentions
     object: people/tom-whelan
-    confidence: 0.7
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [38, 100]
-        quote: '**Attendees:** Mei Tanaka, Tom Whelan, Dev Oyelaran, Sam Kelly'
-  - predicate: owns
-    subject: people/priya-raman
+        span: [65, 75]
+        quote: Tom Whelan
+  - predicate: mentions
     object: processes/release-signoff
-    confidence: 0.85
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [186, 229]
-        quote: Priya Raman confirmed they own the process.
+        span: [2, 18]
+        quote: Release sign-off
+  - predicate: mentions
+    object: teams/engineering
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [245, 256]
+        quote: Engineering
+  - predicate: mentions
+    object: teams/support
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [260, 267]
+        quote: Support
+  - predicate: mentions
+    object: tools/datadog
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [175, 182]
+        quote: Datadog
 ---
 
 # Release sign-off sync — 2024-02-07

@@ -22,9 +22,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 262ba20bb749c35e5d0fc017266ffe4e
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: f0fb72aea0bed42fd4b13072a659d845
   status: accepted
 relations:
   - predicate: authored_by
@@ -37,53 +37,51 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
-  - predicate: depends_on
-    subject: processes/security-review
-    object: tools/linear
-    confidence: 0.6
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [157, 231]
-        quote: Tom Whelan owns this process, but the Linear step is blocked on your team.
   - predicate: mentions
     object: people/sam-kaur
-    confidence: 0.7
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [0, 46]
-        quote: '**From:** Sam Kaur <sam.kaur@meridian.example>'
+        span: [20, 45]
+        quote: sam.kaur@meridian.example
+  - predicate: mentions
+    object: people/tom-whelan
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [157, 167]
+        quote: Tom Whelan
   - predicate: mentions
     object: people/zoe-ravel
-    confidence: 0.7
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [48, 76]
-        quote: '**To:** zoe@meridian.example'
+        span: [56, 76]
+        quote: zoe@meridian.example
   - predicate: mentions
     object: processes/security-review
-    confidence: 0.8
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [124, 156]
-        quote: Following up on security review.
-  - predicate: owns
-    subject: people/tom-whelan
-    object: processes/security-review
-    confidence: 0.95
+        span: [140, 155]
+        quote: security review
+  - predicate: mentions
+    object: tools/linear
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [157, 231]
-        quote: Tom Whelan owns this process, but the Linear step is blocked on your team.
+        span: [195, 201]
+        quote: Linear
 ---
 
 **From:** Sam Kaur <sam.kaur@meridian.example>

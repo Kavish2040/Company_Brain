@@ -16,40 +16,20 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 90a3001e6ffb9d44d2894ec2ec3975ad
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 19169ef155a79504f0d4d992ad3ebf0c
   status: accepted
 relations:
-  - predicate: depends_on
-    subject: processes/vendor-renewal
-    object: tools/zendesk
-    confidence: 0.85
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [109, 176]
-        quote: "Mei Tanaka raised that vendor renewal is still blocked on\n Zendesk."
-  - predicate: handoff_to
-    subject: teams/product
-    object: teams/engineering
-    confidence: 0.7
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [222, 306]
-        quote: "Handoff from Product to Engineering is unclear; two\n tickets bounced back last week."
   - predicate: mentions
     object: people/ana-brito
-    confidence: 0.85
+    confidence: 0.9
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [322, 365]
-        quote: Ana Brito to document the handoff boundary.
+        span: [86, 95]
+        quote: Ana Brito
   - predicate: mentions
     object: people/mei-tanaka
     confidence: 0.9
@@ -57,26 +37,35 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [109, 176]
-        quote: "Mei Tanaka raised that vendor renewal is still blocked on\n Zendesk."
+        span: [51, 61]
+        quote: Mei Tanaka
+  - predicate: mentions
+    object: people/sam-kaur
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [179, 187]
+        quote: Sam Kaur
   - predicate: mentions
     object: people/tom-whelan
-    confidence: 0.8
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [36, 95]
-        quote: '**Attendees:** Mei Tanaka, Zoë Ravel, Tom Whelan, Ana Brito'
+        span: [74, 84]
+        quote: Tom Whelan
   - predicate: mentions
     object: people/zoe-ravel
-    confidence: 0.8
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [36, 95]
-        quote: '**Attendees:** Mei Tanaka, Zoë Ravel, Tom Whelan, Ana Brito'
+        span: [63, 72]
+        quote: Zoë Ravel
   - predicate: mentions
     object: processes/vendor-renewal
     confidence: 0.9
@@ -84,26 +73,26 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [109, 176]
-        quote: "Mei Tanaka raised that vendor renewal is still blocked on\n Zendesk."
+        span: [2, 16]
+        quote: Vendor renewal
   - predicate: mentions
     object: teams/engineering
-    confidence: 0.85
+    confidence: 0.9
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [222, 306]
-        quote: "Handoff from Product to Engineering is unclear; two\n tickets bounced back last week."
+        span: [246, 257]
+        quote: Engineering
   - predicate: mentions
     object: teams/product
-    confidence: 0.85
+    confidence: 0.9
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [222, 306]
-        quote: "Handoff from Product to Engineering is unclear; two\n tickets bounced back last week."
+        span: [235, 242]
+        quote: Product
   - predicate: mentions
     object: tools/zendesk
     confidence: 0.9
@@ -111,18 +100,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [109, 176]
-        quote: "Mei Tanaka raised that vendor renewal is still blocked on\n Zendesk."
-  - predicate: owns
-    subject: people/sam-kaur
-    object: processes/vendor-renewal
-    confidence: 0.95
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [179, 219]
-        quote: Sam Kaur confirmed they own the process.
+        span: [168, 175]
+        quote: Zendesk
 ---
 
 # Vendor renewal sync — 2024-01-30

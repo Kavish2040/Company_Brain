@@ -21,9 +21,9 @@ normalizer:
   name: docx
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 7ce6c4a37d59f1f9a981d0fc75be6171
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 867ba90b2eca2356300b758c1b1ee00a
   status: accepted
 relations:
   - predicate: authored_by
@@ -31,16 +31,43 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
-  - predicate: owns
-    subject: teams/engineering
+  - predicate: mentions
+    object: people/tom-whelan
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [48, 68]
+        quote: tom@meridian.example
+  - predicate: mentions
     object: processes/security-review
     confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [2, 17]
+        quote: Security review
+  - predicate: mentions
+    object: teams/engineering
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [84, 95]
+        quote: Engineering
+  - predicate: owns
+    subject: people/tom-whelan
+    object: processes/security-review
+    confidence: 0.75
     provenance: llm
     status: proposed
     evidence:
       - node: self
-        span: [71, 95]
-        quote: 'Owning team: Engineering'
+        span: [29, 47]
+        quote: 'Owner: Tom Whelan'
 ---
 
 # Security review — runbook

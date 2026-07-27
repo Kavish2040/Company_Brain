@@ -19,47 +19,38 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 915d9071c48ea6a819202b8a097d2a06
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 2b4410f77a296eb58690ceff4c2c17ed
   status: accepted
 relations:
   - predicate: mentions
     object: people/ana-brito
-    confidence: 0.6
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [24, 44]
-        quote: Welcome to the team!
+        span: [78, 87]
+        quote: Ana Brito
   - predicate: mentions
     object: people/nadia-hassan
-    confidence: 0.6
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [177, 205]
-        quote: All-hands moved to Thursday.
+        span: [153, 165]
+        quote: Nadia Hassan
   - predicate: mentions
     object: people/tom-whelan
-    confidence: 0.6
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [24, 44]
-        quote: Welcome to the team!
-  - predicate: mentions
-    object: processes/onboarding
-    confidence: 0.7
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [45, 74]
-        quote: Onboarding docs are in Drive.
+        span: [2, 12]
+        quote: Tom Whelan
 ---
 
 **Tom Whelan** (13:03): Welcome to the team! Onboarding docs are in Drive.

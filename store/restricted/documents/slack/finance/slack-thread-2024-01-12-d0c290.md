@@ -19,56 +19,56 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 38e0ca5b75eb169ae397a4c4fe689912
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 1d9f2bc562f33b67c532cbb798a34515
   status: accepted
 relations:
   - predicate: mentions
     object: people/ana-brito
-    confidence: 0.6
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [72, 133]
-        quote: 'Ana Brito** (12:47): Reminder: Quarterly close closes Friday.'
+        span: [72, 81]
+        quote: Ana Brito
   - predicate: mentions
     object: people/sam-kaur
-    confidence: 0.6
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [2, 68]
-        quote: 'Sam Kaur** (12:40): Reminder: Customer data request closes Friday.'
+        span: [2, 10]
+        quote: Sam Kaur
   - predicate: mentions
     object: processes/data-request
-    confidence: 0.7
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [22, 68]
-        quote: 'Reminder: Customer data request closes Friday.'
+        span: [32, 53]
+        quote: Customer data request
   - predicate: mentions
     object: processes/quarterly-close
-    confidence: 0.7
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [93, 133]
-        quote: 'Reminder: Quarterly close closes Friday.'
+        span: [103, 118]
+        quote: Quarterly close
   - predicate: mentions
     object: processes/refund-approval
-    confidence: 0.7
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [158, 198]
-        quote: 'Reminder: Refund approval closes Friday.'
+        span: [168, 183]
+        quote: Refund approval
 ---
 
 **Sam Kaur** (12:40): Reminder: Customer data request closes Friday.

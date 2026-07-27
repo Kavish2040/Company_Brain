@@ -19,20 +19,38 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 485a3e2cc5373a73995473005168cc0d
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: b671b5c5e3f84bb590d0499420655054
   status: accepted
 relations:
   - predicate: mentions
-    object: processes/onboarding
-    confidence: 0.7
+    object: people/mei-tanaka
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [50, 79]
-        quote: Onboarding docs are in Drive.
+        span: [138, 148]
+        quote: Mei Tanaka
+  - predicate: mentions
+    object: people/owen-fitz
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [2, 17]
+        quote: Owen Fitzgerald
+  - predicate: mentions
+    object: people/priya-raman
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [83, 94]
+        quote: Priya Raman
 ---
 
 **Owen Fitzgerald** (09:20): Welcome to the team! Onboarding docs are in Drive.

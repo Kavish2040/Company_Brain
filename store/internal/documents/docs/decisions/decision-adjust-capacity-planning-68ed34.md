@@ -16,20 +16,38 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 05eeb2c17828ab82c22c7f7ea828238d
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 78b7c0dae2cd5d8a0fae8057fb851c6a
   status: accepted
 relations:
-  - predicate: supersedes
-    object: teams/engineering
-    confidence: 0.6
+  - predicate: mentions
+    object: people/owen-fitz
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [321, 395]
-        quote: The previous informal arrangement documented in the Engineering team page.
+        span: [75, 90]
+        quote: Owen Fitzgerald
+  - predicate: mentions
+    object: processes/capacity-planning
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [19, 36]
+        quote: capacity planning
+  - predicate: mentions
+    object: teams/engineering
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [373, 384]
+        quote: Engineering
 ---
 
 # Decision: adjust capacity planning

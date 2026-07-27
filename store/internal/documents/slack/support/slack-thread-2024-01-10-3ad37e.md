@@ -19,58 +19,92 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: fb53cabf7f747183014115d346179963
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: e06068bfa8c565496f3eec6786968165
   status: accepted
 relations:
-  - predicate: handoff_to
-    subject: processes/onboarding
-    object: teams/engineering
-    confidence: 0.65
+  - predicate: mentions
+    object: people/priya-raman
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [212, 290]
-        quote: Escalating this to Engineering — it's a Snowflake integration bug, not config.
-  - predicate: handoff_to
-    subject: processes/vendor-renewal
-    object: teams/finance
-    confidence: 0.7
+        span: [106, 117]
+        quote: Priya Raman
+  - predicate: mentions
+    object: people/sam-kelly
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [315, 372]
-        quote: Looping in Finance for the refund side of Vendor renewal.
+        span: [294, 303]
+        quote: Sam Kelly
+  - predicate: mentions
+    object: people/zoe-ravel
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [2, 11]
+        quote: Zoë Ravel
   - predicate: mentions
     object: processes/onboarding
-    confidence: 0.7
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [23, 102]
-        quote: This is the fourth ticket bounced back from Engineering on Employee onboarding.
+        span: [82, 101]
+        quote: Employee onboarding
+  - predicate: mentions
+    object: processes/refund-approval
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [171, 186]
+        quote: Refund approval
+  - predicate: mentions
+    object: processes/vendor-renewal
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [357, 371]
+        quote: Vendor renewal
   - predicate: mentions
     object: teams/engineering
-    confidence: 0.7
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [23, 102]
-        quote: This is the fourth ticket bounced back from Engineering on Employee onboarding.
+        span: [67, 78]
+        quote: Engineering
+  - predicate: mentions
+    object: teams/finance
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [140, 147]
+        quote: Finance
   - predicate: mentions
     object: tools/snowflake
-    confidence: 0.8
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [212, 290]
-        quote: Escalating this to Engineering — it's a Snowflake integration bug, not config.
+        span: [252, 261]
+        quote: Snowflake
 ---
 
 **Zoë Ravel** (11:43): This is the fourth ticket bounced back from Engineering on Employee onboarding.

@@ -19,74 +19,65 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 12bc213b9f480d23f3c54bc0584969c5
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 1edff6d6a0944026bf458604334c5d0c
   status: accepted
 relations:
   - predicate: mentions
     object: people/ana-brito
-    confidence: 0.6
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [0, 72]
-        quote: '**Ana Brito** (12:29): Reminder that Vendor renewal kicks off next week.'
+        span: [2, 11]
+        quote: Ana Brito
   - predicate: mentions
     object: people/dev-oyelaran
-    confidence: 0.6
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [149, 225]
-        quote: '**Dev Oyelaran** (12:43): Reminder that Refund approval kicks off next week.'
+        span: [151, 163]
+        quote: Dev Oyelaran
   - predicate: mentions
     object: people/sam-kelly
-    confidence: 0.6
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [227, 300]
-        quote: '**Sam Kelly** (12:50): Reminder that Quarterly close kicks off next week.'
-  - predicate: mentions
-    object: processes/onboarding
-    confidence: 0.7
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [97, 147]
-        quote: Welcome to the team! Onboarding docs are in Drive.
+        span: [229, 238]
+        quote: Sam Kelly
   - predicate: mentions
     object: processes/quarterly-close
-    confidence: 0.7
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [250, 300]
-        quote: Reminder that Quarterly close kicks off next week.
+        span: [264, 279]
+        quote: Quarterly close
   - predicate: mentions
     object: processes/refund-approval
-    confidence: 0.7
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [175, 225]
-        quote: Reminder that Refund approval kicks off next week.
+        span: [189, 204]
+        quote: Refund approval
   - predicate: mentions
     object: processes/vendor-renewal
-    confidence: 0.7
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [23, 72]
-        quote: Reminder that Vendor renewal kicks off next week.
+        span: [37, 51]
+        quote: Vendor renewal
 ---
 
 **Ana Brito** (12:29): Reminder that Vendor renewal kicks off next week.

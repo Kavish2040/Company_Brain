@@ -16,29 +16,38 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 499a0f22f1376a701ced8f2b6b94826b
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 2312a027be652a07e19913f1dafdbc86
   status: accepted
 relations:
   - predicate: mentions
     object: people/nadia-hassan
-    confidence: 0.95
+    confidence: 0.9
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [78, 120]
-        quote: Nadia Hassan — PM (nadia@meridian.example)
+        span: [97, 119]
+        quote: nadia@meridian.example
   - predicate: mentions
     object: people/zoe-ravel
-    confidence: 0.95
+    confidence: 0.9
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [25, 75]
-        quote: Zoë Ravel — Head of Product (zoe@meridian.example)
+        span: [54, 74]
+        quote: zoe@meridian.example
+  - predicate: mentions
+    object: processes/onboarding
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [144, 163]
+        quote: Employee onboarding
   - predicate: mentions
     object: teams/product
     confidence: 0.9
@@ -46,18 +55,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [25, 75]
-        quote: Zoë Ravel — Head of Product (zoe@meridian.example)
-  - predicate: owns
-    subject: people/zoe-ravel
-    object: processes/onboarding
-    confidence: 0.98
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [144, 182]
-        quote: 'Employee onboarding (owner: Zoë Ravel)'
+        span: [2, 9]
+        quote: Product
 ---
 
 # Product

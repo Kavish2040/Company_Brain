@@ -19,38 +19,38 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 16e7d4fccb0cf4b89e5bbdaa34505a59
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 149705c4db84e4dc42c4ce32de7c78d8
   status: accepted
 relations:
   - predicate: mentions
     object: people/priya-raman
-    confidence: 0.6
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [220, 272]
-        quote: Let's keep the comp discussion in this channel only.
+        span: [98, 109]
+        quote: Priya Raman
   - predicate: mentions
     object: people/sam-kaur
-    confidence: 0.6
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [22, 94]
-        quote: Compensation bands for the Engineering ladder need revisiting before Q3.
+        span: [2, 10]
+        quote: Sam Kaur
   - predicate: mentions
     object: teams/engineering
-    confidence: 0.7
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [22, 94]
-        quote: Compensation bands for the Engineering ladder need revisiting before Q3.
+        span: [49, 60]
+        quote: Engineering
 ---
 
 **Sam Kaur** (12:44): Compensation bands for the Engineering ladder need revisiting before Q3.

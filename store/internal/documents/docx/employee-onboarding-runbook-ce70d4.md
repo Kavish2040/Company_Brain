@@ -21,9 +21,9 @@ normalizer:
   name: docx
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: dbcd9bc18d72d1ad4aee03094f494da2
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: b3eff42e70ee59c8ad993d892b487e83
   status: accepted
 relations:
   - predicate: authored_by
@@ -33,13 +33,13 @@ relations:
     status: accepted
   - predicate: mentions
     object: people/zoe-ravel
-    confidence: 0.85
+    confidence: 0.9
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [187, 208]
-        quote: Sign-off by Zoë Ravel
+        span: [51, 71]
+        quote: zoe@meridian.example
   - predicate: mentions
     object: processes/onboarding
     confidence: 0.9
@@ -47,27 +47,27 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [0, 31]
-        quote: '# Employee onboarding — runbook'
+        span: [2, 21]
+        quote: Employee onboarding
   - predicate: mentions
     object: teams/product
-    confidence: 0.8
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [118, 132]
-        quote: Product triage
-  - predicate: owns
-    subject: teams/product
-    object: processes/onboarding
     confidence: 0.9
     provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [87, 94]
+        quote: Product
+  - predicate: owns
+    subject: people/zoe-ravel
+    object: processes/onboarding
+    confidence: 0.75
+    provenance: llm
     status: proposed
     evidence:
       - node: self
-        span: [74, 94]
-        quote: 'Owning team: Product'
+        span: [33, 50]
+        quote: 'Owner: Zoë Ravel'
 ---
 
 # Employee onboarding — runbook

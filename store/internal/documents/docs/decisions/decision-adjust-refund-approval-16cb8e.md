@@ -16,20 +16,38 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 9c33b3ea223f1574967dd0ea8612aff2
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: deb60c49d605c0c32ce82f1b5b33d07f
   status: accepted
 relations:
-  - predicate: supersedes
-    object: teams/finance
-    confidence: 0.75
+  - predicate: mentions
+    object: people/ana-brito
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [303, 373]
-        quote: The previous informal arrangement documented in the Finance team page.
+        span: [73, 82]
+        quote: Ana Brito
+  - predicate: mentions
+    object: processes/refund-approval
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [19, 34]
+        quote: refund approval
+  - predicate: mentions
+    object: teams/finance
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [355, 362]
+        quote: Finance
 ---
 
 # Decision: adjust refund approval

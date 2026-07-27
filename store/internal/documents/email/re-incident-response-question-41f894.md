@@ -22,9 +22,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 772eb92d7fb9f18dafb25b90726ae841
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: daa514fe874add040f539d6e7e70308e
   status: accepted
 relations:
   - predicate: authored_by
@@ -37,25 +37,24 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
-  - predicate: depends_on
-    subject: processes/incident-response
-    object: tools/pagerduty
-    confidence: 0.8
+  - predicate: mentions
+    object: people/owen-fitz
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [163, 245]
-        quote: Owen Fitzgerald owns this process, but the PagerDuty step is blocked on your team.
+        span: [163, 178]
+        quote: Owen Fitzgerald
   - predicate: mentions
     object: people/priya-raman
-    confidence: 0.7
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [48, 78]
-        quote: '**To:** priya@meridian.example'
+        span: [56, 78]
+        quote: priya@meridian.example
   - predicate: mentions
     object: people/sam-kaur
     confidence: 0.9
@@ -63,8 +62,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [0, 46]
-        quote: '**From:** Sam Kaur <sam.kaur@meridian.example>'
+        span: [20, 45]
+        quote: sam.kaur@meridian.example
   - predicate: mentions
     object: processes/incident-response
     confidence: 0.9
@@ -72,8 +71,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [128, 162]
-        quote: Following up on incident response.
+        span: [144, 161]
+        quote: incident response
   - predicate: mentions
     object: tools/pagerduty
     confidence: 0.9
@@ -81,18 +80,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [163, 245]
-        quote: Owen Fitzgerald owns this process, but the PagerDuty step is blocked on your team.
-  - predicate: owns
-    subject: people/owen-fitz
-    object: processes/incident-response
-    confidence: 0.95
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [163, 245]
-        quote: Owen Fitzgerald owns this process, but the PagerDuty step is blocked on your team.
+        span: [206, 215]
+        quote: PagerDuty
 ---
 
 **From:** Sam Kaur <sam.kaur@meridian.example>

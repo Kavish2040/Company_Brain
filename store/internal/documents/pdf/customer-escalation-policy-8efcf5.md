@@ -16,11 +16,20 @@ normalizer:
   name: pdf
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 5c7c7e86e298bb70eaca9e4d99fe60ed
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 61bf5fb0729db0b37c70eaa787f5770a
   status: accepted
 relations:
+  - predicate: mentions
+    object: people/dev-oyelaran
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [34, 46]
+        quote: Dev Oyelaran
   - predicate: mentions
     object: processes/customer-escalation
     confidence: 0.9
@@ -28,21 +37,21 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [61, 123]
-        quote: This policy governs customer escalation at Meridian Logistics.
+        span: [0, 19]
+        quote: Customer escalation
   - predicate: mentions
     object: teams/support
-    confidence: 0.7
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [47, 60]
-        quote: 'Team: Support'
+        span: [53, 60]
+        quote: Support
   - predicate: owns
     subject: people/dev-oyelaran
     object: processes/customer-escalation
-    confidence: 0.9
+    confidence: 0.75
     provenance: llm
     status: proposed
     evidence:

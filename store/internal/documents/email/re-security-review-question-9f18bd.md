@@ -22,9 +22,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: c61cd5a2e1f0d2c30834a3165bac38b8
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 8bde0db9ce2b6398f744bf9211522745
   status: accepted
 relations:
   - predicate: authored_by
@@ -37,35 +37,42 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
-  - predicate: depends_on
-    subject: processes/security-review
-    object: tools/netsuite
-    confidence: 0.85
+  - predicate: mentions
+    object: people/tom-whelan
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [154, 230]
-        quote: Tom Whelan owns this process, but the NetSuite step is blocked on your team.
+        span: [22, 42]
+        quote: tom@meridian.example
   - predicate: mentions
     object: people/zoe-ravel
-    confidence: 0.7
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [112, 119]
-        quote: Hi Zoë,
-  - predicate: owns
-    subject: people/tom-whelan
+        span: [53, 73]
+        quote: zoe@meridian.example
+  - predicate: mentions
     object: processes/security-review
-    confidence: 0.95
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [154, 230]
-        quote: Tom Whelan owns this process, but the NetSuite step is blocked on your team.
+        span: [137, 152]
+        quote: security review
+  - predicate: mentions
+    object: tools/netsuite
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [192, 200]
+        quote: NetSuite
 ---
 
 **From:** Tom Whelan <tom@meridian.example>

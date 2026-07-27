@@ -21,9 +21,9 @@ normalizer:
   name: docx
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: ce1ae3d9567c117e5080020ffe1b9408
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 4986a5d36fd292ae5d6a3a813e4421e0
   status: accepted
 relations:
   - predicate: authored_by
@@ -31,16 +31,43 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
-  - predicate: owns
-    subject: teams/engineering
+  - predicate: mentions
+    object: people/priya-raman
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [50, 72]
+        quote: priya@meridian.example
+  - predicate: mentions
     object: processes/release-signoff
     confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [2, 18]
+        quote: Release sign-off
+  - predicate: mentions
+    object: teams/engineering
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [88, 99]
+        quote: Engineering
+  - predicate: owns
+    subject: people/priya-raman
+    object: processes/release-signoff
+    confidence: 0.75
     provenance: llm
     status: proposed
     evidence:
       - node: self
-        span: [75, 99]
-        quote: 'Owning team: Engineering'
+        span: [30, 49]
+        quote: 'Owner: Priya Raman'
 ---
 
 # Release sign-off — runbook

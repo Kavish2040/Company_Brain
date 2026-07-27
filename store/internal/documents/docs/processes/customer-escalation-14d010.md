@@ -16,31 +16,31 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 5dd8518dbee9ad38ce5c196883e59e08
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: e86803a17229eb4a69a697a3e99146a8
   status: accepted
 relations:
   - predicate: handoff_to
     subject: teams/support
     object: teams/engineering
-    confidence: 0.95
+    confidence: 0.6
     provenance: llm
     status: proposed
     evidence:
       - node: self
-        span: [534, 607]
-        quote: Support hands off to Engineering when the root cause is a product defect.
+        span: [534, 566]
+        quote: Support hands off to Engineering
   - predicate: handoff_to
     subject: teams/support
     object: teams/finance
-    confidence: 0.95
+    confidence: 0.6
     provenance: llm
     status: proposed
     evidence:
       - node: self
-        span: [469, 531]
-        quote: Support hands off to Finance when a cost approval is required.
+        span: [469, 497]
+        quote: Support hands off to Finance
   - predicate: mentions
     object: people/dev-oyelaran
     confidence: 0.9
@@ -48,30 +48,53 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [400, 452]
-        quote: Dev Oyelaran signs off before the request is closed.
+        span: [48, 68]
+        quote: dev@meridian.example
+  - predicate: mentions
+    object: processes/customer-escalation
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [2, 21]
+        quote: Customer escalation
   - predicate: mentions
     object: teams/engineering
-    confidence: 0.85
+    confidence: 0.9
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [626, 728]
-        quote: 'Tickets frequently bounce between Support and Engineering when ownership of the
-
-          root cause is unclear.'
+        span: [555, 566]
+        quote: Engineering
+  - predicate: mentions
+    object: teams/finance
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [490, 497]
+        quote: Finance
+  - predicate: mentions
+    object: teams/product
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [592, 599]
+        quote: product
   - predicate: mentions
     object: teams/support
-    confidence: 0.85
+    confidence: 0.9
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [626, 728]
-        quote: 'Tickets frequently bounce between Support and Engineering when ownership of the
-
-          root cause is unclear.'
+        span: [80, 87]
+        quote: Support
   - predicate: mentions
     object: tools/zendesk
     confidence: 0.9
@@ -79,18 +102,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [243, 272]
-        quote: Request is raised in Zendesk.
-  - predicate: owns
-    subject: teams/support
-    object: processes/customer-escalation
-    confidence: 0.6
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [70, 87]
-        quote: '**Team:** Support'
+        span: [264, 271]
+        quote: Zendesk
 ---
 
 # Customer escalation

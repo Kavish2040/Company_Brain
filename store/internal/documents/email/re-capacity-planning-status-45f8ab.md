@@ -22,9 +22,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 203c053104388f7868462ccece3c2cfc
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: d4aacae22a063de87592c74a892f7090
   status: accepted
 relations:
   - predicate: authored_by
@@ -37,21 +37,20 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
-  - predicate: depends_on
-    subject: processes/capacity-planning
-    object: tools/datadog
-    confidence: 0.85
+  - predicate: mentions
+    object: people/owen-fitz
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [199, 239]
-        quote: the Datadog step is blocked on your team
+        span: [160, 175]
+        quote: Owen Fitzgerald
   - predicate: mentions
     object: people/priya-raman
-    confidence: 0.8
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
         span: [53, 75]
@@ -63,8 +62,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [10, 20]
-        quote: Tom Whelan
+        span: [22, 42]
+        quote: tom@meridian.example
   - predicate: mentions
     object: processes/capacity-planning
     confidence: 0.9
@@ -72,8 +71,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [125, 159]
-        quote: Following up on capacity planning.
+        span: [141, 158]
+        quote: capacity planning
   - predicate: mentions
     object: tools/datadog
     confidence: 0.9
@@ -81,18 +80,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [199, 239]
-        quote: the Datadog step is blocked on your team
-  - predicate: owns
-    subject: people/owen-fitz
-    object: processes/capacity-planning
-    confidence: 0.95
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [160, 240]
-        quote: Owen Fitzgerald owns this process, but the Datadog step is blocked on your team.
+        span: [203, 210]
+        quote: Datadog
 ---
 
 **From:** Tom Whelan <tom@meridian.example>

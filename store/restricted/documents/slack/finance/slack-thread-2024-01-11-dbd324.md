@@ -19,67 +19,74 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: c11bc7b4190a73e5a811f5c0c839c140
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 2b881d0d36649bc1ae5ca42c8105a0ab
   status: accepted
 relations:
-  - predicate: depends_on
-    subject: processes/customer-escalation
+  - predicate: mentions
+    object: people/ana-brito
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [2, 11]
+        quote: Ana Brito
+  - predicate: mentions
+    object: people/sam-kaur
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [109, 117]
+        quote: Sam Kaur
+  - predicate: mentions
+    object: processes/customer-escalation
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [23, 42]
+        quote: Customer escalation
+  - predicate: mentions
+    object: processes/onboarding
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [207, 226]
+        quote: Employee onboarding
+  - predicate: mentions
     object: processes/security-review
     confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [23, 105]
-        quote: Customer escalation is blocked until Engineering signs off on the security review.
-  - predicate: mentions
-    object: processes/customer-escalation
-    confidence: 0.8
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [129, 173]
-        quote: 'Reminder: Customer escalation closes Friday.'
-  - predicate: mentions
-    object: processes/onboarding
-    confidence: 0.8
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [197, 241]
-        quote: 'Reminder: Employee onboarding closes Friday.'
+        span: [89, 104]
+        quote: security review
   - predicate: mentions
     object: teams/engineering
-    confidence: 0.7
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [23, 105]
-        quote: Customer escalation is blocked until Engineering signs off on the security review.
+        span: [60, 71]
+        quote: Engineering
   - predicate: mentions
     object: tools/linear
-    confidence: 0.8
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [266, 300]
-        quote: The Linear renewal lands in April.
-  - predicate: owns
-    subject: people/ana-brito
-    object: processes/vendor-renewal
-    confidence: 0.75
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [301, 323]
-        quote: I own that end to end.
+        span: [270, 276]
+        quote: Linear
 ---
 
 **Ana Brito** (10:12): Customer escalation is blocked until Engineering signs off on the security review.

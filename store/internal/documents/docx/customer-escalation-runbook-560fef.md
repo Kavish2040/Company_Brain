@@ -21,9 +21,9 @@ normalizer:
   name: docx
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 97e6f5329b0d76427c8b1d64f7a32458
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: a05cb8434f8fc2feca22d577fd23d925
   status: accepted
 relations:
   - predicate: authored_by
@@ -31,16 +31,43 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
-  - predicate: owns
-    subject: teams/support
+  - predicate: mentions
+    object: people/dev-oyelaran
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [54, 74]
+        quote: dev@meridian.example
+  - predicate: mentions
     object: processes/customer-escalation
     confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [2, 21]
+        quote: Customer escalation
+  - predicate: mentions
+    object: teams/support
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [90, 97]
+        quote: Support
+  - predicate: owns
+    subject: people/dev-oyelaran
+    object: processes/customer-escalation
+    confidence: 0.75
     provenance: llm
     status: proposed
     evidence:
       - node: self
-        span: [77, 97]
-        quote: 'Owning team: Support'
+        span: [33, 53]
+        quote: 'Owner: Dev Oyelaran'
 ---
 
 # Customer escalation — runbook

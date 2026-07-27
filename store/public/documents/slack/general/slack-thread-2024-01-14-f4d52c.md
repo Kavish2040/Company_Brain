@@ -19,9 +19,9 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: e5026d20c10de9dc00ab46a319098768
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: d2cb8be74086702c67d8a0c671196875
   status: accepted
 relations:
   - predicate: mentions
@@ -31,8 +31,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [0, 46]
-        quote: '**Nadia Hassan** (13:39): Welcome to the team!'
+        span: [2, 14]
+        quote: Nadia Hassan
   - predicate: mentions
     object: people/owen-fitz
     confidence: 0.9
@@ -40,8 +40,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [78, 127]
-        quote: '**Owen Fitzgerald** (13:46): Welcome to the team!'
+        span: [80, 95]
+        quote: Owen Fitzgerald
   - predicate: mentions
     object: people/sam-kelly
     confidence: 0.9
@@ -49,17 +49,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [159, 202]
-        quote: '**Sam Kelly** (13:53): Welcome to the team!'
-  - predicate: mentions
-    object: processes/onboarding
-    confidence: 0.85
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [47, 76]
-        quote: Onboarding docs are in Drive.
+        span: [161, 170]
+        quote: Sam Kelly
 ---
 
 **Nadia Hassan** (13:39): Welcome to the team! Onboarding docs are in Drive.

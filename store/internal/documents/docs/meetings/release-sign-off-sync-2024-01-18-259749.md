@@ -16,95 +16,92 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: ad119d9f7fe054663a2af777cd3f1a22
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 10f2466fae85866b332769df47c13830
   status: accepted
 relations:
-  - predicate: depends_on
-    subject: processes/release-signoff
-    object: tools/zendesk
-    confidence: 0.8
+  - predicate: mentions
+    object: people/ana-brito
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [115, 183]
-        quote: "Zoë Ravel raised that release sign-off is still blocked on\n Zendesk."
-  - predicate: handoff_to
-    subject: teams/engineering
-    object: teams/finance
-    confidence: 0.55
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [232, 316]
-        quote: "Handoff from Engineering to Finance is unclear; two\n tickets bounced back last week."
+        span: [75, 84]
+        quote: Ana Brito
   - predicate: mentions
     object: people/owen-fitz
-    confidence: 0.7
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [332, 381]
-        quote: Owen Fitzgerald to document the handoff boundary.
+        span: [86, 101]
+        quote: Owen Fitzgerald
+  - predicate: mentions
+    object: people/priya-raman
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [186, 197]
+        quote: Priya Raman
+  - predicate: mentions
+    object: people/sam-kelly
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [64, 73]
+        quote: Sam Kelly
   - predicate: mentions
     object: people/zoe-ravel
-    confidence: 0.75
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [115, 183]
-        quote: "Zoë Ravel raised that release sign-off is still blocked on\n Zendesk."
+        span: [53, 62]
+        quote: Zoë Ravel
   - predicate: mentions
     object: processes/release-signoff
-    confidence: 0.6
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [332, 381]
-        quote: Owen Fitzgerald to document the handoff boundary.
+        span: [2, 18]
+        quote: Release sign-off
   - predicate: mentions
     object: teams/engineering
-    confidence: 0.6
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [232, 316]
-        quote: "Handoff from Engineering to Finance is unclear; two\n tickets bounced back last week."
+        span: [245, 256]
+        quote: Engineering
   - predicate: mentions
     object: teams/finance
-    confidence: 0.6
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [232, 316]
-        quote: "Handoff from Engineering to Finance is unclear; two\n tickets bounced back last week."
+        span: [260, 267]
+        quote: Finance
   - predicate: mentions
     object: tools/zendesk
-    confidence: 0.75
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [115, 183]
-        quote: "Zoë Ravel raised that release sign-off is still blocked on\n Zendesk."
-  - predicate: owns
-    subject: people/priya-raman
-    object: processes/release-signoff
-    confidence: 0.85
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [186, 229]
-        quote: Priya Raman confirmed they own the process.
+        span: [175, 182]
+        quote: Zendesk
 ---
 
 # Release sign-off sync — 2024-01-18

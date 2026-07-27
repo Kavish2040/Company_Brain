@@ -19,9 +19,9 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 051a08a179bea679383064b4259c830e
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: aa0afb25ec8733c40698173880f8666c
   status: accepted
 relations:
   - predicate: mentions
@@ -31,8 +31,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [79, 155]
-        quote: '**Nadia Hassan** (14:03): Reminder that Quarterly close kicks off next week.'
+        span: [81, 93]
+        quote: Nadia Hassan
   - predicate: mentions
     object: people/sam-kelly
     confidence: 0.9
@@ -40,8 +40,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [0, 77]
-        quote: '**Sam Kelly** (13:56): Reminder that Employee onboarding kicks off next week.'
+        span: [2, 11]
+        quote: Sam Kelly
   - predicate: mentions
     object: processes/onboarding
     confidence: 0.9
@@ -49,8 +49,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [23, 77]
-        quote: Reminder that Employee onboarding kicks off next week.
+        span: [37, 56]
+        quote: Employee onboarding
   - predicate: mentions
     object: processes/quarterly-close
     confidence: 0.9
@@ -58,8 +58,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [105, 155]
-        quote: Reminder that Quarterly close kicks off next week.
+        span: [119, 134]
+        quote: Quarterly close
 ---
 
 **Sam Kelly** (13:56): Reminder that Employee onboarding kicks off next week.

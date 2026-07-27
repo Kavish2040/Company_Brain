@@ -22,9 +22,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 03df6417aed7c66d0b9faf6245fd7c6f
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: c8cd8ebb67ea3feefcd0b5a049a23b55
   status: accepted
 relations:
   - predicate: authored_by
@@ -37,16 +37,6 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
-  - predicate: depends_on
-    subject: processes/refund-approval
-    object: tools/linear
-    confidence: 0.7
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [193, 232]
-        quote: the Linear step is blocked on your team
   - predicate: mentions
     object: people/ana-brito
     confidence: 0.9
@@ -54,8 +44,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [160, 187]
-        quote: Ana Brito owns this process
+        span: [160, 169]
+        quote: Ana Brito
   - predicate: mentions
     object: people/sam-kelly
     confidence: 0.9
@@ -72,8 +62,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [10, 20]
-        quote: Tom Whelan
+        span: [22, 42]
+        quote: tom@meridian.example
   - predicate: mentions
     object: processes/refund-approval
     confidence: 0.9
@@ -81,27 +71,17 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [127, 159]
-        quote: Following up on refund approval.
+        span: [143, 158]
+        quote: refund approval
   - predicate: mentions
     object: tools/linear
-    confidence: 0.85
+    confidence: 0.9
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [193, 232]
-        quote: the Linear step is blocked on your team
-  - predicate: owns
-    subject: people/ana-brito
-    object: processes/refund-approval
-    confidence: 0.95
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [160, 233]
-        quote: Ana Brito owns this process, but the Linear step is blocked on your team.
+        span: [197, 203]
+        quote: Linear
 ---
 
 **From:** Tom Whelan <tom@meridian.example>

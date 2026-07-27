@@ -16,77 +16,83 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: ef26369260a3d6b8d1fa96c7e8647f64
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: a676f7578d648f1b3a98aac247eec46b
   status: accepted
 relations:
-  - predicate: depends_on
-    subject: processes/quarterly-close
-    object: tools/snowflake
-    confidence: 0.85
+  - predicate: mentions
+    object: people/ana-brito
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [117, 192]
-        quote: "Owen Fitzgerald raised that quarterly close is still blocked on\n Snowflake."
-  - predicate: handoff_to
-    subject: teams/finance
-    object: teams/engineering
-    confidence: 0.6
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [239, 323]
-        quote: "Handoff from Finance to Engineering is unclear; two\n tickets bounced back last week."
+        span: [69, 78]
+        quote: Ana Brito
   - predicate: mentions
     object: people/owen-fitz
-    confidence: 0.8
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [117, 192]
-        quote: "Owen Fitzgerald raised that quarterly close is still blocked on\n Snowflake."
+        span: [52, 67]
+        quote: Owen Fitzgerald
   - predicate: mentions
     object: people/priya-raman
-    confidence: 0.6
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [37, 103]
-        quote: '**Attendees:** Owen Fitzgerald, Ana Brito, Priya Raman, Tom Whelan'
+        span: [80, 91]
+        quote: Priya Raman
   - predicate: mentions
     object: people/tom-whelan
-    confidence: 0.8
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [339, 383]
-        quote: Tom Whelan to document the handoff boundary.
+        span: [93, 103]
+        quote: Tom Whelan
   - predicate: mentions
     object: processes/quarterly-close
-    confidence: 0.8
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [117, 192]
-        quote: "Owen Fitzgerald raised that quarterly close is still blocked on\n Snowflake."
-  - predicate: owns
-    subject: people/ana-brito
-    object: processes/quarterly-close
-    confidence: 0.85
+        span: [2, 17]
+        quote: Quarterly close
+  - predicate: mentions
+    object: teams/engineering
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [195, 236]
-        quote: Ana Brito confirmed they own the process.
+        span: [263, 274]
+        quote: Engineering
+  - predicate: mentions
+    object: teams/finance
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [252, 259]
+        quote: Finance
+  - predicate: mentions
+    object: tools/snowflake
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [182, 191]
+        quote: Snowflake
 ---
 
 # Quarterly close sync — 2024-02-25

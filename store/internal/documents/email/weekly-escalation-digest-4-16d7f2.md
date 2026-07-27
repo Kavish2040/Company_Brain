@@ -22,9 +22,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 24b5dceb466e65336614b02566506c15
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: a28a755dab8de1bc4a28a308e03986fe
   status: accepted
 relations:
   - predicate: authored_by
@@ -37,44 +37,42 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
-  - predicate: handoff_to
-    subject: processes/customer-escalation
-    object: teams/engineering
-    confidence: 0.75
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [140, 190]
-        quote: 6 escalations were handed to Engineering this week
-  - predicate: handoff_to
-    subject: teams/engineering
-    object: teams/support
-    confidence: 0.65
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [192, 228]
-        quote: 3 bounced back to Support unresolved
   - predicate: mentions
     object: accounts/support-inbox
-    confidence: 0.8
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [10, 53]
-        quote: Meridian Support <support@meridian.example>
+        span: [28, 52]
+        quote: support@meridian.example
   - predicate: mentions
     object: people/dev-oyelaran
-    confidence: 0.6
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
         span: [63, 83]
         quote: dev@meridian.example
+  - predicate: mentions
+    object: teams/engineering
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [169, 180]
+        quote: Engineering
+  - predicate: mentions
+    object: teams/support
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [210, 217]
+        quote: Support
 ---
 
 **From:** Meridian Support <support@meridian.example>

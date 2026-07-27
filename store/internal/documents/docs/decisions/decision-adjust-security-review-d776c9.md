@@ -16,20 +16,38 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 498657a7f118e13cdac468c7d544f262
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: b008975027482cff20e7f7ce2356085b
   status: accepted
 relations:
-  - predicate: supersedes
-    object: teams/engineering
-    confidence: 0.75
+  - predicate: mentions
+    object: people/tom-whelan
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [305, 379]
-        quote: The previous informal arrangement documented in the Engineering team page.
+        span: [73, 83]
+        quote: Tom Whelan
+  - predicate: mentions
+    object: processes/security-review
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [19, 34]
+        quote: security review
+  - predicate: mentions
+    object: teams/engineering
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [357, 368]
+        quote: Engineering
 ---
 
 # Decision: adjust security review

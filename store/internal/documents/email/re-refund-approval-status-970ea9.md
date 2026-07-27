@@ -22,9 +22,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: c6feb4770f436ba866c72fc2df345633
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: f615913cb31e6edc82dc0a4dd27e30a7
   status: accepted
 relations:
   - predicate: authored_by
@@ -37,25 +37,33 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
-  - predicate: depends_on
-    subject: processes/refund-approval
-    object: tools/zendesk
-    confidence: 0.7
+  - predicate: mentions
+    object: people/ana-brito
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [193, 233]
-        quote: the Zendesk step is blocked on your team
+        span: [160, 169]
+        quote: Ana Brito
+  - predicate: mentions
+    object: people/nadia-hassan
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [24, 46]
+        quote: nadia@meridian.example
   - predicate: mentions
     object: people/owen-fitz
-    confidence: 0.8
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [117, 125]
-        quote: Hi Owen,
+        span: [57, 78]
+        quote: owen@meridian.example
   - predicate: mentions
     object: processes/refund-approval
     confidence: 0.9
@@ -63,18 +71,17 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [127, 159]
-        quote: Following up on refund approval.
-  - predicate: owns
-    subject: people/ana-brito
-    object: processes/refund-approval
-    confidence: 0.95
+        span: [143, 158]
+        quote: refund approval
+  - predicate: mentions
+    object: tools/zendesk
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [160, 234]
-        quote: Ana Brito owns this process, but the Zendesk step is blocked on your team.
+        span: [197, 204]
+        quote: Zendesk
 ---
 
 **From:** Nadia Hassan <nadia@meridian.example>

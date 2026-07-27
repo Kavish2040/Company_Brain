@@ -16,21 +16,20 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: fe63bb5454a89db85e46087b2557c43d
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 98b2c1111c9b8925984a81824a24af34
   status: accepted
 relations:
-  - predicate: handoff_to
-    subject: teams/engineering
-    object: teams/support
-    confidence: 0.55
+  - predicate: mentions
+    object: people/mei-tanaka
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [248, 332]
-        quote: "Handoff from Engineering to Support is unclear; two\n tickets bounced back last week."
+        span: [89, 99]
+        quote: Mei Tanaka
   - predicate: mentions
     object: people/nadia-hassan
     confidence: 0.9
@@ -38,17 +37,26 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [124, 200]
-        quote: "Nadia Hassan raised that customer data request is still blocked on\n Zendesk."
+        span: [58, 70]
+        quote: Nadia Hassan
   - predicate: mentions
-    object: people/zoe-ravel
-    confidence: 0.8
+    object: people/owen-fitz
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [348, 391]
-        quote: Zoë Ravel to document the handoff boundary.
+        span: [72, 87]
+        quote: Owen Fitzgerald
+  - predicate: mentions
+    object: people/zoe-ravel
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [101, 110]
+        quote: Zoë Ravel
   - predicate: mentions
     object: processes/data-request
     confidence: 0.9
@@ -56,27 +64,35 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [124, 200]
-        quote: "Nadia Hassan raised that customer data request is still blocked on\n Zendesk."
+        span: [2, 23]
+        quote: Customer data request
   - predicate: mentions
-    object: tools/zendesk
-    confidence: 0.85
+    object: teams/engineering
+    confidence: 0.9
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [124, 200]
-        quote: "Nadia Hassan raised that customer data request is still blocked on\n Zendesk."
-  - predicate: owns
-    subject: people/mei-tanaka
-    object: processes/data-request
-    confidence: 0.75
+        span: [261, 272]
+        quote: Engineering
+  - predicate: mentions
+    object: teams/support
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [203, 245]
-        quote: Mei Tanaka confirmed they own the process.
+        span: [276, 283]
+        quote: Support
+  - predicate: mentions
+    object: tools/zendesk
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [192, 199]
+        quote: Zendesk
 ---
 
 # Customer data request sync — 2024-02-17

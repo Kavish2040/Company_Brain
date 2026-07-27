@@ -22,9 +22,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: eb1a48d696efe2812683cf90e2f5d815
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: dae832ba44184df326a89c46486e1b19
   status: accepted
 relations:
   - predicate: authored_by
@@ -37,26 +37,51 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
-  - predicate: depends_on
-    subject: processes/quarterly-close
-    object: tools/netsuite
-    confidence: 0.75
+  - predicate: mentions
+    object: people/ana-brito
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [197, 238]
-        quote: the NetSuite step is blocked on your team
-  - predicate: owns
-    subject: people/ana-brito
+        span: [164, 173]
+        quote: Ana Brito
+  - predicate: mentions
+    object: people/owen-fitz
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [27, 48]
+        quote: owen@meridian.example
+  - predicate: mentions
+    object: people/priya-raman
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [59, 81]
+        quote: priya@meridian.example
+  - predicate: mentions
     object: processes/quarterly-close
-    confidence: 0.95
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [164, 239]
-        quote: Ana Brito owns this process, but the NetSuite step is blocked on your team.
+        span: [147, 162]
+        quote: quarterly close
+  - predicate: mentions
+    object: tools/netsuite
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [201, 209]
+        quote: NetSuite
 ---
 
 **From:** Owen Fitzgerald <owen@meridian.example>

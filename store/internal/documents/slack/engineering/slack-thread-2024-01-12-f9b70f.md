@@ -19,21 +19,38 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: f4c4884ec4f525fa920fa203c7a48789
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: a0fbadf5e9410a1dff3d2c904ef2f685
   status: accepted
 relations:
-  - predicate: depends_on
-    subject: processes/data-request
-    object: processes/release-signoff
+  - predicate: mentions
+    object: people/nadia-hassan
     confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [288, 370]
-        quote: Deploy for the Customer data request change is queued behind the release sign-off.
+        span: [94, 106]
+        quote: Nadia Hassan
+  - predicate: mentions
+    object: people/priya-raman
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [2, 13]
+        quote: Priya Raman
+  - predicate: mentions
+    object: people/tom-whelan
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [180, 190]
+        quote: Tom Whelan
   - predicate: mentions
     object: processes/data-request
     confidence: 0.9
@@ -41,8 +58,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [288, 370]
-        quote: Deploy for the Customer data request change is queued behind the release sign-off.
+        span: [303, 324]
+        quote: Customer data request
   - predicate: mentions
     object: processes/release-signoff
     confidence: 0.9
@@ -50,26 +67,17 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [288, 370]
-        quote: Deploy for the Customer data request change is queued behind the release sign-off.
-  - predicate: mentions
-    object: processes/vendor-renewal
-    confidence: 0.7
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [118, 176]
-        quote: Can someone from Finance confirm the Zendesk renewal date?
+        span: [353, 369]
+        quote: release sign-off
   - predicate: mentions
     object: teams/finance
-    confidence: 0.8
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [118, 176]
-        quote: Can someone from Finance confirm the Zendesk renewal date?
+        span: [135, 142]
+        quote: Finance
   - predicate: mentions
     object: tools/pagerduty
     confidence: 0.9
@@ -77,8 +85,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [25, 90]
-        quote: The PagerDuty alert fired again overnight — third time this week.
+        span: [29, 38]
+        quote: PagerDuty
   - predicate: mentions
     object: tools/snowflake
     confidence: 0.9
@@ -86,8 +94,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [202, 262]
-        quote: Can someone from Finance confirm the Snowflake renewal date?
+        span: [239, 248]
+        quote: Snowflake
   - predicate: mentions
     object: tools/zendesk
     confidence: 0.9
@@ -95,8 +103,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [118, 176]
-        quote: Can someone from Finance confirm the Zendesk renewal date?
+        span: [155, 162]
+        quote: Zendesk
 ---
 
 **Priya Raman** (11:46): The PagerDuty alert fired again overnight — third time this week.

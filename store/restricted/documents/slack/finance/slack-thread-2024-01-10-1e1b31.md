@@ -19,11 +19,29 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 0344d5abcc0946eafec3a095975b5695
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: c0f8626bfd6e85ccda78b8dfb7e7197a
   status: accepted
 relations:
+  - predicate: mentions
+    object: people/ana-brito
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [2, 11]
+        quote: Ana Brito
+  - predicate: mentions
+    object: people/sam-kaur
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [239, 247]
+        quote: Sam Kaur
   - predicate: mentions
     object: processes/customer-escalation
     confidence: 0.9
@@ -31,28 +49,26 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [23, 67]
-        quote: 'Reminder: Customer escalation closes Friday.'
-  - predicate: owns
-    subject: people/ana-brito
+        span: [33, 52]
+        quote: Customer escalation
+  - predicate: mentions
     object: tools/datadog
     confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [92, 150]
-        quote: The Datadog renewal lands in April. I own that end to end.
-  - predicate: owns
-    subject: people/sam-kaur
+        span: [96, 103]
+        quote: Datadog
+  - predicate: mentions
     object: tools/pagerduty
-    confidence: 0.6
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [175, 235]
-        quote: The PagerDuty renewal lands in April. I own that end to end.
+        span: [179, 188]
+        quote: PagerDuty
 ---
 
 **Ana Brito** (09:37): Reminder: Customer escalation closes Friday.

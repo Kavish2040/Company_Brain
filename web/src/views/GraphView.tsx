@@ -53,7 +53,8 @@ export function GraphView({ principal }: { principal: Principal }) {
         setError(null);
 
         // Fetch all document nodes (API is already ACL-filtered)
-        const nodes_list = await api.nodes(principal.id);
+        // Use a high limit to fetch all accessible nodes (API defaults to 200)
+        const nodes_list = await api.nodes(principal.id, undefined, undefined, 1000);
         console.log(`📊 Fetched ${nodes_list.length} node summaries for ${principal.id}`);
 
         if (nodes_list.length === 0) {

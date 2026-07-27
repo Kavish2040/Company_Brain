@@ -22,9 +22,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: ab36574885a89eb9ffda6f157363a56b
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 871c44143a822f4278db9b349b62efd3
   status: accepted
 relations:
   - predicate: authored_by
@@ -37,45 +37,33 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
-  - predicate: depends_on
-    subject: processes/security-review
-    object: tools/zendesk
-    confidence: 0.75
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [192, 232]
-        quote: the Zendesk step is blocked on your team
   - predicate: mentions
     object: people/ana-brito
-    confidence: 0.8
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [263, 280]
-        quote: 'Thanks,
-
-          Ana Brito'
+        span: [21, 41]
+        quote: ana@meridian.example
   - predicate: mentions
     object: people/sam-kaur
-    confidence: 0.6
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [116, 123]
-        quote: Hi Sam,
+        span: [52, 77]
+        quote: sam.kaur@meridian.example
   - predicate: mentions
     object: people/tom-whelan
-    confidence: 0.85
+    confidence: 0.9
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [158, 233]
-        quote: Tom Whelan owns this process, but the Zendesk step is blocked on your team.
+        span: [158, 168]
+        quote: Tom Whelan
   - predicate: mentions
     object: processes/security-review
     confidence: 0.9
@@ -83,27 +71,17 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [125, 157]
-        quote: Following up on security review.
+        span: [141, 156]
+        quote: security review
   - predicate: mentions
     object: tools/zendesk
-    confidence: 0.85
+    confidence: 0.9
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [192, 232]
-        quote: the Zendesk step is blocked on your team
-  - predicate: owns
-    subject: people/tom-whelan
-    object: processes/security-review
-    confidence: 0.9
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [158, 233]
-        quote: Tom Whelan owns this process, but the Zendesk step is blocked on your team.
+        span: [196, 203]
+        quote: Zendesk
 ---
 
 **From:** Ana Brito <ana@meridian.example>

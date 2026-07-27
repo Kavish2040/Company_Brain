@@ -19,29 +19,38 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 9c65e9da2fe30f2ee2a9f3ce6ca82a60
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 47f94409607086ef1c3f22c29f112653
   status: accepted
 relations:
   - predicate: mentions
-    object: processes/onboarding
-    confidence: 0.7
+    object: people/nadia-hassan
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [43, 72]
-        quote: Onboarding docs are in Drive.
+        span: [76, 88]
+        quote: Nadia Hassan
+  - predicate: mentions
+    object: people/sam-kaur
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [2, 10]
+        quote: Sam Kaur
   - predicate: mentions
     object: processes/vendor-renewal
-    confidence: 0.8
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [100, 149]
-        quote: Reminder that Vendor renewal kicks off next week.
+        span: [114, 128]
+        quote: Vendor renewal
 ---
 
 **Sam Kaur** (11:28): Welcome to the team! Onboarding docs are in Drive.

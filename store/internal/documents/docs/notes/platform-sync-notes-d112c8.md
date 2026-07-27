@@ -16,38 +16,38 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: d1febb1fd1ce836046cb3a3a01785e4b
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 6519e7fca0be27e118d136e7950db76d
   status: accepted
 relations:
   - predicate: mentions
     object: people/owen-fitz
-    confidence: 0.7
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
         span: [54, 69]
         quote: Owen Fitzgerald
   - predicate: mentions
     object: people/tom-whelan
-    confidence: 0.7
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
         span: [42, 52]
         quote: Tom Whelan
   - predicate: mentions
     object: tools/snowflake
-    confidence: 0.6
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [149, 199]
-        quote: Project Snowflake will need a schema freeze first.
+        span: [157, 166]
+        quote: Snowflake
 ---
 
 # Platform sync notes

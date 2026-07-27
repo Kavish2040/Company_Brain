@@ -22,9 +22,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: e84bec2b8864e79a91a5f2784772697a
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 69c4a9ec7f7f51db3753ed73e734a2ee
   status: accepted
 relations:
   - predicate: authored_by
@@ -37,16 +37,42 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
-  - predicate: owns
-    subject: people/owen-fitz
-    object: processes/capacity-planning
-    confidence: 0.95
+  - predicate: mentions
+    object: people/mei-tanaka
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [162, 241]
-        quote: Owen Fitzgerald owns this process, but the Linear step is blocked on your team.
+        span: [59, 79]
+        quote: mei@meridian.example
+  - predicate: mentions
+    object: people/owen-fitz
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [27, 48]
+        quote: owen@meridian.example
+  - predicate: mentions
+    object: processes/capacity-planning
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [143, 160]
+        quote: capacity planning
+  - predicate: mentions
+    object: tools/linear
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [205, 211]
+        quote: Linear
 ---
 
 **From:** Owen Fitzgerald <owen@meridian.example>

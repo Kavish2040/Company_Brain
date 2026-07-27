@@ -19,50 +19,74 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 4075ca601a20834a92b7b8733fcab15e
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 26abd0aac94e2076fe3ba16cbcb2b2bf
   status: accepted
 relations:
-  - predicate: depends_on
-    subject: processes/quarterly-close
+  - predicate: mentions
+    object: people/ana-brito
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [86, 95]
+        quote: Ana Brito
+  - predicate: mentions
+    object: people/sam-kaur
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [2, 10]
+        quote: Sam Kaur
+  - predicate: mentions
+    object: processes/data-request
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [209, 230]
+        quote: Customer data request
+  - predicate: mentions
+    object: processes/quarterly-close
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [107, 122]
+        quote: Quarterly close
+  - predicate: mentions
     object: processes/security-review
     confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [107, 185]
-        quote: Quarterly close is blocked until Engineering signs off on the security review.
-  - predicate: depends_on
-    subject: processes/quarterly-close
-    object: teams/engineering
-    confidence: 0.85
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [107, 185]
-        quote: Quarterly close is blocked until Engineering signs off on the security review.
+        span: [169, 184]
+        quote: security review
   - predicate: mentions
-    object: tools/snowflake
-    confidence: 0.8
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [22, 59]
-        quote: The Snowflake renewal lands in April.
-  - predicate: owns
-    subject: people/sam-kaur
-    object: processes/vendor-renewal
+    object: teams/engineering
     confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [22, 82]
-        quote: The Snowflake renewal lands in April. I own that end to end.
+        span: [140, 151]
+        quote: Engineering
+  - predicate: mentions
+    object: tools/snowflake
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [26, 35]
+        quote: Snowflake
 ---
 
 **Sam Kaur** (13:12): The Snowflake renewal lands in April. I own that end to end.

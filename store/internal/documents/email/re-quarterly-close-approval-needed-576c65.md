@@ -22,9 +22,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 9344a56020dc5a11a1758bfeb5938a0f
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: bb63895096e5445f5f987fb6282f53cf
   status: accepted
 relations:
   - predicate: authored_by
@@ -37,25 +37,33 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
-  - predicate: depends_on
-    subject: processes/quarterly-close
-    object: tools/snowflake
-    confidence: 0.75
+  - predicate: mentions
+    object: people/ana-brito
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [157, 233]
-        quote: Ana Brito owns this process, but the Snowflake step is blocked on your team.
+        span: [157, 166]
+        quote: Ana Brito
   - predicate: mentions
     object: people/dev-oyelaran
-    confidence: 0.7
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [115, 122]
-        quote: Hi Dev,
+        span: [56, 76]
+        quote: dev@meridian.example
+  - predicate: mentions
+    object: people/sam-kaur
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [20, 45]
+        quote: sam.kaur@meridian.example
   - predicate: mentions
     object: processes/quarterly-close
     confidence: 0.9
@@ -63,27 +71,17 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [124, 156]
-        quote: Following up on quarterly close.
+        span: [140, 155]
+        quote: quarterly close
   - predicate: mentions
     object: tools/snowflake
-    confidence: 0.85
+    confidence: 0.9
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [157, 233]
-        quote: Ana Brito owns this process, but the Snowflake step is blocked on your team.
-  - predicate: owns
-    subject: people/ana-brito
-    object: processes/quarterly-close
-    confidence: 0.9
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [157, 233]
-        quote: Ana Brito owns this process, but the Snowflake step is blocked on your team.
+        span: [194, 203]
+        quote: Snowflake
 ---
 
 **From:** Sam Kaur <sam.kaur@meridian.example>

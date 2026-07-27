@@ -16,31 +16,11 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: cf28de447a2d025e9812057c65219699
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 2eae280119c38bee194fc494e03747b6
   status: accepted
 relations:
-  - predicate: depends_on
-    subject: processes/vendor-renewal
-    object: tools/pagerduty
-    confidence: 0.85
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [115, 184]
-        quote: "Tom Whelan raised that vendor renewal is still blocked on\n PagerDuty."
-  - predicate: handoff_to
-    subject: teams/support
-    object: teams/product
-    confidence: 0.55
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [230, 310]
-        quote: "Handoff from Support to Product is unclear; two\n tickets bounced back last week."
   - predicate: mentions
     object: people/dev-oyelaran
     confidence: 0.9
@@ -48,63 +28,80 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [326, 372]
-        quote: Dev Oyelaran to document the handoff boundary.
+        span: [89, 101]
+        quote: Dev Oyelaran
   - predicate: mentions
     object: people/mei-tanaka
-    confidence: 0.6
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [36, 101]
-        quote: '**Attendees:** Tom Whelan, Mei Tanaka, Nadia Hassan, Dev Oyelaran'
+        span: [63, 73]
+        quote: Mei Tanaka
   - predicate: mentions
     object: people/nadia-hassan
-    confidence: 0.6
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [36, 101]
-        quote: '**Attendees:** Tom Whelan, Mei Tanaka, Nadia Hassan, Dev Oyelaran'
+        span: [75, 87]
+        quote: Nadia Hassan
+  - predicate: mentions
+    object: people/sam-kaur
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [187, 195]
+        quote: Sam Kaur
   - predicate: mentions
     object: people/tom-whelan
-    confidence: 0.7
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [115, 184]
-        quote: "Tom Whelan raised that vendor renewal is still blocked on\n PagerDuty."
+        span: [51, 61]
+        quote: Tom Whelan
   - predicate: mentions
     object: processes/vendor-renewal
-    confidence: 0.6
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [2, 34]
-        quote: Vendor renewal sync — 2024-01-10
+        span: [2, 16]
+        quote: Vendor renewal
+  - predicate: mentions
+    object: teams/product
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [254, 261]
+        quote: Product
+  - predicate: mentions
+    object: teams/support
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [243, 250]
+        quote: Support
   - predicate: mentions
     object: tools/pagerduty
-    confidence: 0.8
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [115, 184]
-        quote: "Tom Whelan raised that vendor renewal is still blocked on\n PagerDuty."
-  - predicate: owns
-    subject: people/sam-kaur
-    object: processes/vendor-renewal
-    confidence: 0.75
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [187, 227]
-        quote: Sam Kaur confirmed they own the process.
+        span: [174, 183]
+        quote: PagerDuty
 ---
 
 # Vendor renewal sync — 2024-01-10

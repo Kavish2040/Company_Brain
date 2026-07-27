@@ -19,56 +19,56 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: ea483d7df71f7df495cf634ca4b0ed35
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 8f3fbe3df0a6918b23169d89596b3a8f
   status: accepted
 relations:
   - predicate: mentions
     object: people/mei-tanaka
-    confidence: 0.7
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [128, 194]
-        quote: Customer is asking about the Customer data request timeline again.
+        span: [106, 116]
+        quote: Mei Tanaka
   - predicate: mentions
     object: people/zoe-ravel
-    confidence: 0.7
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [23, 102]
-        quote: This is the fourth ticket bounced back from Engineering on Employee onboarding.
+        span: [2, 11]
+        quote: Zoë Ravel
   - predicate: mentions
     object: processes/data-request
-    confidence: 0.8
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [128, 194]
-        quote: Customer is asking about the Customer data request timeline again.
+        span: [157, 178]
+        quote: Customer data request
   - predicate: mentions
     object: processes/onboarding
-    confidence: 0.8
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [23, 102]
-        quote: This is the fourth ticket bounced back from Engineering on Employee onboarding.
+        span: [82, 101]
+        quote: Employee onboarding
   - predicate: mentions
     object: teams/engineering
-    confidence: 0.8
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [23, 102]
-        quote: This is the fourth ticket bounced back from Engineering on Employee onboarding.
+        span: [67, 78]
+        quote: Engineering
 ---
 
 **Zoë Ravel** (13:46): This is the fourth ticket bounced back from Engineering on Employee onboarding.

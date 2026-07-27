@@ -16,39 +16,83 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 245971176bb7518dc94accdf37246798
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 35a1e319a1eedc17e6a61d0b1f81822f
   status: accepted
 relations:
   - predicate: mentions
-    object: people/mei-tanaka
-    confidence: 0.6
+    object: people/ana-brito
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [326, 370]
-        quote: Mei Tanaka to document the handoff boundary.
+        span: [77, 86]
+        quote: Ana Brito
+  - predicate: mentions
+    object: people/mei-tanaka
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [88, 98]
+        quote: Mei Tanaka
+  - predicate: mentions
+    object: people/nadia-hassan
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [52, 64]
+        quote: Nadia Hassan
   - predicate: mentions
     object: people/zoe-ravel
-    confidence: 0.6
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [37, 98]
-        quote: '**Attendees:** Nadia Hassan, Zoë Ravel, Ana Brito, Mei Tanaka'
-  - predicate: owns
-    subject: people/ana-brito
+        span: [66, 75]
+        quote: Zoë Ravel
+  - predicate: mentions
     object: processes/quarterly-close
-    confidence: 0.85
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [186, 227]
-        quote: Ana Brito confirmed they own the process.
+        span: [2, 17]
+        quote: Quarterly close
+  - predicate: mentions
+    object: teams/finance
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [254, 261]
+        quote: Finance
+  - predicate: mentions
+    object: teams/product
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [243, 250]
+        quote: Product
+  - predicate: mentions
+    object: tools/netsuite
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [174, 182]
+        quote: NetSuite
 ---
 
 # Quarterly close sync — 2024-01-16

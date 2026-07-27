@@ -22,9 +22,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 6ce36cd1aff24bbd58ba95be4749dbb3
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 952f0695e58f884ded3727d43efc7a97
   status: accepted
 relations:
   - predicate: authored_by
@@ -37,16 +37,6 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
-  - predicate: depends_on
-    subject: processes/refund-approval
-    object: tools/pagerduty
-    confidence: 0.8
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [191, 233]
-        quote: the PagerDuty step is blocked on your team
   - predicate: mentions
     object: people/ana-brito
     confidence: 0.9
@@ -54,13 +44,13 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [158, 234]
-        quote: Ana Brito owns this process, but the PagerDuty step is blocked on your team.
+        span: [158, 167]
+        quote: Ana Brito
   - predicate: mentions
     object: people/dev-oyelaran
-    confidence: 0.7
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
         span: [57, 77]
@@ -72,8 +62,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [10, 47]
-        quote: Nadia Hassan <nadia@meridian.example>
+        span: [24, 46]
+        quote: nadia@meridian.example
   - predicate: mentions
     object: processes/refund-approval
     confidence: 0.9
@@ -81,8 +71,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [125, 157]
-        quote: Following up on refund approval.
+        span: [141, 156]
+        quote: refund approval
   - predicate: mentions
     object: tools/pagerduty
     confidence: 0.9
@@ -90,18 +80,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [191, 233]
-        quote: the PagerDuty step is blocked on your team
-  - predicate: owns
-    subject: people/ana-brito
-    object: processes/refund-approval
-    confidence: 0.95
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [158, 185]
-        quote: Ana Brito owns this process
+        span: [195, 204]
+        quote: PagerDuty
 ---
 
 **From:** Nadia Hassan <nadia@meridian.example>

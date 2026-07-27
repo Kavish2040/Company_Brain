@@ -16,51 +16,85 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 2b463bcb823496835cf4682fba5b1c52
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 30ceee79f132347f238649e71049a74b
   status: accepted
 relations:
   - predicate: handoff_to
     subject: teams/support
     object: teams/engineering
-    confidence: 0.95
+    confidence: 0.6
     provenance: llm
     status: proposed
     evidence:
       - node: self
-        span: [536, 609]
-        quote: Support hands off to Engineering when the root cause is a product defect.
+        span: [536, 568]
+        quote: Support hands off to Engineering
   - predicate: handoff_to
     subject: teams/support
     object: teams/finance
-    confidence: 0.95
+    confidence: 0.6
     provenance: llm
     status: proposed
     evidence:
       - node: self
-        span: [471, 533]
-        quote: Support hands off to Finance when a cost approval is required.
+        span: [471, 499]
+        quote: Support hands off to Finance
+  - predicate: mentions
+    object: people/mei-tanaka
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [48, 68]
+        quote: mei@meridian.example
+  - predicate: mentions
+    object: processes/data-request
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [2, 23]
+        quote: Customer data request
   - predicate: mentions
     object: teams/engineering
-    confidence: 0.7
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [628, 730]
-        quote: 'Tickets frequently bounce between Support and Engineering when ownership of the
-
-          root cause is unclear.'
+        span: [557, 568]
+        quote: Engineering
+  - predicate: mentions
+    object: teams/finance
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [492, 499]
+        quote: Finance
+  - predicate: mentions
+    object: teams/product
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [594, 601]
+        quote: product
   - predicate: mentions
     object: teams/support
-    confidence: 0.8
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [280, 320]
-        quote: Support triages within one business day.
+        span: [80, 87]
+        quote: Support
   - predicate: mentions
     object: tools/zendesk
     confidence: 0.9
@@ -68,18 +102,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [247, 276]
-        quote: Request is raised in Zendesk.
-  - predicate: owns
-    subject: people/mei-tanaka
-    object: processes/data-request
-    confidence: 0.9
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [25, 69]
-        quote: '**Owner:** Mei Tanaka (mei@meridian.example)'
+        span: [268, 275]
+        quote: Zendesk
 ---
 
 # Customer data request

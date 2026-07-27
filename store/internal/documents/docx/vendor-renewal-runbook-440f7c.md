@@ -21,9 +21,9 @@ normalizer:
   name: docx
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 30667c01dd34978a535dcf8be4f23f23
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 393d95434cb40e2edb419fdb01007945
   status: accepted
 relations:
   - predicate: authored_by
@@ -31,16 +31,43 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
-  - predicate: owns
-    subject: teams/finance
+  - predicate: mentions
+    object: people/sam-kaur
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [45, 70]
+        quote: sam.kaur@meridian.example
+  - predicate: mentions
     object: processes/vendor-renewal
     confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [2, 16]
+        quote: Vendor renewal
+  - predicate: mentions
+    object: teams/finance
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [86, 93]
+        quote: Finance
+  - predicate: owns
+    subject: people/sam-kaur
+    object: processes/vendor-renewal
+    confidence: 0.75
     provenance: llm
     status: proposed
     evidence:
       - node: self
-        span: [73, 93]
-        quote: 'Owning team: Finance'
+        span: [28, 44]
+        quote: 'Owner: Sam Kaur'
 ---
 
 # Vendor renewal — runbook

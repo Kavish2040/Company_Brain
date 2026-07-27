@@ -16,9 +16,9 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 363bef249d220402c3d2f52145b22896
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: b43075d1e7f17aff48754cba2aef477d
   status: accepted
 relations:
   - predicate: mentions
@@ -28,17 +28,26 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [63, 89]
-        quote: '**Decided by:** Mei Tanaka'
-  - predicate: supersedes
-    object: teams/support
-    confidence: 0.75
+        span: [79, 89]
+        quote: Mei Tanaka
+  - predicate: mentions
+    object: processes/data-request
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [323, 393]
-        quote: The previous informal arrangement documented in the Support team page.
+        span: [19, 40]
+        quote: customer data request
+  - predicate: mentions
+    object: teams/support
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [375, 382]
+        quote: Support
 ---
 
 # Decision: adjust customer data request

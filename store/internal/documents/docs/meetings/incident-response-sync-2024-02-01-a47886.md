@@ -16,31 +16,11 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: cb904bfa6de6d2e0d7780718bb981812
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 4ebaa127c11a4e41d82c46606a23aa94
   status: accepted
 relations:
-  - predicate: depends_on
-    subject: processes/incident-response
-    object: tools/snowflake
-    confidence: 0.85
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [112, 183]
-        quote: "Zoë Ravel raised that incident response is still blocked on\n Snowflake."
-  - predicate: handoff_to
-    subject: teams/engineering
-    object: teams/support
-    confidence: 0.6
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [236, 320]
-        quote: "Handoff from Engineering to Support is unclear; two\n tickets bounced back last week."
   - predicate: mentions
     object: people/ana-brito
     confidence: 0.9
@@ -48,26 +28,35 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [336, 379]
-        quote: Ana Brito to document the handoff boundary.
+        span: [89, 98]
+        quote: Ana Brito
   - predicate: mentions
     object: people/mei-tanaka
-    confidence: 0.6
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [39, 98]
-        quote: '**Attendees:** Zoë Ravel, Tom Whelan, Mei Tanaka, Ana Brito'
+        span: [77, 87]
+        quote: Mei Tanaka
+  - predicate: mentions
+    object: people/owen-fitz
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [186, 201]
+        quote: Owen Fitzgerald
   - predicate: mentions
     object: people/tom-whelan
-    confidence: 0.6
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [39, 98]
-        quote: '**Attendees:** Zoë Ravel, Tom Whelan, Mei Tanaka, Ana Brito'
+        span: [65, 75]
+        quote: Tom Whelan
   - predicate: mentions
     object: people/zoe-ravel
     confidence: 0.9
@@ -75,54 +64,44 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [112, 183]
-        quote: "Zoë Ravel raised that incident response is still blocked on\n Snowflake."
+        span: [54, 63]
+        quote: Zoë Ravel
   - predicate: mentions
     object: processes/incident-response
-    confidence: 0.85
+    confidence: 0.9
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [112, 183]
-        quote: "Zoë Ravel raised that incident response is still blocked on\n Snowflake."
+        span: [2, 19]
+        quote: Incident response
   - predicate: mentions
     object: teams/engineering
-    confidence: 0.7
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [236, 320]
-        quote: "Handoff from Engineering to Support is unclear; two\n tickets bounced back last week."
-  - predicate: mentions
-    object: teams/support
-    confidence: 0.7
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [236, 320]
-        quote: "Handoff from Engineering to Support is unclear; two\n tickets bounced back last week."
-  - predicate: mentions
-    object: tools/snowflake
-    confidence: 0.85
+    confidence: 0.9
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [112, 183]
-        quote: "Zoë Ravel raised that incident response is still blocked on\n Snowflake."
-  - predicate: owns
-    subject: people/owen-fitz
-    object: processes/incident-response
-    confidence: 0.7
+        span: [249, 260]
+        quote: Engineering
+  - predicate: mentions
+    object: teams/support
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [186, 233]
-        quote: Owen Fitzgerald confirmed they own the process.
+        span: [264, 271]
+        quote: Support
+  - predicate: mentions
+    object: tools/snowflake
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [173, 182]
+        quote: Snowflake
 ---
 
 # Incident response sync — 2024-02-01

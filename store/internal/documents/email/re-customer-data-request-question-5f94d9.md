@@ -22,9 +22,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 306e0bb47e9a31fdac5127e772dc98b1
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 3100b865deb896ee64e2586cf1c60405
   status: accepted
 relations:
   - predicate: authored_by
@@ -37,62 +37,51 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
-  - predicate: depends_on
-    subject: processes/data-request
-    object: tools/zendesk
-    confidence: 0.75
+  - predicate: mentions
+    object: people/mei-tanaka
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [200, 240]
-        quote: the Zendesk step is blocked on your team
+        span: [166, 176]
+        quote: Mei Tanaka
   - predicate: mentions
     object: people/sam-kelly
-    confidence: 0.7
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
         span: [53, 79]
         quote: sam.kelly@meridian.example
   - predicate: mentions
     object: people/tom-whelan
-    confidence: 0.8
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [10, 20]
-        quote: Tom Whelan
+        span: [22, 42]
+        quote: tom@meridian.example
   - predicate: mentions
-    object: processes/data-request
-    confidence: 0.8
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [127, 165]
-        quote: Following up on customer data request.
-  - predicate: mentions
-    object: tools/zendesk
-    confidence: 0.7
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [200, 240]
-        quote: the Zendesk step is blocked on your team
-  - predicate: owns
-    subject: people/mei-tanaka
     object: processes/data-request
     confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [166, 241]
-        quote: Mei Tanaka owns this process, but the Zendesk step is blocked on your team.
+        span: [143, 164]
+        quote: customer data request
+  - predicate: mentions
+    object: tools/zendesk
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [204, 211]
+        quote: Zendesk
 ---
 
 **From:** Tom Whelan <tom@meridian.example>

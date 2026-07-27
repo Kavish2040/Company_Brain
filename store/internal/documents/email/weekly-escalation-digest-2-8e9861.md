@@ -22,9 +22,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 08c505d88eb75281619a817e577f6626
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 4f7309ebabae54b2e72b82aa1fa53ae1
   status: accepted
 relations:
   - predicate: authored_by
@@ -38,23 +38,41 @@ relations:
     provenance: structural
     status: accepted
   - predicate: mentions
-    object: processes/customer-escalation
-    confidence: 0.85
+    object: accounts/support-inbox
+    confidence: 0.9
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [140, 229]
-        quote: 4 escalations were handed to Engineering this week; 1 bounced back to Support unresolved.
+        span: [28, 52]
+        quote: support@meridian.example
   - predicate: mentions
-    object: teams/engineering
-    confidence: 0.8
+    object: people/dev-oyelaran
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [140, 229]
-        quote: 4 escalations were handed to Engineering this week; 1 bounced back to Support unresolved.
+        span: [63, 83]
+        quote: dev@meridian.example
+  - predicate: mentions
+    object: teams/engineering
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [169, 180]
+        quote: Engineering
+  - predicate: mentions
+    object: teams/support
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [210, 217]
+        quote: Support
 ---
 
 **From:** Meridian Support <support@meridian.example>

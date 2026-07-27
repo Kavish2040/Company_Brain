@@ -16,20 +16,38 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: f2eb9a836b5319c17e32af36ab1347da
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: a5a4f4b15ab4f64fce63d642163f4b57
   status: accepted
 relations:
-  - predicate: supersedes
-    object: teams/engineering
-    confidence: 0.6
+  - predicate: mentions
+    object: people/owen-fitz
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [321, 395]
-        quote: The previous informal arrangement documented in the Engineering team page.
+        span: [75, 90]
+        quote: Owen Fitzgerald
+  - predicate: mentions
+    object: processes/incident-response
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [19, 36]
+        quote: incident response
+  - predicate: mentions
+    object: teams/engineering
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [373, 384]
+        quote: Engineering
 ---
 
 # Decision: adjust incident response

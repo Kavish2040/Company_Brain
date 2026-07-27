@@ -22,9 +22,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 0882487a96951b3c7666c2631644bd0f
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 205ffe0ae0bd6a3a4559f55930763c72
   status: accepted
 relations:
   - predicate: authored_by
@@ -37,35 +37,51 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
-  - predicate: depends_on
-    subject: processes/quarterly-close
-    object: teams/engineering
-    confidence: 0.6
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [187, 226]
-        quote: the Linear step is blocked on your team
   - predicate: mentions
-    object: tools/linear
-    confidence: 0.7
+    object: people/ana-brito
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [187, 226]
-        quote: the Linear step is blocked on your team
-  - predicate: owns
-    subject: people/ana-brito
+        span: [154, 163]
+        quote: Ana Brito
+  - predicate: mentions
+    object: people/dev-oyelaran
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [53, 73]
+        quote: dev@meridian.example
+  - predicate: mentions
+    object: people/mei-tanaka
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [22, 42]
+        quote: mei@meridian.example
+  - predicate: mentions
     object: processes/quarterly-close
     confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [154, 227]
-        quote: Ana Brito owns this process, but the Linear step is blocked on your team.
+        span: [137, 152]
+        quote: quarterly close
+  - predicate: mentions
+    object: tools/linear
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [191, 197]
+        quote: Linear
 ---
 
 **From:** Mei Tanaka <mei@meridian.example>

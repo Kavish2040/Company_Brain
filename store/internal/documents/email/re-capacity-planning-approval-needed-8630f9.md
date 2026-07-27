@@ -22,9 +22,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 88b89ea9e6de6022286aec50a60b5ab9
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 0a2530ac713c279b36b4b923a5f127f6
   status: accepted
 relations:
   - predicate: authored_by
@@ -37,16 +37,6 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
-  - predicate: depends_on
-    subject: processes/capacity-planning
-    object: tools/snowflake
-    confidence: 0.85
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [162, 244]
-        quote: Owen Fitzgerald owns this process, but the Snowflake step is blocked on your team.
   - predicate: mentions
     object: people/mei-tanaka
     confidence: 0.9
@@ -63,8 +53,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [10, 49]
-        quote: Owen Fitzgerald <owen@meridian.example>
+        span: [27, 48]
+        quote: owen@meridian.example
   - predicate: mentions
     object: processes/capacity-planning
     confidence: 0.9
@@ -72,8 +62,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [127, 161]
-        quote: Following up on capacity planning.
+        span: [143, 160]
+        quote: capacity planning
   - predicate: mentions
     object: tools/snowflake
     confidence: 0.9
@@ -81,18 +71,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [201, 243]
-        quote: the Snowflake step is blocked on your team
-  - predicate: owns
-    subject: people/owen-fitz
-    object: processes/capacity-planning
-    confidence: 0.95
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [162, 244]
-        quote: Owen Fitzgerald owns this process, but the Snowflake step is blocked on your team.
+        span: [205, 214]
+        quote: Snowflake
 ---
 
 **From:** Owen Fitzgerald <owen@meridian.example>

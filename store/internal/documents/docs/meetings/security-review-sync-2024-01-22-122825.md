@@ -16,21 +16,11 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: claude-sonnet-5
-  prompt_version: claude-roster-v2
-  cache_key: 22494c224503eedb154aa8b29470e6ac
+  model: rules-offline
+  prompt_version: roster-v2
+  cache_key: 44644e65039bdaa925c8a1d91f644c22
   status: accepted
 relations:
-  - predicate: depends_on
-    subject: processes/security-review
-    object: tools/pagerduty
-    confidence: 0.85
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [120, 195]
-        quote: "Owen Fitzgerald raised that security review is still blocked on\n PagerDuty."
   - predicate: mentions
     object: people/dev-oyelaran
     confidence: 0.9
@@ -38,8 +28,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [347, 393]
-        quote: Dev Oyelaran to document the handoff boundary.
+        span: [94, 106]
+        quote: Dev Oyelaran
   - predicate: mentions
     object: people/owen-fitz
     confidence: 0.9
@@ -47,36 +37,53 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [120, 195]
-        quote: "Owen Fitzgerald raised that security review is still blocked on\n PagerDuty."
+        span: [52, 67]
+        quote: Owen Fitzgerald
   - predicate: mentions
     object: people/priya-raman
-    confidence: 0.6
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [37, 106]
-        quote: '**Attendees:** Owen Fitzgerald, Tom Whelan, Priya Raman, Dev Oyelaran'
+        span: [81, 92]
+        quote: Priya Raman
+  - predicate: mentions
+    object: people/tom-whelan
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [69, 79]
+        quote: Tom Whelan
   - predicate: mentions
     object: processes/security-review
-    confidence: 0.8
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [2, 35]
-        quote: Security review sync — 2024-01-22
-  - predicate: owns
-    subject: people/tom-whelan
-    object: processes/security-review
-    confidence: 0.75
+        span: [2, 17]
+        quote: Security review
+  - predicate: mentions
+    object: teams/engineering
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [198, 240]
-        quote: Tom Whelan confirmed they own the process.
+        span: [256, 267]
+        quote: Engineering
+  - predicate: mentions
+    object: tools/pagerduty
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [185, 194]
+        quote: PagerDuty
 ---
 
 # Security review sync — 2024-01-22
