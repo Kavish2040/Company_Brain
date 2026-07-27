@@ -25,3 +25,8 @@ supabase/.temp/
 # Frontend
 web/node_modules/
 web/dist/
+
+# A separate repo (getnao/sylph) that lives inside this directory.
+# Committing it as a gitlink gives clones an empty folder pointing at
+# a commit in another repository.
+sylph/
