@@ -10,7 +10,7 @@ from datetime import UTC, datetime, timedelta
 from typing import Any
 
 import httpx
-from fastapi import APIRouter, Cookie, HTTPException, Response
+from fastapi import APIRouter, Cookie, HTTPException
 from fastapi.responses import RedirectResponse
 
 from company_brain.connectors.google_auth import (
@@ -30,7 +30,7 @@ _oauth_sessions: dict[str, dict[str, Any]] = {}
 
 
 @router.get("/oauth/start")
-def oauth_start(response: Response) -> RedirectResponse:
+def oauth_start() -> RedirectResponse:
     """Initiate the OAuth flow: generate and store PKCE/state, redirect to Google."""
     client_id = os.environ.get("GOOGLE_CLIENT_ID", "").strip()
     if not client_id:
@@ -51,6 +51,7 @@ def oauth_start(response: Response) -> RedirectResponse:
     redirect_uri = "http://localhost:8000/api/gmail/oauth/callback"
     auth_url = build_authorization_url(client_id, redirect_uri, _SCOPES, state, code_challenge)
 
+    response = RedirectResponse(url=auth_url)
     response.set_cookie(
         "gmail_session",
         session_id,
@@ -60,7 +61,7 @@ def oauth_start(response: Response) -> RedirectResponse:
         max_age=3600,
     )
 
-    return RedirectResponse(url=auth_url)
+    return response
 
 
 @router.get("/oauth/callback")

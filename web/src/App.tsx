@@ -21,6 +21,7 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   Search,
+  Send,
   Sun,
 } from "lucide-react";
 
@@ -39,9 +40,16 @@ import { ReviewView } from "./views/ReviewView";
 import { BrowseView } from "./views/BrowseView";
 import { GmailView } from "./views/GmailView";
 import { GraphView } from "./views/GraphView";
+import { OutreachView } from "./views/OutreachView";
 import { NodeDrawer } from "./views/NodeDrawer";
 
-type View = { kind: "ask" } | { kind: "review" } | { kind: "browse"; type: string } | { kind: "gmail" } | { kind: "graph" };
+type View =
+  | { kind: "ask" }
+  | { kind: "review" }
+  | { kind: "browse"; type: string }
+  | { kind: "gmail" }
+  | { kind: "graph" }
+  | { kind: "outreach" };
 
 export default function App() {
   const [principal, setPrincipal] = useState("ceo");
@@ -52,6 +60,7 @@ export default function App() {
   const [browseOpen, setBrowseOpen] = useState(true);
   const [switcherOpen, setSwitcherOpen] = useState(false);
   const [pendingCount, setPendingCount] = useState(0);
+  const [outreachCount, setOutreachCount] = useState(0);
   const [openNode, setOpenNode] = useState<string | null>(null);
   const [dark, setDark] = useState(
     () => window.matchMedia("(prefers-color-scheme: dark)").matches,
@@ -61,28 +70,41 @@ export default function App() {
     document.documentElement.dataset.theme = dark ? "dark" : "light";
   }, [dark]);
 
+  const refreshCounts = useCallback(() => {
+    api
+      .reviewStats(principal)
+      .then((s) => {
+        setPendingCount(s.pending);
+        // Its own badge as well as its share of the review count: outreach is
+        // the only queue item that ends up addressed to a person, so "three
+        // things need you" should not hide which one is the message.
+        setOutreachCount(s.pending_outreach);
+      })
+      .catch(() => {
+        setPendingCount(0);
+        setOutreachCount(0);
+      });
+  }, [principal]);
+
   useEffect(() => {
     api.principals(principal).then(setPrincipals).catch(() => setPrincipals([]));
     api.health(principal).then(setHealth).catch(() => setHealth(null));
-    api
-      .reviewStats(principal)
-      .then((s) => setPendingCount(s.pending))
-      .catch(() => setPendingCount(0));
-  }, [principal]);
+    refreshCounts();
+  }, [principal, refreshCounts]);
 
   const current = principals.find((p) => p.id === principal);
   const openNodeCb = useCallback((id: string) => setOpenNode(id), []);
 
+  const TITLES: Record<string, string> = {
+    ask: "Ask",
+    review: "Review",
+    gmail: "Gmail",
+    graph: "Graph",
+    outreach: "Outreach",
+  };
+  // Only `browse` carries its own label; everything else is named by its kind.
   const breadcrumb =
-    view.kind === "ask"
-      ? "Ask"
-      : view.kind === "review"
-        ? "Review"
-        : view.kind === "gmail"
-          ? "Gmail"
-          : view.kind === "graph"
-            ? "Graph"
-            : view.type;
+    view.kind === "browse" ? view.type : (TITLES[view.kind] ?? view.kind);
 
   return (
     <div className="flex h-full bg-background text-foreground">
@@ -168,6 +190,14 @@ export default function App() {
                 trailing={pendingCount > 0 ? <Badge>{pendingCount}</Badge> : undefined}
               >
                 Review
+              </Row>
+              <Row
+                active={view.kind === "outreach"}
+                onClick={() => setView({ kind: "outreach" })}
+                icon={<Icon of={Send} active={view.kind === "outreach"} />}
+                trailing={outreachCount > 0 ? <Badge>{outreachCount}</Badge> : undefined}
+              >
+                Outreach
               </Row>
               <Row
                 active={view.kind === "gmail"}
@@ -278,9 +308,14 @@ export default function App() {
           {view.kind === "review" && (
             <ReviewView
               principal={principal}
-              onChanged={() =>
-                api.reviewStats(principal).then((s) => setPendingCount(s.pending))
-              }
+              onChanged={refreshCounts}
+              onOpenNode={openNodeCb}
+            />
+          )}
+          {view.kind === "outreach" && (
+            <OutreachView
+              principal={principal}
+              onChanged={refreshCounts}
               onOpenNode={openNodeCb}
             />
           )}

@@ -327,7 +327,7 @@ export const api = {
       `/gmail/triage${forceRefresh ? "?force_refresh=true" : ""}`,
       "",
     ),
-  gmailOauthStart: () => "http://localhost:9000/api/gmail/oauth/start",
+  gmailOauthStart: () => "http://localhost:8000/api/gmail/oauth/start",
   gmailLogout: () =>
     request<{ status: string }>("/gmail/oauth/logout", "", {
       method: "POST",

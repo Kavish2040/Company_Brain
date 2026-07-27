@@ -148,6 +148,28 @@ class TestDraftPermissions:
         )
         assert response.status_code == 400
 
+    def test_redrafting_a_decided_draft_conflicts_rather_than_crashing(
+        self, client: TestClient
+    ) -> None:
+        """Ids are content-addressed on the message, so re-drafting an
+        unchanged message for someone already decided lands on that decided
+        draft. The store refuses — and the API has to report that as a
+        conflict, because an unhandled refusal here is a 500 in front of a user
+        who pressed a button the console offered them.
+        """
+        draft = client.post("/api/outreach/draft", json={"node_id": PERSON}, headers=CEO).json()
+        client.post(
+            "/api/review/decide",
+            headers=CEO,
+            json={
+                "items": [{"key": draft["draft_id"], "kind": "outreach"}],
+                "decision": "rejected",
+            },
+        )
+        again = client.post("/api/outreach/draft", json={"node_id": PERSON}, headers=CEO)
+        assert again.status_code == 409
+        assert "re-drafted" in again.json()["detail"]
+
     def test_the_draft_never_carries_a_fact_its_author_cannot_read(
         self, client: TestClient
     ) -> None:

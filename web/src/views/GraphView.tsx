@@ -146,7 +146,9 @@ export function GraphView({ principal }: { principal: Principal }) {
           .force("link", d3.forceLink<GraphNode, GraphLink>(graphLinks).distance(100))
           .force("charge", d3.forceManyBody().strength(-300))
           .force("center", d3.forceCenter(0, 0))
-          .force("collide", d3.forceCollide().radius((d) => getNodeRadius(d) + 5));
+          // Typed: a bare forceCollide() is generic over SimulationNodeDatum,
+          // which has none of GraphNode's fields that getNodeRadius reads.
+          .force("collide", d3.forceCollide<GraphNode>().radius((d) => getNodeRadius(d) + 5));
 
         simulationRef.current = simulation;
 

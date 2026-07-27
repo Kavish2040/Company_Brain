@@ -788,21 +788,36 @@ def outreach_draft(
         sender_display=principal.display,
     )
     store = OutreachStore(instance.repo)
-    draft = store.put(
-        OutreachDraft(
-            draft_id=draft_id(indexed.id, principal.id, text),
-            node_id=indexed.id,
-            node_title=indexed.title,
-            sensitivity=indexed.sensitivity,
-            drafted_by=principal.id,
-            created_at=datetime.now(UTC),
-            subject=subject,
-            body=text,
-            facts=tuple(facts),
-            lead=lead,
-            lead_source=provider.source.name,
-        )
+    candidate = OutreachDraft(
+        draft_id=draft_id(indexed.id, principal.id, text),
+        node_id=indexed.id,
+        node_title=indexed.title,
+        sensitivity=indexed.sensitivity,
+        drafted_by=principal.id,
+        created_at=datetime.now(UTC),
+        subject=subject,
+        body=text,
+        facts=tuple(facts),
+        lead=lead,
+        lead_source=provider.source.name,
     )
+    try:
+        draft = store.put(candidate)
+    except OutreachError as exc:
+        # The id is content-addressed on the message, so re-drafting an
+        # unchanged message for someone whose last draft was decided lands on
+        # that decided draft — and the store refuses to reset it to pending.
+        # A conflict, not a server error: the caller asked for something that
+        # already has an answer, and the fix is to reopen it rather than retry.
+        audit.record(
+            actor=principal,
+            action=Action.OUTREACH_REFUSED,
+            outcome=Outcome.REFUSED,
+            node_ids=[indexed.id],
+            proposal_id=candidate.draft_id,
+            detail=str(exc),
+        )
+        raise HTTPException(409, str(exc)) from exc
     audit.record(
         actor=principal,
         action=Action.OUTREACH_DRAFT,
