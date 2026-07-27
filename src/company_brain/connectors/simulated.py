@@ -160,6 +160,35 @@ class SimulatedSlack:
                 )
 
 
+def seeded_workspace() -> SimulatedSlack:
+    """A workspace matching the synthetic corpus, for the `cb sync` demo.
+
+    Without this the CLI built an *empty* SimulatedSlack, and reconciliation
+    correctly concluded that every slack:* grant should be revoked — the engine
+    behaving properly against a source that says nothing exists. Right answer,
+    catastrophic demo.
+    """
+    from company_brain.corpus.generate import CHANNELS, PEOPLE
+
+    workspace = SimulatedSlack()
+    for cid, name, tier in CHANNELS:
+        sensitivity = Sensitivity(tier)
+        if name == "leadership-comp":
+            members = {"ceo"}
+        elif name == "general":
+            members = {"ceo", "support-lead", "eng-ic", "contractor"}
+        elif name == "support":
+            members = {"ceo", "support-lead"}
+        elif name == "finance":
+            members = {"ceo"}
+        else:
+            members = {"ceo", "support-lead", "eng-ic"}
+        workspace.add_channel(cid, name, sensitivity, members)
+        speaker = PEOPLE[hash(cid) % len(PEOPLE)]
+        workspace.post(cid, speaker.slack_id, f"Opening message in #{name}.")
+    return workspace
+
+
 def _assert_protocol() -> None:
     _: Connector = SimulatedSlack()
 

@@ -181,7 +181,7 @@ def sync(
     revocation without credentials. Real Slack and Drive replace three methods
     and keep the rest (see connectors/base.py).
     """
-    from company_brain.connectors.simulated import SimulatedSlack
+    from company_brain.connectors.simulated import seeded_workspace
     from company_brain.connectors.sync import SyncEngine
 
     if connector != "simulated-slack":
@@ -189,7 +189,7 @@ def sync(
         raise typer.Exit(64)
 
     instance = build_app(store)
-    source = SimulatedSlack()
+    source = seeded_workspace()
     engine = SyncEngine(
         instance.repo,
         instance.registry,
