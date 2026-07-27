@@ -125,6 +125,157 @@ class TestAclDrift:
         )
 
 
+class TestGrantPairing:
+    """A grant is a (ref, ceiling) pair, and the two halves must stay married.
+
+    Storing refs and tiers in separate sets makes `allows` a cross-product: hold
+    one restricted channel and every other ref you hold is silently restricted
+    too. Every test here fails against that shape, and the existing suite did
+    not, because its fixtures map each tier to exactly one ref — so the ref check
+    and the tier check could never disagree.
+    """
+
+    PUBLIC_CH = "slack:channel:PUBLIC"
+    SECRET_CH = "slack:channel:SECRET"
+
+    def test_a_tier_from_one_ref_does_not_apply_to_another(self, grants: GrantTable) -> None:
+        """The escalation: adding someone to one restricted channel must not
+        raise their ceiling on every other ref they already hold."""
+        access = AccessFilter(grants, human("boss"))
+        assert access.allows(self.SECRET_CH, RESTRICTED)
+        assert not access.allows(self.PUBLIC_CH, RESTRICTED)
+
+    def test_a_new_restricted_grant_does_not_widen_existing_refs(
+        self, grants: GrantTable
+    ) -> None:
+        grants.grant("staff", "slack:channel:FINANCE", RESTRICTED)
+        access = AccessFilter(grants, human("staff"))
+        assert access.allows("slack:channel:FINANCE", RESTRICTED)
+        # staff holds PUBLIC_CH at internal only; the finance grant is unrelated.
+        assert not access.allows(self.PUBLIC_CH, RESTRICTED)
+        assert not access.allows("gmail:mailbox:shared", RESTRICTED)
+
+    def test_revoking_a_grant_takes_its_ceiling_with_it(self, grants: GrantTable) -> None:
+        """The M2 case. `SyncEngine._sync_grants` calls revoke() when someone
+        leaves a channel; a ceiling that outlives the ref makes that a no-op."""
+        grants.grant("staff", "slack:channel:FINANCE", RESTRICTED)
+        grants.revoke("staff", "slack:channel:FINANCE")
+
+        access = AccessFilter(grants, human("staff"))
+        assert not access.allows("slack:channel:FINANCE", RESTRICTED)
+        assert not access.allows(self.PUBLIC_CH, RESTRICTED)
+        assert access.ceiling("slack:channel:FINANCE") is None
+
+    def test_regranting_higher_raises_only_that_ref(self, grants: GrantTable) -> None:
+        grants.grant("staff", self.PUBLIC_CH, RESTRICTED)
+        access = AccessFilter(grants, human("staff"))
+        assert access.allows(self.PUBLIC_CH, RESTRICTED)
+        assert not access.allows("slack:channel:OTHER", RESTRICTED)
+
+    def test_a_ceiling_admits_everything_below_it(self, grants: GrantTable) -> None:
+        """Tiers are ordered. A restricted grant must not refuse the public
+        content sitting underneath it — `Sensitivity` says so in its docstring."""
+        grants.grant("staff", "gdrive:folder:MIXED", RESTRICTED)
+        access = AccessFilter(grants, human("staff"))
+        assert access.allows("gdrive:folder:MIXED", RESTRICTED)
+        assert access.allows("gdrive:folder:MIXED", INTERNAL)
+        assert access.allows("gdrive:folder:MIXED", Sensitivity.PUBLIC)
+
+    def test_a_low_ceiling_refuses_content_above_it(self, grants: GrantTable) -> None:
+        """The direction that must stay closed: a Drive folder holding both
+        internal and restricted files is exactly where M2 will find this."""
+        grants.grant("staff", "gdrive:folder:MIXED", INTERNAL)
+        access = AccessFilter(grants, human("staff"))
+        assert access.allows("gdrive:folder:MIXED", INTERNAL)
+        assert not access.allows("gdrive:folder:MIXED", RESTRICTED)
+
+    def test_group_membership_takes_the_higher_ceiling_per_ref(
+        self, grants: GrantTable
+    ) -> None:
+        grants.grant("staff", "gdrive:folder:LEDGER", INTERNAL)
+        grants.grant("finance-team", "gdrive:folder:LEDGER", RESTRICTED)
+        grants.add_to_group("staff", "finance-team")
+        assert AccessFilter(grants, human("staff")).allows("gdrive:folder:LEDGER", RESTRICTED)
+
+    def test_an_agent_is_capped_per_ref_not_just_per_ref_list(
+        self, grants: GrantTable
+    ) -> None:
+        """Invariant 8 at tier granularity: the agent holds a ref at restricted
+        that its human holds only at internal. The lower ceiling wins."""
+        grants.grant("boss", "gdrive:folder:MIXED", INTERNAL)
+        grants.register_agent("privileged", inherit=False)
+        grants.grant("privileged", "gdrive:folder:MIXED", RESTRICTED)
+
+        access = AccessFilter(grants, agent("privileged", "boss"))
+        assert access.allows("gdrive:folder:MIXED", INTERNAL)
+        assert not access.allows("gdrive:folder:MIXED", RESTRICTED)
+
+    def test_an_agent_below_its_human_stays_below(self, grants: GrantTable) -> None:
+        grants.grant("boss", "gdrive:folder:MIXED", RESTRICTED)
+        grants.register_agent("narrow", inherit=False)
+        grants.grant("narrow", "gdrive:folder:MIXED", INTERNAL)
+
+        access = AccessFilter(grants, agent("narrow", "boss"))
+        assert access.allows("gdrive:folder:MIXED", INTERNAL)
+        assert not access.allows("gdrive:folder:MIXED", RESTRICTED)
+
+
+class TestOneEnforcementPoint:
+    """The index must ask the filter, not re-implement it.
+
+    `MemoryIndex` used to carry its own copy of the predicate, and retrieval
+    handed it loose ref and tier sets — so fixing `allows` alone would leave the
+    search path leaking. A `PostgresIndex` would have made it three copies.
+    """
+
+    def test_search_honours_the_per_ref_ceiling(self) -> None:
+        from company_brain.index.base import IndexedNode
+        from company_brain.index.memory import MemoryIndex
+
+        grants = GrantTable()
+        grants.grant("reader", "slack:channel:OPEN", INTERNAL)
+        grants.grant("reader", "slack:channel:VAULT", RESTRICTED)
+        access = AccessFilter(grants, human("reader"))
+
+        def node(node_id: str, ref: str, tier: Sensitivity) -> IndexedNode:
+            return IndexedNode(
+                id=node_id,
+                type="Document",
+                title="compensation planning",
+                acl_ref=ref,
+                sensitivity=tier,
+                status="active",
+                content_sha256="",
+                edges=(),
+            )
+
+        index = MemoryIndex()
+        index.rebuild(
+            [
+                # Same tier, different refs: allowed on VAULT, not on OPEN.
+                (node("documents/vault", "slack:channel:VAULT", RESTRICTED), "compensation"),
+                (node("documents/open", "slack:channel:OPEN", RESTRICTED), "compensation"),
+            ]
+        )
+
+        found = {h.chunk.node_id for h in index.search_lexical("compensation", access, 10)}
+        assert "documents/vault" in found
+        assert "documents/open" not in found, "index applied a tier it was not granted on"
+
+    def test_the_index_cannot_be_handed_loose_sets(self) -> None:
+        """A guard against the old shape coming back by way of a new backend."""
+        import inspect
+
+        from company_brain.index.base import Index
+
+        for name in ("search_vector", "search_lexical"):
+            params = set(inspect.signature(getattr(Index, name)).parameters)
+            assert "visibility" in params, f"{name} must take the filter itself"
+            assert not (params & {"refs", "tiers", "elevated"}), (
+                f"{name} takes ACL parts again: {params}"
+            )
+
+
 class TestElevation:
     def test_elevated_principal_sees_everything(self) -> None:
         access = AccessFilter(GrantTable(), elevate())

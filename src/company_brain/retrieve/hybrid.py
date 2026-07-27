@@ -69,11 +69,10 @@ class HybridRetriever:
     def retrieve(
         self, query: str, *, limit: int = 8, per_leg: int = 25, max_hops: int = 2
     ) -> Retrieval:
-        elevated = self.access.elevated
-        refs, tiers = self.access.refs, self.access.tiers
-
-        vector = self.index.search_vector(query, refs, tiers, per_leg, elevated=elevated)
-        lexical = self.index.search_lexical(query, refs, tiers, per_leg, elevated=elevated)
+        # The filter goes in whole. Unpacking it into refs and tiers here is what
+        # let the index answer a different question than `allows` does.
+        vector = self.index.search_vector(query, self.access, per_leg)
+        lexical = self.index.search_lexical(query, self.access, per_leg)
         fused = reciprocal_rank_fusion(vector, lexical)
 
         by_chunk = {h.chunk.id: h for h in [*vector, *lexical]}

@@ -110,6 +110,11 @@ class NodeSummary(BaseModel):
 
 class EdgeOut(BaseModel):
     predicate: str
+    # None means "this node" — the document itself is the subject, which is the
+    # normal case for mentions/authored_by. Present for third-party relations,
+    # where omitting it renders "owns processes/x" with no owner shown.
+    subject: str | None
+    subject_title: str | None
     object: str
     object_title: str
     confidence: float
@@ -131,6 +136,8 @@ class PendingOut(BaseModel):
     node_id: str
     node_title: str
     predicate: str
+    subject: str | None
+    subject_title: str | None
     object: str
     confidence: float
     quote: str
@@ -264,9 +271,12 @@ def get_node(
         target = instance.index.get_node(edge.object)
         if target is None or not access.allows(target.acl_ref, target.sensitivity):
             continue
+        subject_node = instance.index.get_node(edge.subject) if edge.subject else None
         relations.append(
             EdgeOut(
                 predicate=str(edge.predicate),
+                subject=edge.subject,
+                subject_title=subject_node.title if subject_node else None,
                 object=edge.object,
                 object_title=target.title,
                 confidence=edge.confidence,
@@ -300,6 +310,12 @@ def review_pending(
             node_id=item.node_id,
             node_title=item.node_title,
             predicate=str(item.edge.predicate),
+            subject=item.edge.subject,
+            subject_title=(
+                node.title
+                if item.edge.subject and (node := instance.index.get_node(item.edge.subject))
+                else None
+            ),
             object=item.edge.object,
             confidence=item.edge.confidence,
             quote=item.quote(),

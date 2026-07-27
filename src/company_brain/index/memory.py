@@ -21,11 +21,11 @@ from company_brain.index.base import (
     HashingEmbedder,
     Hit,
     IndexedNode,
+    Visibility,
     chunk_node,
     cosine,
     tokenize,
 )
-from company_brain.schemas.acl import Sensitivity
 from company_brain.schemas.edges import EdgeStatus
 
 _K1 = 1.5
@@ -88,24 +88,7 @@ class MemoryIndex:
     def get_node(self, node_id: str) -> IndexedNode | None:
         return self._nodes.get(node_id)
 
-    def _visible(
-        self,
-        chunk: Chunk,
-        refs: frozenset[str],
-        tiers: frozenset[Sensitivity],
-        elevated: bool,
-    ) -> bool:
-        return elevated or (chunk.acl_ref in refs and chunk.sensitivity in tiers)
-
-    def search_vector(
-        self,
-        query: str,
-        refs: frozenset[str],
-        tiers: frozenset[Sensitivity],
-        limit: int,
-        *,
-        elevated: bool = False,
-    ) -> list[Hit]:
+    def search_vector(self, query: str, visibility: Visibility, limit: int) -> list[Hit]:
         if not self._vectors:
             return []
         query_vector = self.embedder.embed([query])[0]
@@ -115,20 +98,12 @@ class MemoryIndex:
             # ACL is applied *before* ranking, not after — post-filtering an ANN
             # result set is what produces the permission-driven recall cliff
             # described in ARCHITECTURE §6.4.
-            if self._visible(chunk, refs, tiers, elevated)
+            if visibility.allows(chunk.acl_ref, chunk.sensitivity)
         ]
         scored.sort(key=lambda h: (-h.score, h.chunk.id))
         return [h for h in scored[:limit] if h.score > 0]
 
-    def search_lexical(
-        self,
-        query: str,
-        refs: frozenset[str],
-        tiers: frozenset[Sensitivity],
-        limit: int,
-        *,
-        elevated: bool = False,
-    ) -> list[Hit]:
+    def search_lexical(self, query: str, visibility: Visibility, limit: int) -> list[Hit]:
         terms = tokenize(query)
         if not terms or not self._chunks:
             return []
@@ -142,7 +117,7 @@ class MemoryIndex:
             idf = math.log(1 + (total - len(postings) + 0.5) / (len(postings) + 0.5))
             for chunk_id, freq in postings.items():
                 chunk = self._chunks[chunk_id]
-                if not self._visible(chunk, refs, tiers, elevated):
+                if not visibility.allows(chunk.acl_ref, chunk.sensitivity):
                     continue
                 length = self._lengths[chunk_id]
                 denominator = freq + _K1 * (

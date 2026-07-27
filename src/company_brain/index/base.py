@@ -175,32 +175,31 @@ def _pack(content: str, max_tokens: int) -> list[str]:
 
 
 @runtime_checkable
+class Visibility(Protocol):
+    """The access predicate, as the index sees it.
+
+    Deliberately narrow: one method, no sets to unpack. `acl.AccessFilter`
+    satisfies it structurally, so an index implementation cannot re-derive the
+    decision — it can only ask. A `PostgresIndex` translates this into a SQL
+    predicate over (acl_ref, sensitivity) pairs; it must not translate loose
+    ref and tier lists, which is not the same predicate.
+    """
+
+    def allows(self, acl_ref: str, sensitivity: Sensitivity) -> bool: ...
+
+
+@runtime_checkable
 class Index(Protocol):
-    """Query surface. Every method takes the caller's visible ACL set."""
+    """Query surface. Every search takes the caller's visibility, and applies it
+    before ranking rather than after."""
 
     def rebuild(self, nodes: Iterable[tuple[IndexedNode, str]]) -> int: ...
 
     def get_node(self, node_id: str) -> IndexedNode | None: ...
 
-    def search_vector(
-        self,
-        query: str,
-        refs: frozenset[str],
-        tiers: frozenset[Sensitivity],
-        limit: int,
-        *,
-        elevated: bool = False,
-    ) -> list[Hit]: ...
+    def search_vector(self, query: str, visibility: Visibility, limit: int) -> list[Hit]: ...
 
-    def search_lexical(
-        self,
-        query: str,
-        refs: frozenset[str],
-        tiers: frozenset[Sensitivity],
-        limit: int,
-        *,
-        elevated: bool = False,
-    ) -> list[Hit]: ...
+    def search_lexical(self, query: str, visibility: Visibility, limit: int) -> list[Hit]: ...
 
     def neighbours(
         self, node_id: str, predicates: frozenset[str] | None, limit: int

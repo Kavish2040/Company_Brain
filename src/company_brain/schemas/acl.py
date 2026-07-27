@@ -35,6 +35,18 @@ _TIER_ORDER: Final[dict[Sensitivity, int]] = {
 }
 
 
+def at_least(candidate: Sensitivity, ceiling: Sensitivity) -> bool:
+    """Does a grant with this `ceiling` admit content at tier `candidate`?
+
+    Tiers are ordered, so a ceiling admits its own tier and everything less
+    restrictive: RESTRICTED admits public, internal and restricted content;
+    PUBLIC admits only public. Treating them as an unordered set instead is how
+    a principal ends up holding a restricted grant and being refused the public
+    content underneath it.
+    """
+    return _TIER_ORDER[candidate] <= _TIER_ORDER[ceiling]
+
+
 def narrowest(tiers: Iterable[Sensitivity]) -> Sensitivity:
     """Most restrictive tier in an iterable. Empty input is RESTRICTED.
 
