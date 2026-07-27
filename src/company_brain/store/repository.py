@@ -1,0 +1,234 @@
+"""The store's public API.
+
+Everything upstream of the index goes through here. Two things this layer owns
+that a raw backend cannot:
+
+* **ACLs never widen** (invariant 6). Writing a node whose sensitivity is looser
+  than its recorded inputs is refused here, at the writer, rather than left to
+  each caller's discipline.
+* **Tier confinement.** A ``restricted`` node cannot be written into a
+  non-``restricted`` store root (docs/ARCHITECTURE.md §6.2). The tier is a
+  physical boundary, so the check belongs where the bytes are placed.
+
+This module deliberately has no read-side ACL filtering. The store is not a
+permission boundary — enforcement lives in the API/MCP layer, and pretending
+otherwise here would give callers false confidence.
+"""
+
+from __future__ import annotations
+
+from collections.abc import Iterator
+from datetime import datetime
+
+from company_brain.schemas.acl import Sensitivity, narrowest
+from company_brain.schemas.edges import Edge, EdgeStatus, Predicate, Provenance
+from company_brain.schemas.ids import id_to_path, split_id
+from company_brain.schemas.nodes import Frontmatter, Node, NodeStatus
+from company_brain.store.backend import StoreBackend
+from company_brain.store.serialize import dump_node, parse_node
+
+PROPOSALS_PREFIX = "_proposals"
+CACHE_PREFIX = "_cache"
+
+
+class StoreError(RuntimeError):
+    """A write violated a store invariant."""
+
+
+class AclWideningError(StoreError):
+    """Invariant 6: a derived node may not be more visible than its inputs."""
+
+
+class TierMismatchError(StoreError):
+    """A node's sensitivity does not belong in this store root."""
+
+
+class NodeNotFoundError(KeyError):
+    def __init__(self, node_id: str) -> None:
+        super().__init__(node_id)
+        self.node_id = node_id
+
+
+class Repository:
+    """Read and write canonical nodes over a backend.
+
+    ``tier`` pins this root to one sensitivity level. Leaving it None is the
+    single-root dev configuration; production sets it per root so a connector
+    bug can't land restricted content in the internal bucket.
+    """
+
+    def __init__(self, backend: StoreBackend, *, tier: Sensitivity | None = None) -> None:
+        self.backend = backend
+        self.tier = tier
+
+    # ---- read ----------------------------------------------------------
+
+    def get(self, node_id: str) -> Node:
+        node = self.find(node_id)
+        if node is None:
+            raise NodeNotFoundError(node_id)
+        return node
+
+    def find(self, node_id: str) -> Node | None:
+        text = self.backend.read_text(id_to_path(node_id))
+        return None if text is None else parse_node(text)
+
+    def exists(self, node_id: str) -> bool:
+        return self.backend.exists(id_to_path(node_id))
+
+    def resolve(self, node_id: str, *, max_hops: int = 8) -> Node:
+        """Follow ``redirects_to`` to the live node behind a renamed or merged ID.
+
+        Old citations must always resolve (invariant 12), so this is the read
+        path for anything user-facing.
+        """
+        seen: list[str] = []
+        current = node_id
+        for _ in range(max_hops):
+            if current in seen:
+                raise StoreError(f"redirect cycle: {' -> '.join([*seen, current])}")
+            seen.append(current)
+            node = self.get(current)
+            target = node.frontmatter.redirects_to
+            if target is None:
+                return node
+            current = target
+        raise StoreError(f"redirect chain longer than {max_hops} hops from {node_id!r}")
+
+    def walk_ids(self, node_type: str | None = None) -> Iterator[str]:
+        """Yield every node ID in the store, sorted, skipping internal trees."""
+        prefix = ""
+        if node_type is not None:
+            from company_brain.schemas.ids import TYPE_PLURALS
+
+            prefix = TYPE_PLURALS[node_type]
+        for path in self.backend.walk(prefix):
+            if not path.endswith(".md"):
+                continue
+            if path.startswith((f"{PROPOSALS_PREFIX}/", f"{CACHE_PREFIX}/")):
+                continue
+            yield path[: -len(".md")]
+
+    def walk(self, node_type: str | None = None) -> Iterator[Node]:
+        for node_id in self.walk_ids(node_type):
+            node = self.find(node_id)
+            if node is not None:
+                yield node
+
+    # ---- write ---------------------------------------------------------
+
+    def put(self, node: Node, *, input_tiers: tuple[Sensitivity, ...] = ()) -> None:
+        """Write a node, enforcing tier confinement and the no-widening rule.
+
+        ``input_tiers`` is the sensitivity of every source that fed a derived
+        node. Supplying it is what makes invariant 6 checkable; a synthesized
+        entity page that omits it is trusted, and that trust is the loophole to
+        watch in review.
+        """
+        self._check_tier(node)
+        if input_tiers:
+            required = narrowest(input_tiers)
+            if _looser_than(node.frontmatter.acl.sensitivity, required):
+                raise AclWideningError(
+                    f"{node.id!r} would be written as "
+                    f"{node.frontmatter.acl.sensitivity} but its narrowest input is "
+                    f"{required}; extraction may never widen an ACL"
+                )
+        self.backend.write_text(id_to_path(node.id), dump_node(node))
+
+    def _check_tier(self, node: Node) -> None:
+        if self.tier is None:
+            return
+        actual = node.frontmatter.acl.sensitivity
+        if actual is not self.tier:
+            raise TierMismatchError(
+                f"{node.id!r} is {actual} but this store root holds {self.tier} only"
+            )
+
+    def tombstone(
+        self,
+        node_id: str,
+        *,
+        deleted_at: datetime,
+        retain_content: bool,
+        reason: str = "deleted upstream",
+    ) -> Node:
+        """Mark a node deleted without removing the file (§9.3).
+
+        Inbound edges survive so a citation issued before the delete resolves to
+        "this source was deleted on <date>" rather than a dangling ID — a worse
+        answer than the tombstone, and a much more confusing one.
+        """
+        node = self.get(node_id)
+        body = node.body if retain_content else f"_{reason} on {deleted_at.date()}._"
+        updated = Frontmatter.model_validate(
+            node.frontmatter.model_dump()
+            | {
+                "status": NodeStatus.DELETED,
+                "deleted_upstream_at": deleted_at,
+                "content_retained": retain_content,
+            }
+        )
+        tombstoned = Node(frontmatter=updated, body=body)
+        self.put(tombstoned)
+        return tombstoned
+
+    def redirect(self, old_id: str, new_id: str) -> Node:
+        """Leave a redirect stub at ``old_id`` pointing to ``new_id``.
+
+        IDs are immutable (invariant 12), so a rename or an entity merge is
+        always new-node-plus-stub, never a move. That is also what makes a merge
+        reversible: the losing node is still there.
+        """
+        if old_id == new_id:
+            raise StoreError(f"cannot redirect {old_id!r} to itself")
+        split_id(new_id)
+        existing = self.get(old_id)
+        updated = Frontmatter.model_validate(
+            existing.frontmatter.model_dump()
+            | {
+                "status": NodeStatus.MERGED,
+                "redirects_to": new_id,
+                "relations": [
+                    *(
+                        e.model_dump()
+                        for e in existing.frontmatter.relations
+                        if e.predicate is not Predicate.REDIRECTS_TO
+                    ),
+                    Edge(
+                        predicate=Predicate.REDIRECTS_TO,
+                        object=new_id,
+                        confidence=1.0,
+                        provenance=Provenance.HUMAN,
+                        status=EdgeStatus.ACCEPTED,
+                    ).model_dump(),
+                ],
+            }
+        )
+        stub = Node(frontmatter=updated, body=f"Merged into [[{new_id}]].")
+        self.put(stub)
+        return stub
+
+    # ---- proposals -----------------------------------------------------
+
+    def put_proposal(self, proposal_id: str, node: Node) -> str:
+        """Write an agent or low-confidence write to the proposal tree.
+
+        Agents never mutate the graph (invariant 9). Proposals are real markdown
+        so a reviewer diffs them in the same editor as everything else.
+        """
+        path = f"{PROPOSALS_PREFIX}/{proposal_id}.md"
+        self.backend.write_text(path, dump_node(node))
+        return path
+
+    def walk_proposal_ids(self) -> Iterator[str]:
+        for path in self.backend.walk(PROPOSALS_PREFIX):
+            if path.endswith(".md"):
+                yield path[len(PROPOSALS_PREFIX) + 1 : -len(".md")]
+
+
+_TIER_RANK = {Sensitivity.PUBLIC: 0, Sensitivity.INTERNAL: 1, Sensitivity.RESTRICTED: 2}
+
+
+def _looser_than(candidate: Sensitivity, floor: Sensitivity) -> bool:
+    return _TIER_RANK[candidate] < _TIER_RANK[floor]

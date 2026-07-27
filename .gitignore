@@ -1,0 +1,23 @@
+# NOTE: store/ is deliberately NOT ignored. The M1 acceptance test is
+# `git diff --exit-code` over the generated markdown tree, and the extraction
+# cache under store/_cache/ is committed on purpose (docs/ARCHITECTURE.md §4).
+
+__pycache__/
+*.py[cod]
+.venv/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+dist/
+build/
+*.egg-info/
+
+.env
+.env.*
+!.env.example
+
+# Supabase local stack state
+supabase/.branches/
+supabase/.temp/
+
+.DS_Store
