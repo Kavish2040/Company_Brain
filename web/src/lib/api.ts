@@ -299,8 +299,17 @@ export const api = {
    * Decide one item or many, in the order the reviewer worked them. Each item
    * carries back the `kind` the queue gave it, so the server validates a tag
    * rather than inferring a code path from the shape of a key.
+   *
+   * Typed to the two fields it actually sends rather than to `Pending`, so a
+   * caller holding an `Outreach` can decide it without fabricating a queue row
+   * of nulls to satisfy a shape the request never uses. `Pending[]` still
+   * satisfies it.
    */
-  decide: (p: string, items: Pending[], decision: Decision) =>
+  decide: (
+    p: string,
+    items: readonly { key: string; kind: Pending["kind"] }[],
+    decision: Decision,
+  ) =>
     request<{ decided: number; decision: string; by: string }>(
       "/review/decide",
       p,
@@ -318,7 +327,7 @@ export const api = {
       `/gmail/triage${forceRefresh ? "?force_refresh=true" : ""}`,
       "",
     ),
-  gmailOauthStart: () => `${window.location.protocol}//${window.location.hostname}:8000/api/gmail/oauth/start`,
+  gmailOauthStart: () => "http://localhost:9000/api/gmail/oauth/start",
   gmailLogout: () =>
     request<{ status: string }>("/gmail/oauth/logout", "", {
       method: "POST",

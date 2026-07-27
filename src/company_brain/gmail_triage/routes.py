@@ -13,7 +13,7 @@ from company_brain.gmail_triage.oauth import get_account_key_for_session
 from company_brain.gmail_triage.state import Message, StateStore, TriageState, EmailBucket
 
 
-router = APIRouter(tags=["gmail"], prefix="/api/gmail")
+router = APIRouter(tags=["gmail"])
 
 
 def _extract_date(headers: list[dict[str, str]]) -> str:

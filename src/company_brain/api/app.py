@@ -1412,7 +1412,7 @@ async def _announce_ask_room(hub: CollabHub) -> None:
     await hub.broadcast(ASK_ROOM, {"type": "presence", "participants": participants})
 
 
-api.include_router(gmail_oauth_router, tags=["gmail"])
-api.include_router(gmail_routes_router)
+api.include_router(gmail_oauth_router, prefix="/api/gmail", tags=["gmail"])
+api.include_router(gmail_routes_router, prefix="/api/gmail")
 
 app = api
