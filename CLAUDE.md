@@ -419,11 +419,10 @@ the next ingest on a Document node.
 | the shared ask room answers each principal separately | `test_each_participant_is_answered_under_their_own_grants` |
 | entity-page edits survive ingest; document edits do not | `TestLiveEditDurability` |
 
-**Verified this session, offline** (`COMPANY_BRAIN_OFFLINE=1`): the full suite — 192 tests
-at the time of writing, including 12 in `tests/integration/` over real WebSockets — passes
-in ~27s;
-ruff, format, and `mypy --strict` clean. A cold ingest of the 201-file corpus yields 232
-nodes, 364 chunks, 1122 accepted edges, and 32 edges pending review; `cb doctor` clean;
+**Verified this session, offline** (`COMPANY_BRAIN_OFFLINE=1`): the full suite — 491 tests
+pass in ~68s, including 14 in `tests/integration/` over real WebSockets; 55 Postgres tests
+skipped (memory index only). Ruff, format, and `mypy --strict` clean. A cold ingest of the
+201-file corpus yields 232 nodes, 364 chunks, 1122 accepted edges; `cb doctor` clean;
 `cb sync` picks up 5 simulated channels. The online path is real, not theoretical — the
 extraction cache in `store/` carries `model: claude-sonnet-5` frontmatter from live runs.
 
@@ -467,24 +466,32 @@ And every M2 guarantee above holds against a simulated source whose `enumerate_i
 free; against real Slack it is a paginated, rate-limited crawl, which is exactly where the
 freshness SLA stops being a footnote.
 
-**Not yet true, despite what a skim of this file suggests:** there are no git commits, so
-"COMMITTED store" and `git diff --exit-code` describe the intent rather than the current
-mechanism — determinism is verified by tree hashing inside the acceptance suite.
-`tests/integration/` covers the live-collab transport but nothing database-backed yet. `resolve/` is empty.
+**Not yet true, despite what a skim of this file suggests:** there are no git commits to the
+store yet, so "COMMITTED store" and `git diff --exit-code` describe the intent rather than
+the current mechanism — determinism is verified by tree hashing inside the acceptance suite.
+`tests/integration/` covers live-collab transport but nothing database-backed yet.
+`src/company_brain/index/postgres.py` is scaffolded but not wired. `src/company_brain/resolve/`
+is complete but unwired — item 0 below before it sees reviews or the CLI.
 
 **Next, in order:**
 
-1. `supabase/` — `config.toml`, `migrations/*.sql`, and a `psycopg` `Index` implementation
-   behind the existing protocol, joining the live-collab tests already in `tests/integration/`.
-2. A real Slack connector: the same three protocol methods against the API, with paginated
-   enumeration and a stated freshness SLA. Then Drive and Gmail.
-3. Sensitivity tiers as physical store roots, and ARCHITECTURE §14 open questions 2 and 3
-   (prod store backend, retention on delete) — both block the rest of M2.
-4. M3 — entity resolution layer 3 in `resolve/`, and the review surfaces that depend on it.
-5. M4, now that the gate exists, in this order: process modelling (curated Process nodes
-   with steps, owners and inputs/outputs — ARCHITECTURE §10.3 and §14 Q5, which is decided
-   in practice but still typeset as an open question); `handoff_to` enriched with observed
-   latency, volume and rework; the systemic queries; evidence-grade synthesis separating
-   asserted from inferred; and a real insufficient-evidence path with `ClaudeSynthesizer`
-   under an adversarial test. Each step moves a number in `eval/baseline.json` or it did
-   not happen.
+1. **Wire M3 entity resolution.** `src/company_brain/resolve/` is complete but unwired.
+   Converge `resolve/proposals.py` with `review/proposals.py` (both are proposal stores
+   with different write paths). Wire `cb resolve` in the CLI. Join the queues in
+   `ReviewQueue.pending_edges` so humans see merge proposals alongside edge proposals.
+   Expose a resolver in `build_app` for MCP/API/CLI composition.
+
+2. **Postgres index backend** — `src/company_brain/index/postgres.py` scaffolded, not
+   implemented. Implement `Index` protocol for pgvector + Postgres FTS, joining the
+   live-collab tests already in `tests/integration/`.
+
+3. **Real connectors** — Slack API (paginated `enumerate_ids`, stated freshness SLA),
+   Google Drive, and Gmail. `src/company_brain/connectors/drive.py` scaffolded. The
+   protocol and simulator are done; this is the source-specific work.
+
+4. **M4 quality moves**, now that the gate exists: process modelling (curated Process nodes
+   with steps, owners and inputs/outputs — ARCHITECTURE §10.3 and §14 Q5); `handoff_to`
+   enriched with latency, volume and rework; systemic queries; evidence-grade synthesis
+   separating asserted from inferred; and a real insufficient-evidence path with
+   `ClaudeSynthesizer` under an adversarial test. Each step moves a number in
+   `eval/baseline.json` or it did not happen.
