@@ -83,20 +83,50 @@ cmd_api() {
 cmd_mcp() {
   need_uv
   need_module "src/company_brain/mcp/server.py" "the MCP server"
-  cmd_cb mcp serve "$@"
+  # stdout is the MCP transport; anything printed there corrupts the protocol.
+  cmd_cb mcp --serve "$@"
+}
+
+cmd_web() {
+  command -v npm >/dev/null 2>&1 || die "npm is not installed."
+  [[ -d web/node_modules ]] || { say "npm install"; (cd web && npm install); }
+  say "vite dev server on http://localhost:5173 (proxies /api to :8000)"
+  (cd web && npm run dev)
+}
+
+# The demo: corpus -> ingest -> index -> re-ingest determinism -> ask, as two
+# principals. Runs with or without API keys; app.py reports which providers it
+# picked, so a run is never silently offline.
+cmd_demo() {
+  need_uv
+  say "generate corpus"       ; uv run cb corpus --force
+  say "ingest"                ; rm -rf store && uv run cb ingest
+  say "index"                 ; uv run cb index
+  say "doctor"                ; uv run cb doctor
+
+  say "re-ingest, frozen (must be byte-identical)"
+  local before after
+  before=$(find store -type f -exec shasum {} + | sort | shasum | cut -d" " -f1)
+  uv run cb ingest --frozen >/dev/null
+  after=$(find store -type f -exec shasum {} + | sort | shasum | cut -d" " -f1)
+  [[ "$before" == "$after" ]] || die "store changed on re-ingest"
+  say "PASS byte-identical ($before)"
+
+  say "who can see what"      ; uv run cb principals
+  say "ask, as the CEO"       ; uv run cb ask "who owns vendor renewals?" --principal ceo
+  say "ask, as a contractor"  ; uv run cb ask "who owns vendor renewals?" --principal contractor
+  say "review queue"          ; uv run cb review stats
 }
 
 cmd_db() {
-  # CLAUDE.md says `docker compose up -d postgres`; pyproject's integration marker
-  # says `supabase start`. Neither is configured in the repo yet — say so plainly
-  # rather than guessing which one wins.
-  if [[ -f docker-compose.yml || -f compose.yaml ]]; then
-    say "docker compose up -d postgres"; docker compose up -d postgres
-  elif [[ -d supabase ]]; then
-    say "supabase start"; supabase start
-  else
-    die "no local Postgres configured yet (no compose file, no supabase/). CLAUDE.md and pyproject.toml disagree on which it should be — resolve that before M1 integration tests."
-  fi
+  # Supabase, not Docker Compose and not Alembic — see the stack table in CLAUDE.md.
+  # Nothing in the codebase talks to a database yet; the M1 index is in-memory.
+  command -v supabase >/dev/null 2>&1 ||
+    die "the supabase CLI is not installed. See https://supabase.com/docs/guides/local-development"
+  [[ -d supabase ]] ||
+    die "no supabase/ directory yet (needs config.toml + migrations/*.sql). Nothing reads a database at M1 — see CLAUDE.md §Current state."
+  say "supabase start"
+  supabase start
 }
 
 usage() {
@@ -112,9 +142,11 @@ ${BOLD}company_brain${RESET} — dev commands
   ${BOLD}unit${RESET} | ${BOLD}integration${RESET} | ${BOLD}acceptance${RESET} | ${BOLD}llm${RESET}
                 run one test marker (integration needs Postgres; llm needs an API key)
 
-  ${BOLD}cb${RESET} [args]     the company_brain CLI  ${DIM}(not implemented yet)${RESET}
-  ${BOLD}api${RESET}           uvicorn, PORT=8000     ${DIM}(not implemented yet)${RESET}
-  ${BOLD}mcp${RESET}           MCP server             ${DIM}(not implemented yet)${RESET}
+  ${BOLD}cb${RESET} [args]     the company_brain CLI
+  ${BOLD}demo${RESET}          full pipeline end to end, then ask as two principals
+  ${BOLD}api${RESET}           uvicorn on PORT (default 8000)
+  ${BOLD}web${RESET}           vite dev server on :5173, proxying /api to :8000
+  ${BOLD}mcp${RESET} [--as X]  MCP stdio server; identity is bound at startup
   ${BOLD}db${RESET}            start local Postgres   ${DIM}(not configured yet)${RESET}
 
 Examples:
@@ -122,6 +154,7 @@ Examples:
   ./scripts/run.sh all
   ./scripts/run.sh test tests/unit -k serialize -q
   ./scripts/run.sh cb ask "who owns vendor renewals?"
+  ./scripts/run.sh api &  ./scripts/run.sh web
 EOF
   exit "${1:-1}"
 }
@@ -130,7 +163,7 @@ main() {
   [[ $# -gt 0 ]] || usage 0
   local cmd="$1"; shift
   case "$cmd" in
-    setup|check|fmt|test|unit|integration|acceptance|llm|all|cb|api|mcp|db) "cmd_$cmd" "$@" ;;
+    setup|check|fmt|test|unit|integration|acceptance|llm|all|cb|api|web|mcp|db|demo) "cmd_$cmd" "$@" ;;
     -h|--help|help) usage 0 ;;
     *) printf '%sunknown command: %s%s\n\n' "$RED" "$cmd" "$RESET" >&2; usage 1 ;;
   esac

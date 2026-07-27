@@ -10,10 +10,12 @@ import os
 from dataclasses import dataclass
 from pathlib import Path
 
+from dotenv import load_dotenv
+
 from company_brain.acl.grants import AccessFilter, GrantTable, elevate
 from company_brain.corpus.generate import CHANNELS
 from company_brain.extract.base import CachedExtractor, Extractor
-from company_brain.extract.rules import RuleBasedExtractor
+from company_brain.extract.rules import Roster
 from company_brain.index.base import Embedder, HashingEmbedder, IndexedNode
 from company_brain.index.memory import MemoryIndex
 from company_brain.normalize.base import Registry
@@ -21,9 +23,15 @@ from company_brain.normalize.formats import default_registry
 from company_brain.schemas.acl import Principal, PrincipalKind, Sensitivity
 from company_brain.store.backend import LocalFsBackend
 from company_brain.store.repository import Repository
+from company_brain.synthesize.answer import Synthesizer
 
 STORE_ROOT = Path("store")
 CORPUS_ROOT = Path("corpus/synthetic")
+
+# Load .env once, at import, without clobbering anything already exported.
+# The alternative — requiring `set -a; source .env` — is a step people forget,
+# and forgetting it produces a silently offline run rather than an error.
+load_dotenv(override=False)
 
 # Synthetic principals for M1. M2 replaces these with directory-synced grants.
 PRINCIPALS: dict[str, Principal] = {
@@ -86,31 +94,72 @@ class Providers:
     offline: bool
     reason: str
 
+    def synthesizer(self) -> Synthesizer:
+        from company_brain.synthesize.answer import ExtractiveSynthesizer
 
-def choose_providers(roster_extractor: Extractor) -> Providers:
-    """Pick real or offline providers based on what credentials exist.
+        if self.offline:
+            return ExtractiveSynthesizer()
+        from company_brain.synthesize.claude import ClaudeSynthesizer
 
-    Reports *why* it chose, so a run is never silently offline.
+        return ClaudeSynthesizer()
+
+
+def _offline_requested() -> bool:
+    return os.environ.get("COMPANY_BRAIN_OFFLINE", "").strip().lower() in {
+        "1",
+        "true",
+        "yes",
+    }
+
+
+def choose_providers(roster: Roster) -> Providers:
+    """Pick real or offline providers from what credentials exist.
+
+    Both keys or neither. A half-configured run — Claude extraction scored
+    against hash-based embeddings — is a hybrid nobody asked for, and "offline,
+    because OPENAI_API_KEY is unset" is a far easier failure to diagnose than
+    unexplained retrieval quality.
+
+    Always reports *why*, so a run is never silently degraded.
     """
+    from company_brain.extract.rules import RuleBasedExtractor
+
+    fallback = RuleBasedExtractor(roster)
+
+    if _offline_requested():
+        return Providers(
+            extractor=fallback,
+            embedder=HashingEmbedder(),
+            synthesizer_name="extractive-offline",
+            offline=True,
+            reason="offline providers (COMPANY_BRAIN_OFFLINE is set)",
+        )
+
     missing = [
         name for name in ("ANTHROPIC_API_KEY", "OPENAI_API_KEY") if not os.environ.get(name)
     ]
     if missing:
         return Providers(
-            extractor=roster_extractor,
+            extractor=fallback,
             embedder=HashingEmbedder(),
             synthesizer_name="extractive-offline",
             offline=True,
             reason=f"offline providers ({', '.join(missing)} not set)",
         )
-    # Online providers land here once keys are present; the protocol boundary is
-    # already in place so this is a constructor swap, not a rewrite.
+
+    from company_brain.extract.claude import ClaudeExtractor
+    from company_brain.index.openai_embed import OpenAIEmbedder
+
+    extractor = ClaudeExtractor(roster)
+    embedder = OpenAIEmbedder()
     return Providers(
-        extractor=roster_extractor,
-        embedder=HashingEmbedder(),
-        synthesizer_name="extractive-offline",
-        offline=True,
-        reason="online providers not yet wired; see docs/ARCHITECTURE.md §4.1",
+        extractor=extractor,
+        embedder=embedder,
+        synthesizer_name="claude",
+        offline=False,
+        reason=(
+            f"online: extract={extractor.model}, synth=claude-opus-5, embed={embedder.name}"
+        ),
     )
 
 
@@ -161,7 +210,7 @@ def build_app(store_root: Path = STORE_ROOT, *, frozen: bool = False) -> App:
 
     backend = LocalFsBackend(store_root)
     repo = Repository(backend)
-    providers = choose_providers(RuleBasedExtractor(build_roster()))
+    providers = choose_providers(build_roster())
     return App(
         repo=repo,
         registry=default_registry(),

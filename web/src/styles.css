@@ -1,0 +1,99 @@
+@import "tailwindcss";
+
+/* Design tokens — docs/DESIGN_SYSTEM.md §2.
+   Semantic names only; no component may reference a raw hex value.
+   Every surface is defined in both themes: dark is not an afterthought filter. */
+
+@theme {
+  --color-background: oklch(99% 0.002 260);
+  --color-foreground: oklch(21% 0.012 260);
+  --color-card: oklch(100% 0 0);
+  --color-card-foreground: oklch(21% 0.012 260);
+  --color-primary: oklch(52% 0.16 258);
+  --color-primary-foreground: oklch(99% 0.002 260);
+  --color-muted-foreground: oklch(52% 0.014 260);
+  --color-border: oklch(90% 0.006 260);
+  --color-ring: oklch(52% 0.16 258);
+
+  --radius-fence: 4px;
+  --radius-row: 6px;
+}
+
+/* The viewer's toggle stamps data-theme on the root and must win in both
+   directions, so the media query supplies the default and the attribute
+   overrides it. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-background: oklch(17% 0.012 260);
+    --color-foreground: oklch(96% 0.004 260);
+    --color-card: oklch(21% 0.013 260);
+    --color-card-foreground: oklch(96% 0.004 260);
+    --color-primary: oklch(72% 0.13 258);
+    --color-primary-foreground: oklch(17% 0.012 260);
+    --color-muted-foreground: oklch(67% 0.014 260);
+    --color-border: oklch(33% 0.011 260);
+  }
+}
+
+:root[data-theme="dark"] {
+  --color-background: oklch(17% 0.012 260);
+  --color-foreground: oklch(96% 0.004 260);
+  --color-card: oklch(21% 0.013 260);
+  --color-card-foreground: oklch(96% 0.004 260);
+  --color-primary: oklch(72% 0.13 258);
+  --color-primary-foreground: oklch(17% 0.012 260);
+  --color-muted-foreground: oklch(67% 0.014 260);
+  --color-border: oklch(33% 0.011 260);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family:
+    ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* §5 — hidden scrollbars on every scroll container. */
+@utility no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* §4 — overlays: animate-in fade-in zoom-in-95, nothing over 300ms. */
+@keyframes cb-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@utility animate-in {
+  animation: cb-in 200ms ease-out;
+}
+
+@keyframes cb-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@utility fade-in {
+  animation: cb-fade 150ms ease-out;
+}

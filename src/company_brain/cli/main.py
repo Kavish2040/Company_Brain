@@ -13,7 +13,6 @@ from company_brain.app import CORPUS_ROOT, PRINCIPALS, STORE_ROOT, build_app, ca
 from company_brain.retrieve.hybrid import HybridRetriever
 from company_brain.synthesize.answer import (
     CitationLeakError,
-    ExtractiveSynthesizer,
     UncitedAnswerError,
     validate,
 )
@@ -131,7 +130,7 @@ def ask(
     access = instance.access(who)
 
     retrieval = HybridRetriever(instance.index, access).retrieve(question, limit=limit)
-    answer = ExtractiveSynthesizer().synthesize(question, retrieval, instance.index)
+    answer = instance.providers.synthesizer().synthesize(question, retrieval, instance.index)
 
     try:
         validate(answer, retrieval, access, instance.index)
