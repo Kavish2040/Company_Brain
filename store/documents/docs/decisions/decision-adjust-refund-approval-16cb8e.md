@@ -17,10 +17,19 @@ normalizer:
   version: 1.0.0
 extraction:
   model: claude-sonnet-5
-  prompt_version: claude-roster-v1
-  cache_key: fe3b0d402ca9c5273d2b745a420ea86f
+  prompt_version: claude-roster-v2
+  cache_key: 9c33b3ea223f1574967dd0ea8612aff2
   status: accepted
 relations:
+  - predicate: mentions
+    object: processes/refund-approval
+    confidence: 0.8
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [117, 174]
+        quote: The existing refund approval process was taking too long.
   - predicate: supersedes
     object: teams/finance
     confidence: 0.6

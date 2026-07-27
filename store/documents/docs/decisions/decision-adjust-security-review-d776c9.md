@@ -17,10 +17,22 @@ normalizer:
   version: 1.0.0
 extraction:
   model: claude-sonnet-5
-  prompt_version: claude-roster-v1
-  cache_key: 79794165ef149f3a7cc53d3eef5884fb
+  prompt_version: claude-roster-v2
+  cache_key: 498657a7f118e13cdac468c7d544f262
   status: accepted
 relations:
+  - predicate: owns
+    subject: people/tom-whelan
+    object: processes/security-review
+    confidence: 0.95
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [190, 288]
+        quote: 'Tom Whelan will own security review going forward, and the
+
+          sign-off step moves to the owning team.'
   - predicate: supersedes
     object: teams/engineering
     confidence: 0.6

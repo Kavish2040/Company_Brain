@@ -1,0 +1,41 @@
+{
+  "edges": [
+    {
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "The existing refund approval process was taking too long.",
+          "span": [
+            117,
+            174
+          ]
+        }
+      ],
+      "object": "processes/refund-approval",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed"
+    },
+    {
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "The previous informal arrangement documented in the Finance team page.",
+          "span": [
+            303,
+            373
+          ]
+        }
+      ],
+      "object": "teams/finance",
+      "predicate": "supersedes",
+      "provenance": "llm",
+      "status": "proposed"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v2",
+  "unresolved": []
+}

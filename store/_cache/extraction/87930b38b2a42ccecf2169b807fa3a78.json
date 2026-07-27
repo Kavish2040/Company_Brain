@@ -1,0 +1,75 @@
+{
+  "edges": [
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "**Decided by:** Dev Oyelaran",
+          "span": [
+            61,
+            89
+          ]
+        }
+      ],
+      "object": "people/dev-oyelaran",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted"
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "The existing customer escalation process was taking too long.",
+          "span": [
+            124,
+            185
+          ]
+        }
+      ],
+      "object": "processes/customer-escalation",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted"
+    },
+    {
+      "confidence": 0.95,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Dev Oyelaran will own customer escalation going forward, and the\nsign-off step moves to the owning team.",
+          "span": [
+            200,
+            304
+          ]
+        }
+      ],
+      "object": "processes/customer-escalation",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed"
+    },
+    {
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "The previous informal arrangement documented in the Support team page.",
+          "span": [
+            321,
+            391
+          ]
+        }
+      ],
+      "object": "teams/support",
+      "predicate": "supersedes",
+      "provenance": "llm",
+      "status": "proposed"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v2",
+  "unresolved": []
+}

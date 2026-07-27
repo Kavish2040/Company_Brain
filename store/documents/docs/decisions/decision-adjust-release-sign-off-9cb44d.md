@@ -17,21 +17,10 @@ normalizer:
   version: 1.0.0
 extraction:
   model: claude-sonnet-5
-  prompt_version: claude-roster-v1
-  cache_key: 4cbd0cb44bac878a293db051355188e6
+  prompt_version: claude-roster-v2
+  cache_key: aa4875c683458a61a2ea9b99383ae59b
   status: accepted
 relations:
-  - predicate: owns
-    object: processes/release-signoff
-    confidence: 0.95
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [193, 293]
-        quote: 'Priya Raman will own release sign-off going forward, and the
-
-          sign-off step moves to the owning team.'
   - predicate: supersedes
     object: teams/engineering
     confidence: 0.7

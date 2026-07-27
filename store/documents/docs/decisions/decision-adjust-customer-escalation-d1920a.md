@@ -17,22 +17,43 @@ normalizer:
   version: 1.0.0
 extraction:
   model: claude-sonnet-5
-  prompt_version: claude-roster-v1
-  cache_key: 5b18c275e1bb9b1d1055f2ae012f7f57
+  prompt_version: claude-roster-v2
+  cache_key: 87930b38b2a42ccecf2169b807fa3a78
   status: accepted
 relations:
   - predicate: mentions
-    object: teams/support
-    confidence: 0.75
+    object: people/dev-oyelaran
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [61, 89]
+        quote: '**Decided by:** Dev Oyelaran'
+  - predicate: mentions
+    object: processes/customer-escalation
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [124, 185]
+        quote: The existing customer escalation process was taking too long.
+  - predicate: owns
+    subject: people/dev-oyelaran
+    object: processes/customer-escalation
+    confidence: 0.95
     provenance: llm
     status: proposed
     evidence:
       - node: self
-        span: [321, 391]
-        quote: The previous informal arrangement documented in the Support team page.
+        span: [200, 304]
+        quote: 'Dev Oyelaran will own customer escalation going forward, and the
+
+          sign-off step moves to the owning team.'
   - predicate: supersedes
-    object: processes/customer-escalation
-    confidence: 0.7
+    object: teams/support
+    confidence: 0.6
     provenance: llm
     status: proposed
     evidence:
