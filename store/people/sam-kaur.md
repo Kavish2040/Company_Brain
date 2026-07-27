@@ -11,5 +11,3 @@ aliases:
   - Sam Kaur
   - sam.kaur@meridian.example
 ---
-
-Sam owns vendor renewals. — typed live

@@ -197,9 +197,7 @@ class TestGrantPairing:
         grants.add_to_group("staff", "finance-team")
         assert AccessFilter(grants, human("staff")).allows("gdrive:folder:LEDGER", RESTRICTED)
 
-    def test_an_agent_is_capped_per_ref_not_just_per_ref_list(
-        self, grants: GrantTable
-    ) -> None:
+    def test_an_agent_is_capped_per_ref_not_just_per_ref_list(self, grants: GrantTable) -> None:
         """Invariant 8 at tier granularity: the agent holds a ref at restricted
         that its human holds only at internal. The lower ceiling wins."""
         grants.grant("boss", "gdrive:folder:MIXED", INTERNAL)

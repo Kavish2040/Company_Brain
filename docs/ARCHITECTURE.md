@@ -747,3 +747,94 @@ and `acl/`, Typer for the CLI, Alembic for migrations.
 6. **Who is the reviewer persona** for the review queue? If it's an ops team, the gates
    in §11 are right. If it's the executive asking the question, the volume is far too
    high and we need to auto-accept more and surface uncertainty in the answer instead.
+
+---
+
+## 15. Live collaboration — **demo-grade, deliberately**
+
+Two people open the same node, both type, both see each other's cursors and text
+land with no save button; a shared room lets a team sit inside one `ask` session
+together. This section exists because that feature is the one place in the system
+where we have knowingly shipped something that loses data, and a reader who does not
+know that will mistake it for the real thing.
+
+### 15.1 The merge rule
+
+**Server-authoritative, last-write-wins.** The room holds the authoritative body and
+a monotonic revision. A client sends `{type: "edit", base_revision, body}`; the
+server *always* accepts, bumps the revision, and broadcasts the whole body to
+everyone. Persistence is debounced — after ~800ms of quiet the room flushes through
+`Repository.put`, which is what makes "no save button" true without a file write per
+keystroke.
+
+**What this costs.** Two people editing the same paragraph inside one round trip: the
+later write replaces the *entire* body, and the earlier typist's sentence is gone with
+no conflict, no marker, and no undo. Fast broadcast makes the window small and
+presence makes collisions socially visible; neither makes them impossible. `clobbered`
+is set on the outcome so the loss shows up in logs rather than silently, and
+`tests/unit/test_collab.py::TestLastWriteWins::test_a_stale_write_still_wins_and_says_so`
+asserts the data loss on purpose — turning this into a real merge should require
+changing that test, not just adding code.
+
+### 15.2 What a live edit may touch
+
+Invariant 13 says machine writers touch only the interior of a generated fence. Live
+editing is its mirror image: a **human** writer may touch only the text *outside*
+every fence. `collab/guard.py` compares the generated regions before and after every
+edit — name, interior, and recorded hash — and refuses the write if any of them moved.
+
+This runs on the server. A browser is not a trust boundary, and a client that strips a
+fence or rewrites a generated interior gets rejected and resynced, not persisted.
+
+### 15.3 Durability differs by node type — know which you are editing
+
+| Node type | A live edit… | Why |
+|---|---|---|
+| Entity page (Person, Team, Tool, Process) | **survives ingest forever** | `_write_entities` skips nodes that already exist |
+| Document node | **is replaced at the next ingest of its source** | a Document mirrors an upstream artifact; invariant 1 says the source wins for sourced content |
+
+This is by design, not an oversight, and both halves are pinned in
+`tests/acceptance/test_m1.py::TestLiveEditDurability`. But it is a sharp edge: a user
+who annotates a Slack thread's Document node will lose the annotation on the next
+sync. Annotation belongs on entity pages. If we want durable per-document human text,
+it needs its own fenced human region — not a change to the live editor.
+
+### 15.4 Identity
+
+A browser cannot set `X-Principal` on a WebSocket, so the header stand-in does not
+carry over. The principal travels in the `Sec-WebSocket-Protocol` subprotocol
+(`cb.principal.<id>`), fixed at connect time and impossible to restate per message —
+which is what invariant 8 actually requires. A query parameter would have been a
+parameter the caller can vary, which is the thing the invariant forbids. Same demo
+stand-in for a session cookie as `X-Principal`; the shape is what matters.
+
+ACL is checked on connect and the socket closes with `4404` for both "no such node"
+and "not visible to you" — distinguishing them would confirm a node's existence to
+someone who cannot read it (§6.3).
+
+### 15.5 The shared ask room
+
+One question, one broadcast — but **each participant's answer is computed under their
+own grants**, never copied from the asker. The room fans out per principal through the
+same `answer_for` helper the REST route uses, so the citation validator (invariant 11)
+runs on every answer on both surfaces. Broadcasting one principal's answer to a room
+is the obvious way to build this and is a leak wearing a collaboration costume.
+
+### 15.6 Rejected alternatives
+
+| Decision | Chosen | Rejected | Why |
+|---|---|---|---|
+| Merge model | Server LWW, whole body | CRDT (Yjs / Automerge) | A CRDT replaces the whole-file write model that the byte-identical acceptance gate and the fence hashes both depend on. That is an M5-scale change to §2, not a library swap |
+| Merge model | Server LWW | Operational transform | Same objection, plus OT needs a server that understands document structure; ours understands bytes |
+| Persistence | Debounced flush | Write per keystroke | 232-node index, atomic rename per character |
+| Persistence | Debounced flush | Explicit save button | The product claim is "no save button"; a WAL is the honest fix for the lost-window problem, not a button |
+| Room state | In-process registry | Redis/Postgres backplane | Correct for multi-worker, unnecessary for one. **This pins us to a single uvicorn worker** — two workers would each hold a different authoritative body for the same node |
+| Presence colour | Server sends a palette *name* | Server sends hex | DESIGN_SYSTEM §2 bans raw hex in the UI; the name→class map lives in the client |
+
+### 15.7 What production would need
+
+Not a longer version of this — a different design. A CRDT or OT layer for real
+concurrent editing; a write-ahead log so the debounce window is recoverable; a shared
+backplane so more than one worker can serve a room; per-document human regions if
+Document nodes are to be annotatable; and an audit trail of who changed which bytes,
+which today exists only as the git history of the store.

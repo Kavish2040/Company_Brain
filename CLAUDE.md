@@ -100,6 +100,10 @@ src/company_brain/
   synthesize/  answer.py (Synthesizer protocol, extractive fallback, citation validator)
                claude.py (claude-opus-5; output still goes through the same validator)
   review/      queue.py — proposal queue: list, accept, reject, per-predicate accept rate
+  collab/      DEMO-GRADE live editing. session.py (rooms, last-write-wins, debounced
+               flush) · guard.py (a human edit may never touch a generated region)
+               hub.py (fan-out, flush timer). Read ARCHITECTURE §15 first — this one
+               loses data by design
   mcp/         server.py (Session, McpTools) · stdio.py (transport)
   cli/         main.py — Typer commands
   api/         app.py — FastAPI, ACL-projected responses, X-Principal header
@@ -113,8 +117,9 @@ store/               generated markdown tree — COMMITTED, not gitignored: re-i
 supabase/            config.toml + migrations/*.sql (not created yet)
 web/                 src/App.tsx (shell + principal switcher) · views/ (Ask, Browse,
                      Review, NodeDrawer) · components/ui/primitives.tsx · lib/api.ts
+                     lib/collab.ts (WebSocket client; principal in the subprotocol)
 scripts/run.sh       dev entry point: setup, check, test, all, demo, api, web, mcp
-tests/               unit/ · integration/ (empty until the database lands) · acceptance/
+tests/               unit/ · integration/ (live-collab WebSockets; Postgres later) · acceptance/
 docs/
 ```
 
@@ -178,7 +183,7 @@ Things that surprise people:
 - **Only `acceptance`, `integration`, and `llm` are real markers.** Unit tests carry no
   marker, so `pytest -m unit` selects nothing. Select them by path: `pytest tests/unit`.
 
-Test markers: `integration` (needs Postgres; no tests yet), `llm` (needs an API key;
+Test markers: `integration` (WebSocket transport now; Postgres later), `llm` (needs an API key;
 excluded from CI), `acceptance`. `pytest` runs everything except `llm`. CI runs the suite
 with `COMPANY_BRAIN_OFFLINE=1` and a frozen extraction cache, and never calls a model.
 
@@ -241,8 +246,10 @@ it is enforced today — if you change that code, you are changing the contract.
     `TestDeletions`.
 13. **Never overwrite human-authored content.** Machine writers touch only the interior of
     `<!-- cb:generated start … -->` fences, and only when the current content matches the
-    recorded hash. Mismatch → divert to a proposal.
-    → `store/fences.py`, `RegionTampered`.
+    recorded hash. Mismatch → divert to a proposal. The live editor is the mirror image of
+    this rule — a **human** writer may touch only the text *outside* every fence, checked
+    on the server because a browser is not a trust boundary.
+    → `store/fences.py`, `RegionTampered`; `collab/guard.py`, `FenceViolation`.
 14. **Writes are atomic.** temp file → fsync → rename. A partial store is never observable.
     → `LocalFsBackend.write_text`.
 15. **Log node IDs, never node content.** No document text, no PII in logs, traces, or
@@ -368,8 +375,25 @@ connector over mutable state, not a mock) covers what M2 claimed was difficult:
 | revocation propagates to a delegated agent | `test_revocation_propagates_to_a_delegated_agent` |
 | the leak window is real, bounded, and asserted | `test_the_leak_window_is_real_and_bounded_by_sync` |
 
-**Verified this session, offline** (`COMPANY_BRAIN_OFFLINE=1`): the full suite — 177 tests
-at the time of writing, 151 unit and 26 acceptance — passes in ~25s;
+**Live collaboration — demo-grade, and labelled as such.** Server-authoritative
+last-write-wins editing over WebSockets, with presence, remote carets, and a shared ask
+room. **No CRDT**: two people editing one paragraph inside a round trip lose the earlier
+write entirely. Read [ARCHITECTURE §15](docs/ARCHITECTURE.md) before touching `collab/` —
+especially §15.3, since a live edit survives forever on an entity page and is replaced at
+the next ingest on a Document node.
+
+| Behaviour | Test |
+|---|---|
+| an edit reaches the other window; revision bumps | `TestLiveEditing` |
+| a stale write still wins, and says so | `test_a_stale_write_still_wins_and_says_so` |
+| editing a generated region is refused and resynced | `test_editing_a_generated_region_is_rejected_and_resynced` |
+| hidden and missing nodes close with the same code | `TestNodeRoomPermissions` |
+| the shared ask room answers each principal separately | `test_each_participant_is_answered_under_their_own_grants` |
+| entity-page edits survive ingest; document edits do not | `TestLiveEditDurability` |
+
+**Verified this session, offline** (`COMPANY_BRAIN_OFFLINE=1`): the full suite — 192 tests
+at the time of writing, including 12 in `tests/integration/` over real WebSockets — passes
+in ~27s;
 ruff, format, and `mypy --strict` clean. A cold ingest of the 201-file corpus yields 232
 nodes, 364 chunks, 1122 accepted edges, and 32 edges pending review; `cb doctor` clean;
 `cb sync` picks up 5 simulated channels. The online path is real, not theoretical — the
@@ -388,12 +412,12 @@ freshness SLA stops being a footnote.
 **Not yet true, despite what a skim of this file suggests:** there are no git commits, so
 "COMMITTED store" and `git diff --exit-code` describe the intent rather than the current
 mechanism — determinism is verified by tree hashing inside the acceptance suite.
-`tests/integration/` is empty. `resolve/` is empty.
+`tests/integration/` covers the live-collab transport but nothing database-backed yet. `resolve/` is empty.
 
 **Next, in order:**
 
 1. `supabase/` — `config.toml`, `migrations/*.sql`, and a `psycopg` `Index` implementation
-   behind the existing protocol, with `tests/integration/` finally populated.
+   behind the existing protocol, joining the live-collab tests already in `tests/integration/`.
 2. A real Slack connector: the same three protocol methods against the API, with paginated
    enumeration and a stated freshness SLA. Then Drive and Gmail.
 3. Sensitivity tiers as physical store roots, and ARCHITECTURE §14 open questions 2 and 3
