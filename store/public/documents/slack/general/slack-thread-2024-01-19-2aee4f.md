@@ -7,10 +7,10 @@ acl:
   ref: slack:channel:C0GEN
   sensitivity: public
 source:
-  connector: slack
+  connector: local_fs
   uri: file://corpus/slack/general/2024-01-19.json
-  external_id: general/2024-01-19
-  external_version: rev-0
+  external_id: slack/general/2024-01-19.json
+  external_version: b570802415c8933b
   content_sha256: b570802415c8933bee2a8c578aceb3acb3f69112204bcba111c609b982d2289b
 timestamps:
   created: '2024-01-19T14:20:00Z'
@@ -19,38 +19,29 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v2
-  cache_key: 89d2a947405352aed0d433738702fc74
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v2
+  cache_key: 8ebca52ee948841fe5733b7cc06ee708
   status: accepted
 relations:
   - predicate: mentions
-    object: people/nadia-hassan
-    confidence: 0.9
+    object: processes/onboarding
+    confidence: 0.7
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [2, 14]
-        quote: Nadia Hassan
-  - predicate: mentions
-    object: people/owen-fitz
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [80, 95]
-        quote: Owen Fitzgerald
+        span: [47, 76]
+        quote: Onboarding docs are in Drive.
   - predicate: mentions
     object: processes/quarterly-close
-    confidence: 0.9
+    confidence: 0.8
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [121, 136]
-        quote: Quarterly close
+        span: [107, 157]
+        quote: Reminder that Quarterly close kicks off next week.
 ---
 
 **Nadia Hassan** (14:20): Welcome to the team! Onboarding docs are in Drive.

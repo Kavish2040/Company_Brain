@@ -7,10 +7,10 @@ acl:
   ref: slack:channel:C0ENG
   sensitivity: internal
 source:
-  connector: slack
+  connector: local_fs
   uri: file://corpus/slack/engineering/2024-01-25.json
-  external_id: engineering/2024-01-25
-  external_version: rev-0
+  external_id: slack/engineering/2024-01-25.json
+  external_version: 4339bfee933a420e
   content_sha256: 4339bfee933a420e8fa5c4e7565bcc1dd3fc10b45116259da9fd84ac42952222
 timestamps:
   created: '2024-01-25T12:14:00Z'
@@ -19,56 +19,30 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v2
-  cache_key: d5d4859a1e73844b0b9d17c735ea8e1c
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v2
+  cache_key: 1de3c0f5b257219654d3938b1e163555
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/mei-tanaka
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 12]
-        quote: Mei Tanaka
-  - predicate: mentions
-    object: people/tom-whelan
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [103, 113]
-        quote: Tom Whelan
-  - predicate: mentions
+  - predicate: depends_on
+    subject: processes/vendor-renewal
     object: processes/release-signoff
-    confidence: 0.9
+    confidence: 0.85
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [82, 98]
-        quote: release sign-off
-  - predicate: mentions
-    object: processes/vendor-renewal
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [39, 53]
-        quote: Vendor renewal
+        span: [24, 99]
+        quote: Deploy for the Vendor renewal change is queued behind the release sign-off.
   - predicate: mentions
     object: tools/linear
-    confidence: 0.9
+    confidence: 0.8
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [129, 135]
-        quote: Linear
+        span: [125, 187]
+        quote: The Linear alert fired again overnight — third time this week.
 ---
 
 **Mei Tanaka** (12:14): Deploy for the Vendor renewal change is queued behind the release sign-off.

@@ -7,10 +7,10 @@ acl:
   ref: slack:channel:C0ENG
   sensitivity: internal
 source:
-  connector: slack
+  connector: local_fs
   uri: file://corpus/slack/engineering/2024-01-14.json
-  external_id: engineering/2024-01-14
-  external_version: rev-0
+  external_id: slack/engineering/2024-01-14.json
+  external_version: 336147d8ebcbda65
   content_sha256: 336147d8ebcbda6574135429c4c33a92dd5746ad0670dece0fbb740a7ab5baa2
 timestamps:
   created: '2024-01-14T11:03:00Z'
@@ -19,65 +19,41 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v2
-  cache_key: 1a355f45557f7c3ad858379bdacaee46
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v2
+  cache_key: 1200913eec8c7fee3aad2022d419be30
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/priya-raman
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 13]
-        quote: Priya Raman
-  - predicate: mentions
-    object: people/tom-whelan
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [105, 115]
-        quote: Tom Whelan
-  - predicate: mentions
-    object: processes/data-request
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [139, 160]
-        quote: Customer data request
-  - predicate: mentions
+  - predicate: depends_on
+    subject: processes/security-review
     object: processes/release-signoff
-    confidence: 0.9
+    confidence: 0.85
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [84, 100]
-        quote: release sign-off
-  - predicate: mentions
-    object: processes/security-review
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [40, 55]
-        quote: Security review
-  - predicate: mentions
+        span: [25, 101]
+        quote: Deploy for the Security review change is queued behind the release sign-off.
+  - predicate: handoff_to
+    subject: processes/data-request
     object: teams/support
     confidence: 0.9
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [176, 183]
-        quote: Support
+        span: [127, 213]
+        quote: Handing the Customer data request ticket over to Support, they own the customer comms.
+  - predicate: owns
+    subject: teams/support
+    object: processes/data-request
+    confidence: 0.6
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [185, 212]
+        quote: they own the customer comms
 ---
 
 **Priya Raman** (11:03): Deploy for the Security review change is queued behind the release sign-off.

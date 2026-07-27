@@ -7,10 +7,10 @@ acl:
   ref: slack:channel:C0SUP
   sensitivity: internal
 source:
-  connector: slack
+  connector: local_fs
   uri: file://corpus/slack/support/2024-01-10.json
-  external_id: support/2024-01-10
-  external_version: rev-0
+  external_id: slack/support/2024-01-10.json
+  external_version: 63197ac9496db246
   content_sha256: 63197ac9496db24653a21497b95000f3cb9da8c05f59a49e3498e87a07c19d5b
 timestamps:
   created: '2024-01-10T11:43:00Z'
@@ -19,92 +19,58 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v2
-  cache_key: e06068bfa8c565496f3eec6786968165
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v2
+  cache_key: fb53cabf7f747183014115d346179963
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/priya-raman
-    confidence: 0.9
+  - predicate: handoff_to
+    subject: processes/onboarding
+    object: teams/engineering
+    confidence: 0.65
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [106, 117]
-        quote: Priya Raman
-  - predicate: mentions
-    object: people/sam-kelly
-    confidence: 0.9
+        span: [212, 290]
+        quote: Escalating this to Engineering — it's a Snowflake integration bug, not config.
+  - predicate: handoff_to
+    subject: processes/vendor-renewal
+    object: teams/finance
+    confidence: 0.7
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [294, 303]
-        quote: Sam Kelly
-  - predicate: mentions
-    object: people/zoe-ravel
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 11]
-        quote: Zoë Ravel
+        span: [315, 372]
+        quote: Looping in Finance for the refund side of Vendor renewal.
   - predicate: mentions
     object: processes/onboarding
-    confidence: 0.9
+    confidence: 0.7
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [82, 101]
-        quote: Employee onboarding
-  - predicate: mentions
-    object: processes/refund-approval
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [171, 186]
-        quote: Refund approval
-  - predicate: mentions
-    object: processes/vendor-renewal
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [357, 371]
-        quote: Vendor renewal
+        span: [23, 102]
+        quote: This is the fourth ticket bounced back from Engineering on Employee onboarding.
   - predicate: mentions
     object: teams/engineering
-    confidence: 0.9
+    confidence: 0.7
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [67, 78]
-        quote: Engineering
-  - predicate: mentions
-    object: teams/finance
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [140, 147]
-        quote: Finance
+        span: [23, 102]
+        quote: This is the fourth ticket bounced back from Engineering on Employee onboarding.
   - predicate: mentions
     object: tools/snowflake
-    confidence: 0.9
+    confidence: 0.8
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [252, 261]
-        quote: Snowflake
+        span: [212, 290]
+        quote: Escalating this to Engineering — it's a Snowflake integration bug, not config.
 ---
 
 **Zoë Ravel** (11:43): This is the fourth ticket bounced back from Engineering on Employee onboarding.

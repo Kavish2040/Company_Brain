@@ -7,10 +7,10 @@ acl:
   ref: slack:channel:C0FIN
   sensitivity: restricted
 source:
-  connector: slack
+  connector: local_fs
   uri: file://corpus/slack/finance/2024-01-16.json
-  external_id: finance/2024-01-16
-  external_version: rev-0
+  external_id: slack/finance/2024-01-16.json
+  external_version: 849db25fa27ccb65
   content_sha256: 849db25fa27ccb65a8962f6e6cf897123875ddffcf923b42e5b8b4d47579ba1d
 timestamps:
   created: '2024-01-16T14:12:00Z'
@@ -19,29 +19,21 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v2
-  cache_key: 07df08bea5d1684035688989ee3cb045
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v2
+  cache_key: 32b23c7ab5aa7b2e50ff82a50399a88f
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/ana-brito
+  - predicate: depends_on
+    subject: processes/quarterly-close
+    object: processes/security-review
     confidence: 0.9
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [2, 11]
-        quote: Ana Brito
-  - predicate: mentions
-    object: people/sam-kaur
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [153, 161]
-        quote: Sam Kaur
+        span: [173, 251]
+        quote: Quarterly close is blocked until Engineering signs off on the security review.
   - predicate: mentions
     object: processes/capacity-planning
     confidence: 0.9
@@ -49,53 +41,36 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [33, 50]
-        quote: Capacity planning
-  - predicate: mentions
-    object: processes/data-request
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [275, 296]
-        quote: Customer data request
-  - predicate: mentions
-    object: processes/quarterly-close
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [173, 188]
-        quote: Quarterly close
-  - predicate: mentions
-    object: processes/security-review
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [235, 250]
-        quote: security review
+        span: [23, 65]
+        quote: 'Reminder: Capacity planning closes Friday.'
   - predicate: mentions
     object: teams/engineering
-    confidence: 0.9
+    confidence: 0.75
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [206, 217]
-        quote: Engineering
+        span: [173, 251]
+        quote: Quarterly close is blocked until Engineering signs off on the security review.
   - predicate: mentions
     object: tools/netsuite
-    confidence: 0.9
+    confidence: 0.85
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [94, 102]
-        quote: NetSuite
+        span: [90, 126]
+        quote: The NetSuite renewal lands in April.
+  - predicate: owns
+    subject: people/ana-brito
+    object: processes/vendor-renewal
+    confidence: 0.8
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [127, 149]
+        quote: I own that end to end.
 ---
 
 **Ana Brito** (14:12): Reminder: Capacity planning closes Friday.

@@ -1,0 +1,45 @@
+{
+  "edges": [
+    {
+      "confidence": 0.95,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Owner: Owen Fitzgerald (owen@meridian.example)",
+          "span": [
+            31,
+            77
+          ]
+        }
+      ],
+      "object": "processes/capacity-planning",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "people/owen-fitz"
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Owning team: Engineering",
+          "span": [
+            79,
+            103
+          ]
+        }
+      ],
+      "object": "processes/capacity-planning",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "teams/engineering"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v2",
+  "unresolved": [
+    "Cross-team handoff if root cause sits elsewhere (no specific team named)"
+  ]
+}

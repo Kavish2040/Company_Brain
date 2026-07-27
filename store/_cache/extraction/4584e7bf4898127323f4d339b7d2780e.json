@@ -1,0 +1,43 @@
+{
+  "edges": [
+    {
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "3 escalations were handed to Engineering this week; 0 bounced back to Support unresolved.",
+          "span": [
+            140,
+            229
+          ]
+        }
+      ],
+      "object": "teams/engineering",
+      "predicate": "handoff_to",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "teams/support"
+    },
+    {
+      "confidence": 0.55,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "3 escalations were handed to Engineering this week; 0 bounced back to Support unresolved.",
+          "span": [
+            140,
+            229
+          ]
+        }
+      ],
+      "object": "processes/customer-escalation",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v2",
+  "unresolved": []
+}

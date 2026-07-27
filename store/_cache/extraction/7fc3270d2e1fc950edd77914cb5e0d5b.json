@@ -1,0 +1,205 @@
+{
+  "edges": [
+    {
+      "confidence": 0.55,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "This is the fourth ticket bounced back from Engineering on Release sign-off.",
+          "span": [
+            111,
+            187
+          ]
+        }
+      ],
+      "object": "teams/engineering",
+      "predicate": "depends_on",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "processes/release-signoff"
+    },
+    {
+      "confidence": 0.55,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "This is the fourth ticket bounced back from Engineering on Vendor renewal.",
+          "span": [
+            211,
+            285
+          ]
+        }
+      ],
+      "object": "teams/engineering",
+      "predicate": "depends_on",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "processes/vendor-renewal"
+    },
+    {
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Looping in Finance for the refund side of Capacity planning.",
+          "span": [
+            26,
+            86
+          ]
+        }
+      ],
+      "object": "teams/finance",
+      "predicate": "handoff_to",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "processes/capacity-planning"
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "This is the fourth ticket bounced back from Engineering on Release sign-off.",
+          "span": [
+            111,
+            187
+          ]
+        }
+      ],
+      "object": "people/ana-brito",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Looping in Finance for the refund side of Capacity planning.",
+          "span": [
+            26,
+            86
+          ]
+        }
+      ],
+      "object": "people/dev-oyelaran",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "This is the fourth ticket bounced back from Engineering on Vendor renewal.",
+          "span": [
+            211,
+            285
+          ]
+        }
+      ],
+      "object": "people/sam-kaur",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Looping in Finance for the refund side of Capacity planning.",
+          "span": [
+            26,
+            86
+          ]
+        }
+      ],
+      "object": "processes/capacity-planning",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "This is the fourth ticket bounced back from Engineering on Release sign-off.",
+          "span": [
+            111,
+            187
+          ]
+        }
+      ],
+      "object": "processes/release-signoff",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "This is the fourth ticket bounced back from Engineering on Vendor renewal.",
+          "span": [
+            211,
+            285
+          ]
+        }
+      ],
+      "object": "processes/vendor-renewal",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "This is the fourth ticket bounced back from Engineering on Release sign-off.",
+          "span": [
+            111,
+            187
+          ]
+        }
+      ],
+      "object": "teams/engineering",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Looping in Finance for the refund side of Capacity planning.",
+          "span": [
+            26,
+            86
+          ]
+        }
+      ],
+      "object": "teams/finance",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v2",
+  "unresolved": []
+}

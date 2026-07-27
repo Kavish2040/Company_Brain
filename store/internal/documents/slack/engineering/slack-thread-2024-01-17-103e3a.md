@@ -7,10 +7,10 @@ acl:
   ref: slack:channel:C0ENG
   sensitivity: internal
 source:
-  connector: slack
+  connector: local_fs
   uri: file://corpus/slack/engineering/2024-01-17.json
-  external_id: engineering/2024-01-17
-  external_version: rev-0
+  external_id: slack/engineering/2024-01-17.json
+  external_version: 7a0d24ae4ce95e6f
   content_sha256: 7a0d24ae4ce95e6fdb660a515804767b74edcd1651a1fdb8d4c6ca9c699c4815
 timestamps:
   created: '2024-01-17T09:29:00Z'
@@ -19,29 +19,30 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v2
-  cache_key: 9f63423d03a2b240be7f488331ec69a9
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v2
+  cache_key: f9d417822507ac29862630050555224a
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/priya-raman
+  - predicate: handoff_to
+    subject: processes/onboarding
+    object: teams/support
     confidence: 0.9
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [2, 13]
-        quote: Priya Raman
+        span: [109, 193]
+        quote: Handing the Employee onboarding ticket over to Support, they own the customer comms.
   - predicate: mentions
-    object: processes/onboarding
-    confidence: 0.9
+    object: processes/vendor-renewal
+    confidence: 0.6
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [121, 140]
-        quote: Employee onboarding
+        span: [25, 82]
+        quote: Can someone from Finance confirm the Linear renewal date?
   - predicate: mentions
     object: teams/finance
     confidence: 0.9
@@ -49,17 +50,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [42, 49]
-        quote: Finance
-  - predicate: mentions
-    object: teams/support
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [156, 163]
-        quote: Support
+        span: [25, 82]
+        quote: Can someone from Finance confirm the Linear renewal date?
   - predicate: mentions
     object: tools/linear
     confidence: 0.9
@@ -67,8 +59,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [62, 68]
-        quote: Linear
+        span: [25, 82]
+        quote: Can someone from Finance confirm the Linear renewal date?
 ---
 
 **Priya Raman** (09:29): Can someone from Finance confirm the Linear renewal date?

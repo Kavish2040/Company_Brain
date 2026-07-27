@@ -7,10 +7,10 @@ acl:
   ref: slack:channel:C0ENG
   sensitivity: internal
 source:
-  connector: slack
+  connector: local_fs
   uri: file://corpus/slack/engineering/2024-01-19.json
-  external_id: engineering/2024-01-19
-  external_version: rev-0
+  external_id: slack/engineering/2024-01-19.json
+  external_version: ce44975063bee487
   content_sha256: ce44975063bee487b2007221ed85a5c90442033ee747bfdf1fd09b84c0fe5e5e
 timestamps:
   created: '2024-01-19T12:39:00Z'
@@ -19,47 +19,21 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v2
-  cache_key: 980a9ea6ca85060af8875e1cfc024458
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v2
+  cache_key: 058d7f192d7baa8825ec8fabeb422802
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/dev-oyelaran
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [93, 105]
-        quote: Dev Oyelaran
-  - predicate: mentions
-    object: people/priya-raman
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 13]
-        quote: Priya Raman
-  - predicate: mentions
-    object: processes/customer-escalation
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [129, 148]
-        quote: Customer escalation
-  - predicate: mentions
+  - predicate: handoff_to
+    subject: processes/customer-escalation
     object: teams/support
-    confidence: 0.9
+    confidence: 0.85
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [164, 171]
-        quote: Support
+        span: [117, 201]
+        quote: Handing the Customer escalation ticket over to Support, they own the customer comms.
   - predicate: mentions
     object: tools/netsuite
     confidence: 0.9
@@ -67,8 +41,18 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [29, 37]
-        quote: NetSuite
+        span: [25, 89]
+        quote: The NetSuite alert fired again overnight — third time this week.
+  - predicate: owns
+    subject: teams/support
+    object: processes/customer-escalation
+    confidence: 0.75
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [173, 201]
+        quote: they own the customer comms.
 ---
 
 **Priya Raman** (12:39): The NetSuite alert fired again overnight — third time this week.

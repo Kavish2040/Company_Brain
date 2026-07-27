@@ -1,0 +1,43 @@
+{
+  "edges": [
+    {
+      "confidence": 0.98,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Owner: Ana Brito (ana@meridian.example)",
+          "span": [
+            29,
+            68
+          ]
+        }
+      ],
+      "object": "processes/refund-approval",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "people/ana-brito"
+    },
+    {
+      "confidence": 0.95,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Owning team: Finance",
+          "span": [
+            70,
+            90
+          ]
+        }
+      ],
+      "object": "processes/refund-approval",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "teams/finance"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v2",
+  "unresolved": []
+}

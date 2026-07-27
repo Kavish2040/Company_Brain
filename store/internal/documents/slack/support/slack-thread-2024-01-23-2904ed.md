@@ -7,10 +7,10 @@ acl:
   ref: slack:channel:C0SUP
   sensitivity: internal
 source:
-  connector: slack
+  connector: local_fs
   uri: file://corpus/slack/support/2024-01-23.json
-  external_id: support/2024-01-23
-  external_version: rev-0
+  external_id: slack/support/2024-01-23.json
+  external_version: 72ef3c706e9ba354
   content_sha256: 72ef3c706e9ba354535e0dd1258f9bee1fefccc225de1fc5818a50fae33e777c
 timestamps:
   created: '2024-01-23T09:35:00Z'
@@ -19,74 +19,57 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v2
-  cache_key: e8b568fcd99118ad17da2b4735e39d56
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v2
+  cache_key: fe5f17c9294c320ca874901fd6f023df
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/sam-kaur
-    confidence: 0.9
+  - predicate: handoff_to
+    subject: people/zoe-ravel
+    object: teams/engineering
+    confidence: 0.75
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [310, 318]
-        quote: Sam Kaur
-  - predicate: mentions
-    object: people/tom-whelan
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [105, 115]
-        quote: Tom Whelan
-  - predicate: mentions
-    object: people/zoe-ravel
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 11]
-        quote: Zoë Ravel
+        span: [23, 101]
+        quote: Escalating this to Engineering — it's a PagerDuty integration bug, not config.
   - predicate: mentions
     object: processes/refund-approval
-    confidence: 0.9
+    confidence: 0.65
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [290, 305]
-        quote: Refund approval
+        span: [231, 306]
+        quote: This is the fourth ticket bounced back from Engineering on Refund approval.
   - predicate: mentions
     object: processes/vendor-renewal
-    confidence: 0.9
+    confidence: 0.65
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [389, 403]
-        quote: Vendor renewal
+        span: [330, 404]
+        quote: This is the fourth ticket bounced back from Engineering on Vendor renewal.
   - predicate: mentions
     object: teams/engineering
-    confidence: 0.9
+    confidence: 0.6
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [42, 53]
-        quote: Engineering
+        span: [231, 306]
+        quote: This is the fourth ticket bounced back from Engineering on Refund approval.
   - predicate: mentions
     object: tools/pagerduty
-    confidence: 0.9
+    confidence: 0.7
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [63, 72]
-        quote: PagerDuty
+        span: [56, 100]
+        quote: it's a PagerDuty integration bug, not config
 ---
 
 **Zoë Ravel** (09:35): Escalating this to Engineering — it's a PagerDuty integration bug, not config.

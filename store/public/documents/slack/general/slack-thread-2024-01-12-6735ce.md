@@ -7,10 +7,10 @@ acl:
   ref: slack:channel:C0GEN
   sensitivity: public
 source:
-  connector: slack
+  connector: local_fs
   uri: file://corpus/slack/general/2024-01-12.json
-  external_id: general/2024-01-12
-  external_version: rev-0
+  external_id: slack/general/2024-01-12.json
+  external_version: f24bb03f89203574
   content_sha256: f24bb03f892035742ab5e557d871d79222dd7873ceb56cefbccd837b9ca036cc
 timestamps:
   created: '2024-01-12T11:28:00Z'
@@ -19,38 +19,29 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v2
-  cache_key: 47f94409607086ef1c3f22c29f112653
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v2
+  cache_key: 9c65e9da2fe30f2ee2a9f3ce6ca82a60
   status: accepted
 relations:
   - predicate: mentions
-    object: people/nadia-hassan
-    confidence: 0.9
+    object: processes/onboarding
+    confidence: 0.7
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [76, 88]
-        quote: Nadia Hassan
-  - predicate: mentions
-    object: people/sam-kaur
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 10]
-        quote: Sam Kaur
+        span: [43, 72]
+        quote: Onboarding docs are in Drive.
   - predicate: mentions
     object: processes/vendor-renewal
-    confidence: 0.9
+    confidence: 0.8
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [114, 128]
-        quote: Vendor renewal
+        span: [100, 149]
+        quote: Reminder that Vendor renewal kicks off next week.
 ---
 
 **Sam Kaur** (11:28): Welcome to the team! Onboarding docs are in Drive.

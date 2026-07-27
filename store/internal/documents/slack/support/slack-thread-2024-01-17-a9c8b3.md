@@ -7,10 +7,10 @@ acl:
   ref: slack:channel:C0SUP
   sensitivity: internal
 source:
-  connector: slack
+  connector: local_fs
   uri: file://corpus/slack/support/2024-01-17.json
-  external_id: support/2024-01-17
-  external_version: rev-0
+  external_id: slack/support/2024-01-17.json
+  external_version: 6686d7f84861ab0e
   content_sha256: 6686d7f84861ab0e11a9a20ecee91735db8fe198caeab8099334abee623e15cc
 timestamps:
   created: '2024-01-17T13:46:00Z'
@@ -19,56 +19,56 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v2
-  cache_key: 8f3fbe3df0a6918b23169d89596b3a8f
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v2
+  cache_key: ea483d7df71f7df495cf634ca4b0ed35
   status: accepted
 relations:
   - predicate: mentions
     object: people/mei-tanaka
-    confidence: 0.9
+    confidence: 0.7
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [106, 116]
-        quote: Mei Tanaka
+        span: [128, 194]
+        quote: Customer is asking about the Customer data request timeline again.
   - predicate: mentions
     object: people/zoe-ravel
-    confidence: 0.9
+    confidence: 0.7
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [2, 11]
-        quote: Zoë Ravel
+        span: [23, 102]
+        quote: This is the fourth ticket bounced back from Engineering on Employee onboarding.
   - predicate: mentions
     object: processes/data-request
-    confidence: 0.9
+    confidence: 0.8
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [157, 178]
-        quote: Customer data request
+        span: [128, 194]
+        quote: Customer is asking about the Customer data request timeline again.
   - predicate: mentions
     object: processes/onboarding
-    confidence: 0.9
+    confidence: 0.8
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [82, 101]
-        quote: Employee onboarding
+        span: [23, 102]
+        quote: This is the fourth ticket bounced back from Engineering on Employee onboarding.
   - predicate: mentions
     object: teams/engineering
-    confidence: 0.9
+    confidence: 0.8
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [67, 78]
-        quote: Engineering
+        span: [23, 102]
+        quote: This is the fourth ticket bounced back from Engineering on Employee onboarding.
 ---
 
 **Zoë Ravel** (13:46): This is the fourth ticket bounced back from Engineering on Employee onboarding.

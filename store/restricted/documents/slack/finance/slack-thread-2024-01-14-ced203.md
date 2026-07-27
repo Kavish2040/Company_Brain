@@ -7,10 +7,10 @@ acl:
   ref: slack:channel:C0FIN
   sensitivity: restricted
 source:
-  connector: slack
+  connector: local_fs
   uri: file://corpus/slack/finance/2024-01-14.json
-  external_id: finance/2024-01-14
-  external_version: rev-0
+  external_id: slack/finance/2024-01-14.json
+  external_version: a94689329ea31ec7
   content_sha256: a94689329ea31ec73d113fd65973ab0023597361048358beac198f4ca8d9b1eb
 timestamps:
   created: '2024-01-14T13:12:00Z'
@@ -19,74 +19,50 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v2
-  cache_key: 26abd0aac94e2076fe3ba16cbcb2b2bf
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v2
+  cache_key: 4075ca601a20834a92b7b8733fcab15e
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/ana-brito
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [86, 95]
-        quote: Ana Brito
-  - predicate: mentions
-    object: people/sam-kaur
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 10]
-        quote: Sam Kaur
-  - predicate: mentions
-    object: processes/data-request
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [209, 230]
-        quote: Customer data request
-  - predicate: mentions
-    object: processes/quarterly-close
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [107, 122]
-        quote: Quarterly close
-  - predicate: mentions
+  - predicate: depends_on
+    subject: processes/quarterly-close
     object: processes/security-review
     confidence: 0.9
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [169, 184]
-        quote: security review
-  - predicate: mentions
+        span: [107, 185]
+        quote: Quarterly close is blocked until Engineering signs off on the security review.
+  - predicate: depends_on
+    subject: processes/quarterly-close
     object: teams/engineering
-    confidence: 0.9
+    confidence: 0.85
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [140, 151]
-        quote: Engineering
+        span: [107, 185]
+        quote: Quarterly close is blocked until Engineering signs off on the security review.
   - predicate: mentions
     object: tools/snowflake
-    confidence: 0.9
+    confidence: 0.8
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [26, 35]
-        quote: Snowflake
+        span: [22, 59]
+        quote: The Snowflake renewal lands in April.
+  - predicate: owns
+    subject: people/sam-kaur
+    object: processes/vendor-renewal
+    confidence: 0.9
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [22, 82]
+        quote: The Snowflake renewal lands in April. I own that end to end.
 ---
 
 **Sam Kaur** (13:12): The Snowflake renewal lands in April. I own that end to end.

@@ -7,10 +7,10 @@ acl:
   ref: slack:channel:C0GEN
   sensitivity: public
 source:
-  connector: slack
+  connector: local_fs
   uri: file://corpus/slack/general/2024-01-13.json
-  external_id: general/2024-01-13
-  external_version: rev-0
+  external_id: slack/general/2024-01-13.json
+  external_version: 1c8eca18e1501f56
   content_sha256: 1c8eca18e1501f562fdef38874e2927cf5d793c67c616c1282412864602ef517
 timestamps:
   created: '2024-01-13T13:03:00Z'
@@ -19,38 +19,47 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v2
-  cache_key: 2b4410f77a296eb58690ceff4c2c17ed
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v2
+  cache_key: 915d9071c48ea6a819202b8a097d2a06
   status: accepted
 relations:
   - predicate: mentions
     object: people/ana-brito
-    confidence: 0.9
+    confidence: 0.6
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [78, 87]
-        quote: Ana Brito
+        span: [24, 44]
+        quote: Welcome to the team!
   - predicate: mentions
     object: people/nadia-hassan
-    confidence: 0.9
+    confidence: 0.6
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [153, 165]
-        quote: Nadia Hassan
+        span: [177, 205]
+        quote: All-hands moved to Thursday.
   - predicate: mentions
     object: people/tom-whelan
-    confidence: 0.9
+    confidence: 0.6
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [2, 12]
-        quote: Tom Whelan
+        span: [24, 44]
+        quote: Welcome to the team!
+  - predicate: mentions
+    object: processes/onboarding
+    confidence: 0.7
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [45, 74]
+        quote: Onboarding docs are in Drive.
 ---
 
 **Tom Whelan** (13:03): Welcome to the team! Onboarding docs are in Drive.

@@ -7,10 +7,10 @@ acl:
   ref: slack:channel:C0FIN
   sensitivity: restricted
 source:
-  connector: slack
+  connector: local_fs
   uri: file://corpus/slack/finance/2024-01-26.json
-  external_id: finance/2024-01-26
-  external_version: rev-0
+  external_id: slack/finance/2024-01-26.json
+  external_version: 63d7b88cd9ae24be
   content_sha256: 63d7b88cd9ae24be5f314cd007edbb0ffa1941a15d8e4718cb9edbc16f75ffa4
 timestamps:
   created: '2024-01-26T09:54:00Z'
@@ -19,38 +19,48 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v2
-  cache_key: a4279bf65dd74e55793664027e175aa8
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v2
+  cache_key: b060897c7a488f4cd3c5d6d3b21e18db
   status: accepted
 relations:
+  - predicate: depends_on
+    subject: processes/customer-escalation
+    object: processes/security-review
+    confidence: 0.85
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [229, 311]
+        quote: Customer escalation is blocked until Engineering signs off on the security review.
   - predicate: mentions
     object: people/ana-brito
-    confidence: 0.9
+    confidence: 0.8
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [208, 217]
-        quote: Ana Brito
+        span: [206, 311]
+        quote: '**Ana Brito** (10:15): Customer escalation is blocked until Engineering signs off on the security review.'
   - predicate: mentions
     object: people/sam-kaur
-    confidence: 0.9
+    confidence: 0.8
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [2, 10]
-        quote: Sam Kaur
+        span: [0, 66]
+        quote: '**Sam Kaur** (09:54): Reminder: Employee onboarding closes Friday.'
   - predicate: mentions
     object: processes/customer-escalation
-    confidence: 0.9
+    confidence: 0.85
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [229, 248]
-        quote: Customer escalation
+        span: [229, 311]
+        quote: Customer escalation is blocked until Engineering signs off on the security review.
   - predicate: mentions
     object: processes/data-request
     confidence: 0.9
@@ -58,8 +68,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [168, 189]
-        quote: Customer data request
+        span: [158, 204]
+        quote: 'Reminder: Customer data request closes Friday.'
   - predicate: mentions
     object: processes/onboarding
     confidence: 0.9
@@ -67,26 +77,26 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [32, 51]
-        quote: Employee onboarding
+        span: [22, 66]
+        quote: 'Reminder: Employee onboarding closes Friday.'
   - predicate: mentions
     object: processes/security-review
-    confidence: 0.9
+    confidence: 0.85
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [295, 310]
-        quote: security review
+        span: [229, 311]
+        quote: Customer escalation is blocked until Engineering signs off on the security review.
   - predicate: mentions
     object: teams/engineering
-    confidence: 0.9
+    confidence: 0.85
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [266, 277]
-        quote: Engineering
+        span: [229, 311]
+        quote: Customer escalation is blocked until Engineering signs off on the security review.
 ---
 
 **Sam Kaur** (09:54): Reminder: Employee onboarding closes Friday.

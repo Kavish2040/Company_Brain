@@ -7,10 +7,10 @@ acl:
   ref: slack:channel:C0LEAD
   sensitivity: restricted
 source:
-  connector: slack
+  connector: local_fs
   uri: file://corpus/slack/leadership-comp/2024-01-18.json
-  external_id: leadership-comp/2024-01-18
-  external_version: rev-0
+  external_id: slack/leadership-comp/2024-01-18.json
+  external_version: d3367f4378153adc
   content_sha256: d3367f4378153adc6eade1a7ff746b0b73c159876437e716fd594fa65d713a7f
 timestamps:
   created: '2024-01-18T12:18:00Z'
@@ -19,29 +19,20 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v2
-  cache_key: 313ef35e1f4c8d77802585555cef4314
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v2
+  cache_key: 3dfc8dcbf200039127c47ee525797600
   status: accepted
 relations:
   - predicate: mentions
-    object: people/sam-kaur
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 10]
-        quote: Sam Kaur
-  - predicate: mentions
     object: teams/engineering
-    confidence: 0.9
+    confidence: 0.6
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [49, 60]
-        quote: Engineering
+        span: [22, 94]
+        quote: Compensation bands for the Engineering ladder need revisiting before Q3.
 ---
 
 **Sam Kaur** (12:18): Compensation bands for the Engineering ladder need revisiting before Q3.

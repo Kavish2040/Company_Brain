@@ -7,10 +7,10 @@ acl:
   ref: slack:channel:C0FIN
   sensitivity: restricted
 source:
-  connector: slack
+  connector: local_fs
   uri: file://corpus/slack/finance/2024-01-18.json
-  external_id: finance/2024-01-18
-  external_version: rev-0
+  external_id: slack/finance/2024-01-18.json
+  external_version: b3dedc37213af302
   content_sha256: b3dedc37213af302404d7d8efc60cf647fb5ebfea8ba444c050f6e55f99858ab
 timestamps:
   created: '2024-01-18T14:32:00Z'
@@ -19,38 +19,11 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v2
-  cache_key: 226c761972b6e611d397ab4847cae41b
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v2
+  cache_key: f1553b44a96d6370cd48eb39622fa9a8
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/ana-brito
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [148, 157]
-        quote: Ana Brito
-  - predicate: mentions
-    object: people/sam-kaur
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 10]
-        quote: Sam Kaur
-  - predicate: mentions
-    object: processes/quarterly-close
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [232, 247]
-        quote: Quarterly close
   - predicate: mentions
     object: processes/refund-approval
     confidence: 0.9
@@ -58,44 +31,17 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [32, 47]
-        quote: Refund approval
-  - predicate: mentions
-    object: processes/security-review
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [294, 309]
-        quote: security review
-  - predicate: mentions
-    object: processes/vendor-renewal
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [179, 193]
-        quote: Vendor renewal
-  - predicate: mentions
-    object: teams/engineering
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [265, 276]
-        quote: Engineering
+        span: [22, 62]
+        quote: 'Reminder: Refund approval closes Friday.'
   - predicate: mentions
     object: tools/zendesk
-    confidence: 0.9
+    confidence: 0.85
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [90, 97]
-        quote: Zendesk
+        span: [86, 121]
+        quote: The Zendesk renewal lands in April.
 ---
 
 **Sam Kaur** (14:32): Reminder: Refund approval closes Friday.

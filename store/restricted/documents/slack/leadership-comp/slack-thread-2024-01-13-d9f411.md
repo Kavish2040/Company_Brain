@@ -7,10 +7,10 @@ acl:
   ref: slack:channel:C0LEAD
   sensitivity: restricted
 source:
-  connector: slack
+  connector: local_fs
   uri: file://corpus/slack/leadership-comp/2024-01-13.json
-  external_id: leadership-comp/2024-01-13
-  external_version: rev-0
+  external_id: slack/leadership-comp/2024-01-13.json
+  external_version: a8ed72ba47688b85
   content_sha256: a8ed72ba47688b854994b60c95e96e56d469323a18f7eb629496374b394db45f
 timestamps:
   created: '2024-01-13T14:32:00Z'
@@ -19,38 +19,20 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v2
-  cache_key: 7526c1b7b1ceb1c4ac348a35e387b914
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v2
+  cache_key: 9a45e3f3cf9c8894ab7822654ec7481d
   status: accepted
 relations:
   - predicate: mentions
-    object: people/priya-raman
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [78, 89]
-        quote: Priya Raman
-  - predicate: mentions
-    object: people/sam-kaur
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 10]
-        quote: Sam Kaur
-  - predicate: mentions
     object: teams/engineering
-    confidence: 0.9
+    confidence: 0.6
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [207, 218]
-        quote: Engineering
+        span: [180, 252]
+        quote: Compensation bands for the Engineering ladder need revisiting before Q3.
 ---
 
 **Sam Kaur** (14:32): Let's keep the comp discussion in this channel only.

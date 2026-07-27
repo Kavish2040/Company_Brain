@@ -7,10 +7,10 @@ acl:
   ref: slack:channel:C0ENG
   sensitivity: internal
 source:
-  connector: slack
+  connector: local_fs
   uri: file://corpus/slack/engineering/2024-01-13.json
-  external_id: engineering/2024-01-13
-  external_version: rev-0
+  external_id: slack/engineering/2024-01-13.json
+  external_version: 16633adbebc455f1
   content_sha256: 16633adbebc455f1675256f34a6d03ed4bbf4b38646a07d8587f463ae42b5e17
 timestamps:
   created: '2024-01-13T14:19:00Z'
@@ -19,83 +19,58 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v2
-  cache_key: 0f2c20799daf7c558aa9800f783ea28c
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v2
+  cache_key: 7d838bec148063ab15f2736e34e8e526
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/nadia-hassan
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [108, 120]
-        quote: Nadia Hassan
-  - predicate: mentions
-    object: people/owen-fitz
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [285, 300]
-        quote: Owen Fitzgerald
-  - predicate: mentions
-    object: people/sam-kaur
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [201, 209]
-        quote: Sam Kaur
-  - predicate: mentions
-    object: people/sam-kelly
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 11]
-        quote: Sam Kelly
-  - predicate: mentions
-    object: processes/data-request
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [327, 348]
-        quote: Customer data request
-  - predicate: mentions
+  - predicate: depends_on
+    subject: processes/data-request
     object: processes/release-signoff
     confidence: 0.9
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [35, 51]
-        quote: Release sign-off
-  - predicate: mentions
-    object: teams/finance
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [238, 245]
-        quote: Finance
-  - predicate: mentions
+        span: [312, 394]
+        quote: Deploy for the Customer data request change is queued behind the release sign-off.
+  - predicate: handoff_to
+    subject: people/sam-kelly
     object: teams/support
     confidence: 0.9
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [67, 74]
-        quote: Support
+        span: [23, 104]
+        quote: Handing the Release sign-off ticket over to Support, they own the customer comms.
+  - predicate: mentions
+    object: processes/release-signoff
+    confidence: 0.8
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [23, 104]
+        quote: Handing the Release sign-off ticket over to Support, they own the customer comms.
+  - predicate: mentions
+    object: processes/vendor-renewal
+    confidence: 0.6
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [221, 281]
+        quote: Can someone from Finance confirm the Snowflake renewal date?
+  - predicate: mentions
+    object: teams/finance
+    confidence: 0.8
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [221, 281]
+        quote: Can someone from Finance confirm the Snowflake renewal date?
   - predicate: mentions
     object: tools/pagerduty
     confidence: 0.9
@@ -103,17 +78,17 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [136, 145]
-        quote: PagerDuty
+        span: [132, 197]
+        quote: The PagerDuty alert fired again overnight — third time this week.
   - predicate: mentions
     object: tools/snowflake
-    confidence: 0.9
+    confidence: 0.8
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [258, 267]
-        quote: Snowflake
+        span: [221, 281]
+        quote: Can someone from Finance confirm the Snowflake renewal date?
 ---
 
 **Sam Kelly** (14:19): Handing the Release sign-off ticket over to Support, they own the customer comms.

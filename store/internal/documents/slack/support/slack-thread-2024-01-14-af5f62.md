@@ -7,10 +7,10 @@ acl:
   ref: slack:channel:C0SUP
   sensitivity: internal
 source:
-  connector: slack
+  connector: local_fs
   uri: file://corpus/slack/support/2024-01-14.json
-  external_id: support/2024-01-14
-  external_version: rev-0
+  external_id: slack/support/2024-01-14.json
+  external_version: 9043fa4818d3beab
   content_sha256: 9043fa4818d3beab343642d2f57600cee067dd933a028136261e910e8ba88f13
 timestamps:
   created: '2024-01-14T09:28:00Z'
@@ -19,38 +19,48 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v2
-  cache_key: db45b17ba8f91f73edb75582f86a08ec
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v2
+  cache_key: 3515650d20bb1728c66f77f61d57b21f
   status: accepted
 relations:
+  - predicate: handoff_to
+    subject: processes/release-signoff
+    object: teams/finance
+    confidence: 0.7
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [25, 84]
+        quote: Looping in Finance for the refund side of Release sign-off.
   - predicate: mentions
     object: people/nadia-hassan
-    confidence: 0.9
+    confidence: 0.8
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [88, 100]
-        quote: Nadia Hassan
+        span: [88, 174]
+        quote: 'Nadia Hassan** (09:35): Customer is asking about the Capacity planning timeline again.'
   - predicate: mentions
     object: people/priya-raman
-    confidence: 0.9
+    confidence: 0.8
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [2, 13]
-        quote: Priya Raman
+        span: [2, 84]
+        quote: 'Priya Raman** (09:28): Looping in Finance for the refund side of Release sign-off.'
   - predicate: mentions
     object: people/zoe-ravel
-    confidence: 0.9
+    confidence: 0.8
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [178, 187]
-        quote: Zoë Ravel
+        span: [178, 257]
+        quote: 'Zoë Ravel** (09:42): Looping in Finance for the refund side of Quarterly close.'
   - predicate: mentions
     object: processes/capacity-planning
     confidence: 0.9
@@ -58,35 +68,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [141, 158]
-        quote: Capacity planning
-  - predicate: mentions
-    object: processes/quarterly-close
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [241, 256]
-        quote: Quarterly close
-  - predicate: mentions
-    object: processes/release-signoff
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [67, 83]
-        quote: Release sign-off
-  - predicate: mentions
-    object: teams/finance
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [36, 43]
-        quote: Finance
+        span: [112, 174]
+        quote: Customer is asking about the Capacity planning timeline again.
 ---
 
 **Priya Raman** (09:28): Looping in Finance for the refund side of Release sign-off.

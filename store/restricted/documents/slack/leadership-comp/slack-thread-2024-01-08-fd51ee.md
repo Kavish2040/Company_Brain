@@ -7,10 +7,10 @@ acl:
   ref: slack:channel:C0LEAD
   sensitivity: restricted
 source:
-  connector: slack
+  connector: local_fs
   uri: file://corpus/slack/leadership-comp/2024-01-08.json
-  external_id: leadership-comp/2024-01-08
-  external_version: rev-0
+  external_id: slack/leadership-comp/2024-01-08.json
+  external_version: 2246c366340b6e72
   content_sha256: 2246c366340b6e72d6b36e3722acbc2e81b2eff83342d66add52c4ab1e8d87e4
 timestamps:
   created: '2024-01-08T14:13:00Z'
@@ -19,9 +19,9 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v2
-  cache_key: 16e3e918b5ad18cafc1de7981ea08066
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v2
+  cache_key: b554025755e8a66799335b98c6e26510
   status: accepted
 relations:
   - predicate: mentions
@@ -35,13 +35,13 @@ relations:
         quote: Priya Raman
   - predicate: mentions
     object: teams/engineering
-    confidence: 0.9
+    confidence: 0.6
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [52, 63]
-        quote: Engineering
+        span: [25, 97]
+        quote: Compensation bands for the Engineering ladder need revisiting before Q3.
 ---
 
 **Priya Raman** (14:13): Compensation bands for the Engineering ladder need revisiting before Q3.

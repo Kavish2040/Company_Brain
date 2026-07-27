@@ -7,10 +7,10 @@ acl:
   ref: slack:channel:C0FIN
   sensitivity: restricted
 source:
-  connector: slack
+  connector: local_fs
   uri: file://corpus/slack/finance/2024-01-24.json
-  external_id: finance/2024-01-24
-  external_version: rev-0
+  external_id: slack/finance/2024-01-24.json
+  external_version: acc8402283f90532
   content_sha256: acc8402283f905324c09616b945bdf0abdc1274cba587be3109c600b3fe67401
 timestamps:
   created: '2024-01-24T13:25:00Z'
@@ -19,29 +19,21 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v2
-  cache_key: f6c360aa6aec33783c57955d27ea4b87
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v2
+  cache_key: 989fb2aadd42b261671e3809819a48cd
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/ana-brito
-    confidence: 0.9
+  - predicate: depends_on
+    subject: processes/security-review
+    object: teams/engineering
+    confidence: 0.8
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [104, 113]
-        quote: Ana Brito
-  - predicate: mentions
-    object: people/sam-kaur
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 10]
-        quote: Sam Kaur
+        span: [189, 267]
+        quote: Security review is blocked until Engineering signs off on the security review.
   - predicate: mentions
     object: processes/data-request
     confidence: 0.9
@@ -49,26 +41,26 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [301, 322]
-        quote: Customer data request
+        span: [291, 337]
+        quote: 'Reminder: Customer data request closes Friday.'
   - predicate: mentions
     object: processes/refund-approval
-    confidence: 0.9
+    confidence: 0.85
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [22, 37]
-        quote: Refund approval
+        span: [22, 100]
+        quote: Refund approval is blocked until Engineering signs off on the security review.
   - predicate: mentions
     object: processes/security-review
-    confidence: 0.9
+    confidence: 0.85
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [84, 99]
-        quote: security review
+        span: [189, 267]
+        quote: Security review is blocked until Engineering signs off on the security review.
   - predicate: mentions
     object: processes/vendor-renewal
     confidence: 0.9
@@ -76,17 +68,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [135, 149]
-        quote: Vendor renewal
-  - predicate: mentions
-    object: teams/engineering
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [55, 66]
-        quote: Engineering
+        span: [125, 164]
+        quote: 'Reminder: Vendor renewal closes Friday.'
 ---
 
 **Sam Kaur** (13:25): Refund approval is blocked until Engineering signs off on the security review.

@@ -1,0 +1,79 @@
+{
+  "edges": [
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Reminder: Customer escalation closes Friday.",
+          "span": [
+            23,
+            67
+          ]
+        }
+      ],
+      "object": "processes/customer-escalation",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "The Datadog renewal lands in April. I own that end to end.",
+          "span": [
+            92,
+            150
+          ]
+        }
+      ],
+      "object": "tools/datadog",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "people/ana-brito"
+    },
+    {
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "The PagerDuty renewal lands in April. I own that end to end.",
+          "span": [
+            175,
+            235
+          ]
+        }
+      ],
+      "object": "tools/pagerduty",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "people/ana-brito"
+    },
+    {
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "The PagerDuty renewal lands in April. I own that end to end.",
+          "span": [
+            175,
+            235
+          ]
+        }
+      ],
+      "object": "tools/pagerduty",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "people/sam-kaur"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v2",
+  "unresolved": []
+}

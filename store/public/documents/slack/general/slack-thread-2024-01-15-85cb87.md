@@ -7,10 +7,10 @@ acl:
   ref: slack:channel:C0GEN
   sensitivity: public
 source:
-  connector: slack
+  connector: local_fs
   uri: file://corpus/slack/general/2024-01-15.json
-  external_id: general/2024-01-15
-  external_version: rev-0
+  external_id: slack/general/2024-01-15.json
+  external_version: 15cd72ed3974ecfc
   content_sha256: 15cd72ed3974ecfc184955a9ac2ac2ddee63ae546e48598e16a91c502dccd29c
 timestamps:
   created: '2024-01-15T10:16:00Z'
@@ -19,47 +19,29 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v2
-  cache_key: e1c23eda9d3e2673332bf69e861812cf
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v2
+  cache_key: 083809a00b7995a3e1c2f09ad5df4bfb
   status: accepted
 relations:
   - predicate: mentions
-    object: people/priya-raman
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [156, 167]
-        quote: Priya Raman
-  - predicate: mentions
-    object: people/sam-kaur
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 10]
-        quote: Sam Kaur
-  - predicate: mentions
-    object: people/tom-whelan
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [80, 90]
-        quote: Tom Whelan
-  - predicate: mentions
     object: processes/customer-escalation
-    confidence: 0.9
+    confidence: 0.8
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [36, 55]
-        quote: Customer escalation
+        span: [22, 76]
+        quote: Reminder that Customer escalation kicks off next week.
+  - predicate: mentions
+    object: processes/onboarding
+    confidence: 0.7
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [123, 152]
+        quote: Onboarding docs are in Drive.
 ---
 
 **Sam Kaur** (10:16): Reminder that Customer escalation kicks off next week.

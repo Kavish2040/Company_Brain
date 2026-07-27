@@ -7,10 +7,10 @@ acl:
   ref: slack:channel:C0ENG
   sensitivity: internal
 source:
-  connector: slack
+  connector: local_fs
   uri: file://corpus/slack/engineering/2024-01-08.json
-  external_id: engineering/2024-01-08
-  external_version: rev-0
+  external_id: slack/engineering/2024-01-08.json
+  external_version: bfb0164dce979ff3
   content_sha256: bfb0164dce979ff3b40f7c161eb58b46c2c5cda5b5d082646e7ac3a312718605
 timestamps:
   created: '2024-01-08T12:55:00Z'
@@ -19,56 +19,30 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v2
-  cache_key: f19d73729dc38b3853a475abda55d395
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v2
+  cache_key: 530074fb4830b9b1407cce1605cf7166
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/tom-whelan
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [105, 115]
-        quote: Tom Whelan
-  - predicate: mentions
-    object: people/zoe-ravel
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 11]
-        quote: Zoë Ravel
-  - predicate: mentions
-    object: processes/incident-response
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [38, 55]
-        quote: Incident response
-  - predicate: mentions
+  - predicate: depends_on
+    subject: processes/incident-response
     object: processes/release-signoff
     confidence: 0.9
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [84, 100]
-        quote: release sign-off
+        span: [23, 101]
+        quote: Deploy for the Incident response change is queued behind the release sign-off.
   - predicate: mentions
     object: tools/netsuite
-    confidence: 0.9
+    confidence: 0.85
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [131, 139]
-        quote: NetSuite
+        span: [127, 191]
+        quote: The NetSuite alert fired again overnight — third time this week.
 ---
 
 **Zoë Ravel** (12:55): Deploy for the Incident response change is queued behind the release sign-off.

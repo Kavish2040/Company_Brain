@@ -7,10 +7,10 @@ acl:
   ref: slack:channel:C0GEN
   sensitivity: public
 source:
-  connector: slack
+  connector: local_fs
   uri: file://corpus/slack/general/2024-01-09.json
-  external_id: general/2024-01-09
-  external_version: rev-0
+  external_id: slack/general/2024-01-09.json
+  external_version: e9c349bee8b88b99
   content_sha256: e9c349bee8b88b99a742005443e76dd317f6037a0127fd7fa06052c597328e20
 timestamps:
   created: '2024-01-09T09:20:00Z'
@@ -19,38 +19,20 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v2
-  cache_key: b671b5c5e3f84bb590d0499420655054
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v2
+  cache_key: 485a3e2cc5373a73995473005168cc0d
   status: accepted
 relations:
   - predicate: mentions
-    object: people/mei-tanaka
-    confidence: 0.9
+    object: processes/onboarding
+    confidence: 0.7
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [138, 148]
-        quote: Mei Tanaka
-  - predicate: mentions
-    object: people/owen-fitz
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 17]
-        quote: Owen Fitzgerald
-  - predicate: mentions
-    object: people/priya-raman
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [83, 94]
-        quote: Priya Raman
+        span: [50, 79]
+        quote: Onboarding docs are in Drive.
 ---
 
 **Owen Fitzgerald** (09:20): Welcome to the team! Onboarding docs are in Drive.

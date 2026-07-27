@@ -1,0 +1,45 @@
+{
+  "edges": [
+    {
+      "confidence": 0.95,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Owner: Tom Whelan (tom@meridian.example)",
+          "span": [
+            29,
+            69
+          ]
+        }
+      ],
+      "object": "processes/security-review",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "people/tom-whelan"
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Owning team: Engineering",
+          "span": [
+            71,
+            95
+          ]
+        }
+      ],
+      "object": "processes/security-review",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "teams/engineering"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v2",
+  "unresolved": [
+    "Cross-team handoff if root cause sits elsewhere (destination team unnamed)"
+  ]
+}

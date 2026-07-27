@@ -7,10 +7,10 @@ acl:
   ref: slack:channel:C0ENG
   sensitivity: internal
 source:
-  connector: slack
+  connector: local_fs
   uri: file://corpus/slack/engineering/2024-01-20.json
-  external_id: engineering/2024-01-20
-  external_version: rev-0
+  external_id: slack/engineering/2024-01-20.json
+  external_version: a9ad0abc2edb60b7
   content_sha256: a9ad0abc2edb60b77355276f01a35e7e08e464edb1ced519e66cdd11534deee2
 timestamps:
   created: '2024-01-20T09:48:00Z'
@@ -19,56 +19,30 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v2
-  cache_key: 53e2786b4d0113805c81237589ce569c
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v2
+  cache_key: 038d2e2689b4a52f5054eb654f3f7cd9
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/ana-brito
-    confidence: 0.9
+  - predicate: handoff_to
+    subject: processes/security-review
+    object: teams/support
+    confidence: 0.85
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [199, 208]
-        quote: Ana Brito
+        span: [115, 195]
+        quote: Handing the Security review ticket over to Support, they own the customer comms.
   - predicate: mentions
-    object: people/owen-fitz
-    confidence: 0.9
+    object: processes/vendor-renewal
+    confidence: 0.6
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [88, 103]
-        quote: Owen Fitzgerald
-  - predicate: mentions
-    object: people/sam-kelly
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [287, 296]
-        quote: Sam Kelly
-  - predicate: mentions
-    object: people/tom-whelan
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 12]
-        quote: Tom Whelan
-  - predicate: mentions
-    object: processes/security-review
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [127, 142]
-        quote: Security review
+        span: [24, 84]
+        quote: Can someone from Finance confirm the PagerDuty renewal date?
   - predicate: mentions
     object: teams/finance
     confidence: 0.9
@@ -76,17 +50,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [41, 48]
-        quote: Finance
-  - predicate: mentions
-    object: teams/support
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [158, 165]
-        quote: Support
+        span: [24, 84]
+        quote: Can someone from Finance confirm the PagerDuty renewal date?
   - predicate: mentions
     object: tools/datadog
     confidence: 0.9
@@ -94,8 +59,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [224, 231]
-        quote: Datadog
+        span: [220, 283]
+        quote: The Datadog alert fired again overnight — third time this week.
   - predicate: mentions
     object: tools/pagerduty
     confidence: 0.9
@@ -103,8 +68,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [61, 70]
-        quote: PagerDuty
+        span: [24, 84]
+        quote: Can someone from Finance confirm the PagerDuty renewal date?
   - predicate: mentions
     object: tools/snowflake
     confidence: 0.9
@@ -112,8 +77,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [312, 321]
-        quote: Snowflake
+        span: [308, 373]
+        quote: The Snowflake alert fired again overnight — third time this week.
 ---
 
 **Tom Whelan** (09:48): Can someone from Finance confirm the PagerDuty renewal date?

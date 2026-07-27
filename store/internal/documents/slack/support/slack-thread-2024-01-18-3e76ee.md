@@ -7,10 +7,10 @@ acl:
   ref: slack:channel:C0SUP
   sensitivity: internal
 source:
-  connector: slack
+  connector: local_fs
   uri: file://corpus/slack/support/2024-01-18.json
-  external_id: support/2024-01-18
-  external_version: rev-0
+  external_id: slack/support/2024-01-18.json
+  external_version: 651634bca3947ecd
   content_sha256: 651634bca3947ecd0b0e1b09675d20fb6c7168342008a3b8d34be36b46704add
 timestamps:
   created: '2024-01-18T14:51:00Z'
@@ -19,74 +19,29 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v2
-  cache_key: 0f0f5dd47c31e5482120e457e527e373
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v2
+  cache_key: 30f1c6f587c90529e4b8da8f22b782a9
   status: accepted
 relations:
   - predicate: mentions
-    object: people/mei-tanaka
-    confidence: 0.9
+    object: processes/refund-approval
+    confidence: 0.5
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [2, 12]
-        quote: Mei Tanaka
-  - predicate: mentions
-    object: people/sam-kelly
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [88, 97]
-        quote: Sam Kelly
-  - predicate: mentions
-    object: people/tom-whelan
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [173, 183]
-        quote: Tom Whelan
-  - predicate: mentions
-    object: processes/capacity-planning
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [66, 83]
-        quote: Capacity planning
-  - predicate: mentions
-    object: processes/quarterly-close
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [138, 153]
-        quote: Quarterly close
-  - predicate: mentions
-    object: teams/engineering
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [239, 250]
-        quote: Engineering
+        span: [24, 84]
+        quote: Looping in Finance for the refund side of Capacity planning.
   - predicate: mentions
     object: teams/finance
-    confidence: 0.9
+    confidence: 0.7
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [35, 42]
-        quote: Finance
+        span: [24, 84]
+        quote: Looping in Finance for the refund side of Capacity planning.
 ---
 
 **Mei Tanaka** (14:51): Looping in Finance for the refund side of Capacity planning.

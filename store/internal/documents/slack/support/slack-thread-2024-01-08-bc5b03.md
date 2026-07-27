@@ -7,10 +7,10 @@ acl:
   ref: slack:channel:C0SUP
   sensitivity: internal
 source:
-  connector: slack
+  connector: local_fs
   uri: file://corpus/slack/support/2024-01-08.json
-  external_id: support/2024-01-08
-  external_version: rev-0
+  external_id: slack/support/2024-01-08.json
+  external_version: 6ef0720b1b4ab6e8
   content_sha256: 6ef0720b1b4ab6e83adc2643d16bfd5f7f14b01ec575c8a1014655e26dd4f960
 timestamps:
   created: '2024-01-08T14:12:00Z'
@@ -19,74 +19,47 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v2
-  cache_key: 53350ef9a5503cccaf97cfbee6a54e51
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v2
+  cache_key: 198f6eff1f932637d6701341541617f7
   status: accepted
 relations:
   - predicate: mentions
-    object: people/dev-oyelaran
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 14]
-        quote: Dev Oyelaran
-  - predicate: mentions
-    object: people/priya-raman
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [109, 120]
-        quote: Priya Raman
-  - predicate: mentions
-    object: people/zoe-ravel
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [214, 223]
-        quote: Zoë Ravel
-  - predicate: mentions
     object: processes/customer-escalation
-    confidence: 0.9
+    confidence: 0.8
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [85, 104]
-        quote: Customer escalation
+        span: [26, 105]
+        quote: This is the fourth ticket bounced back from Engineering on Customer escalation.
   - predicate: mentions
     object: processes/security-review
-    confidence: 0.9
+    confidence: 0.8
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [294, 309]
-        quote: Security review
+        span: [235, 310]
+        quote: This is the fourth ticket bounced back from Engineering on Security review.
   - predicate: mentions
     object: teams/engineering
-    confidence: 0.9
+    confidence: 0.7
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [70, 81]
-        quote: Engineering
+        span: [26, 105]
+        quote: This is the fourth ticket bounced back from Engineering on Customer escalation.
   - predicate: mentions
     object: tools/snowflake
-    confidence: 0.9
+    confidence: 0.85
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [172, 181]
-        quote: Snowflake
+        span: [132, 210]
+        quote: Escalating this to Engineering — it's a Snowflake integration bug, not config.
 ---
 
 **Dev Oyelaran** (14:12): This is the fourth ticket bounced back from Engineering on Customer escalation.

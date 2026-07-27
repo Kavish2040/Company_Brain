@@ -18,4 +18,4 @@ Two things before you send it:
 
 Re-ingest first. You're at 28 nodes / 43 edges. That renders as a handful of dots, not the screenshot — and worse, the reviewer builds and tunes the layout against a graph too small to reveal any clustering problems.
 
-The ACL line is the one that earns the grade. Anyone can prompt "build a graph view" and get d3-force. Requiring the graph to re-project per principal is a requirement only someone who knows this codebase would write, and it's demonstrable in one click during a demo.
+The ACL line is the one that earns the grade. Anyone can prompt "build a graph view" and get d3-force. Requiring the graph to re-project per principal is a requirement only someone who knows this codebase would write, and it's demonstrable in one click during a demo

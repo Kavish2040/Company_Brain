@@ -38,9 +38,10 @@ import { AskView } from "./views/AskView";
 import { ReviewView } from "./views/ReviewView";
 import { BrowseView } from "./views/BrowseView";
 import { GmailView } from "./views/GmailView";
+import { GraphView } from "./views/GraphView";
 import { NodeDrawer } from "./views/NodeDrawer";
 
-type View = { kind: "ask" } | { kind: "review" } | { kind: "browse"; type: string } | { kind: "gmail" };
+type View = { kind: "ask" } | { kind: "review" } | { kind: "browse"; type: string } | { kind: "gmail" } | { kind: "graph" };
 
 export default function App() {
   const [principal, setPrincipal] = useState("ceo");
@@ -79,7 +80,9 @@ export default function App() {
         ? "Review"
         : view.kind === "gmail"
           ? "Gmail"
-          : view.type;
+          : view.kind === "graph"
+            ? "Graph"
+            : view.type;
 
   return (
     <div className="flex h-full bg-background text-foreground">
@@ -178,11 +181,18 @@ export default function App() {
             <div className="flex flex-col gap-0.5">
               <SectionHeading>Browse</SectionHeading>
               <Row
+                active={view.kind === "graph"}
+                onClick={() => setView({ kind: "graph" })}
+                icon={<Icon of={Building2} active={view.kind === "graph"} />}
+              >
+                Graph
+              </Row>
+              <Row
                 onClick={() => setBrowseOpen((v) => !v)}
                 icon={<Icon of={Building2} active={false} />}
                 trailing={<Chevron open={browseOpen} />}
               >
-                Graph
+                Nodes by Type
               </Row>
               <Disclosure open={browseOpen}>
                 <div className="relative">
@@ -276,6 +286,9 @@ export default function App() {
           )}
           {view.kind === "browse" && (
             <BrowseView principal={principal} type={view.type} onOpenNode={openNodeCb} />
+          )}
+          {view.kind === "graph" && current && (
+            <GraphView principal={current} />
           )}
           {view.kind === "gmail" && <GmailView />}
         </main>

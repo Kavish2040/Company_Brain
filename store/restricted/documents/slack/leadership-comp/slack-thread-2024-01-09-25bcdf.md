@@ -7,10 +7,10 @@ acl:
   ref: slack:channel:C0LEAD
   sensitivity: restricted
 source:
-  connector: slack
+  connector: local_fs
   uri: file://corpus/slack/leadership-comp/2024-01-09.json
-  external_id: leadership-comp/2024-01-09
-  external_version: rev-0
+  external_id: slack/leadership-comp/2024-01-09.json
+  external_version: b0280d2d6e176572
   content_sha256: b0280d2d6e17657218e164bf461f51b5056367041bf802d7907c263ac010bb34
 timestamps:
   created: '2024-01-09T13:39:00Z'
@@ -19,29 +19,10 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v2
-  cache_key: 98a02a52ef2f46c77b961783a6e4ae2c
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v2
+  cache_key: 16e2ee839315b9ae099bd83af4a91142
   status: accepted
-relations:
-  - predicate: mentions
-    object: people/priya-raman
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 13]
-        quote: Priya Raman
-  - predicate: mentions
-    object: people/sam-kaur
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [81, 89]
-        quote: Sam Kaur
 ---
 
 **Priya Raman** (13:39): Let's keep the comp discussion in this channel only.

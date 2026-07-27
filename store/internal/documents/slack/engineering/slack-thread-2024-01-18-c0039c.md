@@ -7,10 +7,10 @@ acl:
   ref: slack:channel:C0ENG
   sensitivity: internal
 source:
-  connector: slack
+  connector: local_fs
   uri: file://corpus/slack/engineering/2024-01-18.json
-  external_id: engineering/2024-01-18
-  external_version: rev-0
+  external_id: slack/engineering/2024-01-18.json
+  external_version: a565db525bfd86c7
   content_sha256: a565db525bfd86c751a77d9aaa4916afada26660dd75c27719689fcb00b4f7a0
 timestamps:
   created: '2024-01-18T13:17:00Z'
@@ -19,56 +19,48 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v2
-  cache_key: f8c907324c97f232e8036a1a9d00e684
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v2
+  cache_key: 8bcf7012fbe2e7daa08752d4cd6e1f5b
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/dev-oyelaran
-    confidence: 0.9
+  - predicate: handoff_to
+    subject: people/dev-oyelaran
+    object: teams/support
+    confidence: 0.8
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [2, 14]
-        quote: Dev Oyelaran
+        span: [26, 112]
+        quote: Handing the Customer data request ticket over to Support, they own the customer comms.
   - predicate: mentions
     object: processes/data-request
-    confidence: 0.9
+    confidence: 0.7
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [38, 59]
-        quote: Customer data request
+        span: [26, 112]
+        quote: Handing the Customer data request ticket over to Support, they own the customer comms.
   - predicate: mentions
     object: teams/finance
-    confidence: 0.9
+    confidence: 0.8
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [157, 164]
-        quote: Finance
-  - predicate: mentions
-    object: teams/support
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [75, 82]
-        quote: Support
+        span: [140, 200]
+        quote: Can someone from Finance confirm the Snowflake renewal date?
   - predicate: mentions
     object: tools/snowflake
-    confidence: 0.9
+    confidence: 0.8
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [177, 186]
-        quote: Snowflake
+        span: [140, 200]
+        quote: Can someone from Finance confirm the Snowflake renewal date?
 ---
 
 **Dev Oyelaran** (13:17): Handing the Customer data request ticket over to Support, they own the customer comms.
