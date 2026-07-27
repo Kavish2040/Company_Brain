@@ -31,6 +31,10 @@ class GrantTable:
     _direct: dict[str, set[str]] = field(default_factory=dict)
     _members: dict[str, set[str]] = field(default_factory=dict)
     _tiers: dict[str, set[Sensitivity]] = field(default_factory=dict)
+    # Agents must be registered before they can see anything. An unregistered
+    # agent id is denied outright rather than falling back to the human's set,
+    # so a typo'd or spoofed agent name fails closed.
+    _agents: dict[str, bool] = field(default_factory=dict)
 
     def grant(self, principal_id: str, acl_ref: str, tier: Sensitivity) -> None:
         self._direct.setdefault(principal_id, set()).add(acl_ref)
@@ -42,22 +46,47 @@ class GrantTable:
     def add_to_group(self, principal_id: str, group_id: str) -> None:
         self._members.setdefault(principal_id, set()).add(group_id)
 
+    def register_agent(self, agent_id: str, *, inherit: bool) -> None:
+        """Register an agent and declare how its ceiling is computed.
+
+        ``inherit=True`` — the agent may see whatever the invoking human sees.
+        ``inherit=False`` — the agent has its own grant list, and its view is the
+        intersection of that list with the human's, so it can be scoped *below*
+        the human but never above.
+
+        Both forms are capped by the human. The distinction is only whether the
+        agent carries an additional restriction of its own.
+        """
+        self._agents[agent_id] = inherit
+
+    def is_registered_agent(self, agent_id: str) -> bool:
+        return agent_id in self._agents
+
     def visible_refs(self, principal: Principal) -> frozenset[str]:
         """Expand a principal's grants through group membership.
 
-        For a delegated agent this is the intersection with the delegating
-        human's set — the agent cannot exceed the person it acts for.
+        A delegated agent can never exceed the human it acts for. That cap is
+        the invariant; how the agent's own side is computed depends on how it
+        was registered.
         """
-        own = self._expand(principal.id)
         if principal.delegated_by is None:
-            return own
-        return own & self._expand(principal.delegated_by)
+            return self._expand(principal.id)
+
+        human = self._expand(principal.delegated_by)
+        inherit = self._agents.get(principal.id)
+        if inherit is None:
+            return frozenset()  # unregistered agent: fail closed
+        return human if inherit else self._expand(principal.id) & human
 
     def visible_tiers(self, principal: Principal) -> frozenset[Sensitivity]:
-        own = self._tiers_for(principal.id)
         if principal.delegated_by is None:
-            return own
-        return own & self._tiers_for(principal.delegated_by)
+            return self._tiers_for(principal.id)
+
+        human = self._tiers_for(principal.delegated_by)
+        inherit = self._agents.get(principal.id)
+        if inherit is None:
+            return frozenset()
+        return human if inherit else self._tiers_for(principal.id) & human
 
     def _expand(self, principal_id: str) -> frozenset[str]:
         refs = set(self._direct.get(principal_id, ()))

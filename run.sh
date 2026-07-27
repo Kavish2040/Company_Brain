@@ -86,14 +86,24 @@ uv run cb ask "compensation bands for the engineering ladder" --principal ceo | 
 echo "--- as eng-ic (must not surface it) ---"
 uv run cb ask "compensation bands for the engineering ladder" --principal eng-ic | head -8
 
-bold "10. MCP tool surface"
+bold "10. Review queue"
+note "owns and handoff_to have no auto-accept threshold at any confidence (§11)."
+uv run cb review stats
+
+bold "11. MCP tool surface"
 uv run cb mcp
 
 bold "Done"
 cat <<'EOF'
-Store:  ./store            canonical markdown — open it in any editor
+Store:  ./store             canonical markdown — open it in any editor
 Corpus: ./corpus/synthetic  the 201 source files
 
-  ./run.sh test    lint, types, and the full acceptance suite
-  uv run cb ask "..." --principal ceo|support-lead|eng-ic|contractor
+  ./run.sh test     lint, types, unit + acceptance suites
+  cb ask "..." --principal ceo|support-lead|eng-ic|contractor
+  cb review list --predicate owns
+  cb mcp --serve --as eng-ic        stdio MCP server
+
+Connect Claude Code to it:
+  claude mcp add company-brain -- \
+    uv run --directory "$PWD" cb mcp --serve --as eng-ic
 EOF

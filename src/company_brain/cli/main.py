@@ -168,11 +168,116 @@ def principals(store: Annotated[Path, typer.Option()] = STORE_ROOT) -> None:
 
 
 @app.command("mcp")
-def mcp_cmd(store: Annotated[Path, typer.Option()] = STORE_ROOT) -> None:
-    """Describe the MCP tool surface (stdio server entry point)."""
-    from company_brain.mcp.server import describe
+def mcp_cmd(
+    store: Annotated[Path, typer.Option()] = STORE_ROOT,
+    serve: Annotated[bool, typer.Option(help="Run the stdio server.")] = False,
+    agent_id: Annotated[str, typer.Option(help="This agent's own identity.")] = "agent-local",
+    as_user: Annotated[
+        str, typer.Option("--as", help=f"Human to act for: {', '.join(PRINCIPALS)}")
+    ] = "ceo",
+) -> None:
+    """Describe, or run, the MCP server.
 
-    echo(json.dumps(describe(), indent=2))
+    `--as` binds the session's identity at startup. No tool accepts a principal
+    argument, so a connected model cannot claim a different one (invariant 8).
+    """
+    if not serve:
+        from company_brain.mcp.server import describe
+
+        echo(json.dumps(describe(), indent=2))
+        return
+
+    from company_brain.mcp.stdio import serve as run_stdio
+
+    if as_user not in PRINCIPALS:
+        echo(f"unknown principal {as_user!r}; try {', '.join(sorted(PRINCIPALS))}")
+        raise typer.Exit(64)
+    # stdout is the MCP transport — anything printed there corrupts the protocol.
+    run_stdio(store, agent_id=agent_id, delegated_by=as_user)
+
+
+review_app = typer.Typer(help="The human review queue for proposed edges.")
+app.add_typer(review_app, name="review")
+
+
+@review_app.command("list")
+def review_list(
+    store: Annotated[Path, typer.Option()] = STORE_ROOT,
+    predicate: Annotated[str | None, typer.Option(help="Filter by predicate.")] = None,
+    limit: Annotated[int, typer.Option()] = 20,
+) -> None:
+    """Show proposed edges awaiting a decision."""
+    from company_brain.review.queue import ReviewQueue
+
+    instance = build_app(store)
+    pending = ReviewQueue(instance.repo).pending_edges(predicate)
+    if not pending:
+        echo("Nothing pending.")
+        return
+    for item in pending[:limit]:
+        echo(f"\n{item.key}")
+        echo(f"  {item.node_title}  (confidence {item.edge.confidence:.2f})")
+        if item.quote():
+            echo(f"  evidence: {item.quote()[:120]!r}")
+    echo(f"\n{len(pending)} pending" + (f", showing {limit}" if len(pending) > limit else ""))
+
+
+@review_app.command("stats")
+def review_stats(store: Annotated[Path, typer.Option()] = STORE_ROOT) -> None:
+    """Queue volume and per-predicate accept rate.
+
+    Accept rate is the calibration signal: near 100% means the gate is theatre,
+    near 10% means the extractor is wasting reviewer time (ARCHITECTURE §11).
+    """
+    from company_brain.review.queue import ReviewQueue
+
+    instance = build_app(store)
+    queue = ReviewQueue(instance.repo)
+    stats = queue.stats()
+
+    echo(f"Pending: {stats.total} ({stats.with_evidence} carry evidence)")
+    for name, count in sorted(stats.by_predicate.items(), key=lambda kv: -kv[1]):
+        echo(f"  {name:22} {count}")
+
+    rates = queue.accept_rate()
+    echo("\nAccept rate (llm-provenance edges that have been decided):")
+    if not rates:
+        echo("  nothing decided yet — no calibration signal")
+        return
+    for name, (accepted, decided) in rates.items():
+        echo(f"  {name:22} {accepted}/{decided} ({100 * accepted / decided:.0f}%)")
+
+
+@review_app.command("accept")
+def review_accept(
+    key: Annotated[str, typer.Argument(help="node_id|predicate|object")],
+    store: Annotated[Path, typer.Option()] = STORE_ROOT,
+) -> None:
+    """Accept a proposed edge into the graph."""
+    _decide(key, store, accept=True)
+
+
+@review_app.command("reject")
+def review_reject(
+    key: Annotated[str, typer.Argument(help="node_id|predicate|object")],
+    store: Annotated[Path, typer.Option()] = STORE_ROOT,
+) -> None:
+    """Reject a proposed edge. Retained, not deleted — it's the tuning signal."""
+    _decide(key, store, accept=False)
+
+
+def _decide(key: str, store: Path, *, accept: bool) -> None:
+    from company_brain.review.queue import Decision, ReviewQueue
+
+    instance = build_app(store)
+    try:
+        ReviewQueue(instance.repo).decide(
+            key, Decision.ACCEPTED if accept else Decision.REJECTED
+        )
+    except (KeyError, ValueError) as exc:
+        echo(f"Could not decide {key!r}: {exc}")
+        raise typer.Exit(1) from exc
+    echo(f"{'Accepted' if accept else 'Rejected'} {key}")
 
 
 if __name__ == "__main__":
