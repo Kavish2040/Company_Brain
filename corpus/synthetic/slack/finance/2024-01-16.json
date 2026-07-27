@@ -1,0 +1,38 @@
+[
+  {
+    "text": "Reminder: Capacity planning closes Friday.",
+    "ts": "1705414320.000000",
+    "type": "message",
+    "user": "U05ANAB",
+    "user_profile": {
+      "real_name": "Ana Brito"
+    }
+  },
+  {
+    "text": "The NetSuite renewal lands in April. I own that end to end.",
+    "ts": "1705414740.000000",
+    "type": "message",
+    "user": "U05ANAB",
+    "user_profile": {
+      "real_name": "Ana Brito"
+    }
+  },
+  {
+    "text": "Quarterly close is blocked until Engineering signs off on the security review.",
+    "ts": "1705415160.000000",
+    "type": "message",
+    "user": "U01SAMK",
+    "user_profile": {
+      "real_name": "Sam Kaur"
+    }
+  },
+  {
+    "text": "Customer data request is blocked until Engineering signs off on the security review.",
+    "ts": "1705415580.000000",
+    "type": "message",
+    "user": "U01SAMK",
+    "user_profile": {
+      "real_name": "Sam Kaur"
+    }
+  }
+]

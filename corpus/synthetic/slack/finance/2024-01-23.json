@@ -1,0 +1,20 @@
+[
+  {
+    "text": "Employee onboarding is blocked until Engineering signs off on the security review.",
+    "ts": "1706015460.000000",
+    "type": "message",
+    "user": "U01SAMK",
+    "user_profile": {
+      "real_name": "Sam Kaur"
+    }
+  },
+  {
+    "text": "Reminder: Capacity planning closes Friday.",
+    "ts": "1706015880.000000",
+    "type": "message",
+    "user": "U05ANAB",
+    "user_profile": {
+      "real_name": "Ana Brito"
+    }
+  }
+]

@@ -1,0 +1,38 @@
+[
+  {
+    "text": "This is the fourth ticket bounced back from Engineering on Capacity planning.",
+    "ts": "1705842240.000000",
+    "type": "message",
+    "user": "U08OWEN",
+    "user_profile": {
+      "real_name": "Owen Fitzgerald"
+    }
+  },
+  {
+    "text": "Customer is asking about the Quarterly close timeline again.",
+    "ts": "1705842660.000000",
+    "type": "message",
+    "user": "U01SAMY",
+    "user_profile": {
+      "real_name": "Sam Kelly"
+    }
+  },
+  {
+    "text": "Escalating this to Engineering \u2014 it's a Zendesk integration bug, not config.",
+    "ts": "1705843080.000000",
+    "type": "message",
+    "user": "U09NADH",
+    "user_profile": {
+      "real_name": "Nadia Hassan"
+    }
+  },
+  {
+    "text": "This is the fourth ticket bounced back from Engineering on Incident response.",
+    "ts": "1705843500.000000",
+    "type": "message",
+    "user": "U05ANAB",
+    "user_profile": {
+      "real_name": "Ana Brito"
+    }
+  }
+]

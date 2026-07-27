@@ -1,0 +1,29 @@
+[
+  {
+    "text": "Handing the Release sign-off ticket over to Support, they own the customer comms.",
+    "ts": "1705323480.000000",
+    "type": "message",
+    "user": "U02PRIY",
+    "user_profile": {
+      "real_name": "Priya Raman"
+    }
+  },
+  {
+    "text": "Deploy for the Quarterly close change is queued behind the release sign-off.",
+    "ts": "1705323900.000000",
+    "type": "message",
+    "user": "U02PRIY",
+    "user_profile": {
+      "real_name": "Priya Raman"
+    }
+  },
+  {
+    "text": "The NetSuite alert fired again overnight \u2014 third time this week.",
+    "ts": "1705324320.000000",
+    "type": "message",
+    "user": "U01SAMY",
+    "user_profile": {
+      "real_name": "Sam Kelly"
+    }
+  }
+]

@@ -1,0 +1,29 @@
+[
+  {
+    "text": "Reminder: Customer data request closes Friday.",
+    "ts": "1705063200.000000",
+    "type": "message",
+    "user": "U01SAMK",
+    "user_profile": {
+      "real_name": "Sam Kaur"
+    }
+  },
+  {
+    "text": "Reminder: Quarterly close closes Friday.",
+    "ts": "1705063620.000000",
+    "type": "message",
+    "user": "U05ANAB",
+    "user_profile": {
+      "real_name": "Ana Brito"
+    }
+  },
+  {
+    "text": "Reminder: Refund approval closes Friday.",
+    "ts": "1705064040.000000",
+    "type": "message",
+    "user": "U05ANAB",
+    "user_profile": {
+      "real_name": "Ana Brito"
+    }
+  }
+]

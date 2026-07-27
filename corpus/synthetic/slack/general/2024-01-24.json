@@ -1,0 +1,38 @@
+[
+  {
+    "text": "All-hands moved to Thursday.",
+    "ts": "1706092980.000000",
+    "type": "message",
+    "user": "U01SAMY",
+    "user_profile": {
+      "real_name": "Sam Kelly"
+    }
+  },
+  {
+    "text": "Reminder that Employee onboarding kicks off next week.",
+    "ts": "1706093400.000000",
+    "type": "message",
+    "user": "U02PRIY",
+    "user_profile": {
+      "real_name": "Priya Raman"
+    }
+  },
+  {
+    "text": "Reminder that Quarterly close kicks off next week.",
+    "ts": "1706093820.000000",
+    "type": "message",
+    "user": "U05ANAB",
+    "user_profile": {
+      "real_name": "Ana Brito"
+    }
+  },
+  {
+    "text": "Welcome to the team! Onboarding docs are in Drive.",
+    "ts": "1706094240.000000",
+    "type": "message",
+    "user": "U02PRIY",
+    "user_profile": {
+      "real_name": "Priya Raman"
+    }
+  }
+]

@@ -1,0 +1,29 @@
+[
+  {
+    "text": "Escalating this to Engineering \u2014 it's a Snowflake integration bug, not config.",
+    "ts": "1706173740.000000",
+    "type": "message",
+    "user": "U08OWEN",
+    "user_profile": {
+      "real_name": "Owen Fitzgerald"
+    }
+  },
+  {
+    "text": "Looping in Finance for the refund side of Incident response.",
+    "ts": "1706174160.000000",
+    "type": "message",
+    "user": "U09NADH",
+    "user_profile": {
+      "real_name": "Nadia Hassan"
+    }
+  },
+  {
+    "text": "Escalating this to Engineering \u2014 it's a PagerDuty integration bug, not config.",
+    "ts": "1706174580.000000",
+    "type": "message",
+    "user": "U06TOMW",
+    "user_profile": {
+      "real_name": "Tom Whelan"
+    }
+  }
+]

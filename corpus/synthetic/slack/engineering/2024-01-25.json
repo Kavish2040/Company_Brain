@@ -1,0 +1,20 @@
+[
+  {
+    "text": "Deploy for the Vendor renewal change is queued behind the release sign-off.",
+    "ts": "1706184840.000000",
+    "type": "message",
+    "user": "U04MEIT",
+    "user_profile": {
+      "real_name": "Mei Tanaka"
+    }
+  },
+  {
+    "text": "The Linear alert fired again overnight \u2014 third time this week.",
+    "ts": "1706185260.000000",
+    "type": "message",
+    "user": "U06TOMW",
+    "user_profile": {
+      "real_name": "Tom Whelan"
+    }
+  }
+]

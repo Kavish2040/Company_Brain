@@ -1,0 +1,20 @@
+[
+  {
+    "text": "Handing the Customer data request ticket over to Support, they own the customer comms.",
+    "ts": "1705583820.000000",
+    "type": "message",
+    "user": "U03DEVO",
+    "user_profile": {
+      "real_name": "Dev Oyelaran"
+    }
+  },
+  {
+    "text": "Can someone from Finance confirm the Snowflake renewal date?",
+    "ts": "1705584240.000000",
+    "type": "message",
+    "user": "U03DEVO",
+    "user_profile": {
+      "real_name": "Dev Oyelaran"
+    }
+  }
+]

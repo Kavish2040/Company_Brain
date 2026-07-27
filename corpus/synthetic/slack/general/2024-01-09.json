@@ -1,0 +1,38 @@
+[
+  {
+    "text": "Welcome to the team! Onboarding docs are in Drive.",
+    "ts": "1704792000.000000",
+    "type": "message",
+    "user": "U08OWEN",
+    "user_profile": {
+      "real_name": "Owen Fitzgerald"
+    }
+  },
+  {
+    "text": "All-hands moved to Thursday.",
+    "ts": "1704792420.000000",
+    "type": "message",
+    "user": "U02PRIY",
+    "user_profile": {
+      "real_name": "Priya Raman"
+    }
+  },
+  {
+    "text": "Welcome to the team! Onboarding docs are in Drive.",
+    "ts": "1704792840.000000",
+    "type": "message",
+    "user": "U04MEIT",
+    "user_profile": {
+      "real_name": "Mei Tanaka"
+    }
+  },
+  {
+    "text": "Welcome to the team! Onboarding docs are in Drive.",
+    "ts": "1704793260.000000",
+    "type": "message",
+    "user": "U04MEIT",
+    "user_profile": {
+      "real_name": "Mei Tanaka"
+    }
+  }
+]

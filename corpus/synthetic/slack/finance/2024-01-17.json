@@ -1,0 +1,29 @@
+[
+  {
+    "text": "Reminder: Customer data request closes Friday.",
+    "ts": "1705488720.000000",
+    "type": "message",
+    "user": "U05ANAB",
+    "user_profile": {
+      "real_name": "Ana Brito"
+    }
+  },
+  {
+    "text": "Reminder: Capacity planning closes Friday.",
+    "ts": "1705489140.000000",
+    "type": "message",
+    "user": "U05ANAB",
+    "user_profile": {
+      "real_name": "Ana Brito"
+    }
+  },
+  {
+    "text": "Reminder: Security review closes Friday.",
+    "ts": "1705489560.000000",
+    "type": "message",
+    "user": "U01SAMK",
+    "user_profile": {
+      "real_name": "Sam Kaur"
+    }
+  }
+]

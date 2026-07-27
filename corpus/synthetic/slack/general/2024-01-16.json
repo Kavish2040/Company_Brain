@@ -1,0 +1,38 @@
+[
+  {
+    "text": "Welcome to the team! Onboarding docs are in Drive.",
+    "ts": "1705414680.000000",
+    "type": "message",
+    "user": "U01SAMK",
+    "user_profile": {
+      "real_name": "Sam Kaur"
+    }
+  },
+  {
+    "text": "All-hands moved to Thursday.",
+    "ts": "1705415100.000000",
+    "type": "message",
+    "user": "U01SAMY",
+    "user_profile": {
+      "real_name": "Sam Kelly"
+    }
+  },
+  {
+    "text": "All-hands moved to Thursday.",
+    "ts": "1705415520.000000",
+    "type": "message",
+    "user": "U07ZOER",
+    "user_profile": {
+      "real_name": "Zo\u00eb Ravel"
+    }
+  },
+  {
+    "text": "All-hands moved to Thursday.",
+    "ts": "1705415940.000000",
+    "type": "message",
+    "user": "U01SAMK",
+    "user_profile": {
+      "real_name": "Sam Kaur"
+    }
+  }
+]

@@ -1,0 +1,29 @@
+[
+  {
+    "text": "The Snowflake renewal lands in April. I own that end to end.",
+    "ts": "1705237920.000000",
+    "type": "message",
+    "user": "U01SAMK",
+    "user_profile": {
+      "real_name": "Sam Kaur"
+    }
+  },
+  {
+    "text": "Quarterly close is blocked until Engineering signs off on the security review.",
+    "ts": "1705238340.000000",
+    "type": "message",
+    "user": "U05ANAB",
+    "user_profile": {
+      "real_name": "Ana Brito"
+    }
+  },
+  {
+    "text": "Customer data request is blocked until Engineering signs off on the security review.",
+    "ts": "1705238760.000000",
+    "type": "message",
+    "user": "U01SAMK",
+    "user_profile": {
+      "real_name": "Sam Kaur"
+    }
+  }
+]

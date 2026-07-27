@@ -1,0 +1,38 @@
+[
+  {
+    "text": "Escalating this to Engineering \u2014 it's a PagerDuty integration bug, not config.",
+    "ts": "1706002500.000000",
+    "type": "message",
+    "user": "U07ZOER",
+    "user_profile": {
+      "real_name": "Zo\u00eb Ravel"
+    }
+  },
+  {
+    "text": "Escalating this to Engineering \u2014 it's a PagerDuty integration bug, not config.",
+    "ts": "1706002920.000000",
+    "type": "message",
+    "user": "U06TOMW",
+    "user_profile": {
+      "real_name": "Tom Whelan"
+    }
+  },
+  {
+    "text": "This is the fourth ticket bounced back from Engineering on Refund approval.",
+    "ts": "1706003340.000000",
+    "type": "message",
+    "user": "U06TOMW",
+    "user_profile": {
+      "real_name": "Tom Whelan"
+    }
+  },
+  {
+    "text": "This is the fourth ticket bounced back from Engineering on Vendor renewal.",
+    "ts": "1706003760.000000",
+    "type": "message",
+    "user": "U01SAMK",
+    "user_profile": {
+      "real_name": "Sam Kaur"
+    }
+  }
+]

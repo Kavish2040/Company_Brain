@@ -1,0 +1,38 @@
+[
+  {
+    "text": "Reminder: Employee onboarding closes Friday.",
+    "ts": "1706262840.000000",
+    "type": "message",
+    "user": "U01SAMK",
+    "user_profile": {
+      "real_name": "Sam Kaur"
+    }
+  },
+  {
+    "text": "Reminder: Employee onboarding closes Friday.",
+    "ts": "1706263260.000000",
+    "type": "message",
+    "user": "U01SAMK",
+    "user_profile": {
+      "real_name": "Sam Kaur"
+    }
+  },
+  {
+    "text": "Reminder: Customer data request closes Friday.",
+    "ts": "1706263680.000000",
+    "type": "message",
+    "user": "U01SAMK",
+    "user_profile": {
+      "real_name": "Sam Kaur"
+    }
+  },
+  {
+    "text": "Customer escalation is blocked until Engineering signs off on the security review.",
+    "ts": "1706264100.000000",
+    "type": "message",
+    "user": "U05ANAB",
+    "user_profile": {
+      "real_name": "Ana Brito"
+    }
+  }
+]

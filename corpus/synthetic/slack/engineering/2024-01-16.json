@@ -1,0 +1,29 @@
+[
+  {
+    "text": "Deploy for the Quarterly close change is queued behind the release sign-off.",
+    "ts": "1705416240.000000",
+    "type": "message",
+    "user": "U05ANAB",
+    "user_profile": {
+      "real_name": "Ana Brito"
+    }
+  },
+  {
+    "text": "The NetSuite alert fired again overnight \u2014 third time this week.",
+    "ts": "1705416660.000000",
+    "type": "message",
+    "user": "U05ANAB",
+    "user_profile": {
+      "real_name": "Ana Brito"
+    }
+  },
+  {
+    "text": "Handing the Customer escalation ticket over to Support, they own the customer comms.",
+    "ts": "1705417080.000000",
+    "type": "message",
+    "user": "U02PRIY",
+    "user_profile": {
+      "real_name": "Priya Raman"
+    }
+  }
+]

@@ -1,0 +1,38 @@
+[
+  {
+    "text": "Reminder: Quarterly close closes Friday.",
+    "ts": "1705757580.000000",
+    "type": "message",
+    "user": "U05ANAB",
+    "user_profile": {
+      "real_name": "Ana Brito"
+    }
+  },
+  {
+    "text": "Reminder: Vendor renewal closes Friday.",
+    "ts": "1705758000.000000",
+    "type": "message",
+    "user": "U05ANAB",
+    "user_profile": {
+      "real_name": "Ana Brito"
+    }
+  },
+  {
+    "text": "Reminder: Release sign-off closes Friday.",
+    "ts": "1705758420.000000",
+    "type": "message",
+    "user": "U05ANAB",
+    "user_profile": {
+      "real_name": "Ana Brito"
+    }
+  },
+  {
+    "text": "Vendor renewal is blocked until Engineering signs off on the security review.",
+    "ts": "1705758840.000000",
+    "type": "message",
+    "user": "U01SAMK",
+    "user_profile": {
+      "real_name": "Sam Kaur"
+    }
+  }
+]

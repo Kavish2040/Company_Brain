@@ -1,0 +1,20 @@
+[
+  {
+    "text": "Welcome to the team! Onboarding docs are in Drive.",
+    "ts": "1705674000.000000",
+    "type": "message",
+    "user": "U09NADH",
+    "user_profile": {
+      "real_name": "Nadia Hassan"
+    }
+  },
+  {
+    "text": "Reminder that Quarterly close kicks off next week.",
+    "ts": "1705674420.000000",
+    "type": "message",
+    "user": "U08OWEN",
+    "user_profile": {
+      "real_name": "Owen Fitzgerald"
+    }
+  }
+]

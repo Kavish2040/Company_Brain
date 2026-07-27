@@ -1,0 +1,20 @@
+[
+  {
+    "text": "Deploy for the Incident response change is queued behind the release sign-off.",
+    "ts": "1704718500.000000",
+    "type": "message",
+    "user": "U07ZOER",
+    "user_profile": {
+      "real_name": "Zo\u00eb Ravel"
+    }
+  },
+  {
+    "text": "The NetSuite alert fired again overnight \u2014 third time this week.",
+    "ts": "1704718920.000000",
+    "type": "message",
+    "user": "U06TOMW",
+    "user_profile": {
+      "real_name": "Tom Whelan"
+    }
+  }
+]

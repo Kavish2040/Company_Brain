@@ -1,0 +1,38 @@
+[
+  {
+    "text": "Welcome to the team! Onboarding docs are in Drive.",
+    "ts": "1706269620.000000",
+    "type": "message",
+    "user": "U01SAMY",
+    "user_profile": {
+      "real_name": "Sam Kelly"
+    }
+  },
+  {
+    "text": "Welcome to the team! Onboarding docs are in Drive.",
+    "ts": "1706270040.000000",
+    "type": "message",
+    "user": "U06TOMW",
+    "user_profile": {
+      "real_name": "Tom Whelan"
+    }
+  },
+  {
+    "text": "Welcome to the team! Onboarding docs are in Drive.",
+    "ts": "1706270460.000000",
+    "type": "message",
+    "user": "U03DEVO",
+    "user_profile": {
+      "real_name": "Dev Oyelaran"
+    }
+  },
+  {
+    "text": "Reminder that Employee onboarding kicks off next week.",
+    "ts": "1706270880.000000",
+    "type": "message",
+    "user": "U02PRIY",
+    "user_profile": {
+      "real_name": "Priya Raman"
+    }
+  }
+]

@@ -1,0 +1,20 @@
+[
+  {
+    "text": "Reminder that Quarterly close kicks off next week.",
+    "ts": "1704969420.000000",
+    "type": "message",
+    "user": "U01SAMY",
+    "user_profile": {
+      "real_name": "Sam Kelly"
+    }
+  },
+  {
+    "text": "All-hands moved to Thursday.",
+    "ts": "1704969840.000000",
+    "type": "message",
+    "user": "U02PRIY",
+    "user_profile": {
+      "real_name": "Priya Raman"
+    }
+  }
+]

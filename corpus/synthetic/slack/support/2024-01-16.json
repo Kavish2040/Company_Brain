@@ -1,0 +1,29 @@
+[
+  {
+    "text": "This is the fourth ticket bounced back from Engineering on Incident response.",
+    "ts": "1705396200.000000",
+    "type": "message",
+    "user": "U05ANAB",
+    "user_profile": {
+      "real_name": "Ana Brito"
+    }
+  },
+  {
+    "text": "Customer is asking about the Employee onboarding timeline again.",
+    "ts": "1705396620.000000",
+    "type": "message",
+    "user": "U04MEIT",
+    "user_profile": {
+      "real_name": "Mei Tanaka"
+    }
+  },
+  {
+    "text": "Looping in Finance for the refund side of Capacity planning.",
+    "ts": "1705397040.000000",
+    "type": "message",
+    "user": "U06TOMW",
+    "user_profile": {
+      "real_name": "Tom Whelan"
+    }
+  }
+]

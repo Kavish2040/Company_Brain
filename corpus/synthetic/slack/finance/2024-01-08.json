@@ -1,0 +1,20 @@
+[
+  {
+    "text": "Incident response is blocked until Engineering signs off on the security review.",
+    "ts": "1704722400.000000",
+    "type": "message",
+    "user": "U05ANAB",
+    "user_profile": {
+      "real_name": "Ana Brito"
+    }
+  },
+  {
+    "text": "Reminder: Security review closes Friday.",
+    "ts": "1704722820.000000",
+    "type": "message",
+    "user": "U05ANAB",
+    "user_profile": {
+      "real_name": "Ana Brito"
+    }
+  }
+]

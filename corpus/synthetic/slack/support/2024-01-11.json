@@ -1,0 +1,29 @@
+[
+  {
+    "text": "Customer is asking about the Refund approval timeline again.",
+    "ts": "1704977520.000000",
+    "type": "message",
+    "user": "U05ANAB",
+    "user_profile": {
+      "real_name": "Ana Brito"
+    }
+  },
+  {
+    "text": "This is the fourth ticket bounced back from Engineering on Employee onboarding.",
+    "ts": "1704977940.000000",
+    "type": "message",
+    "user": "U06TOMW",
+    "user_profile": {
+      "real_name": "Tom Whelan"
+    }
+  },
+  {
+    "text": "Escalating this to Engineering \u2014 it's a Zendesk integration bug, not config.",
+    "ts": "1704978360.000000",
+    "type": "message",
+    "user": "U07ZOER",
+    "user_profile": {
+      "real_name": "Zo\u00eb Ravel"
+    }
+  }
+]

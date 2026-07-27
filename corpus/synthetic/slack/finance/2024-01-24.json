@@ -1,0 +1,38 @@
+[
+  {
+    "text": "Refund approval is blocked until Engineering signs off on the security review.",
+    "ts": "1706102700.000000",
+    "type": "message",
+    "user": "U01SAMK",
+    "user_profile": {
+      "real_name": "Sam Kaur"
+    }
+  },
+  {
+    "text": "Reminder: Vendor renewal closes Friday.",
+    "ts": "1706103120.000000",
+    "type": "message",
+    "user": "U05ANAB",
+    "user_profile": {
+      "real_name": "Ana Brito"
+    }
+  },
+  {
+    "text": "Security review is blocked until Engineering signs off on the security review.",
+    "ts": "1706103540.000000",
+    "type": "message",
+    "user": "U05ANAB",
+    "user_profile": {
+      "real_name": "Ana Brito"
+    }
+  },
+  {
+    "text": "Reminder: Customer data request closes Friday.",
+    "ts": "1706103960.000000",
+    "type": "message",
+    "user": "U01SAMK",
+    "user_profile": {
+      "real_name": "Sam Kaur"
+    }
+  }
+]

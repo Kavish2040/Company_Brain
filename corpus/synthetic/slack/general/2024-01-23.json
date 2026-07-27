@@ -1,0 +1,29 @@
+[
+  {
+    "text": "Reminder that Employee onboarding kicks off next week.",
+    "ts": "1706019420.000000",
+    "type": "message",
+    "user": "U09NADH",
+    "user_profile": {
+      "real_name": "Nadia Hassan"
+    }
+  },
+  {
+    "text": "Welcome to the team! Onboarding docs are in Drive.",
+    "ts": "1706019840.000000",
+    "type": "message",
+    "user": "U03DEVO",
+    "user_profile": {
+      "real_name": "Dev Oyelaran"
+    }
+  },
+  {
+    "text": "Welcome to the team! Onboarding docs are in Drive.",
+    "ts": "1706020260.000000",
+    "type": "message",
+    "user": "U01SAMK",
+    "user_profile": {
+      "real_name": "Sam Kaur"
+    }
+  }
+]

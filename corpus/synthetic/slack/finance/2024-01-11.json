@@ -1,0 +1,38 @@
+[
+  {
+    "text": "Customer escalation is blocked until Engineering signs off on the security review.",
+    "ts": "1704967920.000000",
+    "type": "message",
+    "user": "U05ANAB",
+    "user_profile": {
+      "real_name": "Ana Brito"
+    }
+  },
+  {
+    "text": "Reminder: Customer escalation closes Friday.",
+    "ts": "1704968340.000000",
+    "type": "message",
+    "user": "U01SAMK",
+    "user_profile": {
+      "real_name": "Sam Kaur"
+    }
+  },
+  {
+    "text": "Reminder: Employee onboarding closes Friday.",
+    "ts": "1704968760.000000",
+    "type": "message",
+    "user": "U01SAMK",
+    "user_profile": {
+      "real_name": "Sam Kaur"
+    }
+  },
+  {
+    "text": "The Linear renewal lands in April. I own that end to end.",
+    "ts": "1704969180.000000",
+    "type": "message",
+    "user": "U05ANAB",
+    "user_profile": {
+      "real_name": "Ana Brito"
+    }
+  }
+]

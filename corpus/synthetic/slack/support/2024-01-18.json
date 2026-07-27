@@ -1,0 +1,29 @@
+[
+  {
+    "text": "Looping in Finance for the refund side of Capacity planning.",
+    "ts": "1705589460.000000",
+    "type": "message",
+    "user": "U04MEIT",
+    "user_profile": {
+      "real_name": "Mei Tanaka"
+    }
+  },
+  {
+    "text": "Customer is asking about the Quarterly close timeline again.",
+    "ts": "1705589880.000000",
+    "type": "message",
+    "user": "U01SAMY",
+    "user_profile": {
+      "real_name": "Sam Kelly"
+    }
+  },
+  {
+    "text": "This is the fourth ticket bounced back from Engineering on Capacity planning.",
+    "ts": "1705590300.000000",
+    "type": "message",
+    "user": "U06TOMW",
+    "user_profile": {
+      "real_name": "Tom Whelan"
+    }
+  }
+]

@@ -1,0 +1,29 @@
+[
+  {
+    "text": "Looping in Finance for the refund side of Incident response.",
+    "ts": "1705930020.000000",
+    "type": "message",
+    "user": "U01SAMK",
+    "user_profile": {
+      "real_name": "Sam Kaur"
+    }
+  },
+  {
+    "text": "Customer is asking about the Security review timeline again.",
+    "ts": "1705930440.000000",
+    "type": "message",
+    "user": "U04MEIT",
+    "user_profile": {
+      "real_name": "Mei Tanaka"
+    }
+  },
+  {
+    "text": "Escalating this to Engineering \u2014 it's a Snowflake integration bug, not config.",
+    "ts": "1705930860.000000",
+    "type": "message",
+    "user": "U01SAMK",
+    "user_profile": {
+      "real_name": "Sam Kaur"
+    }
+  }
+]

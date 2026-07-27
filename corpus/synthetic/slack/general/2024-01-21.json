@@ -1,0 +1,38 @@
+[
+  {
+    "text": "Reminder that Vendor renewal kicks off next week.",
+    "ts": "1705840140.000000",
+    "type": "message",
+    "user": "U05ANAB",
+    "user_profile": {
+      "real_name": "Ana Brito"
+    }
+  },
+  {
+    "text": "Welcome to the team! Onboarding docs are in Drive.",
+    "ts": "1705840560.000000",
+    "type": "message",
+    "user": "U05ANAB",
+    "user_profile": {
+      "real_name": "Ana Brito"
+    }
+  },
+  {
+    "text": "Reminder that Refund approval kicks off next week.",
+    "ts": "1705840980.000000",
+    "type": "message",
+    "user": "U03DEVO",
+    "user_profile": {
+      "real_name": "Dev Oyelaran"
+    }
+  },
+  {
+    "text": "Reminder that Quarterly close kicks off next week.",
+    "ts": "1705841400.000000",
+    "type": "message",
+    "user": "U01SAMY",
+    "user_profile": {
+      "real_name": "Sam Kelly"
+    }
+  }
+]

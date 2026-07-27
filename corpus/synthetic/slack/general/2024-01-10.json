@@ -1,0 +1,29 @@
+[
+  {
+    "text": "All-hands moved to Thursday.",
+    "ts": "1704892560.000000",
+    "type": "message",
+    "user": "U07ZOER",
+    "user_profile": {
+      "real_name": "Zo\u00eb Ravel"
+    }
+  },
+  {
+    "text": "Welcome to the team! Onboarding docs are in Drive.",
+    "ts": "1704892980.000000",
+    "type": "message",
+    "user": "U01SAMK",
+    "user_profile": {
+      "real_name": "Sam Kaur"
+    }
+  },
+  {
+    "text": "Reminder that Capacity planning kicks off next week.",
+    "ts": "1704893400.000000",
+    "type": "message",
+    "user": "U05ANAB",
+    "user_profile": {
+      "real_name": "Ana Brito"
+    }
+  }
+]

@@ -1,0 +1,38 @@
+[
+  {
+    "text": "This is the fourth ticket bounced back from Engineering on Employee onboarding.",
+    "ts": "1704886980.000000",
+    "type": "message",
+    "user": "U07ZOER",
+    "user_profile": {
+      "real_name": "Zo\u00eb Ravel"
+    }
+  },
+  {
+    "text": "Looping in Finance for the refund side of Refund approval.",
+    "ts": "1704887400.000000",
+    "type": "message",
+    "user": "U02PRIY",
+    "user_profile": {
+      "real_name": "Priya Raman"
+    }
+  },
+  {
+    "text": "Escalating this to Engineering \u2014 it's a Snowflake integration bug, not config.",
+    "ts": "1704887820.000000",
+    "type": "message",
+    "user": "U07ZOER",
+    "user_profile": {
+      "real_name": "Zo\u00eb Ravel"
+    }
+  },
+  {
+    "text": "Looping in Finance for the refund side of Vendor renewal.",
+    "ts": "1704888240.000000",
+    "type": "message",
+    "user": "U01SAMY",
+    "user_profile": {
+      "real_name": "Sam Kelly"
+    }
+  }
+]

@@ -1,0 +1,20 @@
+[
+  {
+    "text": "Reminder that Employee onboarding kicks off next week.",
+    "ts": "1704722160.000000",
+    "type": "message",
+    "user": "U01SAMY",
+    "user_profile": {
+      "real_name": "Sam Kelly"
+    }
+  },
+  {
+    "text": "Reminder that Quarterly close kicks off next week.",
+    "ts": "1704722580.000000",
+    "type": "message",
+    "user": "U09NADH",
+    "user_profile": {
+      "real_name": "Nadia Hassan"
+    }
+  }
+]

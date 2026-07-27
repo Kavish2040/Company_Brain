@@ -1,0 +1,38 @@
+[
+  {
+    "text": "Release sign-off is blocked until Engineering signs off on the security review.",
+    "ts": "1705931400.000000",
+    "type": "message",
+    "user": "U01SAMK",
+    "user_profile": {
+      "real_name": "Sam Kaur"
+    }
+  },
+  {
+    "text": "Employee onboarding is blocked until Engineering signs off on the security review.",
+    "ts": "1705931820.000000",
+    "type": "message",
+    "user": "U05ANAB",
+    "user_profile": {
+      "real_name": "Ana Brito"
+    }
+  },
+  {
+    "text": "Reminder: Incident response closes Friday.",
+    "ts": "1705932240.000000",
+    "type": "message",
+    "user": "U05ANAB",
+    "user_profile": {
+      "real_name": "Ana Brito"
+    }
+  },
+  {
+    "text": "The NetSuite renewal lands in April. I own that end to end.",
+    "ts": "1705932660.000000",
+    "type": "message",
+    "user": "U01SAMK",
+    "user_profile": {
+      "real_name": "Sam Kaur"
+    }
+  }
+]

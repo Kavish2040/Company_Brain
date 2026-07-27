@@ -1,0 +1,29 @@
+[
+  {
+    "text": "Reminder: Employee onboarding closes Friday.",
+    "ts": "1705666200.000000",
+    "type": "message",
+    "user": "U01SAMK",
+    "user_profile": {
+      "real_name": "Sam Kaur"
+    }
+  },
+  {
+    "text": "Reminder: Employee onboarding closes Friday.",
+    "ts": "1705666620.000000",
+    "type": "message",
+    "user": "U01SAMK",
+    "user_profile": {
+      "real_name": "Sam Kaur"
+    }
+  },
+  {
+    "text": "Reminder: Capacity planning closes Friday.",
+    "ts": "1705667040.000000",
+    "type": "message",
+    "user": "U05ANAB",
+    "user_profile": {
+      "real_name": "Ana Brito"
+    }
+  }
+]

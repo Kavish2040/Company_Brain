@@ -1,0 +1,29 @@
+[
+  {
+    "text": "This is the fourth ticket bounced back from Engineering on Customer escalation.",
+    "ts": "1704723120.000000",
+    "type": "message",
+    "user": "U03DEVO",
+    "user_profile": {
+      "real_name": "Dev Oyelaran"
+    }
+  },
+  {
+    "text": "Escalating this to Engineering \u2014 it's a Snowflake integration bug, not config.",
+    "ts": "1704723540.000000",
+    "type": "message",
+    "user": "U02PRIY",
+    "user_profile": {
+      "real_name": "Priya Raman"
+    }
+  },
+  {
+    "text": "This is the fourth ticket bounced back from Engineering on Security review.",
+    "ts": "1704723960.000000",
+    "type": "message",
+    "user": "U07ZOER",
+    "user_profile": {
+      "real_name": "Zo\u00eb Ravel"
+    }
+  }
+]
