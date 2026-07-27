@@ -19,74 +19,10 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 03d514e70d23f73b679a5b231d6fa5fe
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 38f720e8a95e947ad96b5e34d20a79e4
   status: accepted
-relations:
-  - predicate: mentions
-    object: people/mei-tanaka
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 12]
-        quote: Mei Tanaka
-  - predicate: mentions
-    object: people/sam-kelly
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [88, 97]
-        quote: Sam Kelly
-  - predicate: mentions
-    object: people/tom-whelan
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [173, 183]
-        quote: Tom Whelan
-  - predicate: mentions
-    object: processes/capacity-planning
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [66, 83]
-        quote: Capacity planning
-  - predicate: mentions
-    object: processes/quarterly-close
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [138, 153]
-        quote: Quarterly close
-  - predicate: mentions
-    object: teams/engineering
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [239, 250]
-        quote: Engineering
-  - predicate: mentions
-    object: teams/finance
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [35, 42]
-        quote: Finance
 ---
 
 **Mei Tanaka** (14:51): Looping in Finance for the refund side of Capacity planning.

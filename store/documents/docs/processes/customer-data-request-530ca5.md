@@ -16,92 +16,29 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 4c2d7903d705205e59c7288b0a3af08a
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 27c70846f4f79cdf5abc47dddde40ab6
   status: accepted
 relations:
-  - predicate: handoff_to
-    object: teams/engineering
-    confidence: 0.6
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [536, 568]
-        quote: Support hands off to Engineering
-  - predicate: handoff_to
-    object: teams/finance
-    confidence: 0.6
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [471, 499]
-        quote: Support hands off to Finance
-  - predicate: mentions
+  - predicate: owns
     object: people/mei-tanaka
-    confidence: 0.9
+    confidence: 0.97
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [48, 68]
-        quote: mei@meridian.example
-  - predicate: mentions
-    object: processes/data-request
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 23]
-        quote: Customer data request
-  - predicate: mentions
-    object: teams/engineering
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [557, 568]
-        quote: Engineering
-  - predicate: mentions
-    object: teams/finance
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [492, 499]
-        quote: Finance
-  - predicate: mentions
-    object: teams/product
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [594, 601]
-        quote: product
-  - predicate: mentions
+        span: [25, 69]
+        quote: '**Owner:** Mei Tanaka (mei@meridian.example)'
+  - predicate: owns
     object: teams/support
-    confidence: 0.9
+    confidence: 0.7
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [80, 87]
-        quote: Support
-  - predicate: mentions
-    object: tools/zendesk
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [268, 275]
-        quote: Zendesk
+        span: [70, 87]
+        quote: '**Team:** Support'
 ---
 
 # Customer data request

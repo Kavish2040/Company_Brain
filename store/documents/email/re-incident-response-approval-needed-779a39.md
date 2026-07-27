@@ -22,9 +22,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 098c23ad2c8f9a97f333a69d9cd0e41b
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: cf530ae944174e14e646cd907d186e99
   status: accepted
 relations:
   - predicate: authored_by
@@ -37,51 +37,33 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
+  - predicate: depends_on
+    object: tools/pagerduty
+    confidence: 0.75
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [204, 247]
+        quote: the PagerDuty step is blocked on your team.
   - predicate: mentions
-    object: people/nadia-hassan
-    confidence: 0.9
+    object: processes/incident-response
+    confidence: 0.85
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [58, 80]
-        quote: nadia@meridian.example
-  - predicate: mentions
+        span: [130, 164]
+        quote: Following up on incident response.
+  - predicate: owns
     object: people/owen-fitz
     confidence: 0.9
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [165, 180]
-        quote: Owen Fitzgerald
-  - predicate: mentions
-    object: people/sam-kelly
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [21, 47]
-        quote: sam.kelly@meridian.example
-  - predicate: mentions
-    object: processes/incident-response
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [146, 163]
-        quote: incident response
-  - predicate: mentions
-    object: tools/pagerduty
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [208, 217]
-        quote: PagerDuty
+        span: [165, 247]
+        quote: Owen Fitzgerald owns this process, but the PagerDuty step is blocked on your team.
 ---
 
 **From:** Sam Kelly <sam.kelly@meridian.example>

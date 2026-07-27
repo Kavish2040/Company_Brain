@@ -16,65 +16,38 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 3fb7bf815176d96bef5eec85766528fd
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: e9281966751b3b75977cb52d41aac2d0
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/ana-brito
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [103, 123]
-        quote: ana@meridian.example
-  - predicate: mentions
-    object: people/sam-kaur
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [50, 75]
-        quote: sam.kaur@meridian.example
-  - predicate: mentions
+  - predicate: owns
     object: processes/quarterly-close
-    confidence: 0.9
+    confidence: 0.98
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [183, 198]
-        quote: Quarterly close
-  - predicate: mentions
+        span: [183, 217]
+        quote: 'Quarterly close (owner: Ana Brito)'
+  - predicate: owns
     object: processes/refund-approval
-    confidence: 0.9
+    confidence: 0.98
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [220, 235]
-        quote: Refund approval
-  - predicate: mentions
+        span: [220, 254]
+        quote: 'Refund approval (owner: Ana Brito)'
+  - predicate: owns
     object: processes/vendor-renewal
-    confidence: 0.9
+    confidence: 0.98
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [148, 162]
-        quote: Vendor renewal
-  - predicate: mentions
-    object: teams/finance
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 9]
-        quote: Finance
+        span: [148, 180]
+        quote: 'Vendor renewal (owner: Sam Kaur)'
 ---
 
 # Finance

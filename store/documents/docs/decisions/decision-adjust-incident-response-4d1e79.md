@@ -16,38 +16,29 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: f337dcd3cf27ea45a33c4d0c62a4b272
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 0afb82f20cd14c680645723d39b679a9
   status: accepted
 relations:
-  - predicate: mentions
+  - predicate: owns
     object: people/owen-fitz
     confidence: 0.9
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [75, 90]
-        quote: Owen Fitzgerald
-  - predicate: mentions
-    object: processes/incident-response
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [19, 36]
-        quote: incident response
-  - predicate: mentions
+        span: [199, 255]
+        quote: Owen Fitzgerald will own incident response going forward
+  - predicate: supersedes
     object: teams/engineering
-    confidence: 0.9
+    confidence: 0.6
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [373, 384]
-        quote: Engineering
+        span: [321, 395]
+        quote: The previous informal arrangement documented in the Engineering team page.
 ---
 
 # Decision: adjust incident response

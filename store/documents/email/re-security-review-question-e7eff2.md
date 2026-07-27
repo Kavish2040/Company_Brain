@@ -22,9 +22,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: f9fe45f73d8c6f92a5c2d9d485ac1135
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 0073ec913236ece14de142091e777771
   status: accepted
 relations:
   - predicate: authored_by
@@ -37,51 +37,42 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
-  - predicate: mentions
-    object: people/sam-kaur
-    confidence: 0.9
+  - predicate: depends_on
+    object: tools/linear
+    confidence: 0.7
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [20, 45]
-        quote: sam.kaur@meridian.example
-  - predicate: mentions
-    object: people/tom-whelan
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [157, 167]
-        quote: Tom Whelan
+        span: [157, 231]
+        quote: Tom Whelan owns this process, but the Linear step is blocked on your team.
   - predicate: mentions
     object: people/zoe-ravel
-    confidence: 0.9
+    confidence: 0.6
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [56, 76]
-        quote: zoe@meridian.example
+        span: [48, 76]
+        quote: '**To:** zoe@meridian.example'
   - predicate: mentions
+    object: processes/security-review
+    confidence: 0.8
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [124, 156]
+        quote: Following up on security review.
+  - predicate: owns
     object: processes/security-review
     confidence: 0.9
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [140, 155]
-        quote: security review
-  - predicate: mentions
-    object: tools/linear
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [195, 201]
-        quote: Linear
+        span: [157, 231]
+        quote: Tom Whelan owns this process, but the Linear step is blocked on your team.
 ---
 
 **From:** Sam Kaur <sam.kaur@meridian.example>

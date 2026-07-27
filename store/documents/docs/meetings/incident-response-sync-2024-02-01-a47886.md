@@ -16,92 +16,10 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 45cd6896843e6667126ec8f763000a43
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 46c2c7dee5c64601257baa78a691003b
   status: accepted
-relations:
-  - predicate: mentions
-    object: people/ana-brito
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [89, 98]
-        quote: Ana Brito
-  - predicate: mentions
-    object: people/mei-tanaka
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [77, 87]
-        quote: Mei Tanaka
-  - predicate: mentions
-    object: people/owen-fitz
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [186, 201]
-        quote: Owen Fitzgerald
-  - predicate: mentions
-    object: people/tom-whelan
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [65, 75]
-        quote: Tom Whelan
-  - predicate: mentions
-    object: people/zoe-ravel
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [54, 63]
-        quote: Zoë Ravel
-  - predicate: mentions
-    object: processes/incident-response
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 19]
-        quote: Incident response
-  - predicate: mentions
-    object: teams/engineering
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [249, 260]
-        quote: Engineering
-  - predicate: mentions
-    object: teams/support
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [264, 271]
-        quote: Support
-  - predicate: mentions
-    object: tools/snowflake
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [173, 182]
-        quote: Snowflake
 ---
 
 # Incident response sync — 2024-02-01

@@ -16,83 +16,10 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: d16cae5b1d744305f9fe83126621cd96
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 93b46be069c1c08de33b578cb9ecb62f
   status: accepted
-relations:
-  - predicate: mentions
-    object: people/ana-brito
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [75, 84]
-        quote: Ana Brito
-  - predicate: mentions
-    object: people/mei-tanaka
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [63, 73]
-        quote: Mei Tanaka
-  - predicate: mentions
-    object: people/nadia-hassan
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [86, 98]
-        quote: Nadia Hassan
-  - predicate: mentions
-    object: people/zoe-ravel
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [52, 61]
-        quote: Zoë Ravel
-  - predicate: mentions
-    object: processes/refund-approval
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 17]
-        quote: Refund approval
-  - predicate: mentions
-    object: teams/finance
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [249, 256]
-        quote: Finance
-  - predicate: mentions
-    object: teams/support
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [238, 245]
-        quote: Support
-  - predicate: mentions
-    object: tools/linear
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [171, 177]
-        quote: Linear
 ---
 
 # Refund approval sync — 2024-02-15

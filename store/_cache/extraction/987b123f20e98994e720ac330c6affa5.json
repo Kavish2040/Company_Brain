@@ -1,0 +1,41 @@
+{
+  "edges": [
+    {
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Tom Whelan owns this process, but the NetSuite step is blocked on your team.",
+          "span": [
+            154,
+            230
+          ]
+        }
+      ],
+      "object": "tools/netsuite",
+      "predicate": "depends_on",
+      "provenance": "llm",
+      "status": "proposed"
+    },
+    {
+      "confidence": 0.95,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Tom Whelan owns this process, but the NetSuite step is blocked on your team.",
+          "span": [
+            154,
+            230
+          ]
+        }
+      ],
+      "object": "processes/security-review",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v1",
+  "unresolved": []
+}

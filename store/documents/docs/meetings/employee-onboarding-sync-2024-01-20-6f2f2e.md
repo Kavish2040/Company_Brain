@@ -16,83 +16,10 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: a07d2e3c46afd9268fbd329cbb04ec3b
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: e83ab544ceb71e36d1e0a282e232d615
   status: accepted
-relations:
-  - predicate: mentions
-    object: people/ana-brito
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [56, 65]
-        quote: Ana Brito
-  - predicate: mentions
-    object: people/dev-oyelaran
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [89, 101]
-        quote: Dev Oyelaran
-  - predicate: mentions
-    object: people/sam-kelly
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [67, 76]
-        quote: Sam Kelly
-  - predicate: mentions
-    object: people/zoe-ravel
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [78, 87]
-        quote: Zoë Ravel
-  - predicate: mentions
-    object: processes/onboarding
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 21]
-        quote: Employee onboarding
-  - predicate: mentions
-    object: teams/engineering
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [247, 258]
-        quote: Engineering
-  - predicate: mentions
-    object: teams/product
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [262, 269]
-        quote: Product
-  - predicate: mentions
-    object: tools/netsuite
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [178, 186]
-        quote: NetSuite
 ---
 
 # Employee onboarding sync — 2024-01-20

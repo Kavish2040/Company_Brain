@@ -1,0 +1,43 @@
+{
+  "edges": [
+    {
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Reminder that Employee onboarding kicks off next week.",
+          "span": [
+            78,
+            132
+          ]
+        }
+      ],
+      "object": "processes/onboarding",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed"
+    },
+    {
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Reminder that Quarterly close kicks off next week.",
+          "span": [
+            157,
+            207
+          ]
+        }
+      ],
+      "object": "processes/quarterly-close",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v1",
+  "unresolved": [
+    "All-hands"
+  ]
+}

@@ -16,29 +16,20 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 0faa50e6065a31a5df51e20e1312cf8a
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 99e0a64559b6dc1ef841d227764ec400
   status: accepted
 relations:
-  - predicate: mentions
+  - predicate: owns
     object: teams/support
-    confidence: 0.9
+    confidence: 0.98
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [20, 27]
-        quote: support
-  - predicate: mentions
-    object: tools/zendesk
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 9]
-        quote: Zendesk
+        span: [40, 66]
+        quote: Owned by the Support team.
 ---
 
 # Zendesk

@@ -22,9 +22,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 7deede9e3a1241437e28a66eddd1ac1c
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: ed09fd6219eb7e7cb47ca020b971071a
   status: accepted
 relations:
   - predicate: authored_by
@@ -37,51 +37,33 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
-  - predicate: mentions
-    object: people/ana-brito
-    confidence: 0.9
+  - predicate: depends_on
+    object: tools/pagerduty
+    confidence: 0.85
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [158, 167]
-        quote: Ana Brito
+        span: [191, 234]
+        quote: the PagerDuty step is blocked on your team.
   - predicate: mentions
     object: people/dev-oyelaran
-    confidence: 0.9
+    confidence: 0.6
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [57, 77]
-        quote: dev@meridian.example
-  - predicate: mentions
-    object: people/nadia-hassan
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [24, 46]
-        quote: nadia@meridian.example
-  - predicate: mentions
+        span: [116, 123]
+        quote: Hi Dev,
+  - predicate: owns
     object: processes/refund-approval
     confidence: 0.9
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [141, 156]
-        quote: refund approval
-  - predicate: mentions
-    object: tools/pagerduty
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [195, 204]
-        quote: PagerDuty
+        span: [158, 234]
+        quote: Ana Brito owns this process, but the PagerDuty step is blocked on your team.
 ---
 
 **From:** Nadia Hassan <nadia@meridian.example>

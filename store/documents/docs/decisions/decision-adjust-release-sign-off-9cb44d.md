@@ -16,38 +16,31 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 7a0e1f668fa9719efb6871469afddc3e
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 4cbd0cb44bac878a293db051355188e6
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/priya-raman
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [74, 85]
-        quote: Priya Raman
-  - predicate: mentions
+  - predicate: owns
     object: processes/release-signoff
-    confidence: 0.9
+    confidence: 0.95
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [19, 35]
-        quote: release sign-off
-  - predicate: mentions
+        span: [193, 293]
+        quote: 'Priya Raman will own release sign-off going forward, and the
+
+          sign-off step moves to the owning team.'
+  - predicate: supersedes
     object: teams/engineering
-    confidence: 0.9
+    confidence: 0.7
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [362, 373]
-        quote: Engineering
+        span: [310, 384]
+        quote: The previous informal arrangement documented in the Engineering team page.
 ---
 
 # Decision: adjust release sign-off

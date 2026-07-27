@@ -21,9 +21,9 @@ normalizer:
   name: docx
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 587dac392f718c70e817273a1a3d7b88
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 55165646c0cb98e0ffea608beb215437
   status: accepted
 relations:
   - predicate: authored_by
@@ -38,8 +38,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [54, 74]
-        quote: mei@meridian.example
+        span: [190, 212]
+        quote: Sign-off by Mei Tanaka
   - predicate: mentions
     object: processes/data-request
     confidence: 0.9
@@ -47,26 +47,35 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [2, 23]
-        quote: Customer data request
+        span: [0, 33]
+        quote: '# Customer data request — runbook'
   - predicate: mentions
     object: teams/support
-    confidence: 0.9
+    confidence: 0.85
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [90, 97]
-        quote: Support
+        span: [250, 266]
+        quote: Triage | Support
   - predicate: owns
     object: people/mei-tanaka
-    confidence: 0.75
+    confidence: 0.98
     provenance: llm
     status: proposed
     evidence:
       - node: self
-        span: [35, 53]
-        quote: 'Owner: Mei Tanaka'
+        span: [35, 75]
+        quote: 'Owner: Mei Tanaka (mei@meridian.example)'
+  - predicate: owns
+    object: teams/support
+    confidence: 0.95
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [77, 97]
+        quote: 'Owning team: Support'
 ---
 
 # Customer data request — runbook

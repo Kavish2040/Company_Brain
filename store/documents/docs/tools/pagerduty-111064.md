@@ -16,29 +16,20 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 28ac84f3713333a1eca9bb34732aa246
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: d96e0656664005fa768a0bcfdc0b9569
   status: accepted
 relations:
-  - predicate: mentions
+  - predicate: owns
     object: teams/product
-    confidence: 0.9
+    confidence: 0.95
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [43, 50]
-        quote: Product
-  - predicate: mentions
-    object: tools/pagerduty
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 11]
-        quote: PagerDuty
+        span: [30, 56]
+        quote: Owned by the Product team.
 ---
 
 # PagerDuty

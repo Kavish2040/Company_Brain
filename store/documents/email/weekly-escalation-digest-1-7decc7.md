@@ -22,9 +22,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 48e25b7784ed93f612ff45e510ea68a6
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 7ec13d3b4a4546b18500190f38c3966f
   status: accepted
 relations:
   - predicate: authored_by
@@ -39,49 +39,49 @@ relations:
     status: accepted
   - predicate: handoff_to
     object: teams/engineering
+    confidence: 0.85
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [140, 229]
+        quote: 3 escalations were handed to Engineering this week; 0 bounced back to Support unresolved.
+  - predicate: mentions
+    object: accounts/support-inbox
+    confidence: 0.5
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [0, 53]
+        quote: '**From:** Meridian Support <support@meridian.example>'
+  - predicate: mentions
+    object: people/dev-oyelaran
+    confidence: 0.5
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [55, 83]
+        quote: '**To:** dev@meridian.example'
+  - predicate: mentions
+    object: processes/customer-escalation
+    confidence: 0.7
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [140, 229]
+        quote: 3 escalations were handed to Engineering this week; 0 bounced back to Support unresolved.
+  - predicate: mentions
+    object: teams/support
     confidence: 0.6
     provenance: llm
     status: proposed
     evidence:
       - node: self
-        span: [159, 180]
-        quote: handed to Engineering
-  - predicate: mentions
-    object: accounts/support-inbox
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [28, 52]
-        quote: support@meridian.example
-  - predicate: mentions
-    object: people/dev-oyelaran
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [63, 83]
-        quote: dev@meridian.example
-  - predicate: mentions
-    object: teams/engineering
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [169, 180]
-        quote: Engineering
-  - predicate: mentions
-    object: teams/support
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [210, 217]
-        quote: Support
+        span: [140, 229]
+        quote: 3 escalations were handed to Engineering this week; 0 bounced back to Support unresolved.
 ---
 
 **From:** Meridian Support <support@meridian.example>

@@ -1,0 +1,58 @@
+{
+  "edges": [
+    {
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Owen Fitzgerald owns this process, but the NetSuite step is blocked on your team.",
+          "span": [
+            164,
+            245
+          ]
+        }
+      ],
+      "object": "tools/netsuite",
+      "predicate": "depends_on",
+      "provenance": "llm",
+      "status": "proposed"
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "the NetSuite step is blocked on your team",
+          "span": [
+            203,
+            244
+          ]
+        }
+      ],
+      "object": "tools/netsuite",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted"
+    },
+    {
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Owen Fitzgerald owns this process, but the NetSuite step is blocked on your team.",
+          "span": [
+            164,
+            245
+          ]
+        }
+      ],
+      "object": "people/owen-fitz",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v1",
+  "unresolved": []
+}

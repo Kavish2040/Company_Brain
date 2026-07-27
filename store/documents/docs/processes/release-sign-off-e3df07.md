@@ -16,83 +16,49 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 79de994c8a7ecfb30302961ebd8f1b8c
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: bf4375e94ddd2d7946fc307e40b09b4d
   status: accepted
 relations:
   - predicate: handoff_to
     object: teams/engineering
-    confidence: 0.6
+    confidence: 0.95
     provenance: llm
     status: proposed
     evidence:
       - node: self
-        span: [537, 569]
-        quote: Support hands off to Engineering
+        span: [537, 610]
+        quote: Support hands off to Engineering when the root cause is a product defect.
   - predicate: handoff_to
     object: teams/finance
-    confidence: 0.6
+    confidence: 0.95
     provenance: llm
     status: proposed
     evidence:
       - node: self
-        span: [468, 500]
-        quote: Engineering hands off to Finance
-  - predicate: mentions
-    object: people/priya-raman
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [44, 66]
-        quote: priya@meridian.example
-  - predicate: mentions
-    object: processes/release-signoff
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 18]
-        quote: Release sign-off
+        span: [468, 534]
+        quote: Engineering hands off to Finance when a cost approval is required.
   - predicate: mentions
     object: teams/engineering
-    confidence: 0.9
+    confidence: 0.8
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [78, 89]
-        quote: Engineering
-  - predicate: mentions
-    object: teams/finance
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [493, 500]
-        quote: Finance
-  - predicate: mentions
-    object: teams/product
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [595, 602]
-        quote: product
+        span: [68, 89]
+        quote: '**Team:** Engineering'
   - predicate: mentions
     object: teams/support
-    confidence: 0.9
+    confidence: 0.7
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [537, 544]
-        quote: Support
+        span: [629, 731]
+        quote: 'Tickets frequently bounce between Support and Engineering when ownership of the
+
+          root cause is unclear.'
   - predicate: mentions
     object: tools/datadog
     confidence: 0.9
@@ -100,8 +66,26 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [260, 267]
-        quote: Datadog
+        span: [239, 268]
+        quote: Request is raised in Datadog.
+  - predicate: owns
+    object: people/priya-raman
+    confidence: 0.98
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [20, 67]
+        quote: '**Owner:** Priya Raman (priya@meridian.example)'
+  - predicate: owns
+    object: processes/release-signoff
+    confidence: 0.85
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [400, 451]
+        quote: Priya Raman signs off before the request is closed.
 ---
 
 # Release sign-off

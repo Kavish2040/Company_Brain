@@ -22,9 +22,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 6102c3e027770c3ab5386cc0a1fddc79
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: e9aea8f2cb84af366f88af3a75659a94
   status: accepted
 relations:
   - predicate: authored_by
@@ -37,24 +37,15 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
-  - predicate: mentions
-    object: people/ana-brito
-    confidence: 0.9
+  - predicate: depends_on
+    object: tools/linear
+    confidence: 0.85
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [59, 79]
-        quote: ana@meridian.example
-  - predicate: mentions
-    object: people/owen-fitz
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [27, 48]
-        quote: owen@meridian.example
+        span: [160, 233]
+        quote: Ana Brito owns this process, but the Linear step is blocked on your team.
   - predicate: mentions
     object: processes/refund-approval
     confidence: 0.9
@@ -62,17 +53,17 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [143, 158]
-        quote: refund approval
-  - predicate: mentions
-    object: tools/linear
-    confidence: 0.9
+        span: [127, 159]
+        quote: Following up on refund approval.
+  - predicate: owns
+    object: people/ana-brito
+    confidence: 0.95
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [197, 203]
-        quote: Linear
+        span: [160, 233]
+        quote: Ana Brito owns this process, but the Linear step is blocked on your team.
 ---
 
 **From:** Owen Fitzgerald <owen@meridian.example>

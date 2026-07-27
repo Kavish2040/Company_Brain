@@ -22,9 +22,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 8f25c4dfa630be6d0ef7bfdbe613f360
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 7908d799c9ad1b6a7ff4b84933cd954e
   status: accepted
 relations:
   - predicate: authored_by
@@ -37,51 +37,24 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
-  - predicate: mentions
+  - predicate: depends_on
+    object: tools/pagerduty
+    confidence: 0.75
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [202, 244]
+        quote: the PagerDuty step is blocked on your team
+  - predicate: owns
     object: people/owen-fitz
     confidence: 0.9
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [163, 178]
-        quote: Owen Fitzgerald
-  - predicate: mentions
-    object: people/priya-raman
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [56, 78]
-        quote: priya@meridian.example
-  - predicate: mentions
-    object: people/sam-kaur
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [20, 45]
-        quote: sam.kaur@meridian.example
-  - predicate: mentions
-    object: processes/incident-response
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [144, 161]
-        quote: incident response
-  - predicate: mentions
-    object: tools/pagerduty
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [206, 215]
-        quote: PagerDuty
+        span: [163, 245]
+        quote: Owen Fitzgerald owns this process, but the PagerDuty step is blocked on your team.
 ---
 
 **From:** Sam Kaur <sam.kaur@meridian.example>

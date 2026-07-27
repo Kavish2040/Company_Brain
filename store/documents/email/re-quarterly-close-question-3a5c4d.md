@@ -22,9 +22,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 2dfee9bec707dc5f7889d42f1cada7b1
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 2ed421e3fe91e007774732c3466acc73
   status: accepted
 relations:
   - predicate: authored_by
@@ -37,51 +37,42 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
-  - predicate: mentions
-    object: people/ana-brito
-    confidence: 0.9
+  - predicate: depends_on
+    object: tools/netsuite
+    confidence: 0.75
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [164, 173]
-        quote: Ana Brito
-  - predicate: mentions
-    object: people/owen-fitz
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [27, 48]
-        quote: owen@meridian.example
+        span: [197, 238]
+        quote: the NetSuite step is blocked on your team
   - predicate: mentions
     object: people/priya-raman
-    confidence: 0.9
+    confidence: 0.6
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [59, 81]
-        quote: priya@meridian.example
+        span: [197, 238]
+        quote: the NetSuite step is blocked on your team
   - predicate: mentions
     object: processes/quarterly-close
-    confidence: 0.9
+    confidence: 0.8
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [147, 162]
-        quote: quarterly close
-  - predicate: mentions
-    object: tools/netsuite
-    confidence: 0.9
+        span: [131, 163]
+        quote: Following up on quarterly close.
+  - predicate: owns
+    object: people/ana-brito
+    confidence: 0.95
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [201, 209]
-        quote: NetSuite
+        span: [164, 239]
+        quote: Ana Brito owns this process, but the NetSuite step is blocked on your team.
 ---
 
 **From:** Owen Fitzgerald <owen@meridian.example>

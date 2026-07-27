@@ -19,29 +19,20 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 93ead8cde0693d740c906ff47d596bcb
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: f1bd68447acabda2b5ac66ecc08faecb
   status: accepted
 relations:
   - predicate: mentions
-    object: people/priya-raman
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 13]
-        quote: Priya Raman
-  - predicate: mentions
     object: teams/engineering
-    confidence: 0.9
+    confidence: 0.6
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [52, 63]
-        quote: Engineering
+        span: [25, 97]
+        quote: Compensation bands for the Engineering ladder need revisiting before Q3.
 ---
 
 **Priya Raman** (09:47): Compensation bands for the Engineering ladder need revisiting before Q3.

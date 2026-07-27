@@ -1,0 +1,41 @@
+{
+  "edges": [
+    {
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Looping in Finance for the refund side of Capacity planning.",
+          "span": [
+            26,
+            86
+          ]
+        }
+      ],
+      "object": "teams/finance",
+      "predicate": "handoff_to",
+      "provenance": "llm",
+      "status": "proposed"
+    },
+    {
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Looping in Finance for the refund side of Capacity planning.",
+          "span": [
+            26,
+            86
+          ]
+        }
+      ],
+      "object": "processes/capacity-planning",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v1",
+  "unresolved": []
+}

@@ -22,9 +22,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: dd36ddb8922fbc7eb7325085dbd001b9
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: fda2485c68e3124b0ce4d6a96ff25b78
   status: accepted
 relations:
   - predicate: authored_by
@@ -37,51 +37,6 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
-  - predicate: mentions
-    object: people/ana-brito
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [160, 169]
-        quote: Ana Brito
-  - predicate: mentions
-    object: people/nadia-hassan
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [24, 46]
-        quote: nadia@meridian.example
-  - predicate: mentions
-    object: people/owen-fitz
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [57, 78]
-        quote: owen@meridian.example
-  - predicate: mentions
-    object: processes/refund-approval
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [143, 158]
-        quote: refund approval
-  - predicate: mentions
-    object: tools/zendesk
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [197, 204]
-        quote: Zendesk
 ---
 
 **From:** Nadia Hassan <nadia@meridian.example>

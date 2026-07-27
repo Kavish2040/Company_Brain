@@ -22,9 +22,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 811f77f7386f8ec7a22a103d03e5d3c0
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 45f7539ea9b69bd9d69296b1626acfc0
   status: accepted
 relations:
   - predicate: authored_by
@@ -39,49 +39,40 @@ relations:
     status: accepted
   - predicate: handoff_to
     object: teams/engineering
-    confidence: 0.6
+    confidence: 0.8
     provenance: llm
     status: proposed
     evidence:
       - node: self
-        span: [159, 180]
-        quote: handed to Engineering
+        span: [140, 190]
+        quote: 6 escalations were handed to Engineering this week
+  - predicate: handoff_to
+    object: teams/support
+    confidence: 0.75
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [192, 228]
+        quote: 3 bounced back to Support unresolved
   - predicate: mentions
     object: accounts/support-inbox
-    confidence: 0.9
+    confidence: 0.7
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [28, 52]
-        quote: support@meridian.example
+        span: [0, 53]
+        quote: '**From:** Meridian Support <support@meridian.example>'
   - predicate: mentions
     object: people/dev-oyelaran
-    confidence: 0.9
+    confidence: 0.7
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [63, 83]
-        quote: dev@meridian.example
-  - predicate: mentions
-    object: teams/engineering
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [169, 180]
-        quote: Engineering
-  - predicate: mentions
-    object: teams/support
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [210, 217]
-        quote: Support
+        span: [55, 83]
+        quote: '**To:** dev@meridian.example'
 ---
 
 **From:** Meridian Support <support@meridian.example>

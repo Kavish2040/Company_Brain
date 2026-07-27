@@ -19,92 +19,29 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: e41f1a19b3e85c4a87412fed7d808d06
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: c7dd0c17c0fed6ad8b6b60a51466d420
   status: accepted
 relations:
   - predicate: mentions
-    object: people/dev-oyelaran
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [189, 201]
-        quote: Dev Oyelaran
-  - predicate: mentions
-    object: people/mei-tanaka
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 12]
-        quote: Mei Tanaka
-  - predicate: mentions
-    object: people/priya-raman
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [292, 303]
-        quote: Priya Raman
-  - predicate: mentions
-    object: people/sam-kaur
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [103, 111]
-        quote: Sam Kaur
-  - predicate: mentions
-    object: processes/incident-response
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [152, 169]
-        quote: Incident response
-  - predicate: mentions
     object: processes/refund-approval
-    confidence: 0.9
+    confidence: 0.7
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [83, 98]
-        quote: Refund approval
-  - predicate: mentions
-    object: processes/release-signoff
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [357, 373]
-        quote: Release sign-off
+        span: [24, 99]
+        quote: This is the fourth ticket bounced back from Engineering on Refund approval.
   - predicate: mentions
     object: teams/engineering
-    confidence: 0.9
+    confidence: 0.7
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [68, 79]
-        quote: Engineering
-  - predicate: mentions
-    object: teams/finance
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [326, 333]
-        quote: Finance
+        span: [24, 99]
+        quote: This is the fourth ticket bounced back from Engineering on Refund approval.
 ---
 
 **Mei Tanaka** (14:32): This is the fourth ticket bounced back from Engineering on Refund approval.

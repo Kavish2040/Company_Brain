@@ -19,47 +19,11 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 18a4636e24b23f7cf5de45d47724fec6
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 59e72711dfcb373f8bbbae0e1de96dd7
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/dev-oyelaran
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [153, 165]
-        quote: Dev Oyelaran
-  - predicate: mentions
-    object: people/priya-raman
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [231, 242]
-        quote: Priya Raman
-  - predicate: mentions
-    object: people/sam-kelly
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 11]
-        quote: Sam Kelly
-  - predicate: mentions
-    object: people/tom-whelan
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [77, 87]
-        quote: Tom Whelan
   - predicate: mentions
     object: processes/onboarding
     confidence: 0.9
@@ -67,8 +31,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [268, 287]
-        quote: Employee onboarding
+        span: [268, 308]
+        quote: Employee onboarding kicks off next week.
 ---
 
 **Sam Kelly** (11:47): Welcome to the team! Onboarding docs are in Drive.

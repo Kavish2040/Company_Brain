@@ -1,0 +1,41 @@
+{
+  "edges": [
+    {
+      "confidence": 0.98,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Owner: Dev Oyelaran (dev@meridian.example)",
+          "span": [
+            33,
+            75
+          ]
+        }
+      ],
+      "object": "people/dev-oyelaran",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed"
+    },
+    {
+      "confidence": 0.95,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Owning team: Support",
+          "span": [
+            77,
+            97
+          ]
+        }
+      ],
+      "object": "teams/support",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v1",
+  "unresolved": []
+}

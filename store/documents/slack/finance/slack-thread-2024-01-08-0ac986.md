@@ -19,47 +19,47 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: cb14bcce32f7cb32ebd6cee97050e1de
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 98addd352214388b20d0e5624618cf51
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/ana-brito
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 11]
-        quote: Ana Brito
-  - predicate: mentions
-    object: processes/incident-response
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [23, 40]
-        quote: Incident response
-  - predicate: mentions
+  - predicate: depends_on
     object: processes/security-review
     confidence: 0.9
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [87, 102]
-        quote: security review
+        span: [23, 103]
+        quote: Incident response is blocked until Engineering signs off on the security review.
+  - predicate: mentions
+    object: processes/incident-response
+    confidence: 0.7
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [23, 103]
+        quote: Incident response is blocked until Engineering signs off on the security review.
+  - predicate: mentions
+    object: processes/security-review
+    confidence: 0.8
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [128, 168]
+        quote: 'Reminder: Security review closes Friday.'
   - predicate: mentions
     object: teams/engineering
-    confidence: 0.9
+    confidence: 0.7
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [58, 69]
-        quote: Engineering
+        span: [23, 103]
+        quote: Incident response is blocked until Engineering signs off on the security review.
 ---
 
 **Ana Brito** (14:00): Incident response is blocked until Engineering signs off on the security review.

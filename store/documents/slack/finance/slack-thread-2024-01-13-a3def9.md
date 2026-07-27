@@ -19,83 +19,56 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 72908e0903598b8de701f4fd83a0684b
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 73f307d0f723539b97d937bf29bd1856
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/ana-brito
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [298, 307]
-        quote: Ana Brito
-  - predicate: mentions
-    object: people/sam-kaur
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 10]
-        quote: Sam Kaur
-  - predicate: mentions
-    object: processes/customer-escalation
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [104, 123]
-        quote: Customer escalation
-  - predicate: mentions
-    object: processes/data-request
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [210, 231]
-        quote: Customer data request
-  - predicate: mentions
-    object: processes/release-signoff
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [329, 345]
-        quote: Release sign-off
-  - predicate: mentions
+  - predicate: depends_on
     object: processes/security-review
     confidence: 0.9
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [170, 185]
-        quote: security review
+        span: [104, 186]
+        quote: Customer escalation is blocked until Engineering signs off on the security review.
+  - predicate: mentions
+    object: processes/release-signoff
+    confidence: 0.8
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [319, 360]
+        quote: 'Reminder: Release sign-off closes Friday.'
   - predicate: mentions
     object: teams/engineering
-    confidence: 0.9
+    confidence: 0.7
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [141, 152]
-        quote: Engineering
+        span: [104, 186]
+        quote: Customer escalation is blocked until Engineering signs off on the security review.
   - predicate: mentions
     object: tools/zendesk
-    confidence: 0.9
+    confidence: 0.85
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [26, 33]
-        quote: Zendesk
+        span: [22, 57]
+        quote: The Zendesk renewal lands in April.
+  - predicate: owns
+    object: processes/vendor-renewal
+    confidence: 0.9
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [58, 80]
+        quote: I own that end to end.
 ---
 
 **Sam Kaur** (10:44): The Zendesk renewal lands in April. I own that end to end.

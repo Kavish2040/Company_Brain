@@ -21,9 +21,9 @@ normalizer:
   name: docx
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: a6fca7770e6ce59853596ce3b53c6492
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 743514a0e28c603be5b475023eab12c0
   status: accepted
 relations:
   - predicate: authored_by
@@ -32,41 +32,32 @@ relations:
     provenance: structural
     status: accepted
   - predicate: mentions
-    object: people/owen-fitz
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [55, 76]
-        quote: owen@meridian.example
-  - predicate: mentions
     object: processes/incident-response
     confidence: 0.9
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [2, 19]
-        quote: Incident response
-  - predicate: mentions
-    object: teams/engineering
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [92, 103]
-        quote: Engineering
+        span: [0, 29]
+        quote: '# Incident response — runbook'
   - predicate: owns
     object: people/owen-fitz
-    confidence: 0.75
+    confidence: 0.98
     provenance: llm
     status: proposed
     evidence:
       - node: self
-        span: [31, 54]
-        quote: 'Owner: Owen Fitzgerald'
+        span: [31, 77]
+        quote: 'Owner: Owen Fitzgerald (owen@meridian.example)'
+  - predicate: owns
+    object: teams/engineering
+    confidence: 0.95
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [79, 103]
+        quote: 'Owning team: Engineering'
 ---
 
 # Incident response — runbook

@@ -1,0 +1,75 @@
+{
+  "edges": [
+    {
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "The previous informal arrangement documented in the Finance team page.",
+          "span": [
+            298,
+            368
+          ]
+        }
+      ],
+      "object": "teams/finance",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed"
+    },
+    {
+      "confidence": 0.97,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Sam Kaur will own vendor renewal going forward, and the\nsign-off step moves to the owning team.",
+          "span": [
+            186,
+            281
+          ]
+        }
+      ],
+      "object": "people/sam-kaur",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed"
+    },
+    {
+      "confidence": 0.95,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Sam Kaur will own vendor renewal going forward, and the\nsign-off step moves to the owning team.",
+          "span": [
+            186,
+            281
+          ]
+        }
+      ],
+      "object": "processes/vendor-renewal",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed"
+    },
+    {
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "The previous informal arrangement documented in the Finance team page.",
+          "span": [
+            298,
+            368
+          ]
+        }
+      ],
+      "object": "processes/vendor-renewal",
+      "predicate": "supersedes",
+      "provenance": "llm",
+      "status": "proposed"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v1",
+  "unresolved": []
+}

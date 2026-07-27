@@ -16,47 +16,38 @@ normalizer:
   name: pdf
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 5c33c2387e3703ff1f2d27b8df067cda
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 3f27b6d509763e2966007d4ae96007a2
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/dev-oyelaran
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [34, 46]
-        quote: Dev Oyelaran
-  - predicate: mentions
-    object: processes/customer-escalation
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [0, 19]
-        quote: Customer escalation
-  - predicate: mentions
-    object: teams/support
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [53, 60]
-        quote: Support
   - predicate: owns
     object: people/dev-oyelaran
-    confidence: 0.75
+    confidence: 0.95
     provenance: llm
     status: proposed
     evidence:
       - node: self
         span: [27, 46]
         quote: 'Owner: Dev Oyelaran'
+  - predicate: owns
+    object: processes/customer-escalation
+    confidence: 0.9
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [61, 123]
+        quote: This policy governs customer escalation at Meridian Logistics.
+  - predicate: owns
+    object: teams/support
+    confidence: 0.85
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [47, 60]
+        quote: 'Team: Support'
 ---
 
 Customer escalation Policy

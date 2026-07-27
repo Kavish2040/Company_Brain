@@ -16,20 +16,11 @@ normalizer:
   name: pdf
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 05d374cf6f8f9b300381318ec425ac9d
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 21254d3bf53d11af830ba8e8250f6e64
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/ana-brito
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [30, 39]
-        quote: Ana Brito
   - predicate: mentions
     object: processes/quarterly-close
     confidence: 0.9
@@ -37,20 +28,20 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [0, 15]
-        quote: Quarterly close
+        span: [54, 112]
+        quote: This policy governs quarterly close at Meridian Logistics.
   - predicate: mentions
     object: teams/finance
-    confidence: 0.9
+    confidence: 0.85
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [46, 53]
-        quote: Finance
+        span: [40, 53]
+        quote: 'Team: Finance'
   - predicate: owns
     object: people/ana-brito
-    confidence: 0.75
+    confidence: 0.95
     provenance: llm
     status: proposed
     evidence:

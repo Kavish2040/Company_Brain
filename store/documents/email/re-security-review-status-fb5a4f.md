@@ -21,9 +21,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 5bae8797161494657e1234bac1c5056f
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 9407a78b3e4b06bb7c13c437640f1034
   status: accepted
 relations:
   - predicate: authored_by
@@ -31,42 +31,24 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
-  - predicate: mentions
-    object: people/ana-brito
-    confidence: 0.9
+  - predicate: depends_on
+    object: tools/pagerduty
+    confidence: 0.75
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [21, 41]
-        quote: ana@meridian.example
-  - predicate: mentions
+        span: [187, 229]
+        quote: the PagerDuty step is blocked on your team
+  - predicate: owns
     object: people/tom-whelan
     confidence: 0.9
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [153, 163]
-        quote: Tom Whelan
-  - predicate: mentions
-    object: processes/security-review
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [136, 151]
-        quote: security review
-  - predicate: mentions
-    object: tools/pagerduty
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [191, 200]
-        quote: PagerDuty
+        span: [153, 230]
+        quote: Tom Whelan owns this process, but the PagerDuty step is blocked on your team.
 ---
 
 **From:** Ana Brito <ana@meridian.example>

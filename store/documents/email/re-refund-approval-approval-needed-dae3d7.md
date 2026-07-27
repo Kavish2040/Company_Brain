@@ -22,9 +22,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: f9b866436ddee626d5c72e911f1a1f18
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: fd2aee1b72250052e7ac9b8d37217cd4
   status: accepted
 relations:
   - predicate: authored_by
@@ -37,51 +37,6 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
-  - predicate: mentions
-    object: people/ana-brito
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [163, 172]
-        quote: Ana Brito
-  - predicate: mentions
-    object: people/sam-kaur
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [20, 45]
-        quote: sam.kaur@meridian.example
-  - predicate: mentions
-    object: people/sam-kelly
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [56, 82]
-        quote: sam.kelly@meridian.example
-  - predicate: mentions
-    object: processes/refund-approval
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [146, 161]
-        quote: refund approval
-  - predicate: mentions
-    object: tools/zendesk
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [200, 207]
-        quote: Zendesk
 ---
 
 **From:** Sam Kaur <sam.kaur@meridian.example>

@@ -1,0 +1,43 @@
+{
+  "edges": [
+    {
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Deploy for the Customer escalation change is queued behind the release sign-off.",
+          "span": [
+            133,
+            213
+          ]
+        }
+      ],
+      "object": "processes/release-signoff",
+      "predicate": "depends_on",
+      "provenance": "llm",
+      "status": "proposed"
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Handing the Employee onboarding ticket over to Support, they own the customer comms.",
+          "span": [
+            24,
+            108
+          ]
+        }
+      ],
+      "object": "teams/support",
+      "predicate": "handoff_to",
+      "provenance": "llm",
+      "status": "proposed"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v1",
+  "unresolved": [
+    "customer comms"
+  ]
+}

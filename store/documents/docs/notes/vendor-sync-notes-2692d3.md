@@ -16,47 +16,10 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: f3317d557b2b61911b34d5f89fef5f29
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 15f76d8f59a0cb7c6d164f51cff2c778
   status: accepted
-relations:
-  - predicate: mentions
-    object: people/ana-brito
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [53, 62]
-        quote: Ana Brito
-  - predicate: mentions
-    object: people/priya-raman
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [40, 51]
-        quote: Priya Raman
-  - predicate: mentions
-    object: tools/netsuite
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [85, 93]
-        quote: NetSuite
-  - predicate: mentions
-    object: tools/snowflake
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [152, 161]
-        quote: Snowflake
 ---
 
 # Vendor sync notes

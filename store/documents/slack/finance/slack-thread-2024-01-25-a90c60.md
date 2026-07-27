@@ -19,65 +19,47 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 7cf3443ea52f8b728d665329858169d4
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 56cdd0294064ba67305e7231d8e36112
   status: accepted
 relations:
   - predicate: mentions
-    object: people/ana-brito
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [84, 93]
-        quote: Ana Brito
-  - predicate: mentions
-    object: people/sam-kaur
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 10]
-        quote: Sam Kaur
-  - predicate: mentions
     object: processes/security-review
-    confidence: 0.9
+    confidence: 0.8
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [280, 295]
-        quote: Security review
-  - predicate: mentions
+        span: [270, 310]
+        quote: 'Reminder: Security review closes Friday.'
+  - predicate: owns
     object: tools/datadog
-    confidence: 0.9
+    confidence: 0.95
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [26, 33]
-        quote: Datadog
-  - predicate: mentions
+        span: [22, 80]
+        quote: The Datadog renewal lands in April. I own that end to end.
+  - predicate: owns
     object: tools/netsuite
-    confidence: 0.9
+    confidence: 0.95
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [109, 117]
-        quote: NetSuite
-  - predicate: mentions
+        span: [105, 164]
+        quote: The NetSuite renewal lands in April. I own that end to end.
+  - predicate: owns
     object: tools/zendesk
-    confidence: 0.9
+    confidence: 0.95
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [192, 199]
-        quote: Zendesk
+        span: [188, 246]
+        quote: The Zendesk renewal lands in April. I own that end to end.
 ---
 
 **Sam Kaur** (10:46): The Datadog renewal lands in April. I own that end to end.

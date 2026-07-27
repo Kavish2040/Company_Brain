@@ -1,0 +1,75 @@
+{
+  "edges": [
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "This is the fourth ticket bounced back from Engineering on Capacity planning.",
+          "span": [
+            131,
+            208
+          ]
+        }
+      ],
+      "object": "processes/capacity-planning",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted"
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "This is the fourth ticket bounced back from Engineering on Employee onboarding.",
+          "span": [
+            234,
+            313
+          ]
+        }
+      ],
+      "object": "processes/onboarding",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted"
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "This is the fourth ticket bounced back from Engineering on Release sign-off.",
+          "span": [
+            29,
+            105
+          ]
+        }
+      ],
+      "object": "processes/release-signoff",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted"
+    },
+    {
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "This is the fourth ticket bounced back from Engineering on Release sign-off.",
+          "span": [
+            29,
+            105
+          ]
+        }
+      ],
+      "object": "teams/engineering",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v1",
+  "unresolved": []
+}

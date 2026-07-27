@@ -19,47 +19,29 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 1b584ebaa0f940b5998f1f15b07c510d
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 430c7a97fc59da5869d433f54922e566
   status: accepted
 relations:
   - predicate: mentions
-    object: people/ana-brito
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [138, 147]
-        quote: Ana Brito
-  - predicate: mentions
-    object: people/sam-kaur
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 10]
-        quote: Sam Kaur
-  - predicate: mentions
     object: processes/capacity-planning
-    confidence: 0.9
+    confidence: 0.6
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [169, 186]
-        quote: Capacity planning
+        span: [159, 201]
+        quote: 'Reminder: Capacity planning closes Friday.'
   - predicate: mentions
     object: processes/onboarding
-    confidence: 0.9
+    confidence: 0.6
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [32, 51]
-        quote: Employee onboarding
+        span: [22, 66]
+        quote: 'Reminder: Employee onboarding closes Friday.'
 ---
 
 **Sam Kaur** (12:10): Reminder: Employee onboarding closes Friday.

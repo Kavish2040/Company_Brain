@@ -21,9 +21,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 67b50aa0a67d0a86dd77271cd331ea3c
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: b7f83b3dd6789d41e26265babef6be26
   status: accepted
 relations:
   - predicate: authored_by
@@ -31,33 +31,15 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
-  - predicate: mentions
-    object: people/nadia-hassan
-    confidence: 0.9
+  - predicate: depends_on
+    object: tools/netsuite
+    confidence: 0.8
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [24, 46]
-        quote: nadia@meridian.example
-  - predicate: mentions
-    object: people/owen-fitz
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [164, 179]
-        quote: Owen Fitzgerald
-  - predicate: mentions
-    object: processes/capacity-planning
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [145, 162]
-        quote: capacity planning
+        span: [164, 245]
+        quote: Owen Fitzgerald owns this process, but the NetSuite step is blocked on your team.
   - predicate: mentions
     object: tools/netsuite
     confidence: 0.9
@@ -65,8 +47,17 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [207, 215]
-        quote: NetSuite
+        span: [203, 244]
+        quote: the NetSuite step is blocked on your team
+  - predicate: owns
+    object: people/owen-fitz
+    confidence: 0.85
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [164, 245]
+        quote: Owen Fitzgerald owns this process, but the NetSuite step is blocked on your team.
 ---
 
 **From:** Nadia Hassan <nadia@meridian.example>

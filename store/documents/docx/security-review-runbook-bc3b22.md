@@ -21,9 +21,9 @@ normalizer:
   name: docx
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: cebbb6408ba2b48d7746f5d125652f36
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: d3e094bd773b437bf5293caa768bdbe0
   status: accepted
 relations:
   - predicate: authored_by
@@ -32,41 +32,41 @@ relations:
     provenance: structural
     status: accepted
   - predicate: mentions
-    object: people/tom-whelan
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [48, 68]
-        quote: tom@meridian.example
-  - predicate: mentions
     object: processes/security-review
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 17]
-        quote: Security review
-  - predicate: mentions
-    object: teams/engineering
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [84, 95]
-        quote: Engineering
-  - predicate: owns
-    object: people/tom-whelan
-    confidence: 0.75
+    confidence: 0.8
     provenance: llm
     status: proposed
     evidence:
       - node: self
-        span: [29, 47]
-        quote: 'Owner: Tom Whelan'
+        span: [192, 214]
+        quote: Sign-off by Tom Whelan
+  - predicate: mentions
+    object: teams/engineering
+    confidence: 0.85
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [119, 137]
+        quote: Engineering triage
+  - predicate: owns
+    object: people/tom-whelan
+    confidence: 0.98
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [29, 69]
+        quote: 'Owner: Tom Whelan (tom@meridian.example)'
+  - predicate: owns
+    object: teams/engineering
+    confidence: 0.95
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [71, 95]
+        quote: 'Owning team: Engineering'
 ---
 
 # Security review — runbook

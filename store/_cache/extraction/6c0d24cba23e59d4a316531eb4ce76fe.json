@@ -1,0 +1,47 @@
+{
+  "edges": [
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Attendees: Sam K., Tom Whelan, Owen Fitzgerald",
+          "span": [
+            23,
+            69
+          ]
+        }
+      ],
+      "object": "people/owen-fitz",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted"
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Attendees: Sam K., Tom Whelan, Owen Fitzgerald",
+          "span": [
+            23,
+            69
+          ]
+        }
+      ],
+      "object": "people/tom-whelan",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v1",
+  "unresolved": [
+    "Project Snowflake",
+    "Sam K.",
+    "ingest workers",
+    "legacy queue",
+    "migration RFC"
+  ]
+}

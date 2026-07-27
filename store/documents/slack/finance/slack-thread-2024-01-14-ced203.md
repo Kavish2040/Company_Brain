@@ -19,74 +19,10 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 17a63d7bd8be2af9fa07b8c3690ead76
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: c79cfd79a6a57d07757b8bac126154b8
   status: accepted
-relations:
-  - predicate: mentions
-    object: people/ana-brito
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [86, 95]
-        quote: Ana Brito
-  - predicate: mentions
-    object: people/sam-kaur
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 10]
-        quote: Sam Kaur
-  - predicate: mentions
-    object: processes/data-request
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [209, 230]
-        quote: Customer data request
-  - predicate: mentions
-    object: processes/quarterly-close
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [107, 122]
-        quote: Quarterly close
-  - predicate: mentions
-    object: processes/security-review
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [169, 184]
-        quote: security review
-  - predicate: mentions
-    object: teams/engineering
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [140, 151]
-        quote: Engineering
-  - predicate: mentions
-    object: tools/snowflake
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [26, 35]
-        quote: Snowflake
 ---
 
 **Sam Kaur** (13:12): The Snowflake renewal lands in April. I own that end to end.

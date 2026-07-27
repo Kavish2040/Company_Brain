@@ -22,9 +22,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 9ea0871e7648bd7aceda0b3decd373a7
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 1856259f2eb3263ae188db82f80e879a
   status: accepted
 relations:
   - predicate: authored_by
@@ -37,33 +37,24 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
-  - predicate: mentions
-    object: people/ana-brito
-    confidence: 0.9
+  - predicate: depends_on
+    object: tools/zendesk
+    confidence: 0.75
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [21, 41]
-        quote: ana@meridian.example
+        span: [192, 232]
+        quote: the Zendesk step is blocked on your team
   - predicate: mentions
     object: people/sam-kaur
-    confidence: 0.9
+    confidence: 0.6
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [52, 77]
-        quote: sam.kaur@meridian.example
-  - predicate: mentions
-    object: people/tom-whelan
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [158, 168]
-        quote: Tom Whelan
+        span: [235, 261]
+        quote: Can you confirm by Friday?
   - predicate: mentions
     object: processes/security-review
     confidence: 0.9
@@ -71,17 +62,17 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [141, 156]
-        quote: security review
-  - predicate: mentions
-    object: tools/zendesk
+        span: [125, 157]
+        quote: Following up on security review.
+  - predicate: owns
+    object: people/tom-whelan
     confidence: 0.9
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [196, 203]
-        quote: Zendesk
+        span: [158, 233]
+        quote: Tom Whelan owns this process, but the Zendesk step is blocked on your team.
 ---
 
 **From:** Ana Brito <ana@meridian.example>

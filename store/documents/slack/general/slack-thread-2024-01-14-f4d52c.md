@@ -19,38 +19,20 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 7673f5a47a9dbb6a8b0a5679ba36ac26
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 4301f2e5b5604637f270614ff9786553
   status: accepted
 relations:
   - predicate: mentions
-    object: people/nadia-hassan
-    confidence: 0.9
+    object: processes/onboarding
+    confidence: 0.6
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [2, 14]
-        quote: Nadia Hassan
-  - predicate: mentions
-    object: people/owen-fitz
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [80, 95]
-        quote: Owen Fitzgerald
-  - predicate: mentions
-    object: people/sam-kelly
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [161, 170]
-        quote: Sam Kelly
+        span: [47, 76]
+        quote: Onboarding docs are in Drive.
 ---
 
 **Nadia Hassan** (13:39): Welcome to the team! Onboarding docs are in Drive.

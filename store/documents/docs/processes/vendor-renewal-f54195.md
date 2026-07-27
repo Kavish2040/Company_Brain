@@ -16,83 +16,38 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 2ea2dd32859e7aa83337d72929ee31cd
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 27bcb1791a001915ca0fce3d94e64876
   status: accepted
 relations:
   - predicate: handoff_to
     object: teams/engineering
-    confidence: 0.6
+    confidence: 0.85
     provenance: llm
     status: proposed
     evidence:
       - node: self
-        span: [516, 548]
-        quote: Support hands off to Engineering
+        span: [516, 589]
+        quote: Support hands off to Engineering when the root cause is a product defect.
   - predicate: handoff_to
     object: teams/finance
-    confidence: 0.6
+    confidence: 0.7
     provenance: llm
     status: proposed
     evidence:
       - node: self
-        span: [451, 479]
-        quote: Finance hands off to Finance
-  - predicate: mentions
-    object: people/sam-kaur
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [39, 64]
-        quote: sam.kaur@meridian.example
-  - predicate: mentions
-    object: processes/vendor-renewal
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 16]
-        quote: Vendor renewal
-  - predicate: mentions
-    object: teams/engineering
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [537, 548]
-        quote: Engineering
+        span: [451, 513]
+        quote: Finance hands off to Finance when a cost approval is required.
   - predicate: mentions
     object: teams/finance
-    confidence: 0.9
+    confidence: 0.85
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [76, 83]
-        quote: Finance
-  - predicate: mentions
-    object: teams/product
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [574, 581]
-        quote: product
-  - predicate: mentions
-    object: teams/support
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [516, 523]
-        quote: Support
+        span: [262, 302]
+        quote: Finance triages within one business day.
   - predicate: mentions
     object: tools/datadog
     confidence: 0.9
@@ -100,8 +55,26 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [250, 257]
-        quote: Datadog
+        span: [229, 258]
+        quote: Request is raised in Datadog.
+  - predicate: owns
+    object: people/sam-kaur
+    confidence: 0.95
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [18, 65]
+        quote: '**Owner:** Sam Kaur (sam.kaur@meridian.example)'
+  - predicate: owns
+    object: teams/finance
+    confidence: 0.7
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [66, 83]
+        quote: '**Team:** Finance'
 ---
 
 # Vendor renewal

@@ -16,92 +16,47 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: d524b7793dc0c77bdc0b79b3672fe971
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 5273f14fd00e20eb073d061061800b60
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/ana-brito
-    confidence: 0.9
+  - predicate: depends_on
+    object: tools/snowflake
+    confidence: 0.75
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [54, 63]
-        quote: Ana Brito
-  - predicate: mentions
-    object: people/mei-tanaka
-    confidence: 0.9
+        span: [112, 183]
+        quote: "Ana Brito raised that capacity planning is still blocked on\n Snowflake."
+  - predicate: handoff_to
+    object: teams/engineering
+    confidence: 0.65
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [88, 98]
-        quote: Mei Tanaka
-  - predicate: mentions
-    object: people/owen-fitz
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [186, 201]
-        quote: Owen Fitzgerald
-  - predicate: mentions
-    object: people/priya-raman
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [75, 86]
-        quote: Priya Raman
-  - predicate: mentions
-    object: people/sam-kaur
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [65, 73]
-        quote: Sam Kaur
+        span: [236, 320]
+        quote: "Handoff from Finance to Engineering is unclear; two\n tickets bounced back last week."
   - predicate: mentions
     object: processes/capacity-planning
-    confidence: 0.9
+    confidence: 0.4
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [2, 19]
-        quote: Capacity planning
-  - predicate: mentions
-    object: teams/engineering
-    confidence: 0.9
+        span: [336, 380]
+        quote: Mei Tanaka to document the handoff boundary.
+  - predicate: owns
+    object: processes/capacity-planning
+    confidence: 0.6
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [260, 271]
-        quote: Engineering
-  - predicate: mentions
-    object: teams/finance
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [249, 256]
-        quote: Finance
-  - predicate: mentions
-    object: tools/snowflake
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [173, 182]
-        quote: Snowflake
+        span: [186, 233]
+        quote: Owen Fitzgerald confirmed they own the process.
 ---
 
 # Capacity planning sync — 2024-02-13

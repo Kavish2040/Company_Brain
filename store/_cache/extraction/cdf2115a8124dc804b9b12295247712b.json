@@ -1,0 +1,41 @@
+{
+  "edges": [
+    {
+      "confidence": 0.95,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Owner: Zo\u00eb Ravel (zoe@meridian.example)",
+          "span": [
+            33,
+            72
+          ]
+        }
+      ],
+      "object": "people/zoe-ravel",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed"
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Owning team: Product",
+          "span": [
+            74,
+            94
+          ]
+        }
+      ],
+      "object": "teams/product",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v1",
+  "unresolved": []
+}

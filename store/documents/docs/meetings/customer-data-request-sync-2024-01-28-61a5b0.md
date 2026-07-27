@@ -16,92 +16,20 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 60592a8bd44008359d1fa086f5b62d7e
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: dc8a0ab353fe6c987a6a74b69a65f8be
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/dev-oyelaran
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [85, 97]
-        quote: Dev Oyelaran
-  - predicate: mentions
-    object: people/mei-tanaka
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [200, 210]
-        quote: Mei Tanaka
-  - predicate: mentions
-    object: people/nadia-hassan
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [99, 111]
-        quote: Nadia Hassan
-  - predicate: mentions
-    object: people/owen-fitz
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [68, 83]
-        quote: Owen Fitzgerald
-  - predicate: mentions
-    object: people/sam-kaur
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [58, 66]
-        quote: Sam Kaur
-  - predicate: mentions
+  - predicate: owns
     object: processes/data-request
-    confidence: 0.9
+    confidence: 0.8
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [2, 23]
-        quote: Customer data request
-  - predicate: mentions
-    object: teams/engineering
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [258, 269]
-        quote: Engineering
-  - predicate: mentions
-    object: teams/support
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [273, 280]
-        quote: Support
-  - predicate: mentions
-    object: tools/datadog
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [189, 196]
-        quote: Datadog
+        span: [200, 242]
+        quote: Mei Tanaka confirmed they own the process.
 ---
 
 # Customer data request sync — 2024-01-28

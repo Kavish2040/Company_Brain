@@ -16,92 +16,10 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 34e7755a69f5ec230a3c757a4c5ad986
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: c7cec6ba47b7a585dde0b750e9126762
   status: accepted
-relations:
-  - predicate: mentions
-    object: people/dev-oyelaran
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [89, 101]
-        quote: Dev Oyelaran
-  - predicate: mentions
-    object: people/mei-tanaka
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [63, 73]
-        quote: Mei Tanaka
-  - predicate: mentions
-    object: people/nadia-hassan
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [75, 87]
-        quote: Nadia Hassan
-  - predicate: mentions
-    object: people/sam-kaur
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [187, 195]
-        quote: Sam Kaur
-  - predicate: mentions
-    object: people/tom-whelan
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [51, 61]
-        quote: Tom Whelan
-  - predicate: mentions
-    object: processes/vendor-renewal
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 16]
-        quote: Vendor renewal
-  - predicate: mentions
-    object: teams/product
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [254, 261]
-        quote: Product
-  - predicate: mentions
-    object: teams/support
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [243, 250]
-        quote: Support
-  - predicate: mentions
-    object: tools/pagerduty
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [174, 183]
-        quote: PagerDuty
 ---
 
 # Vendor renewal sync — 2024-01-10

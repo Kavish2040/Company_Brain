@@ -19,83 +19,10 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: bf4eeb6b3c0284c44d80872fae3e1bda
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 2314224f1ba76bcc552414e4358b0916
   status: accepted
-relations:
-  - predicate: mentions
-    object: people/ana-brito
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [189, 198]
-        quote: Ana Brito
-  - predicate: mentions
-    object: people/sam-kaur
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 10]
-        quote: Sam Kaur
-  - predicate: mentions
-    object: processes/capacity-planning
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [292, 309]
-        quote: Capacity planning
-  - predicate: mentions
-    object: processes/release-signoff
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [106, 122]
-        quote: Release sign-off
-  - predicate: mentions
-    object: processes/security-review
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [169, 184]
-        quote: security review
-  - predicate: mentions
-    object: teams/engineering
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [140, 151]
-        quote: Engineering
-  - predicate: mentions
-    object: tools/datadog
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [214, 221]
-        quote: Datadog
-  - predicate: mentions
-    object: tools/pagerduty
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [26, 35]
-        quote: PagerDuty
 ---
 
 **Sam Kaur** (09:07): The PagerDuty renewal lands in April. I own that end to end.

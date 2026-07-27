@@ -19,38 +19,20 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 4e097181d4ee82b0bac9993f5ab65127
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 3fe605dbe3a0a3aabe315e919c1391c2
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/mei-tanaka
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 12]
-        quote: Mei Tanaka
-  - predicate: mentions
-    object: people/tom-whelan
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [103, 113]
-        quote: Tom Whelan
-  - predicate: mentions
+  - predicate: depends_on
     object: processes/release-signoff
-    confidence: 0.9
+    confidence: 0.85
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [82, 98]
-        quote: release sign-off
+        span: [24, 99]
+        quote: Deploy for the Vendor renewal change is queued behind the release sign-off.
   - predicate: mentions
     object: processes/vendor-renewal
     confidence: 0.9
@@ -58,8 +40,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [39, 53]
-        quote: Vendor renewal
+        span: [24, 99]
+        quote: Deploy for the Vendor renewal change is queued behind the release sign-off.
   - predicate: mentions
     object: tools/linear
     confidence: 0.9
@@ -67,8 +49,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [129, 135]
-        quote: Linear
+        span: [125, 187]
+        quote: The Linear alert fired again overnight — third time this week.
 ---
 
 **Mei Tanaka** (12:14): Deploy for the Vendor renewal change is queued behind the release sign-off.

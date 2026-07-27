@@ -22,9 +22,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: a273b37509005c9c5d096d8f2f7848b0
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: e0006a71ca5c8a280e9b7ac3108483c5
   status: accepted
 relations:
   - predicate: authored_by
@@ -37,33 +37,15 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
-  - predicate: mentions
-    object: people/priya-raman
-    confidence: 0.9
+  - predicate: depends_on
+    object: tools/datadog
+    confidence: 0.7
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [164, 175]
-        quote: Priya Raman
-  - predicate: mentions
-    object: people/sam-kaur
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [20, 45]
-        quote: sam.kaur@meridian.example
-  - predicate: mentions
-    object: people/sam-kelly
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [56, 82]
-        quote: sam.kelly@meridian.example
+        span: [164, 240]
+        quote: Priya Raman owns this process, but the Datadog step is blocked on your team.
   - predicate: mentions
     object: processes/release-signoff
     confidence: 0.9
@@ -71,17 +53,17 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [146, 162]
-        quote: release sign-off
-  - predicate: mentions
-    object: tools/datadog
+        span: [130, 163]
+        quote: Following up on release sign-off.
+  - predicate: owns
+    object: people/priya-raman
     confidence: 0.9
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [203, 210]
-        quote: Datadog
+        span: [164, 240]
+        quote: Priya Raman owns this process, but the Datadog step is blocked on your team.
 ---
 
 **From:** Sam Kaur <sam.kaur@meridian.example>

@@ -16,92 +16,38 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 3d7733ac38e20bb42f5c28bf0b13ee7e
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 0a9e186a142a091cad733d67c6d83403
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/dev-oyelaran
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [77, 89]
-        quote: Dev Oyelaran
-  - predicate: mentions
-    object: people/mei-tanaka
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [53, 63]
-        quote: Mei Tanaka
-  - predicate: mentions
-    object: people/priya-raman
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [186, 197]
-        quote: Priya Raman
-  - predicate: mentions
-    object: people/sam-kelly
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [91, 100]
-        quote: Sam Kelly
-  - predicate: mentions
-    object: people/tom-whelan
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [65, 75]
-        quote: Tom Whelan
-  - predicate: mentions
-    object: processes/release-signoff
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 18]
-        quote: Release sign-off
-  - predicate: mentions
-    object: teams/engineering
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [245, 256]
-        quote: Engineering
-  - predicate: mentions
-    object: teams/support
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [260, 267]
-        quote: Support
-  - predicate: mentions
+  - predicate: depends_on
     object: tools/datadog
-    confidence: 0.9
+    confidence: 0.85
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [175, 182]
-        quote: Datadog
+        span: [114, 183]
+        quote: "Mei Tanaka raised that release sign-off is still blocked on\n Datadog."
+  - predicate: handoff_to
+    object: teams/support
+    confidence: 0.6
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [232, 316]
+        quote: "Handoff from Engineering to Support is unclear; two\n tickets bounced back last week."
+  - predicate: owns
+    object: processes/release-signoff
+    confidence: 0.8
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [186, 229]
+        quote: Priya Raman confirmed they own the process.
 ---
 
 # Release sign-off sync — 2024-02-07

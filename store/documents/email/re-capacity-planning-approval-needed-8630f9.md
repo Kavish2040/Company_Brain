@@ -22,9 +22,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 8d67ab795af1a2feff2453e75ab7eb4a
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 34160a22c5e6f3fd9b2fcc3220793b9e
   status: accepted
 relations:
   - predicate: authored_by
@@ -37,42 +37,36 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
+  - predicate: depends_on
+    object: tools/snowflake
+    confidence: 0.85
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [201, 243]
+        quote: the Snowflake step is blocked on your team
   - predicate: mentions
     object: people/mei-tanaka
-    confidence: 0.9
+    confidence: 0.7
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [59, 79]
-        quote: mei@meridian.example
-  - predicate: mentions
-    object: people/owen-fitz
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [27, 48]
-        quote: owen@meridian.example
-  - predicate: mentions
+        span: [118, 161]
+        quote: 'Hi Mei,
+
+
+          Following up on capacity planning.'
+  - predicate: owns
     object: processes/capacity-planning
-    confidence: 0.9
+    confidence: 0.95
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [143, 160]
-        quote: capacity planning
-  - predicate: mentions
-    object: tools/snowflake
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [205, 214]
-        quote: Snowflake
+        span: [162, 244]
+        quote: Owen Fitzgerald owns this process, but the Snowflake step is blocked on your team.
 ---
 
 **From:** Owen Fitzgerald <owen@meridian.example>

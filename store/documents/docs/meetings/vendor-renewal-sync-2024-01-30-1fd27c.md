@@ -16,92 +16,10 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 43eea8c96a12347d30eae1d799f66485
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 9777d71f1328280422b42641038a9f98
   status: accepted
-relations:
-  - predicate: mentions
-    object: people/ana-brito
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [86, 95]
-        quote: Ana Brito
-  - predicate: mentions
-    object: people/mei-tanaka
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [51, 61]
-        quote: Mei Tanaka
-  - predicate: mentions
-    object: people/sam-kaur
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [179, 187]
-        quote: Sam Kaur
-  - predicate: mentions
-    object: people/tom-whelan
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [74, 84]
-        quote: Tom Whelan
-  - predicate: mentions
-    object: people/zoe-ravel
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [63, 72]
-        quote: Zoë Ravel
-  - predicate: mentions
-    object: processes/vendor-renewal
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 16]
-        quote: Vendor renewal
-  - predicate: mentions
-    object: teams/engineering
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [246, 257]
-        quote: Engineering
-  - predicate: mentions
-    object: teams/product
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [235, 242]
-        quote: Product
-  - predicate: mentions
-    object: tools/zendesk
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [168, 175]
-        quote: Zendesk
 ---
 
 # Vendor renewal sync — 2024-01-30

@@ -1,0 +1,43 @@
+{
+  "edges": [
+    {
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "the PagerDuty step is blocked on your team",
+          "span": [
+            202,
+            244
+          ]
+        }
+      ],
+      "object": "tools/pagerduty",
+      "predicate": "depends_on",
+      "provenance": "llm",
+      "status": "proposed"
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Owen Fitzgerald owns this process, but the PagerDuty step is blocked on your team.",
+          "span": [
+            163,
+            245
+          ]
+        }
+      ],
+      "object": "people/owen-fitz",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v1",
+  "unresolved": [
+    "your team"
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "edges": [
+    {
+      "confidence": 0.98,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Owned by the Support team.",
+          "span": [
+            40,
+            66
+          ]
+        }
+      ],
+      "object": "teams/support",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v1",
+  "unresolved": []
+}

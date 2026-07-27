@@ -19,65 +19,74 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 6a0bf8ac770a4d83dbeb4f5603804946
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: eb9386e9485fa3777b511e2707bab93b
   status: accepted
 relations:
   - predicate: mentions
     object: people/dev-oyelaran
-    confidence: 0.9
+    confidence: 0.5
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [92, 104]
-        quote: Dev Oyelaran
+        span: [116, 181]
+        quote: The Snowflake alert fired again overnight — third time this week.
   - predicate: mentions
     object: people/priya-raman
-    confidence: 0.9
+    confidence: 0.5
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [272, 283]
-        quote: Priya Raman
+        span: [295, 353]
+        quote: Can someone from Finance confirm the Datadog renewal date?
   - predicate: mentions
     object: people/sam-kelly
-    confidence: 0.9
+    confidence: 0.5
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [185, 194]
-        quote: Sam Kelly
+        span: [206, 268]
+        quote: The Linear alert fired again overnight — third time this week.
   - predicate: mentions
     object: people/zoe-ravel
-    confidence: 0.9
+    confidence: 0.5
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [2, 11]
-        quote: Zoë Ravel
+        span: [23, 88]
+        quote: The PagerDuty alert fired again overnight — third time this week.
+  - predicate: mentions
+    object: processes/vendor-renewal
+    confidence: 0.4
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [295, 353]
+        quote: Can someone from Finance confirm the Datadog renewal date?
   - predicate: mentions
     object: teams/finance
-    confidence: 0.9
+    confidence: 0.85
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [312, 319]
-        quote: Finance
+        span: [295, 353]
+        quote: Can someone from Finance confirm the Datadog renewal date?
   - predicate: mentions
     object: tools/datadog
-    confidence: 0.9
+    confidence: 0.85
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [332, 339]
-        quote: Datadog
+        span: [295, 353]
+        quote: Can someone from Finance confirm the Datadog renewal date?
   - predicate: mentions
     object: tools/linear
     confidence: 0.9
@@ -85,8 +94,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [210, 216]
-        quote: Linear
+        span: [206, 268]
+        quote: The Linear alert fired again overnight — third time this week.
   - predicate: mentions
     object: tools/pagerduty
     confidence: 0.9
@@ -94,8 +103,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [27, 36]
-        quote: PagerDuty
+        span: [23, 88]
+        quote: The PagerDuty alert fired again overnight — third time this week.
   - predicate: mentions
     object: tools/snowflake
     confidence: 0.9
@@ -103,8 +112,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [120, 129]
-        quote: Snowflake
+        span: [116, 181]
+        quote: The Snowflake alert fired again overnight — third time this week.
 ---
 
 **Zoë Ravel** (13:15): The PagerDuty alert fired again overnight — third time this week.

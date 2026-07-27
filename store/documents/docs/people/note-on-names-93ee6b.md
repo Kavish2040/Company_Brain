@@ -16,56 +16,40 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: f0e66c22bd06a635c316a4e16f58fa62
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 4253d418816970f3cca2f8d2d58c71ce
   status: accepted
 relations:
   - predicate: mentions
-    object: people/sam-kaur
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [69, 94]
-        quote: sam.kaur@meridian.example
-  - predicate: mentions
-    object: people/sam-kelly
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [132, 158]
-        quote: sam.kelly@meridian.example
-  - predicate: mentions
     object: teams/engineering
-    confidence: 0.9
+    confidence: 0.7
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [179, 190]
-        quote: Engineering
+        span: [121, 190]
+        quote: Sam Kelly (sam.kelly@meridian.example), Backend Engineer, Engineering
   - predicate: mentions
     object: teams/finance
-    confidence: 0.9
+    confidence: 0.7
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [97, 104]
-        quote: Finance
+        span: [59, 118]
+        quote: Sam Kaur (sam.kaur@meridian.example), Finance Lead, Finance
   - predicate: mentions
     object: tools/snowflake
-    confidence: 0.9
+    confidence: 0.4
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [222, 231]
-        quote: Snowflake
+        span: [192, 289]
+        quote: 'They work together on Project Snowflake, so context alone is often not enough
+
+          to tell them apart.'
 ---
 
 # Note on names

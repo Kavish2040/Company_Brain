@@ -16,83 +16,47 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: efb6ea79f1430975d7478a6212909d57
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 03896736aa38540639de74ec65c814d6
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/ana-brito
-    confidence: 0.9
+  - predicate: depends_on
+    object: tools/snowflake
+    confidence: 0.85
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [69, 78]
-        quote: Ana Brito
-  - predicate: mentions
-    object: people/owen-fitz
-    confidence: 0.9
+        span: [117, 192]
+        quote: "Owen Fitzgerald raised that quarterly close is still blocked on\n Snowflake."
+  - predicate: handoff_to
+    object: teams/engineering
+    confidence: 0.7
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [52, 67]
-        quote: Owen Fitzgerald
-  - predicate: mentions
-    object: people/priya-raman
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [80, 91]
-        quote: Priya Raman
-  - predicate: mentions
-    object: people/tom-whelan
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [93, 103]
-        quote: Tom Whelan
+        span: [239, 323]
+        quote: "Handoff from Finance to Engineering is unclear; two\n tickets bounced back last week."
   - predicate: mentions
     object: processes/quarterly-close
-    confidence: 0.9
+    confidence: 0.7
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [2, 17]
-        quote: Quarterly close
-  - predicate: mentions
-    object: teams/engineering
-    confidence: 0.9
+        span: [117, 192]
+        quote: "Owen Fitzgerald raised that quarterly close is still blocked on\n Snowflake."
+  - predicate: owns
+    object: processes/quarterly-close
+    confidence: 0.75
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [263, 274]
-        quote: Engineering
-  - predicate: mentions
-    object: teams/finance
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [252, 259]
-        quote: Finance
-  - predicate: mentions
-    object: tools/snowflake
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [182, 191]
-        quote: Snowflake
+        span: [195, 236]
+        quote: Ana Brito confirmed they own the process.
 ---
 
 # Quarterly close sync — 2024-02-25

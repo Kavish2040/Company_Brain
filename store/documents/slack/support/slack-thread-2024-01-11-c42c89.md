@@ -19,47 +19,29 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: bc569f795fec7d211dafb4c5ed13cd93
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 538e19fa9ac25253b42d9f814f55e746
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/ana-brito
+  - predicate: handoff_to
+    object: teams/engineering
     confidence: 0.9
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [2, 11]
-        quote: Ana Brito
-  - predicate: mentions
-    object: people/tom-whelan
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [87, 97]
-        quote: Tom Whelan
-  - predicate: mentions
-    object: people/zoe-ravel
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [192, 201]
-        quote: Zoë Ravel
+        span: [213, 289]
+        quote: Escalating this to Engineering — it's a Zendesk integration bug, not config.
   - predicate: mentions
     object: processes/onboarding
-    confidence: 0.9
+    confidence: 0.85
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [168, 187]
-        quote: Employee onboarding
+        span: [109, 188]
+        quote: This is the fourth ticket bounced back from Engineering on Employee onboarding.
   - predicate: mentions
     object: processes/refund-approval
     confidence: 0.9
@@ -67,26 +49,26 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [52, 67]
-        quote: Refund approval
+        span: [23, 83]
+        quote: Customer is asking about the Refund approval timeline again.
   - predicate: mentions
     object: teams/engineering
-    confidence: 0.9
+    confidence: 0.75
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [153, 164]
-        quote: Engineering
+        span: [109, 188]
+        quote: This is the fourth ticket bounced back from Engineering on Employee onboarding.
   - predicate: mentions
     object: tools/zendesk
-    confidence: 0.9
+    confidence: 0.85
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [253, 260]
-        quote: Zendesk
+        span: [213, 289]
+        quote: Escalating this to Engineering — it's a Zendesk integration bug, not config.
 ---
 
 **Ana Brito** (12:52): Customer is asking about the Refund approval timeline again.

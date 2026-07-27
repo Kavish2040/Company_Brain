@@ -16,41 +16,23 @@ normalizer:
   name: pdf
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 042f29d2eb94e9b0a5a0fc2f314b0e38
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: caf9cd3535ce659a4c66f5fd339e65af
   status: accepted
 relations:
   - predicate: mentions
-    object: people/sam-kaur
-    confidence: 0.9
+    object: teams/finance
+    confidence: 0.6
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [29, 37]
-        quote: Sam Kaur
-  - predicate: mentions
+        span: [38, 51]
+        quote: 'Team: Finance'
+  - predicate: owns
     object: processes/vendor-renewal
     confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [0, 14]
-        quote: Vendor renewal
-  - predicate: mentions
-    object: teams/finance
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [44, 51]
-        quote: Finance
-  - predicate: owns
-    object: people/sam-kaur
-    confidence: 0.75
     provenance: llm
     status: proposed
     evidence:

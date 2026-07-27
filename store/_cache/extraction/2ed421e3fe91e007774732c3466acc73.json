@@ -1,0 +1,77 @@
+{
+  "edges": [
+    {
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "the NetSuite step is blocked on your team",
+          "span": [
+            197,
+            238
+          ]
+        }
+      ],
+      "object": "tools/netsuite",
+      "predicate": "depends_on",
+      "provenance": "llm",
+      "status": "proposed"
+    },
+    {
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "the NetSuite step is blocked on your team",
+          "span": [
+            197,
+            238
+          ]
+        }
+      ],
+      "object": "people/priya-raman",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed"
+    },
+    {
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Following up on quarterly close.",
+          "span": [
+            131,
+            163
+          ]
+        }
+      ],
+      "object": "processes/quarterly-close",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed"
+    },
+    {
+      "confidence": 0.95,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Ana Brito owns this process, but the NetSuite step is blocked on your team.",
+          "span": [
+            164,
+            239
+          ]
+        }
+      ],
+      "object": "people/ana-brito",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v1",
+  "unresolved": [
+    "your team (unspecified team, possibly Finance)"
+  ]
+}

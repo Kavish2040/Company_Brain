@@ -16,92 +16,47 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 9d558f989d31a221e47d08033536be17
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: d354829934b99edf77d69d68737581cc
   status: accepted
 relations:
+  - predicate: depends_on
+    object: tools/pagerduty
+    confidence: 0.85
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [113, 184]
+        quote: "Sam Kelly raised that capacity planning is still blocked on\n PagerDuty."
+  - predicate: handoff_to
+    object: teams/engineering
+    confidence: 0.5
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [237, 321]
+        quote: "Handoff from Finance to Engineering is unclear; two\n tickets bounced back last week."
   - predicate: mentions
     object: people/nadia-hassan
-    confidence: 0.9
+    confidence: 0.8
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [87, 99]
-        quote: Nadia Hassan
-  - predicate: mentions
-    object: people/owen-fitz
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [187, 202]
-        quote: Owen Fitzgerald
-  - predicate: mentions
-    object: people/sam-kaur
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [65, 73]
-        quote: Sam Kaur
-  - predicate: mentions
-    object: people/sam-kelly
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [54, 63]
-        quote: Sam Kelly
-  - predicate: mentions
-    object: people/tom-whelan
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [75, 85]
-        quote: Tom Whelan
-  - predicate: mentions
+        span: [337, 383]
+        quote: Nadia Hassan to document the handoff boundary.
+  - predicate: owns
     object: processes/capacity-planning
-    confidence: 0.9
+    confidence: 0.75
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [2, 19]
-        quote: Capacity planning
-  - predicate: mentions
-    object: teams/engineering
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [261, 272]
-        quote: Engineering
-  - predicate: mentions
-    object: teams/finance
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [250, 257]
-        quote: Finance
-  - predicate: mentions
-    object: tools/pagerduty
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [174, 183]
-        quote: PagerDuty
+        span: [187, 234]
+        quote: Owen Fitzgerald confirmed they own the process.
 ---
 
 # Capacity planning sync — 2024-01-24

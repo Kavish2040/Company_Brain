@@ -1,0 +1,60 @@
+{
+  "edges": [
+    {
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "the Snowflake step is blocked on your team",
+          "span": [
+            194,
+            236
+          ]
+        }
+      ],
+      "object": "tools/snowflake",
+      "predicate": "depends_on",
+      "provenance": "llm",
+      "status": "proposed"
+    },
+    {
+      "confidence": 0.5,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Can you confirm by Friday?",
+          "span": [
+            239,
+            265
+          ]
+        }
+      ],
+      "object": "people/dev-oyelaran",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed"
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Mei Tanaka owns this process, but the Snowflake step is blocked on your team.",
+          "span": [
+            160,
+            237
+          ]
+        }
+      ],
+      "object": "people/mei-tanaka",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v1",
+  "unresolved": [
+    "your team"
+  ]
+}

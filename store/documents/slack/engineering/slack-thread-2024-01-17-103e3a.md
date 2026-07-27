@@ -19,20 +19,20 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: dafeaa17069ea339713becbe7c32496e
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 977f154769b4e9a7e7cbf85843b8fa3a
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/priya-raman
-    confidence: 0.9
+  - predicate: handoff_to
+    object: teams/support
+    confidence: 0.95
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [2, 13]
-        quote: Priya Raman
+        span: [109, 193]
+        quote: Handing the Employee onboarding ticket over to Support, they own the customer comms.
   - predicate: mentions
     object: processes/onboarding
     confidence: 0.9
@@ -40,8 +40,17 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [121, 140]
-        quote: Employee onboarding
+        span: [109, 193]
+        quote: Handing the Employee onboarding ticket over to Support, they own the customer comms.
+  - predicate: mentions
+    object: processes/vendor-renewal
+    confidence: 0.55
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [25, 82]
+        quote: Can someone from Finance confirm the Linear renewal date?
   - predicate: mentions
     object: teams/finance
     confidence: 0.9
@@ -49,17 +58,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [42, 49]
-        quote: Finance
-  - predicate: mentions
-    object: teams/support
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [156, 163]
-        quote: Support
+        span: [25, 82]
+        quote: Can someone from Finance confirm the Linear renewal date?
   - predicate: mentions
     object: tools/linear
     confidence: 0.9
@@ -67,8 +67,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [62, 68]
-        quote: Linear
+        span: [25, 82]
+        quote: Can someone from Finance confirm the Linear renewal date?
 ---
 
 **Priya Raman** (09:29): Can someone from Finance confirm the Linear renewal date?

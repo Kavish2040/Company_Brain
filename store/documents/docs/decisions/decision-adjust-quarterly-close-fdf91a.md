@@ -16,38 +16,20 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 9c3260e788374b88532c6c2df19216b0
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 9aeae9f4fdbf3b112529f2b5e377d074
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/ana-brito
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [73, 82]
-        quote: Ana Brito
-  - predicate: mentions
-    object: processes/quarterly-close
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [19, 34]
-        quote: quarterly close
-  - predicate: mentions
+  - predicate: supersedes
     object: teams/finance
-    confidence: 0.9
+    confidence: 0.6
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [355, 362]
-        quote: Finance
+        span: [303, 373]
+        quote: The previous informal arrangement documented in the Finance team page.
 ---
 
 # Decision: adjust quarterly close

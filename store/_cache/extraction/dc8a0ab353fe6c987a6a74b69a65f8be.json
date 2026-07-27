@@ -1,0 +1,24 @@
+{
+  "edges": [
+    {
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Mei Tanaka confirmed they own the process.",
+          "span": [
+            200,
+            242
+          ]
+        }
+      ],
+      "object": "processes/data-request",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v1",
+  "unresolved": []
+}

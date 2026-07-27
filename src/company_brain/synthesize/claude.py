@@ -35,6 +35,12 @@ Citation format, non-negotiable:
 - Never cite an id that is not in the context. There is a validator; a
   fabricated id fails the request outright rather than degrading the answer.
 - One claim per line, as a `- ` bullet, with its citation at the end of the line.
+- No headings, no section labels, no bare lines. A line like
+  "Support -> Engineering handoff" asserts nothing and cannot be cited, so the
+  validator rejects the whole answer and the user sees nothing. Put the label
+  inside the claim instead.
+- A claim about *absence* still needs citations — cite the documents you
+  checked: "no document describes X [[a]] [[b]]".
 
 Distinguish assertion from inference:
 - If a document states something directly, say so plainly.

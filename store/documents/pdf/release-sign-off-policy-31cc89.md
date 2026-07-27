@@ -16,20 +16,11 @@ normalizer:
   name: pdf
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 19c2ccff8b6c206b113ca3f78f3fc06b
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: dadc0484a40b17006b7d54d8af829030
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/priya-raman
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [31, 42]
-        quote: Priya Raman
   - predicate: mentions
     object: processes/release-signoff
     confidence: 0.9
@@ -37,26 +28,26 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [0, 16]
-        quote: Release sign-off
-  - predicate: mentions
-    object: teams/engineering
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [49, 60]
-        quote: Engineering
+        span: [61, 120]
+        quote: This policy governs release sign-off at Meridian Logistics.
   - predicate: owns
     object: people/priya-raman
-    confidence: 0.75
+    confidence: 0.98
     provenance: llm
     status: proposed
     evidence:
       - node: self
         span: [24, 42]
         quote: 'Owner: Priya Raman'
+  - predicate: owns
+    object: teams/engineering
+    confidence: 0.85
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [43, 60]
+        quote: 'Team: Engineering'
 ---
 
 Release sign-off Policy

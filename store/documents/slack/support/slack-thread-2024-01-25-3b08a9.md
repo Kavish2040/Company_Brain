@@ -19,83 +19,56 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: f8d09b2da2657378f7797bd4a8a26734
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: c7e65ea4cb3608e38d09199dd8b19797
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/nadia-hassan
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [111, 123]
-        quote: Nadia Hassan
-  - predicate: mentions
-    object: people/owen-fitz
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 17]
-        quote: Owen Fitzgerald
-  - predicate: mentions
-    object: people/tom-whelan
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [199, 209]
-        quote: Tom Whelan
-  - predicate: mentions
-    object: processes/incident-response
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [177, 194]
-        quote: Incident response
-  - predicate: mentions
+  - predicate: handoff_to
     object: teams/engineering
     confidence: 0.9
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [48, 59]
-        quote: Engineering
-  - predicate: mentions
+        span: [29, 107]
+        quote: Escalating this to Engineering — it's a Snowflake integration bug, not config.
+  - predicate: handoff_to
     object: teams/finance
     confidence: 0.9
     provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [135, 195]
+        quote: Looping in Finance for the refund side of Incident response.
+  - predicate: mentions
+    object: processes/incident-response
+    confidence: 0.85
+    provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [146, 153]
-        quote: Finance
+        span: [135, 195]
+        quote: Looping in Finance for the refund side of Incident response.
   - predicate: mentions
     object: tools/pagerduty
-    confidence: 0.9
+    confidence: 0.85
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [261, 270]
-        quote: PagerDuty
+        span: [254, 299]
+        quote: it's a PagerDuty integration bug, not config.
   - predicate: mentions
     object: tools/snowflake
-    confidence: 0.9
+    confidence: 0.85
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [69, 78]
-        quote: Snowflake
+        span: [62, 107]
+        quote: it's a Snowflake integration bug, not config.
 ---
 
 **Owen Fitzgerald** (09:09): Escalating this to Engineering — it's a Snowflake integration bug, not config.

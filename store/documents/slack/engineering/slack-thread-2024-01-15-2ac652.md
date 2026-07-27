@@ -19,56 +19,38 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: fb2605f346d39f007fcdc08ea01aced8
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: ff8687483f9c79b60a4f6bbc7c03c13e
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/priya-raman
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 13]
-        quote: Priya Raman
-  - predicate: mentions
-    object: people/sam-kelly
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [213, 222]
-        quote: Sam Kelly
-  - predicate: mentions
-    object: processes/quarterly-close
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [148, 163]
-        quote: Quarterly close
-  - predicate: mentions
+  - predicate: depends_on
     object: processes/release-signoff
-    confidence: 0.9
+    confidence: 0.85
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [37, 53]
-        quote: Release sign-off
-  - predicate: mentions
+        span: [133, 209]
+        quote: Deploy for the Quarterly close change is queued behind the release sign-off.
+  - predicate: handoff_to
     object: teams/support
     confidence: 0.9
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [69, 76]
-        quote: Support
+        span: [25, 106]
+        quote: Handing the Release sign-off ticket over to Support, they own the customer comms.
+  - predicate: mentions
+    object: processes/quarterly-close
+    confidence: 0.7
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [133, 209]
+        quote: Deploy for the Quarterly close change is queued behind the release sign-off.
   - predicate: mentions
     object: tools/netsuite
     confidence: 0.9
@@ -76,8 +58,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [238, 246]
-        quote: NetSuite
+        span: [234, 298]
+        quote: The NetSuite alert fired again overnight — third time this week.
 ---
 
 **Priya Raman** (12:58): Handing the Release sign-off ticket over to Support, they own the customer comms.

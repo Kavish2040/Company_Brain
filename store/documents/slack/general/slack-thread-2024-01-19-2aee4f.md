@@ -19,38 +19,29 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 50bcb26c673b1560422ae7332add83d9
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 0d0cb751e9b941cab3b0556f18fda0f6
   status: accepted
 relations:
   - predicate: mentions
-    object: people/nadia-hassan
-    confidence: 0.9
+    object: processes/onboarding
+    confidence: 0.7
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [2, 14]
-        quote: Nadia Hassan
-  - predicate: mentions
-    object: people/owen-fitz
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [80, 95]
-        quote: Owen Fitzgerald
+        span: [47, 76]
+        quote: Onboarding docs are in Drive.
   - predicate: mentions
     object: processes/quarterly-close
-    confidence: 0.9
+    confidence: 0.8
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [121, 136]
-        quote: Quarterly close
+        span: [107, 157]
+        quote: Reminder that Quarterly close kicks off next week.
 ---
 
 **Nadia Hassan** (14:20): Welcome to the team! Onboarding docs are in Drive.

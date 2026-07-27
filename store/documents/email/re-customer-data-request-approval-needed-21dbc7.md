@@ -22,9 +22,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: c30ccec9e3163799e532f2fd54fd2a2f
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 86f92bd80fcb00d402c455c8bbbe9f45
   status: accepted
 relations:
   - predicate: authored_by
@@ -37,51 +37,44 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
+  - predicate: depends_on
+    object: tools/datadog
+    confidence: 0.75
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [164, 239]
+        quote: Mei Tanaka owns this process, but the Datadog step is blocked on your team.
   - predicate: mentions
+    object: people/priya-raman
+    confidence: 0.7
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [114, 123]
+        quote: Hi Priya,
+  - predicate: mentions
+    object: people/tom-whelan
+    confidence: 0.6
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [269, 287]
+        quote: 'Thanks,
+
+          Tom Whelan'
+  - predicate: owns
     object: people/mei-tanaka
     confidence: 0.9
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [164, 174]
-        quote: Mei Tanaka
-  - predicate: mentions
-    object: people/priya-raman
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [53, 75]
-        quote: priya@meridian.example
-  - predicate: mentions
-    object: people/tom-whelan
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [22, 42]
-        quote: tom@meridian.example
-  - predicate: mentions
-    object: processes/data-request
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [141, 162]
-        quote: customer data request
-  - predicate: mentions
-    object: tools/datadog
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [202, 209]
-        quote: Datadog
+        span: [164, 239]
+        quote: Mei Tanaka owns this process, but the Datadog step is blocked on your team.
 ---
 
 **From:** Tom Whelan <tom@meridian.example>

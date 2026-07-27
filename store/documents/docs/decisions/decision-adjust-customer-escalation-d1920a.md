@@ -16,38 +16,29 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 4d96210c073569d3a671f63266d173d2
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 5b18c275e1bb9b1d1055f2ae012f7f57
   status: accepted
 relations:
   - predicate: mentions
-    object: people/dev-oyelaran
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [77, 89]
-        quote: Dev Oyelaran
-  - predicate: mentions
-    object: processes/customer-escalation
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [19, 38]
-        quote: customer escalation
-  - predicate: mentions
     object: teams/support
-    confidence: 0.9
+    confidence: 0.75
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [373, 380]
-        quote: Support
+        span: [321, 391]
+        quote: The previous informal arrangement documented in the Support team page.
+  - predicate: supersedes
+    object: processes/customer-escalation
+    confidence: 0.7
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [321, 391]
+        quote: The previous informal arrangement documented in the Support team page.
 ---
 
 # Decision: adjust customer escalation

@@ -19,92 +19,74 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 3fa876ec02799a0d8bb24e74698b603b
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 0bb5085007f767bdaddedbe2021755c5
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/priya-raman
-    confidence: 0.9
+  - predicate: handoff_to
+    object: teams/engineering
+    confidence: 0.85
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [106, 117]
-        quote: Priya Raman
-  - predicate: mentions
-    object: people/sam-kelly
-    confidence: 0.9
+        span: [212, 290]
+        quote: Escalating this to Engineering — it's a Snowflake integration bug, not config.
+  - predicate: handoff_to
+    object: teams/finance
+    confidence: 0.85
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [294, 303]
-        quote: Sam Kelly
-  - predicate: mentions
-    object: people/zoe-ravel
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 11]
-        quote: Zoë Ravel
+        span: [129, 187]
+        quote: Looping in Finance for the refund side of Refund approval.
   - predicate: mentions
     object: processes/onboarding
-    confidence: 0.9
+    confidence: 0.8
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [82, 101]
-        quote: Employee onboarding
+        span: [23, 102]
+        quote: This is the fourth ticket bounced back from Engineering on Employee onboarding.
   - predicate: mentions
     object: processes/refund-approval
-    confidence: 0.9
+    confidence: 0.8
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [171, 186]
-        quote: Refund approval
+        span: [129, 187]
+        quote: Looping in Finance for the refund side of Refund approval.
   - predicate: mentions
     object: processes/vendor-renewal
-    confidence: 0.9
+    confidence: 0.8
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [357, 371]
-        quote: Vendor renewal
+        span: [315, 372]
+        quote: Looping in Finance for the refund side of Vendor renewal.
   - predicate: mentions
     object: teams/engineering
-    confidence: 0.9
+    confidence: 0.8
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [67, 78]
-        quote: Engineering
-  - predicate: mentions
-    object: teams/finance
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [140, 147]
-        quote: Finance
+        span: [23, 102]
+        quote: This is the fourth ticket bounced back from Engineering on Employee onboarding.
   - predicate: mentions
     object: tools/snowflake
-    confidence: 0.9
+    confidence: 0.8
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [252, 261]
-        quote: Snowflake
+        span: [212, 290]
+        quote: Escalating this to Engineering — it's a Snowflake integration bug, not config.
 ---
 
 **Zoë Ravel** (11:43): This is the fourth ticket bounced back from Engineering on Employee onboarding.

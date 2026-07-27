@@ -19,29 +19,11 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: f7936ccbe0761ff8a2ee228b787b6a1f
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 5e8af5cd4d1b18c58c95f23942754f31
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/mei-tanaka
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [109, 119]
-        quote: Mei Tanaka
-  - predicate: mentions
-    object: people/owen-fitz
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 17]
-        quote: Owen Fitzgerald
   - predicate: mentions
     object: processes/capacity-planning
     confidence: 0.9
@@ -49,8 +31,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [190, 207]
-        quote: Capacity planning
+        span: [131, 208]
+        quote: This is the fourth ticket bounced back from Engineering on Capacity planning.
   - predicate: mentions
     object: processes/onboarding
     confidence: 0.9
@@ -58,8 +40,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [293, 312]
-        quote: Employee onboarding
+        span: [234, 313]
+        quote: This is the fourth ticket bounced back from Engineering on Employee onboarding.
   - predicate: mentions
     object: processes/release-signoff
     confidence: 0.9
@@ -67,17 +49,17 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [88, 104]
-        quote: Release sign-off
+        span: [29, 105]
+        quote: This is the fourth ticket bounced back from Engineering on Release sign-off.
   - predicate: mentions
     object: teams/engineering
-    confidence: 0.9
+    confidence: 0.8
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [73, 84]
-        quote: Engineering
+        span: [29, 105]
+        quote: This is the fourth ticket bounced back from Engineering on Release sign-off.
 ---
 
 **Owen Fitzgerald** (11:30): This is the fourth ticket bounced back from Engineering on Release sign-off.

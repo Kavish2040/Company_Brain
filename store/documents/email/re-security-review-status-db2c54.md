@@ -22,9 +22,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: ce59d3211920556b9eda393c70157809
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: a7e5827734d2ac37013e05de7d789ae3
   status: accepted
 relations:
   - predicate: authored_by
@@ -37,42 +37,24 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
-  - predicate: mentions
-    object: people/mei-tanaka
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [53, 73]
-        quote: mei@meridian.example
-  - predicate: mentions
-    object: people/tom-whelan
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [22, 42]
-        quote: tom@meridian.example
-  - predicate: mentions
-    object: processes/security-review
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [137, 152]
-        quote: security review
-  - predicate: mentions
+  - predicate: depends_on
     object: tools/linear
-    confidence: 0.9
+    confidence: 0.8
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [192, 198]
-        quote: Linear
+        span: [188, 227]
+        quote: the Linear step is blocked on your team
+  - predicate: owns
+    object: processes/security-review
+    confidence: 0.95
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [154, 228]
+        quote: Tom Whelan owns this process, but the Linear step is blocked on your team.
 ---
 
 **From:** Tom Whelan <tom@meridian.example>

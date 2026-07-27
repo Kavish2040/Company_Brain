@@ -1,0 +1,75 @@
+{
+  "edges": [
+    {
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Zo\u00eb Ravel raised that release sign-off is still blocked on\n Zendesk.",
+          "span": [
+            115,
+            183
+          ]
+        }
+      ],
+      "object": "tools/zendesk",
+      "predicate": "depends_on",
+      "provenance": "llm",
+      "status": "proposed"
+    },
+    {
+      "confidence": 0.5,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Handoff from Engineering to Finance is unclear; two\n tickets bounced back last week.",
+          "span": [
+            232,
+            316
+          ]
+        }
+      ],
+      "object": "teams/finance",
+      "predicate": "handoff_to",
+      "provenance": "llm",
+      "status": "proposed"
+    },
+    {
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Zo\u00eb Ravel raised that release sign-off is still blocked on\n Zendesk.",
+          "span": [
+            115,
+            183
+          ]
+        }
+      ],
+      "object": "processes/release-signoff",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed"
+    },
+    {
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Priya Raman confirmed they own the process.",
+          "span": [
+            186,
+            229
+          ]
+        }
+      ],
+      "object": "processes/release-signoff",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v1",
+  "unresolved": []
+}

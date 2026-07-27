@@ -16,92 +16,29 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 07e878c276503944dc6fb54c4c0275a1
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 7e22c3f19e2d9743a80b1d8f50099d5f
   status: accepted
 relations:
   - predicate: mentions
-    object: people/ana-brito
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [54, 63]
-        quote: Ana Brito
-  - predicate: mentions
-    object: people/dev-oyelaran
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [65, 77]
-        quote: Dev Oyelaran
-  - predicate: mentions
-    object: people/nadia-hassan
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [90, 102]
-        quote: Nadia Hassan
-  - predicate: mentions
-    object: people/owen-fitz
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [189, 204]
-        quote: Owen Fitzgerald
-  - predicate: mentions
-    object: people/zoe-ravel
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [79, 88]
-        quote: Zoë Ravel
-  - predicate: mentions
     object: processes/incident-response
-    confidence: 0.9
+    confidence: 0.5
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [2, 19]
-        quote: Incident response
-  - predicate: mentions
-    object: teams/product
-    confidence: 0.9
+        span: [335, 381]
+        quote: Nadia Hassan to document the handoff boundary.
+  - predicate: owns
+    object: processes/incident-response
+    confidence: 0.7
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [263, 270]
-        quote: Product
-  - predicate: mentions
-    object: teams/support
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [252, 259]
-        quote: Support
-  - predicate: mentions
-    object: tools/netsuite
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [177, 185]
-        quote: NetSuite
+        span: [189, 236]
+        quote: Owen Fitzgerald confirmed they own the process.
 ---
 
 # Incident response sync — 2024-02-21

@@ -21,9 +21,9 @@ normalizer:
   name: docx
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 11d17378fec2a54cc8d0a094c18c2e62
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 492ee57be4daab1fcaa14509145b629d
   status: accepted
 relations:
   - predicate: authored_by
@@ -31,42 +31,24 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
-  - predicate: mentions
-    object: people/ana-brito
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [47, 67]
-        quote: ana@meridian.example
-  - predicate: mentions
-    object: processes/quarterly-close
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 17]
-        quote: Quarterly close
-  - predicate: mentions
-    object: teams/finance
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [83, 90]
-        quote: Finance
   - predicate: owns
     object: people/ana-brito
-    confidence: 0.75
+    confidence: 0.98
     provenance: llm
     status: proposed
     evidence:
       - node: self
-        span: [29, 46]
-        quote: 'Owner: Ana Brito'
+        span: [29, 68]
+        quote: 'Owner: Ana Brito (ana@meridian.example)'
+  - predicate: owns
+    object: teams/finance
+    confidence: 0.95
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [70, 90]
+        quote: 'Owning team: Finance'
 ---
 
 # Quarterly close — runbook

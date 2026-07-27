@@ -16,29 +16,38 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: ca639748485d0959f5dd5c26c77a5aa5
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 72ec83b3d4285451481f51b7e5312874
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/dev-oyelaran
+  - predicate: depends_on
+    object: tools/snowflake
     confidence: 0.9
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [192, 204]
-        quote: Dev Oyelaran
+        span: [115, 189]
+        quote: "Tom Whelan raised that customer escalation is still blocked on\n Snowflake."
+  - predicate: handoff_to
+    object: teams/product
+    confidence: 0.7
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [239, 323]
+        quote: "Handoff from Engineering to Product is unclear; two\n tickets bounced back last week."
   - predicate: mentions
     object: people/priya-raman
-    confidence: 0.9
+    confidence: 0.7
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [68, 79]
-        quote: Priya Raman
+        span: [41, 101]
+        quote: '**Attendees:** Tom Whelan, Priya Raman, Zoë Ravel, Sam Kelly'
   - predicate: mentions
     object: people/sam-kelly
     confidence: 0.9
@@ -46,62 +55,35 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [92, 101]
-        quote: Sam Kelly
+        span: [339, 382]
+        quote: Sam Kelly to document the handoff boundary.
   - predicate: mentions
     object: people/tom-whelan
-    confidence: 0.9
+    confidence: 0.95
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [56, 66]
-        quote: Tom Whelan
+        span: [115, 189]
+        quote: "Tom Whelan raised that customer escalation is still blocked on\n Snowflake."
   - predicate: mentions
     object: people/zoe-ravel
-    confidence: 0.9
+    confidence: 0.7
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [81, 90]
-        quote: Zoë Ravel
-  - predicate: mentions
+        span: [41, 101]
+        quote: '**Attendees:** Tom Whelan, Priya Raman, Zoë Ravel, Sam Kelly'
+  - predicate: owns
     object: processes/customer-escalation
-    confidence: 0.9
+    confidence: 0.85
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [2, 21]
-        quote: Customer escalation
-  - predicate: mentions
-    object: teams/engineering
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [252, 263]
-        quote: Engineering
-  - predicate: mentions
-    object: teams/product
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [267, 274]
-        quote: Product
-  - predicate: mentions
-    object: tools/snowflake
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [179, 188]
-        quote: Snowflake
+        span: [192, 236]
+        quote: Dev Oyelaran confirmed they own the process.
 ---
 
 # Customer escalation sync — 2024-01-14

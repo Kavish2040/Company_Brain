@@ -19,20 +19,10 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: e0f59c5a2e632870614b971af160f4ae
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: b8f648fd4043be492b5be1d6f3a0cb84
   status: accepted
-relations:
-  - predicate: mentions
-    object: people/priya-raman
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 13]
-        quote: Priya Raman
 ---
 
 **Priya Raman** (12:48): Let's keep the comp discussion in this channel only.

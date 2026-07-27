@@ -16,11 +16,20 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: db523d2a5667a1a9f60b723cdacc7d44
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 7df7d03ccf9ba1e814e3b9522dc42b27
   status: accepted
 relations:
+  - predicate: depends_on
+    object: tools/pagerduty
+    confidence: 0.85
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [120, 195]
+        quote: "Owen Fitzgerald raised that security review is still blocked on\n PagerDuty."
   - predicate: mentions
     object: people/dev-oyelaran
     confidence: 0.9
@@ -28,8 +37,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [94, 106]
-        quote: Dev Oyelaran
+        span: [347, 393]
+        quote: Dev Oyelaran to document the handoff boundary.
   - predicate: mentions
     object: people/owen-fitz
     confidence: 0.9
@@ -37,13 +46,13 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [52, 67]
-        quote: Owen Fitzgerald
+        span: [120, 195]
+        quote: "Owen Fitzgerald raised that security review is still blocked on\n PagerDuty."
   - predicate: mentions
     object: people/priya-raman
-    confidence: 0.9
+    confidence: 0.6
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
         span: [81, 92]
@@ -55,35 +64,26 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [69, 79]
-        quote: Tom Whelan
-  - predicate: mentions
-    object: processes/security-review
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 17]
-        quote: Security review
+        span: [198, 240]
+        quote: Tom Whelan confirmed they own the process.
   - predicate: mentions
     object: teams/engineering
-    confidence: 0.9
+    confidence: 0.6
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [256, 267]
-        quote: Engineering
-  - predicate: mentions
-    object: tools/pagerduty
-    confidence: 0.9
+        span: [243, 331]
+        quote: "Handoff from Engineering to Engineering is unclear; two\n tickets bounced back last week."
+  - predicate: owns
+    object: processes/security-review
+    confidence: 0.75
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [185, 194]
-        quote: PagerDuty
+        span: [198, 240]
+        quote: Tom Whelan confirmed they own the process.
 ---
 
 # Security review sync — 2024-01-22

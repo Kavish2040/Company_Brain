@@ -16,38 +16,42 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 771047b317747fe2c17592ea69424cd0
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 320b521a17952bdbabee07209f6036df
   status: accepted
 relations:
-  - predicate: mentions
+  - predicate: owns
     object: people/owen-fitz
-    confidence: 0.9
+    confidence: 0.5
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [75, 90]
-        quote: Owen Fitzgerald
-  - predicate: mentions
+        span: [199, 304]
+        quote: 'Owen Fitzgerald will own capacity planning going forward, and the
+
+          sign-off step moves to the owning team.'
+  - predicate: owns
     object: processes/capacity-planning
-    confidence: 0.9
+    confidence: 0.95
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [19, 36]
-        quote: capacity planning
-  - predicate: mentions
+        span: [199, 304]
+        quote: 'Owen Fitzgerald will own capacity planning going forward, and the
+
+          sign-off step moves to the owning team.'
+  - predicate: supersedes
     object: teams/engineering
-    confidence: 0.9
+    confidence: 0.7
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [373, 384]
-        quote: Engineering
+        span: [321, 395]
+        quote: The previous informal arrangement documented in the Engineering team page.
 ---
 
 # Decision: adjust capacity planning

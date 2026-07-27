@@ -19,29 +19,10 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: ee68d0eb27759e6d25c82fc7f6140064
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 5690a60ef27612c3d2d4e483d394e0dc
   status: accepted
-relations:
-  - predicate: mentions
-    object: people/priya-raman
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 13]
-        quote: Priya Raman
-  - predicate: mentions
-    object: people/sam-kaur
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [81, 89]
-        quote: Sam Kaur
 ---
 
 **Priya Raman** (13:39): Let's keep the comp discussion in this channel only.

@@ -19,38 +19,20 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 448b87857c0072a53e93d3e315b762a9
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: fe51c4d7b2153d933de54fb7ed8b0f00
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/ana-brito
+  - predicate: handoff_to
+    object: teams/finance
     confidence: 0.9
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [91, 100]
-        quote: Ana Brito
-  - predicate: mentions
-    object: people/nadia-hassan
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [178, 190]
-        quote: Nadia Hassan
-  - predicate: mentions
-    object: people/zoe-ravel
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 11]
-        quote: Zoë Ravel
+        span: [23, 87]
+        quote: Looping in Finance for the refund side of Customer data request.
   - predicate: mentions
     object: processes/data-request
     confidence: 0.9
@@ -58,8 +40,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [65, 86]
-        quote: Customer data request
+        span: [23, 87]
+        quote: Looping in Finance for the refund side of Customer data request.
   - predicate: mentions
     object: processes/onboarding
     confidence: 0.9
@@ -67,26 +49,26 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [154, 173]
-        quote: Employee onboarding
+        span: [112, 174]
+        quote: Looping in Finance for the refund side of Employee onboarding.
+  - predicate: mentions
+    object: processes/refund-approval
+    confidence: 0.65
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [23, 87]
+        quote: Looping in Finance for the refund side of Customer data request.
   - predicate: mentions
     object: teams/engineering
-    confidence: 0.9
+    confidence: 0.8
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [246, 257]
-        quote: Engineering
-  - predicate: mentions
-    object: teams/finance
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [34, 41]
-        quote: Finance
+        span: [202, 283]
+        quote: This is the fourth ticket bounced back from Engineering on Customer data request.
 ---
 
 **Zoë Ravel** (12:22): Looping in Finance for the refund side of Customer data request.

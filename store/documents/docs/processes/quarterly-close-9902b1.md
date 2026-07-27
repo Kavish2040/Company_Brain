@@ -16,83 +16,47 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 7197f2dfccdd18395078477aba9d6228
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 902814b5ecf4c421c14bfb6218ac5669
   status: accepted
 relations:
   - predicate: handoff_to
     object: teams/engineering
-    confidence: 0.6
+    confidence: 0.8
     provenance: llm
     status: proposed
     evidence:
       - node: self
-        span: [516, 548]
-        quote: Support hands off to Engineering
+        span: [516, 589]
+        quote: Support hands off to Engineering when the root cause is a product defect.
   - predicate: handoff_to
     object: teams/finance
-    confidence: 0.6
+    confidence: 0.8
     provenance: llm
     status: proposed
     evidence:
       - node: self
-        span: [451, 479]
-        quote: Finance hands off to Finance
+        span: [451, 513]
+        quote: Finance hands off to Finance when a cost approval is required.
+  - predicate: handoff_to
+    object: teams/support
+    confidence: 0.8
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [516, 589]
+        quote: Support hands off to Engineering when the root cause is a product defect.
   - predicate: mentions
     object: people/ana-brito
-    confidence: 0.9
+    confidence: 0.75
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [41, 61]
-        quote: ana@meridian.example
-  - predicate: mentions
-    object: processes/quarterly-close
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 17]
-        quote: Quarterly close
-  - predicate: mentions
-    object: teams/engineering
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [537, 548]
-        quote: Engineering
-  - predicate: mentions
-    object: teams/finance
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [73, 80]
-        quote: Finance
-  - predicate: mentions
-    object: teams/product
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [574, 581]
-        quote: product
-  - predicate: mentions
-    object: teams/support
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [516, 523]
-        quote: Support
+        span: [385, 434]
+        quote: Ana Brito signs off before the request is closed.
   - predicate: mentions
     object: tools/datadog
     confidence: 0.9
@@ -100,8 +64,26 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [249, 256]
-        quote: Datadog
+        span: [228, 257]
+        quote: Request is raised in Datadog.
+  - predicate: owns
+    object: people/ana-brito
+    confidence: 0.95
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [19, 62]
+        quote: '**Owner:** Ana Brito (ana@meridian.example)'
+  - predicate: owns
+    object: teams/finance
+    confidence: 0.85
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [63, 80]
+        quote: '**Team:** Finance'
 ---
 
 # Quarterly close

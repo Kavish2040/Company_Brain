@@ -16,20 +16,11 @@ normalizer:
   name: pdf
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 8de7328eccf8229c02fbe25bca13ab01
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: e071d33cfef35199fcc10b5bd6371683
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/owen-fitz
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [32, 47]
-        quote: Owen Fitzgerald
   - predicate: mentions
     object: processes/incident-response
     confidence: 0.9
@@ -37,26 +28,26 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [0, 17]
-        quote: Incident response
-  - predicate: mentions
-    object: teams/engineering
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [54, 65]
-        quote: Engineering
+        span: [66, 126]
+        quote: This policy governs incident response at Meridian Logistics.
   - predicate: owns
     object: people/owen-fitz
-    confidence: 0.75
+    confidence: 0.95
     provenance: llm
     status: proposed
     evidence:
       - node: self
         span: [25, 47]
         quote: 'Owner: Owen Fitzgerald'
+  - predicate: owns
+    object: teams/engineering
+    confidence: 0.85
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [48, 65]
+        quote: 'Team: Engineering'
 ---
 
 Incident response Policy

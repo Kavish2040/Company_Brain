@@ -16,38 +16,20 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 91c0a051230c2ab389ab9007a48776ba
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 919976858889988ab8cca27c07cfc2c1
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/mei-tanaka
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [79, 89]
-        quote: Mei Tanaka
-  - predicate: mentions
-    object: processes/data-request
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [19, 40]
-        quote: customer data request
-  - predicate: mentions
+  - predicate: supersedes
     object: teams/support
-    confidence: 0.9
+    confidence: 0.6
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [375, 382]
-        quote: Support
+        span: [323, 393]
+        quote: The previous informal arrangement documented in the Support team page.
 ---
 
 # Decision: adjust customer data request

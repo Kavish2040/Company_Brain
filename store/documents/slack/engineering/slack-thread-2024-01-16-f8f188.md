@@ -19,74 +19,47 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 31041a5e189ff37badcb7aba6d383ad6
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: f1685e0830e72fb397dfe0d5f4b62d81
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/ana-brito
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 11]
-        quote: Ana Brito
-  - predicate: mentions
-    object: people/priya-raman
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [192, 203]
-        quote: Priya Raman
-  - predicate: mentions
-    object: processes/customer-escalation
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [227, 246]
-        quote: Customer escalation
-  - predicate: mentions
-    object: processes/quarterly-close
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [38, 53]
-        quote: Quarterly close
-  - predicate: mentions
+  - predicate: depends_on
     object: processes/release-signoff
     confidence: 0.9
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [82, 98]
-        quote: release sign-off
-  - predicate: mentions
+        span: [23, 99]
+        quote: Deploy for the Quarterly close change is queued behind the release sign-off.
+  - predicate: handoff_to
     object: teams/support
     confidence: 0.9
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [262, 269]
-        quote: Support
+        span: [215, 299]
+        quote: Handing the Customer escalation ticket over to Support, they own the customer comms.
   - predicate: mentions
     object: tools/netsuite
-    confidence: 0.9
+    confidence: 0.85
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [128, 136]
-        quote: NetSuite
+        span: [124, 188]
+        quote: The NetSuite alert fired again overnight — third time this week.
+  - predicate: owns
+    object: processes/customer-escalation
+    confidence: 0.7
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [215, 299]
+        quote: Handing the Customer escalation ticket over to Support, they own the customer comms.
 ---
 
 **Ana Brito** (14:44): Deploy for the Quarterly close change is queued behind the release sign-off.

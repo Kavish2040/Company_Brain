@@ -1,0 +1,26 @@
+{
+  "edges": [
+    {
+      "confidence": 0.98,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Owner: Priya Raman (priya@meridian.example)",
+          "span": [
+            30,
+            73
+          ]
+        }
+      ],
+      "object": "processes/release-signoff",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v1",
+  "unresolved": [
+    "Cross-team handoff if root cause sits elsewhere"
+  ]
+}

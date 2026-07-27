@@ -16,92 +16,47 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: fbd653f039f9d7f967875dbd5203d605
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: b7ae36ac65b16f8e04f517c2745228d1
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/ana-brito
-    confidence: 0.9
+  - predicate: depends_on
+    object: tools/zendesk
+    confidence: 0.75
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [75, 84]
-        quote: Ana Brito
-  - predicate: mentions
-    object: people/owen-fitz
-    confidence: 0.9
+        span: [115, 183]
+        quote: "Zoë Ravel raised that release sign-off is still blocked on\n Zendesk."
+  - predicate: handoff_to
+    object: teams/finance
+    confidence: 0.5
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [86, 101]
-        quote: Owen Fitzgerald
-  - predicate: mentions
-    object: people/priya-raman
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [186, 197]
-        quote: Priya Raman
-  - predicate: mentions
-    object: people/sam-kelly
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [64, 73]
-        quote: Sam Kelly
-  - predicate: mentions
-    object: people/zoe-ravel
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [53, 62]
-        quote: Zoë Ravel
+        span: [232, 316]
+        quote: "Handoff from Engineering to Finance is unclear; two\n tickets bounced back last week."
   - predicate: mentions
     object: processes/release-signoff
-    confidence: 0.9
+    confidence: 0.8
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [2, 18]
-        quote: Release sign-off
-  - predicate: mentions
-    object: teams/engineering
-    confidence: 0.9
+        span: [115, 183]
+        quote: "Zoë Ravel raised that release sign-off is still blocked on\n Zendesk."
+  - predicate: owns
+    object: processes/release-signoff
+    confidence: 0.85
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [245, 256]
-        quote: Engineering
-  - predicate: mentions
-    object: teams/finance
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [260, 267]
-        quote: Finance
-  - predicate: mentions
-    object: tools/zendesk
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [175, 182]
-        quote: Zendesk
+        span: [186, 229]
+        quote: Priya Raman confirmed they own the process.
 ---
 
 # Release sign-off sync — 2024-01-18

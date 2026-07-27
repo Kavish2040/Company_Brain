@@ -16,38 +16,51 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 7b098d6d1d60c421c9b8809081f9e96e
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 4d5c9b9dd3ade070c357bf94173ada05
   status: accepted
 relations:
   - predicate: mentions
-    object: people/sam-kaur
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [72, 80]
-        quote: Sam Kaur
-  - predicate: mentions
-    object: processes/vendor-renewal
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [19, 33]
-        quote: vendor renewal
-  - predicate: mentions
     object: teams/finance
-    confidence: 0.9
+    confidence: 0.8
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [350, 357]
-        quote: Finance
+        span: [298, 368]
+        quote: The previous informal arrangement documented in the Finance team page.
+  - predicate: owns
+    object: people/sam-kaur
+    confidence: 0.97
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [186, 281]
+        quote: 'Sam Kaur will own vendor renewal going forward, and the
+
+          sign-off step moves to the owning team.'
+  - predicate: owns
+    object: processes/vendor-renewal
+    confidence: 0.95
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [186, 281]
+        quote: 'Sam Kaur will own vendor renewal going forward, and the
+
+          sign-off step moves to the owning team.'
+  - predicate: supersedes
+    object: processes/vendor-renewal
+    confidence: 0.6
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [298, 368]
+        quote: The previous informal arrangement documented in the Finance team page.
 ---
 
 # Decision: adjust vendor renewal

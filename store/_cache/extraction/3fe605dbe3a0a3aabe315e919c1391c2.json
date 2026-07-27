@@ -1,0 +1,58 @@
+{
+  "edges": [
+    {
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Deploy for the Vendor renewal change is queued behind the release sign-off.",
+          "span": [
+            24,
+            99
+          ]
+        }
+      ],
+      "object": "processes/release-signoff",
+      "predicate": "depends_on",
+      "provenance": "llm",
+      "status": "proposed"
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Deploy for the Vendor renewal change is queued behind the release sign-off.",
+          "span": [
+            24,
+            99
+          ]
+        }
+      ],
+      "object": "processes/vendor-renewal",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted"
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "The Linear alert fired again overnight \u2014 third time this week.",
+          "span": [
+            125,
+            187
+          ]
+        }
+      ],
+      "object": "tools/linear",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v1",
+  "unresolved": []
+}

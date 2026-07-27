@@ -16,83 +16,60 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 54f88c68bdabb13c007aa4009acfd40a
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 95c7c1f4c34163ac730fb3d143c92fff
   status: accepted
 relations:
   - predicate: handoff_to
     object: teams/engineering
-    confidence: 0.6
+    confidence: 0.9
     provenance: llm
     status: proposed
     evidence:
       - node: self
-        span: [518, 550]
-        quote: Support hands off to Engineering
+        span: [518, 591]
+        quote: Support hands off to Engineering when the root cause is a product defect.
   - predicate: handoff_to
     object: teams/finance
-    confidence: 0.6
+    confidence: 0.7
     provenance: llm
     status: proposed
     evidence:
       - node: self
-        span: [453, 481]
-        quote: Finance hands off to Finance
-  - predicate: mentions
-    object: people/ana-brito
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [41, 61]
-        quote: ana@meridian.example
-  - predicate: mentions
-    object: processes/refund-approval
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 17]
-        quote: Refund approval
+        span: [453, 515]
+        quote: Finance hands off to Finance when a cost approval is required.
   - predicate: mentions
     object: teams/engineering
-    confidence: 0.9
+    confidence: 0.75
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [539, 550]
-        quote: Engineering
+        span: [610, 712]
+        quote: 'Tickets frequently bounce between Support and Engineering when ownership of the
+
+          root cause is unclear.'
   - predicate: mentions
     object: teams/finance
-    confidence: 0.9
+    confidence: 0.85
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [73, 80]
-        quote: Finance
-  - predicate: mentions
-    object: teams/product
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [576, 583]
-        quote: product
+        span: [63, 80]
+        quote: '**Team:** Finance'
   - predicate: mentions
     object: teams/support
-    confidence: 0.9
+    confidence: 0.75
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [518, 525]
-        quote: Support
+        span: [610, 712]
+        quote: 'Tickets frequently bounce between Support and Engineering when ownership of the
+
+          root cause is unclear.'
   - predicate: mentions
     object: tools/pagerduty
     confidence: 0.9
@@ -100,8 +77,17 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [249, 258]
-        quote: PagerDuty
+        span: [228, 259]
+        quote: Request is raised in PagerDuty.
+  - predicate: owns
+    object: people/ana-brito
+    confidence: 0.95
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [19, 62]
+        quote: '**Owner:** Ana Brito (ana@meridian.example)'
 ---
 
 # Refund approval

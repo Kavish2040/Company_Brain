@@ -16,38 +16,38 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: a3a8ac7fae8c291c50890f487c3c8be9
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 5fef94abbe94f17e44a72fd4298244b6
   status: accepted
 relations:
   - predicate: mentions
+    object: processes/vendor-renewal
+    confidence: 0.7
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [12, 64]
+        quote: Finance system of record; annual renewal each April.
+  - predicate: mentions
     object: teams/finance
-    confidence: 0.9
+    confidence: 0.6
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [12, 19]
-        quote: Finance
-  - predicate: mentions
+        span: [12, 64]
+        quote: Finance system of record; annual renewal each April.
+  - predicate: owns
     object: teams/product
-    confidence: 0.9
+    confidence: 0.95
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [79, 86]
-        quote: Product
-  - predicate: mentions
-    object: tools/netsuite
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 10]
-        quote: NetSuite
+        span: [66, 92]
+        quote: Owned by the Product team.
 ---
 
 # NetSuite

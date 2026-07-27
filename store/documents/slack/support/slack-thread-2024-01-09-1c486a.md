@@ -19,29 +19,20 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 803ebbfec645cdc6f40dedc0c36d62a7
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 9715d3d0974ffea46380af6ad1f60463
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/nadia-hassan
-    confidence: 0.9
+  - predicate: handoff_to
+    object: teams/finance
+    confidence: 0.85
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [86, 98]
-        quote: Nadia Hassan
-  - predicate: mentions
-    object: people/tom-whelan
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 12]
-        quote: Tom Whelan
+        span: [24, 82]
+        quote: Looping in Finance for the refund side of Refund approval.
   - predicate: mentions
     object: processes/capacity-planning
     confidence: 0.9
@@ -49,8 +40,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [139, 156]
-        quote: Capacity planning
+        span: [110, 172]
+        quote: Customer is asking about the Capacity planning timeline again.
   - predicate: mentions
     object: processes/refund-approval
     confidence: 0.9
@@ -58,17 +49,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [66, 81]
-        quote: Refund approval
-  - predicate: mentions
-    object: teams/finance
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [35, 42]
-        quote: Finance
+        span: [24, 82]
+        quote: Looping in Finance for the refund side of Refund approval.
 ---
 
 **Tom Whelan** (13:07): Looping in Finance for the refund side of Refund approval.

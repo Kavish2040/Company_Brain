@@ -16,83 +16,56 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 88dd75905a1d8d709757fd4d8e9d2d72
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 5cd0056a3a1292237eec9d1b691c4288
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/ana-brito
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [77, 86]
-        quote: Ana Brito
-  - predicate: mentions
-    object: people/mei-tanaka
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [88, 98]
-        quote: Mei Tanaka
-  - predicate: mentions
-    object: people/nadia-hassan
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [52, 64]
-        quote: Nadia Hassan
-  - predicate: mentions
-    object: people/zoe-ravel
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [66, 75]
-        quote: Zoë Ravel
-  - predicate: mentions
-    object: processes/quarterly-close
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 17]
-        quote: Quarterly close
-  - predicate: mentions
-    object: teams/finance
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [254, 261]
-        quote: Finance
-  - predicate: mentions
-    object: teams/product
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [243, 250]
-        quote: Product
-  - predicate: mentions
+  - predicate: depends_on
     object: tools/netsuite
     confidence: 0.9
     provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [137, 183]
+        quote: "quarterly close is still blocked on\n NetSuite."
+  - predicate: handoff_to
+    object: teams/finance
+    confidence: 0.5
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [230, 310]
+        quote: "Handoff from Product to Finance is unclear; two\n tickets bounced back last week."
+  - predicate: mentions
+    object: people/mei-tanaka
+    confidence: 0.7
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [326, 370]
+        quote: Mei Tanaka to document the handoff boundary.
+  - predicate: mentions
+    object: people/nadia-hassan
+    confidence: 0.85
+    provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [174, 182]
-        quote: NetSuite
+        span: [112, 183]
+        quote: "Nadia Hassan raised that quarterly close is still blocked on\n NetSuite."
+  - predicate: owns
+    object: processes/quarterly-close
+    confidence: 0.85
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [186, 227]
+        quote: Ana Brito confirmed they own the process.
 ---
 
 # Quarterly close sync — 2024-01-16

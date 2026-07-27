@@ -22,9 +22,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: ea6449500a9c225239916d672a87c1e7
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 71437c84a908cc7b686f189d001e9ad9
   status: accepted
 relations:
   - predicate: authored_by
@@ -37,51 +37,33 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
+  - predicate: depends_on
+    object: tools/datadog
+    confidence: 0.75
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [199, 239]
+        quote: the Datadog step is blocked on your team
   - predicate: mentions
+    object: people/priya-raman
+    confidence: 0.7
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [114, 123]
+        quote: Hi Priya,
+  - predicate: owns
     object: people/owen-fitz
     confidence: 0.9
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [160, 175]
-        quote: Owen Fitzgerald
-  - predicate: mentions
-    object: people/priya-raman
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [53, 75]
-        quote: priya@meridian.example
-  - predicate: mentions
-    object: people/tom-whelan
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [22, 42]
-        quote: tom@meridian.example
-  - predicate: mentions
-    object: processes/capacity-planning
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [141, 158]
-        quote: capacity planning
-  - predicate: mentions
-    object: tools/datadog
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [203, 210]
-        quote: Datadog
+        span: [160, 240]
+        quote: Owen Fitzgerald owns this process, but the Datadog step is blocked on your team.
 ---
 
 **From:** Tom Whelan <tom@meridian.example>

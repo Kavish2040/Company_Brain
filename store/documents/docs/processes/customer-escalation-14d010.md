@@ -16,83 +16,40 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 735cf0297a09b88d31b6c4d103d1f854
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 68b0907011ae89a3c0c143ff1c02ce40
   status: accepted
 relations:
   - predicate: handoff_to
     object: teams/engineering
-    confidence: 0.6
+    confidence: 0.95
     provenance: llm
     status: proposed
     evidence:
       - node: self
-        span: [534, 566]
-        quote: Support hands off to Engineering
+        span: [534, 607]
+        quote: Support hands off to Engineering when the root cause is a product defect.
   - predicate: handoff_to
     object: teams/finance
+    confidence: 0.95
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [469, 531]
+        quote: Support hands off to Finance when a cost approval is required.
+  - predicate: mentions
+    object: teams/engineering
     confidence: 0.6
     provenance: llm
     status: proposed
     evidence:
       - node: self
-        span: [469, 497]
-        quote: Support hands off to Finance
-  - predicate: mentions
-    object: people/dev-oyelaran
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [48, 68]
-        quote: dev@meridian.example
-  - predicate: mentions
-    object: processes/customer-escalation
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 21]
-        quote: Customer escalation
-  - predicate: mentions
-    object: teams/engineering
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [555, 566]
-        quote: Engineering
-  - predicate: mentions
-    object: teams/finance
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [490, 497]
-        quote: Finance
-  - predicate: mentions
-    object: teams/product
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [592, 599]
-        quote: product
-  - predicate: mentions
-    object: teams/support
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [80, 87]
-        quote: Support
+        span: [626, 728]
+        quote: 'Tickets frequently bounce between Support and Engineering when ownership of the
+
+          root cause is unclear.'
   - predicate: mentions
     object: tools/zendesk
     confidence: 0.9
@@ -100,8 +57,26 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [264, 271]
-        quote: Zendesk
+        span: [243, 272]
+        quote: Request is raised in Zendesk.
+  - predicate: owns
+    object: people/dev-oyelaran
+    confidence: 0.98
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [23, 69]
+        quote: '**Owner:** Dev Oyelaran (dev@meridian.example)'
+  - predicate: owns
+    object: teams/support
+    confidence: 0.7
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [70, 87]
+        quote: '**Team:** Support'
 ---
 
 # Customer escalation

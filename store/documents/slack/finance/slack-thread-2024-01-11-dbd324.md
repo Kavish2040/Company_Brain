@@ -19,74 +19,10 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 58d2e7cb0f3defb157c85f0b4f74aeff
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 86161b8e564531a716042ea4433b280c
   status: accepted
-relations:
-  - predicate: mentions
-    object: people/ana-brito
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 11]
-        quote: Ana Brito
-  - predicate: mentions
-    object: people/sam-kaur
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [109, 117]
-        quote: Sam Kaur
-  - predicate: mentions
-    object: processes/customer-escalation
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [23, 42]
-        quote: Customer escalation
-  - predicate: mentions
-    object: processes/onboarding
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [207, 226]
-        quote: Employee onboarding
-  - predicate: mentions
-    object: processes/security-review
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [89, 104]
-        quote: security review
-  - predicate: mentions
-    object: teams/engineering
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [60, 71]
-        quote: Engineering
-  - predicate: mentions
-    object: tools/linear
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [270, 276]
-        quote: Linear
 ---
 
 **Ana Brito** (10:12): Customer escalation is blocked until Engineering signs off on the security review.

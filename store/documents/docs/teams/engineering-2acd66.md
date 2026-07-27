@@ -16,92 +16,47 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: eb3a7adf7d4c85fe6c8ad721ab3e116f
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 0048aaa0c5f1308c476eb331be88b29a
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/owen-fitz
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [224, 245]
-        quote: owen@meridian.example
-  - predicate: mentions
-    object: people/priya-raman
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [119, 141]
-        quote: priya@meridian.example
-  - predicate: mentions
-    object: people/sam-kelly
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [59, 85]
-        quote: sam.kelly@meridian.example
-  - predicate: mentions
-    object: people/tom-whelan
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [177, 197]
-        quote: tom@meridian.example
-  - predicate: mentions
+  - predicate: owns
     object: processes/capacity-planning
-    confidence: 0.9
+    confidence: 0.98
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [393, 410]
-        quote: Capacity planning
-  - predicate: mentions
+        span: [393, 435]
+        quote: 'Capacity planning (owner: Owen Fitzgerald)'
+  - predicate: owns
     object: processes/incident-response
-    confidence: 0.9
+    confidence: 0.98
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [270, 287]
-        quote: Incident response
-  - predicate: mentions
+        span: [270, 312]
+        quote: 'Incident response (owner: Owen Fitzgerald)'
+  - predicate: owns
     object: processes/release-signoff
-    confidence: 0.9
+    confidence: 0.98
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [315, 331]
-        quote: Release sign-off
-  - predicate: mentions
+        span: [315, 352]
+        quote: 'Release sign-off (owner: Priya Raman)'
+  - predicate: owns
     object: processes/security-review
-    confidence: 0.9
+    confidence: 0.98
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [355, 370]
-        quote: Security review
-  - predicate: mentions
-    object: teams/engineering
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 13]
-        quote: Engineering
+        span: [355, 390]
+        quote: 'Security review (owner: Tom Whelan)'
 ---
 
 # Engineering

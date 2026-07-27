@@ -19,74 +19,56 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 70baac326a2bd6e32ccc2884814fe62f
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 028ba32c772c1ed65025eac4b131f95a
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/ana-brito
-    confidence: 0.9
+  - predicate: depends_on
+    object: processes/security-review
+    confidence: 0.85
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [208, 217]
-        quote: Ana Brito
-  - predicate: mentions
-    object: people/sam-kaur
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 10]
-        quote: Sam Kaur
+        span: [229, 311]
+        quote: Customer escalation is blocked until Engineering signs off on the security review.
   - predicate: mentions
     object: processes/customer-escalation
-    confidence: 0.9
+    confidence: 0.6
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [229, 248]
-        quote: Customer escalation
+        span: [229, 311]
+        quote: Customer escalation is blocked until Engineering signs off on the security review.
   - predicate: mentions
     object: processes/data-request
-    confidence: 0.9
+    confidence: 0.7
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [168, 189]
-        quote: Customer data request
+        span: [158, 204]
+        quote: 'Reminder: Customer data request closes Friday.'
   - predicate: mentions
     object: processes/onboarding
-    confidence: 0.9
+    confidence: 0.7
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [32, 51]
-        quote: Employee onboarding
-  - predicate: mentions
-    object: processes/security-review
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [295, 310]
-        quote: security review
+        span: [22, 66]
+        quote: 'Reminder: Employee onboarding closes Friday.'
   - predicate: mentions
     object: teams/engineering
-    confidence: 0.9
+    confidence: 0.6
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [266, 277]
-        quote: Engineering
+        span: [229, 311]
+        quote: Customer escalation is blocked until Engineering signs off on the security review.
 ---
 
 **Sam Kaur** (09:54): Reminder: Employee onboarding closes Friday.

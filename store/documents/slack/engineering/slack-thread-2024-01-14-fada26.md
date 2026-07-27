@@ -19,65 +19,29 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: bbdc47ebd36cf8fe86cdc5dca87a1f5a
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: acc96bd1d70fcad48c14a220daffd7d8
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/priya-raman
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 13]
-        quote: Priya Raman
-  - predicate: mentions
-    object: people/tom-whelan
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [105, 115]
-        quote: Tom Whelan
-  - predicate: mentions
-    object: processes/data-request
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [139, 160]
-        quote: Customer data request
-  - predicate: mentions
+  - predicate: depends_on
     object: processes/release-signoff
-    confidence: 0.9
+    confidence: 0.85
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [84, 100]
-        quote: release sign-off
-  - predicate: mentions
-    object: processes/security-review
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [40, 55]
-        quote: Security review
-  - predicate: mentions
+        span: [25, 101]
+        quote: Deploy for the Security review change is queued behind the release sign-off.
+  - predicate: handoff_to
     object: teams/support
     confidence: 0.9
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [176, 183]
-        quote: Support
+        span: [127, 213]
+        quote: Handing the Customer data request ticket over to Support, they own the customer comms.
 ---
 
 **Priya Raman** (11:03): Deploy for the Security review change is queued behind the release sign-off.

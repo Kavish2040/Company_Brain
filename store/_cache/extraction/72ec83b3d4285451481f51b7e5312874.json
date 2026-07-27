@@ -1,0 +1,126 @@
+{
+  "edges": [
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Tom Whelan raised that customer escalation is still blocked on\n Snowflake.",
+          "span": [
+            115,
+            189
+          ]
+        }
+      ],
+      "object": "tools/snowflake",
+      "predicate": "depends_on",
+      "provenance": "llm",
+      "status": "proposed"
+    },
+    {
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Handoff from Engineering to Product is unclear; two\n tickets bounced back last week.",
+          "span": [
+            239,
+            323
+          ]
+        }
+      ],
+      "object": "teams/product",
+      "predicate": "handoff_to",
+      "provenance": "llm",
+      "status": "proposed"
+    },
+    {
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "**Attendees:** Tom Whelan, Priya Raman, Zo\u00eb Ravel, Sam Kelly",
+          "span": [
+            41,
+            101
+          ]
+        }
+      ],
+      "object": "people/priya-raman",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed"
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Sam Kelly to document the handoff boundary.",
+          "span": [
+            339,
+            382
+          ]
+        }
+      ],
+      "object": "people/sam-kelly",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted"
+    },
+    {
+      "confidence": 0.95,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Tom Whelan raised that customer escalation is still blocked on\n Snowflake.",
+          "span": [
+            115,
+            189
+          ]
+        }
+      ],
+      "object": "people/tom-whelan",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted"
+    },
+    {
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "**Attendees:** Tom Whelan, Priya Raman, Zo\u00eb Ravel, Sam Kelly",
+          "span": [
+            41,
+            101
+          ]
+        }
+      ],
+      "object": "people/zoe-ravel",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed"
+    },
+    {
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Dev Oyelaran confirmed they own the process.",
+          "span": [
+            192,
+            236
+          ]
+        }
+      ],
+      "object": "processes/customer-escalation",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v1",
+  "unresolved": []
+}

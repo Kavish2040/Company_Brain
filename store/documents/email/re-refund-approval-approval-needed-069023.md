@@ -22,9 +22,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: d0894b1af4a58cd686a0b4d86e879ee1
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 4f6bb1698f01e771063579bbc1077d84
   status: accepted
 relations:
   - predicate: authored_by
@@ -37,51 +37,6 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
-  - predicate: mentions
-    object: people/ana-brito
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [160, 169]
-        quote: Ana Brito
-  - predicate: mentions
-    object: people/sam-kelly
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [53, 79]
-        quote: sam.kelly@meridian.example
-  - predicate: mentions
-    object: people/tom-whelan
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [22, 42]
-        quote: tom@meridian.example
-  - predicate: mentions
-    object: processes/refund-approval
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [143, 158]
-        quote: refund approval
-  - predicate: mentions
-    object: tools/linear
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [197, 203]
-        quote: Linear
 ---
 
 **From:** Tom Whelan <tom@meridian.example>

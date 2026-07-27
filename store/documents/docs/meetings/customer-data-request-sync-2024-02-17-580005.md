@@ -16,20 +16,29 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: dbce4d63764b78e53f8be2c6e6093335
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: a1559b607cb6a9660b3f80bbb8f237f6
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/mei-tanaka
-    confidence: 0.9
+  - predicate: depends_on
+    object: tools/zendesk
+    confidence: 0.7
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [89, 99]
-        quote: Mei Tanaka
+        span: [124, 200]
+        quote: "Nadia Hassan raised that customer data request is still blocked on\n Zendesk."
+  - predicate: handoff_to
+    object: teams/support
+    confidence: 0.6
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [248, 332]
+        quote: "Handoff from Engineering to Support is unclear; two\n tickets bounced back last week."
   - predicate: mentions
     object: people/nadia-hassan
     confidence: 0.9
@@ -37,62 +46,35 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [58, 70]
-        quote: Nadia Hassan
-  - predicate: mentions
-    object: people/owen-fitz
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [72, 87]
-        quote: Owen Fitzgerald
+        span: [124, 200]
+        quote: "Nadia Hassan raised that customer data request is still blocked on\n Zendesk."
   - predicate: mentions
     object: people/zoe-ravel
-    confidence: 0.9
+    confidence: 0.8
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [101, 110]
-        quote: Zoë Ravel
+        span: [348, 391]
+        quote: Zoë Ravel to document the handoff boundary.
   - predicate: mentions
     object: processes/data-request
-    confidence: 0.9
+    confidence: 0.5
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [2, 23]
-        quote: Customer data request
-  - predicate: mentions
-    object: teams/engineering
-    confidence: 0.9
+        span: [348, 391]
+        quote: Zoë Ravel to document the handoff boundary.
+  - predicate: owns
+    object: processes/data-request
+    confidence: 0.75
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [261, 272]
-        quote: Engineering
-  - predicate: mentions
-    object: teams/support
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [276, 283]
-        quote: Support
-  - predicate: mentions
-    object: tools/zendesk
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [192, 199]
-        quote: Zendesk
+        span: [203, 245]
+        quote: Mei Tanaka confirmed they own the process.
 ---
 
 # Customer data request sync — 2024-02-17

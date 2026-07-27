@@ -16,9 +16,9 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 5decbd6f73cb76e056c9ab466adfeead
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 6c0d24cba23e59d4a316531eb4ce76fe
   status: accepted
 relations:
   - predicate: mentions
@@ -28,8 +28,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [54, 69]
-        quote: Owen Fitzgerald
+        span: [23, 69]
+        quote: 'Attendees: Sam K., Tom Whelan, Owen Fitzgerald'
   - predicate: mentions
     object: people/tom-whelan
     confidence: 0.9
@@ -37,17 +37,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [42, 52]
-        quote: Tom Whelan
-  - predicate: mentions
-    object: tools/snowflake
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [157, 166]
-        quote: Snowflake
+        span: [23, 69]
+        quote: 'Attendees: Sam K., Tom Whelan, Owen Fitzgerald'
 ---
 
 # Platform sync notes

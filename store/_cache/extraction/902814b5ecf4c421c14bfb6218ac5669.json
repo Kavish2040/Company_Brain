@@ -1,0 +1,126 @@
+{
+  "edges": [
+    {
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Support hands off to Engineering when the root cause is a product defect.",
+          "span": [
+            516,
+            589
+          ]
+        }
+      ],
+      "object": "teams/engineering",
+      "predicate": "handoff_to",
+      "provenance": "llm",
+      "status": "proposed"
+    },
+    {
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Finance hands off to Finance when a cost approval is required.",
+          "span": [
+            451,
+            513
+          ]
+        }
+      ],
+      "object": "teams/finance",
+      "predicate": "handoff_to",
+      "provenance": "llm",
+      "status": "proposed"
+    },
+    {
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Support hands off to Engineering when the root cause is a product defect.",
+          "span": [
+            516,
+            589
+          ]
+        }
+      ],
+      "object": "teams/support",
+      "predicate": "handoff_to",
+      "provenance": "llm",
+      "status": "proposed"
+    },
+    {
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Ana Brito signs off before the request is closed.",
+          "span": [
+            385,
+            434
+          ]
+        }
+      ],
+      "object": "people/ana-brito",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed"
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Request is raised in Datadog.",
+          "span": [
+            228,
+            257
+          ]
+        }
+      ],
+      "object": "tools/datadog",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted"
+    },
+    {
+      "confidence": 0.95,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "**Owner:** Ana Brito (ana@meridian.example)",
+          "span": [
+            19,
+            62
+          ]
+        }
+      ],
+      "object": "people/ana-brito",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed"
+    },
+    {
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "**Team:** Finance",
+          "span": [
+            63,
+            80
+          ]
+        }
+      ],
+      "object": "teams/finance",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v1",
+  "unresolved": []
+}

@@ -22,9 +22,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 8941d00d54974b4a241efa65be6726f7
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 45afb6230fab7b9219ab6321eb1a8aea
   status: accepted
 relations:
   - predicate: authored_by
@@ -37,51 +37,24 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
-  - predicate: mentions
-    object: people/mei-tanaka
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [166, 176]
-        quote: Mei Tanaka
-  - predicate: mentions
-    object: people/sam-kelly
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [53, 79]
-        quote: sam.kelly@meridian.example
-  - predicate: mentions
-    object: people/tom-whelan
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [22, 42]
-        quote: tom@meridian.example
-  - predicate: mentions
-    object: processes/data-request
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [143, 164]
-        quote: customer data request
-  - predicate: mentions
+  - predicate: depends_on
     object: tools/zendesk
-    confidence: 0.9
+    confidence: 0.85
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [204, 211]
-        quote: Zendesk
+        span: [166, 241]
+        quote: Mei Tanaka owns this process, but the Zendesk step is blocked on your team.
+  - predicate: owns
+    object: people/mei-tanaka
+    confidence: 0.95
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [166, 241]
+        quote: Mei Tanaka owns this process, but the Zendesk step is blocked on your team.
 ---
 
 **From:** Tom Whelan <tom@meridian.example>

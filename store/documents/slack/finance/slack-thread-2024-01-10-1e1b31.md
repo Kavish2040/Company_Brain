@@ -19,56 +19,10 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: d2bc58238cddb85469ad0eb17c67731a
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 9015dc9c7ea5228c3f809fccc282f5c3
   status: accepted
-relations:
-  - predicate: mentions
-    object: people/ana-brito
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 11]
-        quote: Ana Brito
-  - predicate: mentions
-    object: people/sam-kaur
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [239, 247]
-        quote: Sam Kaur
-  - predicate: mentions
-    object: processes/customer-escalation
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [33, 52]
-        quote: Customer escalation
-  - predicate: mentions
-    object: tools/datadog
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [96, 103]
-        quote: Datadog
-  - predicate: mentions
-    object: tools/pagerduty
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [179, 188]
-        quote: PagerDuty
 ---
 
 **Ana Brito** (09:37): Reminder: Customer escalation closes Friday.

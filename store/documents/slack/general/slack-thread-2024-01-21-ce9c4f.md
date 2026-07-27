@@ -19,38 +19,20 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 1178ef26391fc7bee9a32c86d6c19ac1
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 78e1d61dcb2276945afa2162ca611042
   status: accepted
 relations:
   - predicate: mentions
-    object: people/ana-brito
-    confidence: 0.9
+    object: processes/onboarding
+    confidence: 0.7
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [2, 11]
-        quote: Ana Brito
-  - predicate: mentions
-    object: people/dev-oyelaran
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [151, 163]
-        quote: Dev Oyelaran
-  - predicate: mentions
-    object: people/sam-kelly
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [229, 238]
-        quote: Sam Kelly
+        span: [118, 147]
+        quote: Onboarding docs are in Drive.
   - predicate: mentions
     object: processes/quarterly-close
     confidence: 0.9
@@ -58,8 +40,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [264, 279]
-        quote: Quarterly close
+        span: [250, 300]
+        quote: Reminder that Quarterly close kicks off next week.
   - predicate: mentions
     object: processes/refund-approval
     confidence: 0.9
@@ -67,8 +49,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [189, 204]
-        quote: Refund approval
+        span: [175, 225]
+        quote: Reminder that Refund approval kicks off next week.
   - predicate: mentions
     object: processes/vendor-renewal
     confidence: 0.9
@@ -76,8 +58,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [37, 51]
-        quote: Vendor renewal
+        span: [23, 72]
+        quote: Reminder that Vendor renewal kicks off next week.
 ---
 
 **Ana Brito** (12:29): Reminder that Vendor renewal kicks off next week.

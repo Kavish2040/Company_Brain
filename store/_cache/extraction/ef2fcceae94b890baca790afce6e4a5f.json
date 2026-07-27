@@ -1,0 +1,58 @@
+{
+  "edges": [
+    {
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Deploy for the Incident response change is queued behind the release sign-off.",
+          "span": [
+            23,
+            101
+          ]
+        }
+      ],
+      "object": "processes/release-signoff",
+      "predicate": "depends_on",
+      "provenance": "llm",
+      "status": "proposed"
+    },
+    {
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Deploy for the Incident response change is queued behind the release sign-off.",
+          "span": [
+            23,
+            101
+          ]
+        }
+      ],
+      "object": "processes/incident-response",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed"
+    },
+    {
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "The NetSuite alert fired again overnight \u2014 third time this week.",
+          "span": [
+            127,
+            191
+          ]
+        }
+      ],
+      "object": "tools/netsuite",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v1",
+  "unresolved": []
+}

@@ -19,47 +19,29 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 4250135666c95fc03c035989beb5d684
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 67bbe3ed1d2ae97d14c374649c4012fc
   status: accepted
 relations:
   - predicate: mentions
-    object: people/nadia-hassan
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [81, 93]
-        quote: Nadia Hassan
-  - predicate: mentions
-    object: people/sam-kelly
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 11]
-        quote: Sam Kelly
-  - predicate: mentions
     object: processes/onboarding
-    confidence: 0.9
+    confidence: 0.7
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [37, 56]
-        quote: Employee onboarding
+        span: [23, 77]
+        quote: Reminder that Employee onboarding kicks off next week.
   - predicate: mentions
     object: processes/quarterly-close
-    confidence: 0.9
+    confidence: 0.7
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [119, 134]
-        quote: Quarterly close
+        span: [105, 155]
+        quote: Reminder that Quarterly close kicks off next week.
 ---
 
 **Sam Kelly** (13:56): Reminder that Employee onboarding kicks off next week.

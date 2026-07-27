@@ -22,9 +22,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 4525073c13f1bdfd2b7f56c35ab8f435
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: dfd17d9d7682b85caf825e6b4f39dc53
   status: accepted
 relations:
   - predicate: authored_by
@@ -37,6 +37,15 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
+  - predicate: depends_on
+    object: tools/linear
+    confidence: 0.75
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [187, 226]
+        quote: the Linear step is blocked on your team
   - predicate: mentions
     object: people/ana-brito
     confidence: 0.9
@@ -44,26 +53,17 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [154, 163]
-        quote: Ana Brito
+        span: [154, 227]
+        quote: Ana Brito owns this process, but the Linear step is blocked on your team.
   - predicate: mentions
     object: people/dev-oyelaran
-    confidence: 0.9
+    confidence: 0.5
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [53, 73]
-        quote: dev@meridian.example
-  - predicate: mentions
-    object: people/mei-tanaka
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [22, 42]
-        quote: mei@meridian.example
+        span: [121, 153]
+        quote: Following up on quarterly close.
   - predicate: mentions
     object: processes/quarterly-close
     confidence: 0.9
@@ -71,17 +71,17 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [137, 152]
-        quote: quarterly close
-  - predicate: mentions
-    object: tools/linear
+        span: [121, 153]
+        quote: Following up on quarterly close.
+  - predicate: owns
+    object: processes/quarterly-close
     confidence: 0.9
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [191, 197]
-        quote: Linear
+        span: [154, 227]
+        quote: Ana Brito owns this process, but the Linear step is blocked on your team.
 ---
 
 **From:** Mei Tanaka <mei@meridian.example>

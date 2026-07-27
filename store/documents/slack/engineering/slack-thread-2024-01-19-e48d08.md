@@ -19,47 +19,20 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 65ec6ac9884bd4de7c3b0e38107a2b36
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 34a5d6de465f3c02e922e05ebc15a2b3
   status: accepted
 relations:
   - predicate: mentions
-    object: people/dev-oyelaran
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [93, 105]
-        quote: Dev Oyelaran
-  - predicate: mentions
-    object: people/priya-raman
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 13]
-        quote: Priya Raman
-  - predicate: mentions
     object: processes/customer-escalation
-    confidence: 0.9
+    confidence: 0.8
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [129, 148]
-        quote: Customer escalation
-  - predicate: mentions
-    object: teams/support
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [164, 171]
-        quote: Support
+        span: [117, 201]
+        quote: Handing the Customer escalation ticket over to Support, they own the customer comms.
   - predicate: mentions
     object: tools/netsuite
     confidence: 0.9
@@ -67,8 +40,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [29, 37]
-        quote: NetSuite
+        span: [25, 89]
+        quote: The NetSuite alert fired again overnight — third time this week.
 ---
 
 **Priya Raman** (12:39): The NetSuite alert fired again overnight — third time this week.

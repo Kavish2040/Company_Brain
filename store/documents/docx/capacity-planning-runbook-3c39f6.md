@@ -21,9 +21,9 @@ normalizer:
   name: docx
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 04a927b6aa6b00ef00ea4521bd342b06
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 0308c8f095626ef29b19df3f5bc5ece4
   status: accepted
 relations:
   - predicate: authored_by
@@ -31,42 +31,6 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
-  - predicate: mentions
-    object: people/owen-fitz
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [55, 76]
-        quote: owen@meridian.example
-  - predicate: mentions
-    object: processes/capacity-planning
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 19]
-        quote: Capacity planning
-  - predicate: mentions
-    object: teams/engineering
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [92, 103]
-        quote: Engineering
-  - predicate: owns
-    object: people/owen-fitz
-    confidence: 0.75
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [31, 54]
-        quote: 'Owner: Owen Fitzgerald'
 ---
 
 # Capacity planning — runbook

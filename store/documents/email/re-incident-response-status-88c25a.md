@@ -22,9 +22,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 3f13eadc10b27d0df9e4b6b3d187b974
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: dc65f6c40a5b2b72e61576f15587b832
   status: accepted
 relations:
   - predicate: authored_by
@@ -37,15 +37,15 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
-  - predicate: mentions
-    object: people/mei-tanaka
-    confidence: 0.9
+  - predicate: depends_on
+    object: tools/pagerduty
+    confidence: 0.8
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [22, 42]
-        quote: mei@meridian.example
+        span: [161, 243]
+        quote: Owen Fitzgerald owns this process, but the PagerDuty step is blocked on your team.
   - predicate: mentions
     object: people/owen-fitz
     confidence: 0.9
@@ -53,35 +53,26 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [161, 176]
-        quote: Owen Fitzgerald
+        span: [161, 243]
+        quote: Owen Fitzgerald owns this process, but the PagerDuty step is blocked on your team.
   - predicate: mentions
     object: people/sam-kaur
-    confidence: 0.9
+    confidence: 0.6
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [53, 78]
-        quote: sam.kaur@meridian.example
-  - predicate: mentions
+        span: [45, 78]
+        quote: '**To:** sam.kaur@meridian.example'
+  - predicate: owns
     object: processes/incident-response
-    confidence: 0.9
+    confidence: 0.95
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [142, 159]
-        quote: incident response
-  - predicate: mentions
-    object: tools/pagerduty
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [204, 213]
-        quote: PagerDuty
+        span: [161, 243]
+        quote: Owen Fitzgerald owns this process, but the PagerDuty step is blocked on your team.
 ---
 
 **From:** Mei Tanaka <mei@meridian.example>

@@ -21,9 +21,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: d937c0e32a82cd4b8d0f8f7c68be6a75
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 81e00bf54df76ddc4e44d963e00eff18
   status: accepted
 relations:
   - predicate: authored_by
@@ -31,15 +31,15 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
-  - predicate: mentions
-    object: people/dev-oyelaran
-    confidence: 0.9
+  - predicate: depends_on
+    object: tools/datadog
+    confidence: 0.75
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [24, 44]
-        quote: dev@meridian.example
+        span: [196, 236]
+        quote: the Datadog step is blocked on your team
   - predicate: mentions
     object: processes/customer-escalation
     confidence: 0.9
@@ -47,17 +47,17 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [139, 158]
-        quote: customer escalation
-  - predicate: mentions
-    object: tools/datadog
+        span: [123, 159]
+        quote: Following up on customer escalation.
+  - predicate: owns
+    object: people/dev-oyelaran
     confidence: 0.9
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [200, 207]
-        quote: Datadog
+        span: [160, 237]
+        quote: Dev Oyelaran owns this process, but the Datadog step is blocked on your team.
 ---
 
 **From:** Dev Oyelaran <dev@meridian.example>

@@ -16,29 +16,20 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 857d7c806a3e64cb6eae46930e9bc678
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: ab4d799e9ff3fc721e8879b81d56050f
   status: accepted
 relations:
-  - predicate: mentions
-    object: teams/engineering
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [93, 104]
-        quote: Engineering
-  - predicate: mentions
+  - predicate: owns
     object: tools/snowflake
     confidence: 0.9
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [2, 11]
-        quote: Snowflake
+        span: [80, 110]
+        quote: Owned by the Engineering team.
 ---
 
 # Snowflake

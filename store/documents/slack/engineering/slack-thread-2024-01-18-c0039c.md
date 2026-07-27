@@ -19,56 +19,56 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 8eed4c35f9331b872f1290452a821364
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 225aa4ad021472ac14fa6ce236728ea1
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/dev-oyelaran
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 14]
-        quote: Dev Oyelaran
-  - predicate: mentions
-    object: processes/data-request
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [38, 59]
-        quote: Customer data request
-  - predicate: mentions
-    object: teams/finance
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [157, 164]
-        quote: Finance
-  - predicate: mentions
+  - predicate: handoff_to
     object: teams/support
     confidence: 0.9
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [75, 82]
-        quote: Support
+        span: [26, 112]
+        quote: Handing the Customer data request ticket over to Support, they own the customer comms.
   - predicate: mentions
-    object: tools/snowflake
-    confidence: 0.9
+    object: processes/data-request
+    confidence: 0.85
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [177, 186]
-        quote: Snowflake
+        span: [26, 112]
+        quote: Handing the Customer data request ticket over to Support, they own the customer comms.
+  - predicate: mentions
+    object: processes/vendor-renewal
+    confidence: 0.6
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [140, 200]
+        quote: Can someone from Finance confirm the Snowflake renewal date?
+  - predicate: mentions
+    object: teams/finance
+    confidence: 0.8
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [140, 200]
+        quote: Can someone from Finance confirm the Snowflake renewal date?
+  - predicate: mentions
+    object: tools/snowflake
+    confidence: 0.8
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [140, 200]
+        quote: Can someone from Finance confirm the Snowflake renewal date?
 ---
 
 **Dev Oyelaran** (13:17): Handing the Customer data request ticket over to Support, they own the customer comms.

@@ -16,83 +16,38 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 27ac2a1fc8a18aa5b3ea4e6c225638cd
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: df42072b15c449d4866222c93b32c822
   status: accepted
 relations:
   - predicate: handoff_to
     object: teams/engineering
-    confidence: 0.6
+    confidence: 0.9
     provenance: llm
     status: proposed
     evidence:
       - node: self
-        span: [549, 581]
-        quote: Support hands off to Engineering
+        span: [549, 622]
+        quote: Support hands off to Engineering when the root cause is a product defect.
   - predicate: handoff_to
     object: teams/finance
-    confidence: 0.6
+    confidence: 0.9
     provenance: llm
     status: proposed
     evidence:
       - node: self
-        span: [480, 512]
-        quote: Engineering hands off to Finance
-  - predicate: mentions
-    object: people/owen-fitz
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [49, 70]
-        quote: owen@meridian.example
-  - predicate: mentions
-    object: processes/incident-response
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 19]
-        quote: Incident response
+        span: [480, 546]
+        quote: Engineering hands off to Finance when a cost approval is required.
   - predicate: mentions
     object: teams/engineering
-    confidence: 0.9
+    confidence: 0.85
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [82, 93]
-        quote: Engineering
-  - predicate: mentions
-    object: teams/finance
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [505, 512]
-        quote: Finance
-  - predicate: mentions
-    object: teams/product
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [607, 614]
-        quote: product
-  - predicate: mentions
-    object: teams/support
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [549, 556]
-        quote: Support
+        span: [72, 93]
+        quote: '**Team:** Engineering'
   - predicate: mentions
     object: tools/pagerduty
     confidence: 0.9
@@ -100,8 +55,17 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [266, 275]
-        quote: PagerDuty
+        span: [245, 276]
+        quote: Request is raised in PagerDuty.
+  - predicate: owns
+    object: people/owen-fitz
+    confidence: 0.85
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [408, 463]
+        quote: Owen Fitzgerald signs off before the request is closed.
 ---
 
 # Incident response

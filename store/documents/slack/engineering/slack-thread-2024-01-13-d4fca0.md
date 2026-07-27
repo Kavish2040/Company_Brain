@@ -19,101 +19,83 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: e63f2dea19efa184cecb7453aba4f67f
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 894c3b699f5e729c8b61bbca84765e5e
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/nadia-hassan
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [108, 120]
-        quote: Nadia Hassan
-  - predicate: mentions
-    object: people/owen-fitz
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [285, 300]
-        quote: Owen Fitzgerald
-  - predicate: mentions
-    object: people/sam-kaur
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [201, 209]
-        quote: Sam Kaur
-  - predicate: mentions
-    object: people/sam-kelly
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 11]
-        quote: Sam Kelly
-  - predicate: mentions
-    object: processes/data-request
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [327, 348]
-        quote: Customer data request
-  - predicate: mentions
+  - predicate: depends_on
     object: processes/release-signoff
-    confidence: 0.9
+    confidence: 0.85
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [35, 51]
-        quote: Release sign-off
-  - predicate: mentions
-    object: teams/finance
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [238, 245]
-        quote: Finance
-  - predicate: mentions
+        span: [312, 394]
+        quote: Deploy for the Customer data request change is queued behind the release sign-off.
+  - predicate: handoff_to
     object: teams/support
     confidence: 0.9
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [67, 74]
-        quote: Support
+        span: [23, 104]
+        quote: Handing the Release sign-off ticket over to Support, they own the customer comms.
+  - predicate: mentions
+    object: processes/data-request
+    confidence: 0.8
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [312, 394]
+        quote: Deploy for the Customer data request change is queued behind the release sign-off.
+  - predicate: mentions
+    object: processes/release-signoff
+    confidence: 0.7
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [23, 104]
+        quote: Handing the Release sign-off ticket over to Support, they own the customer comms.
+  - predicate: mentions
+    object: processes/vendor-renewal
+    confidence: 0.55
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [221, 281]
+        quote: Can someone from Finance confirm the Snowflake renewal date?
+  - predicate: mentions
+    object: teams/finance
+    confidence: 0.7
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [221, 281]
+        quote: Can someone from Finance confirm the Snowflake renewal date?
   - predicate: mentions
     object: tools/pagerduty
-    confidence: 0.9
+    confidence: 0.85
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [136, 145]
-        quote: PagerDuty
+        span: [132, 197]
+        quote: The PagerDuty alert fired again overnight — third time this week.
   - predicate: mentions
     object: tools/snowflake
-    confidence: 0.9
+    confidence: 0.75
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [258, 267]
-        quote: Snowflake
+        span: [221, 281]
+        quote: Can someone from Finance confirm the Snowflake renewal date?
 ---
 
 **Sam Kelly** (14:19): Handing the Release sign-off ticket over to Support, they own the customer comms.

@@ -19,29 +19,11 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: d8f06d9737138a9eacdd3b5266b9999b
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 68f6ab15ee741383390b55a0bb17a75c
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/priya-raman
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [77, 88]
-        quote: Priya Raman
-  - predicate: mentions
-    object: people/sam-kelly
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 11]
-        quote: Sam Kelly
   - predicate: mentions
     object: processes/quarterly-close
     confidence: 0.9
@@ -49,8 +31,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [37, 52]
-        quote: Quarterly close
+        span: [23, 73]
+        quote: Reminder that Quarterly close kicks off next week.
 ---
 
 **Sam Kelly** (10:37): Reminder that Quarterly close kicks off next week.

@@ -1,0 +1,77 @@
+{
+  "edges": [
+    {
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Tom Whelan owns this process, but the Linear step is blocked on your team.",
+          "span": [
+            157,
+            231
+          ]
+        }
+      ],
+      "object": "tools/linear",
+      "predicate": "depends_on",
+      "provenance": "llm",
+      "status": "proposed"
+    },
+    {
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "**To:** zoe@meridian.example",
+          "span": [
+            48,
+            76
+          ]
+        }
+      ],
+      "object": "people/zoe-ravel",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed"
+    },
+    {
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Following up on security review.",
+          "span": [
+            124,
+            156
+          ]
+        }
+      ],
+      "object": "processes/security-review",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed"
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Tom Whelan owns this process, but the Linear step is blocked on your team.",
+          "span": [
+            157,
+            231
+          ]
+        }
+      ],
+      "object": "processes/security-review",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v1",
+  "unresolved": [
+    "your team (unspecified team affiliation of Zo\u00eb Ravel)"
+  ]
+}

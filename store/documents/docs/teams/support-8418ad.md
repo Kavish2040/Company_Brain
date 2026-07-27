@@ -16,56 +16,29 @@ normalizer:
   name: markdown
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 09ba51944a53338aee503a5e07d1b0c7
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 073234f638e3d6b6c4cc0d1a29835948
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/dev-oyelaran
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [54, 74]
-        quote: dev@meridian.example
-  - predicate: mentions
-    object: people/mei-tanaka
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [109, 129]
-        quote: mei@meridian.example
-  - predicate: mentions
+  - predicate: owns
     object: processes/customer-escalation
-    confidence: 0.9
+    confidence: 0.98
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [154, 173]
-        quote: Customer escalation
-  - predicate: mentions
+        span: [154, 195]
+        quote: 'Customer escalation (owner: Dev Oyelaran)'
+  - predicate: owns
     object: processes/data-request
-    confidence: 0.9
+    confidence: 0.98
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [198, 219]
-        quote: Customer data request
-  - predicate: mentions
-    object: teams/support
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 9]
-        quote: Support
+        span: [198, 239]
+        quote: 'Customer data request (owner: Mei Tanaka)'
 ---
 
 # Support

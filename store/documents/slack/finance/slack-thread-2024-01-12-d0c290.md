@@ -19,56 +19,38 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 55ccb9850ee4f98523fc7c800b09a123
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: b9ce07662d197d76bcb4f64134146971
   status: accepted
 relations:
   - predicate: mentions
-    object: people/ana-brito
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [72, 81]
-        quote: Ana Brito
-  - predicate: mentions
-    object: people/sam-kaur
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 10]
-        quote: Sam Kaur
-  - predicate: mentions
     object: processes/data-request
-    confidence: 0.9
+    confidence: 0.6
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [32, 53]
-        quote: Customer data request
+        span: [22, 68]
+        quote: 'Reminder: Customer data request closes Friday.'
   - predicate: mentions
     object: processes/quarterly-close
-    confidence: 0.9
+    confidence: 0.6
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [103, 118]
-        quote: Quarterly close
+        span: [93, 133]
+        quote: 'Reminder: Quarterly close closes Friday.'
   - predicate: mentions
     object: processes/refund-approval
-    confidence: 0.9
+    confidence: 0.6
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [168, 183]
-        quote: Refund approval
+        span: [158, 198]
+        quote: 'Reminder: Refund approval closes Friday.'
 ---
 
 **Sam Kaur** (12:40): Reminder: Customer data request closes Friday.

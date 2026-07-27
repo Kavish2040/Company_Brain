@@ -19,56 +19,47 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: fdda7141ab51a44d93d06a70052f831b
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 49dcdf013352c6b8cceecbfa4497d894
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/mei-tanaka
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [86, 96]
-        quote: Mei Tanaka
-  - predicate: mentions
-    object: people/tom-whelan
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 12]
-        quote: Tom Whelan
-  - predicate: mentions
-    object: processes/onboarding
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [120, 139]
-        quote: Employee onboarding
-  - predicate: mentions
-    object: teams/finance
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [41, 48]
-        quote: Finance
-  - predicate: mentions
+  - predicate: handoff_to
     object: teams/support
     confidence: 0.9
     provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [108, 192]
+        quote: Handing the Employee onboarding ticket over to Support, they own the customer comms.
+  - predicate: mentions
+    object: processes/onboarding
+    confidence: 0.85
+    provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [155, 162]
-        quote: Support
+        span: [108, 192]
+        quote: Handing the Employee onboarding ticket over to Support, they own the customer comms.
+  - predicate: mentions
+    object: processes/vendor-renewal
+    confidence: 0.6
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [24, 82]
+        quote: Can someone from Finance confirm the Datadog renewal date?
+  - predicate: mentions
+    object: teams/finance
+    confidence: 0.85
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [24, 82]
+        quote: Can someone from Finance confirm the Datadog renewal date?
   - predicate: mentions
     object: tools/datadog
     confidence: 0.9
@@ -76,8 +67,17 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [61, 68]
-        quote: Datadog
+        span: [24, 82]
+        quote: Can someone from Finance confirm the Datadog renewal date?
+  - predicate: owns
+    object: processes/onboarding
+    confidence: 0.5
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [164, 191]
+        quote: they own the customer comms
 ---
 
 **Tom Whelan** (12:48): Can someone from Finance confirm the Datadog renewal date?

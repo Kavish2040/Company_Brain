@@ -1,0 +1,41 @@
+{
+  "edges": [
+    {
+      "confidence": 0.5,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Ana Brito to document the handoff boundary.",
+          "span": [
+            339,
+            382
+          ]
+        }
+      ],
+      "object": "processes/incident-response",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed"
+    },
+    {
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Owen Fitzgerald confirmed they own the process.",
+          "span": [
+            189,
+            236
+          ]
+        }
+      ],
+      "object": "processes/incident-response",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v1",
+  "unresolved": []
+}

@@ -1,0 +1,24 @@
+{
+  "edges": [
+    {
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "The previous informal arrangement documented in the Support team page.",
+          "span": [
+            323,
+            393
+          ]
+        }
+      ],
+      "object": "teams/support",
+      "predicate": "supersedes",
+      "provenance": "llm",
+      "status": "proposed"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v1",
+  "unresolved": []
+}

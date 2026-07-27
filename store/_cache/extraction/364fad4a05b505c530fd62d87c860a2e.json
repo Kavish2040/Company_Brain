@@ -1,0 +1,60 @@
+{
+  "edges": [
+    {
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "the PagerDuty step is blocked on your team",
+          "span": [
+            192,
+            234
+          ]
+        }
+      ],
+      "object": "tools/pagerduty",
+      "predicate": "depends_on",
+      "provenance": "llm",
+      "status": "proposed"
+    },
+    {
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Can you confirm by Friday?",
+          "span": [
+            237,
+            263
+          ]
+        }
+      ],
+      "object": "people/dev-oyelaran",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed"
+    },
+    {
+      "confidence": 0.95,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Tom Whelan owns this process, but the PagerDuty step is blocked on your team.",
+          "span": [
+            158,
+            235
+          ]
+        }
+      ],
+      "object": "people/tom-whelan",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v1",
+  "unresolved": [
+    "your team (unspecified team affiliation of Dev Oyelaran)"
+  ]
+}

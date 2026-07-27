@@ -19,56 +19,38 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 7d570fcf2ce89f9bffe7edb9e026f689
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: d988cd4c8d4588c5c90085594996a464
   status: accepted
 relations:
   - predicate: mentions
-    object: people/mei-tanaka
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [106, 116]
-        quote: Mei Tanaka
-  - predicate: mentions
-    object: people/zoe-ravel
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 11]
-        quote: Zoë Ravel
-  - predicate: mentions
     object: processes/data-request
-    confidence: 0.9
+    confidence: 0.8
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [157, 178]
-        quote: Customer data request
+        span: [128, 194]
+        quote: Customer is asking about the Customer data request timeline again.
   - predicate: mentions
     object: processes/onboarding
-    confidence: 0.9
+    confidence: 0.75
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [82, 101]
-        quote: Employee onboarding
+        span: [23, 102]
+        quote: This is the fourth ticket bounced back from Engineering on Employee onboarding.
   - predicate: mentions
     object: teams/engineering
-    confidence: 0.9
+    confidence: 0.7
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [67, 78]
-        quote: Engineering
+        span: [23, 102]
+        quote: This is the fourth ticket bounced back from Engineering on Employee onboarding.
 ---
 
 **Zoë Ravel** (13:46): This is the fourth ticket bounced back from Engineering on Employee onboarding.

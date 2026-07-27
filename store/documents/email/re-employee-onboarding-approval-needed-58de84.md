@@ -21,9 +21,9 @@ normalizer:
   name: email
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: ae0942b2cbc730fbca5f5dfb89d94e31
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 3ac96e6d80d7f3ac302f98bb2c321c53
   status: accepted
 relations:
   - predicate: authored_by
@@ -31,24 +31,15 @@ relations:
     confidence: 1.0
     provenance: structural
     status: accepted
-  - predicate: mentions
-    object: people/tom-whelan
-    confidence: 0.9
+  - predicate: depends_on
+    object: tools/snowflake
+    confidence: 0.7
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [22, 42]
-        quote: tom@meridian.example
-  - predicate: mentions
-    object: people/zoe-ravel
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [158, 167]
-        quote: Zoë Ravel
+        span: [158, 234]
+        quote: Zoë Ravel owns this process, but the Snowflake step is blocked on your team.
   - predicate: mentions
     object: processes/onboarding
     confidence: 0.9
@@ -56,17 +47,17 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [137, 156]
-        quote: employee onboarding
-  - predicate: mentions
-    object: tools/snowflake
+        span: [121, 157]
+        quote: Following up on employee onboarding.
+  - predicate: owns
+    object: people/zoe-ravel
     confidence: 0.9
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [195, 204]
-        quote: Snowflake
+        span: [158, 234]
+        quote: Zoë Ravel owns this process, but the Snowflake step is blocked on your team.
 ---
 
 **From:** Tom Whelan <tom@meridian.example>

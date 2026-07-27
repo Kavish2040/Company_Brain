@@ -19,38 +19,20 @@ normalizer:
   name: slack_export
   version: 1.0.0
 extraction:
-  model: rules-offline
-  prompt_version: roster-v1
-  cache_key: 39d1b2752dc24e0b6aed4658b119888c
+  model: claude-sonnet-5
+  prompt_version: claude-roster-v1
+  cache_key: 23ea406c19c2ed676ccb392dc6f1f222
   status: accepted
 relations:
   - predicate: mentions
-    object: people/ana-brito
-    confidence: 0.9
+    object: processes/onboarding
+    confidence: 0.7
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [78, 87]
-        quote: Ana Brito
-  - predicate: mentions
-    object: people/nadia-hassan
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [153, 165]
-        quote: Nadia Hassan
-  - predicate: mentions
-    object: people/tom-whelan
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [2, 12]
-        quote: Tom Whelan
+        span: [45, 74]
+        quote: Onboarding docs are in Drive.
 ---
 
 **Tom Whelan** (13:03): Welcome to the team! Onboarding docs are in Drive.

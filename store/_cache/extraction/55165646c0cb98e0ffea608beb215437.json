@@ -1,0 +1,94 @@
+{
+  "edges": [
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Sign-off by Mei Tanaka",
+          "span": [
+            190,
+            212
+          ]
+        }
+      ],
+      "object": "people/mei-tanaka",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted"
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "# Customer data request \u2014 runbook",
+          "span": [
+            0,
+            33
+          ]
+        }
+      ],
+      "object": "processes/data-request",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted"
+    },
+    {
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Triage | Support",
+          "span": [
+            250,
+            266
+          ]
+        }
+      ],
+      "object": "teams/support",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted"
+    },
+    {
+      "confidence": 0.98,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Owner: Mei Tanaka (mei@meridian.example)",
+          "span": [
+            35,
+            75
+          ]
+        }
+      ],
+      "object": "people/mei-tanaka",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed"
+    },
+    {
+      "confidence": 0.95,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Owning team: Support",
+          "span": [
+            77,
+            97
+          ]
+        }
+      ],
+      "object": "teams/support",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v1",
+  "unresolved": [
+    "root cause sits elsewhere (unspecified team for cross-team handoff)"
+  ]
+}
