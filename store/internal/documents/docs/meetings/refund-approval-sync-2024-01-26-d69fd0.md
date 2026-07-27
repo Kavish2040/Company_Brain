@@ -31,43 +31,6 @@ relations:
       - node: self
         span: [112, 181]
         quote: "Tom Whelan raised that refund approval is still blocked on\n NetSuite."
-  - predicate: handoff_to
-    subject: teams/product
-    object: teams/engineering
-    confidence: 0.6
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [228, 312]
-        quote: "Handoff from Product to Engineering is unclear; two\n tickets bounced back last week."
-  - predicate: mentions
-    object: people/nadia-hassan
-    confidence: 0.6
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [37, 98]
-        quote: '**Attendees:** Tom Whelan, Nadia Hassan, Sam Kelly, Ana Brito'
-  - predicate: mentions
-    object: people/sam-kelly
-    confidence: 0.6
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [37, 98]
-        quote: '**Attendees:** Tom Whelan, Nadia Hassan, Sam Kelly, Ana Brito'
-  - predicate: mentions
-    object: people/tom-whelan
-    confidence: 0.8
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [112, 181]
-        quote: "Tom Whelan raised that refund approval is still blocked on\n NetSuite."
   - predicate: owns
     subject: people/ana-brito
     object: processes/refund-approval

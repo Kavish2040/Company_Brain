@@ -21,26 +21,6 @@ extraction:
   cache_key: d56a8181b444508f6f8c89c9c90dffac
   status: accepted
 relations:
-  - predicate: depends_on
-    subject: processes/capacity-planning
-    object: tools/pagerduty
-    confidence: 0.9
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [113, 184]
-        quote: "Sam Kelly raised that capacity planning is still blocked on\n PagerDuty."
-  - predicate: handoff_to
-    subject: teams/finance
-    object: teams/engineering
-    confidence: 0.7
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [237, 321]
-        quote: "Handoff from Finance to Engineering is unclear; two\n tickets bounced back last week."
   - predicate: mentions
     object: people/nadia-hassan
     confidence: 0.85
@@ -50,73 +30,10 @@ relations:
       - node: self
         span: [337, 383]
         quote: Nadia Hassan to document the handoff boundary.
-  - predicate: mentions
-    object: people/sam-kaur
-    confidence: 0.7
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [39, 99]
-        quote: '**Attendees:** Sam Kelly, Sam Kaur, Tom Whelan, Nadia Hassan'
-  - predicate: mentions
-    object: people/sam-kelly
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [113, 184]
-        quote: "Sam Kelly raised that capacity planning is still blocked on\n PagerDuty."
-  - predicate: mentions
-    object: people/tom-whelan
-    confidence: 0.7
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [39, 99]
-        quote: '**Attendees:** Sam Kelly, Sam Kaur, Tom Whelan, Nadia Hassan'
-  - predicate: mentions
-    object: processes/capacity-planning
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [113, 184]
-        quote: "Sam Kelly raised that capacity planning is still blocked on\n PagerDuty."
-  - predicate: mentions
-    object: teams/engineering
-    confidence: 0.85
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [237, 321]
-        quote: "Handoff from Finance to Engineering is unclear; two\n tickets bounced back last week."
-  - predicate: mentions
-    object: teams/finance
-    confidence: 0.85
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [237, 321]
-        quote: "Handoff from Finance to Engineering is unclear; two\n tickets bounced back last week."
-  - predicate: mentions
-    object: tools/pagerduty
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [113, 184]
-        quote: "Sam Kelly raised that capacity planning is still blocked on\n PagerDuty."
   - predicate: owns
     subject: people/owen-fitz
     object: processes/capacity-planning
-    confidence: 0.75
+    confidence: 0.8
     provenance: llm
     status: proposed
     evidence:

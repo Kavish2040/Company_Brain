@@ -1,7 +1,7 @@
 {
   "edges": [
     {
-      "confidence": 0.75,
+      "confidence": 0.6,
       "evidence": [
         {
           "node": "self",

@@ -24,7 +24,7 @@ relations:
   - predicate: depends_on
     subject: processes/vendor-renewal
     object: tools/zendesk
-    confidence: 0.75
+    confidence: 0.85
     provenance: llm
     status: proposed
     evidence:
@@ -34,7 +34,7 @@ relations:
   - predicate: handoff_to
     subject: teams/product
     object: teams/engineering
-    confidence: 0.55
+    confidence: 0.7
     provenance: llm
     status: proposed
     evidence:
@@ -43,7 +43,7 @@ relations:
         quote: "Handoff from Product to Engineering is unclear; two\n tickets bounced back last week."
   - predicate: mentions
     object: people/ana-brito
-    confidence: 0.9
+    confidence: 0.85
     provenance: llm
     status: accepted
     evidence:
@@ -52,7 +52,7 @@ relations:
         quote: Ana Brito to document the handoff boundary.
   - predicate: mentions
     object: people/mei-tanaka
-    confidence: 0.95
+    confidence: 0.9
     provenance: llm
     status: accepted
     evidence:
@@ -60,32 +60,23 @@ relations:
         span: [109, 176]
         quote: "Mei Tanaka raised that vendor renewal is still blocked on\n Zendesk."
   - predicate: mentions
-    object: people/sam-kaur
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [179, 219]
-        quote: Sam Kaur confirmed they own the process.
-  - predicate: mentions
     object: people/tom-whelan
-    confidence: 0.7
+    confidence: 0.8
     provenance: llm
     status: proposed
     evidence:
       - node: self
-        span: [38, 95]
-        quote: Attendees:** Mei Tanaka, Zoë Ravel, Tom Whelan, Ana Brito
+        span: [36, 95]
+        quote: '**Attendees:** Mei Tanaka, Zoë Ravel, Tom Whelan, Ana Brito'
   - predicate: mentions
     object: people/zoe-ravel
-    confidence: 0.7
+    confidence: 0.8
     provenance: llm
     status: proposed
     evidence:
       - node: self
-        span: [38, 95]
-        quote: Attendees:** Mei Tanaka, Zoë Ravel, Tom Whelan, Ana Brito
+        span: [36, 95]
+        quote: '**Attendees:** Mei Tanaka, Zoë Ravel, Tom Whelan, Ana Brito'
   - predicate: mentions
     object: processes/vendor-renewal
     confidence: 0.9
@@ -97,18 +88,18 @@ relations:
         quote: "Mei Tanaka raised that vendor renewal is still blocked on\n Zendesk."
   - predicate: mentions
     object: teams/engineering
-    confidence: 0.8
+    confidence: 0.85
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
         span: [222, 306]
         quote: "Handoff from Product to Engineering is unclear; two\n tickets bounced back last week."
   - predicate: mentions
     object: teams/product
-    confidence: 0.8
+    confidence: 0.85
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
         span: [222, 306]
@@ -125,7 +116,7 @@ relations:
   - predicate: owns
     subject: people/sam-kaur
     object: processes/vendor-renewal
-    confidence: 0.85
+    confidence: 0.95
     provenance: llm
     status: proposed
     evidence:

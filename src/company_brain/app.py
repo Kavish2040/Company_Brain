@@ -6,12 +6,14 @@ the same wiring and the offline/online decision is made exactly once.
 
 from __future__ import annotations
 
+import json
 import os
 from dataclasses import dataclass
 from pathlib import Path
 
 from company_brain.acl.grants import AccessFilter, GrantTable, elevate
-from company_brain.corpus.generate import CHANNELS
+from company_brain.audit.log import AuditLog, Surface
+from company_brain.corpus.generate import CHANNEL_MEMBERS, CHANNELS
 from company_brain.extract.base import CachedExtractor, Extractor
 from company_brain.extract.rules import Roster
 from company_brain.index.base import Embedder, HashingEmbedder, IndexedNode
@@ -39,7 +41,7 @@ PRINCIPALS: dict[str, Principal] = {
 }
 
 
-def build_grants() -> GrantTable:
+def build_grants(store_root: Path = STORE_ROOT) -> GrantTable:
     """Grants for the synthetic principals.
 
     Only the CEO holds the restricted `leadership-comp` channel. That single
@@ -53,30 +55,55 @@ def build_grants() -> GrantTable:
         cid, _, tier = next(c for c in CHANNELS if c[1] == name)
         return f"slack:channel:{cid}", Sensitivity(tier)
 
+    # Slack grants are derived from CHANNEL_MEMBERS, not restated here — the
+    # simulated workspace reads the same map, and grant reconciliation is only
+    # correct while the two agree.
     plan: dict[str, list[tuple[str, Sensitivity]]] = {
-        "ceo": [
-            docs,
-            mail,
-            channel("general"),
-            channel("engineering"),
-            channel("support"),
-            channel("finance"),
-            channel("leadership-comp"),
-        ],
-        "support-lead": [
-            docs,
-            mail,
-            channel("general"),
-            channel("support"),
-            channel("engineering"),
-        ],
-        "eng-ic": [docs, mail, channel("general"), channel("engineering")],
-        "contractor": [channel("general")],
+        "ceo": [docs, mail],
+        "support-lead": [docs, mail],
+        "eng-ic": [docs, mail],
+        "contractor": [],
     }
+    for name, members in CHANNEL_MEMBERS.items():
+        for principal_id in members:
+            plan.setdefault(principal_id, []).append(channel(name))
+
     for principal_id, entries in plan.items():
         for ref, tier in entries:
             grants.grant(principal_id, ref, tier)
+
+    _apply_mirrored_grants(grants, store_root)
     return grants
+
+
+def _apply_mirrored_grants(grants: GrantTable, store_root: Path) -> None:
+    """Overlay grants a connector last observed, if any.
+
+    CHANNEL_MEMBERS is the *seed*; the source system is the authority. Once a
+    connector has synced, its mirror file wins for the refs it owns — otherwise
+    `cb sync --leave` reports a revocation and the next process rebuilds the
+    grant it just removed.
+
+    Absent file means never synced, so the seed stands.
+    """
+    directory = store_root / "_sync" / "grants"
+    if not directory.is_dir():
+        return
+    for path in sorted(directory.glob("*.json")):
+        try:
+            data = json.loads(path.read_text())
+        except (OSError, json.JSONDecodeError):
+            continue  # a corrupt mirror must not deny access it never granted
+        prefix = f"{data['connector']}:"
+        tiers = {ref: Sensitivity(t) for ref, t in data.get("tiers", {}).items()}
+
+        for principal, refs in grants.snapshot().items():
+            for ref in refs:
+                if ref.startswith(prefix):
+                    grants.revoke(principal, ref)
+        for principal, refs in data.get("grants", {}).items():
+            for ref in refs:
+                grants.grant(principal, ref, tiers.get(ref, Sensitivity.RESTRICTED))
 
 
 @dataclass(slots=True)
@@ -175,6 +202,17 @@ class App:
     def access(self, principal: Principal) -> AccessFilter:
         return AccessFilter(self.grants, principal)
 
+    def audit(self, surface: Surface) -> AuditLog:
+        """The audit log for one surface, over this app's store.
+
+        Composed here rather than at each call site for the usual reason: the
+        CLI, the MCP server, and the API must write to *one* log, and a surface
+        that builds its own backend is a surface whose records end up somewhere
+        nobody looks. ``surface`` is bound at construction because a caller that
+        can name its own surface per call can claim to be a different one.
+        """
+        return AuditLog(self.repo.backend, surface=surface)
+
     def load_index(self) -> int:
         """Rebuild the index from markdown. This *is* invariant 2."""
         payload: list[tuple[IndexedNode, str]] = []
@@ -207,7 +245,7 @@ def build_app(store_root: Path = STORE_ROOT, *, frozen: bool = False) -> App:
     return App(
         repo=repo,
         registry=default_registry(),
-        grants=build_grants(),
+        grants=build_grants(store_root),
         index=MemoryIndex(providers.embedder),
         providers=providers,
     )

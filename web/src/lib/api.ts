@@ -50,22 +50,62 @@ export type NodeDetail = {
   relations: Relation[];
 };
 
+/** One edge as a line in a diff, rather than as a settled fact. */
+export type RelationDiff = {
+  predicate: string;
+  subject: string | null;
+  subject_title: string | null;
+  object: string;
+  object_title: string | null;
+  confidence: number;
+  provenance: string;
+  quote: string;
+};
+
+export type DiffLine = {
+  kind: "context" | "added" | "removed" | "gap";
+  text: string;
+};
+
+/**
+ * One queue item. Extraction-proposed edges and agent proposals arrive in the
+ * same shape because to a reviewer they are the same job — an extraction edge
+ * is simply a diff with one added relation and nothing removed.
+ */
 export type Pending = {
   key: string;
+  /** "edge" — the §11 gates held it back; "proposal" — an agent wrote it. */
+  kind: "edge" | "proposal";
   node_id: string;
   node_title: string;
-  predicate: string;
-  object: string;
-  confidence: number;
+  predicate: string | null;
+  subject: string | null;
+  subject_title: string | null;
+  object: string | null;
+  confidence: number | null;
   quote: string;
+  summary: string;
+  /** Agent proposals only. A suggestion nobody can attribute is a suggestion
+   *  nobody should accept. */
+  proposed_by: string | null;
+  delegated_by: string | null;
+  /** The target moved after the proposal was made; accepting would revert it. */
+  stale: boolean;
+  body_diff: DiffLine[];
+  added_relations: RelationDiff[];
+  removed_relations: RelationDiff[];
 };
 
 export type ReviewStats = {
   pending: number;
+  pending_proposals: number;
   by_predicate: Record<string, number>;
   /** predicate -> [accepted, decided]. 100% means the gate is theatre. */
   accept_rate: Record<string, [number, number]>;
+  proposal_accept_rate: Record<string, [number, number]>;
 };
+
+export type Decision = "accepted" | "rejected" | "pending";
 
 export type Health = {
   ok: boolean;
@@ -133,9 +173,21 @@ export const api = {
       p,
     ),
   reviewStats: (p: string) => request<ReviewStats>("/review/stats", p),
-  decide: (p: string, key: string, decision: "accepted" | "rejected") =>
-    request<{ key: string }>("/review/decide", p, {
-      method: "POST",
-      body: JSON.stringify({ key, decision }),
-    }),
+  /**
+   * Decide one item or many, in the order the reviewer worked them. Each item
+   * carries back the `kind` the queue gave it, so the server validates a tag
+   * rather than inferring a code path from the shape of a key.
+   */
+  decide: (p: string, items: Pending[], decision: Decision) =>
+    request<{ decided: number; decision: string; by: string }>(
+      "/review/decide",
+      p,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          items: items.map(({ key, kind }) => ({ key, kind })),
+          decision,
+        }),
+      },
+    ),
 };

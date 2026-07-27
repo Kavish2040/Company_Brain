@@ -1,42 +1,6 @@
 {
   "edges": [
     {
-      "confidence": 0.9,
-      "evidence": [
-        {
-          "node": "self",
-          "quote": "Sam Kelly raised that capacity planning is still blocked on\n PagerDuty.",
-          "span": [
-            113,
-            184
-          ]
-        }
-      ],
-      "object": "tools/pagerduty",
-      "predicate": "depends_on",
-      "provenance": "llm",
-      "status": "proposed",
-      "subject": "processes/capacity-planning"
-    },
-    {
-      "confidence": 0.7,
-      "evidence": [
-        {
-          "node": "self",
-          "quote": "Handoff from Finance to Engineering is unclear; two\n tickets bounced back last week.",
-          "span": [
-            237,
-            321
-          ]
-        }
-      ],
-      "object": "teams/engineering",
-      "predicate": "handoff_to",
-      "provenance": "llm",
-      "status": "proposed",
-      "subject": "teams/finance"
-    },
-    {
       "confidence": 0.85,
       "evidence": [
         {
@@ -55,133 +19,7 @@
       "subject": null
     },
     {
-      "confidence": 0.7,
-      "evidence": [
-        {
-          "node": "self",
-          "quote": "**Attendees:** Sam Kelly, Sam Kaur, Tom Whelan, Nadia Hassan",
-          "span": [
-            39,
-            99
-          ]
-        }
-      ],
-      "object": "people/sam-kaur",
-      "predicate": "mentions",
-      "provenance": "llm",
-      "status": "proposed",
-      "subject": null
-    },
-    {
-      "confidence": 0.9,
-      "evidence": [
-        {
-          "node": "self",
-          "quote": "Sam Kelly raised that capacity planning is still blocked on\n PagerDuty.",
-          "span": [
-            113,
-            184
-          ]
-        }
-      ],
-      "object": "people/sam-kelly",
-      "predicate": "mentions",
-      "provenance": "llm",
-      "status": "accepted",
-      "subject": null
-    },
-    {
-      "confidence": 0.7,
-      "evidence": [
-        {
-          "node": "self",
-          "quote": "**Attendees:** Sam Kelly, Sam Kaur, Tom Whelan, Nadia Hassan",
-          "span": [
-            39,
-            99
-          ]
-        }
-      ],
-      "object": "people/tom-whelan",
-      "predicate": "mentions",
-      "provenance": "llm",
-      "status": "proposed",
-      "subject": null
-    },
-    {
-      "confidence": 0.9,
-      "evidence": [
-        {
-          "node": "self",
-          "quote": "Sam Kelly raised that capacity planning is still blocked on\n PagerDuty.",
-          "span": [
-            113,
-            184
-          ]
-        }
-      ],
-      "object": "processes/capacity-planning",
-      "predicate": "mentions",
-      "provenance": "llm",
-      "status": "accepted",
-      "subject": null
-    },
-    {
-      "confidence": 0.85,
-      "evidence": [
-        {
-          "node": "self",
-          "quote": "Handoff from Finance to Engineering is unclear; two\n tickets bounced back last week.",
-          "span": [
-            237,
-            321
-          ]
-        }
-      ],
-      "object": "teams/engineering",
-      "predicate": "mentions",
-      "provenance": "llm",
-      "status": "accepted",
-      "subject": null
-    },
-    {
-      "confidence": 0.85,
-      "evidence": [
-        {
-          "node": "self",
-          "quote": "Handoff from Finance to Engineering is unclear; two\n tickets bounced back last week.",
-          "span": [
-            237,
-            321
-          ]
-        }
-      ],
-      "object": "teams/finance",
-      "predicate": "mentions",
-      "provenance": "llm",
-      "status": "accepted",
-      "subject": null
-    },
-    {
-      "confidence": 0.9,
-      "evidence": [
-        {
-          "node": "self",
-          "quote": "Sam Kelly raised that capacity planning is still blocked on\n PagerDuty.",
-          "span": [
-            113,
-            184
-          ]
-        }
-      ],
-      "object": "tools/pagerduty",
-      "predicate": "mentions",
-      "provenance": "llm",
-      "status": "accepted",
-      "subject": null
-    },
-    {
-      "confidence": 0.75,
+      "confidence": 0.8,
       "evidence": [
         {
           "node": "self",
@@ -201,5 +39,7 @@
   ],
   "model": "claude-sonnet-5",
   "prompt_version": "claude-roster-v2",
-  "unresolved": []
+  "unresolved": [
+    "Owen Fitzgerald (attendee name variant matches people/owen-fitz)"
+  ]
 }

@@ -30,6 +30,15 @@ relations:
       - node: self
         span: [56, 80]
         quote: '**Decided by:** Sam Kaur'
+  - predicate: mentions
+    object: processes/vendor-renewal
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [115, 171]
+        quote: The existing vendor renewal process was taking too long.
   - predicate: owns
     subject: people/sam-kaur
     object: processes/vendor-renewal
@@ -38,11 +47,13 @@ relations:
     status: proposed
     evidence:
       - node: self
-        span: [186, 232]
-        quote: Sam Kaur will own vendor renewal going forward
+        span: [186, 281]
+        quote: 'Sam Kaur will own vendor renewal going forward, and the
+
+          sign-off step moves to the owning team.'
   - predicate: supersedes
     object: teams/finance
-    confidence: 0.5
+    confidence: 0.6
     provenance: llm
     status: proposed
     evidence:

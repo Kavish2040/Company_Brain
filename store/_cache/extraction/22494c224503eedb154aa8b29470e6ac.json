@@ -19,7 +19,7 @@
       "subject": "processes/security-review"
     },
     {
-      "confidence": 0.7,
+      "confidence": 0.9,
       "evidence": [
         {
           "node": "self",
@@ -33,11 +33,11 @@
       "object": "people/dev-oyelaran",
       "predicate": "mentions",
       "provenance": "llm",
-      "status": "proposed",
+      "status": "accepted",
       "subject": null
     },
     {
-      "confidence": 0.6,
+      "confidence": 0.9,
       "evidence": [
         {
           "node": "self",
@@ -51,11 +51,11 @@
       "object": "people/owen-fitz",
       "predicate": "mentions",
       "provenance": "llm",
-      "status": "proposed",
+      "status": "accepted",
       "subject": null
     },
     {
-      "confidence": 0.5,
+      "confidence": 0.6,
       "evidence": [
         {
           "node": "self",
@@ -73,18 +73,18 @@
       "subject": null
     },
     {
-      "confidence": 0.5,
+      "confidence": 0.8,
       "evidence": [
         {
           "node": "self",
-          "quote": "Handoff from Engineering to Engineering is unclear; two\n tickets bounced back last week.",
+          "quote": "Security review sync \u2014 2024-01-22",
           "span": [
-            243,
-            331
+            2,
+            35
           ]
         }
       ],
-      "object": "teams/engineering",
+      "object": "processes/security-review",
       "predicate": "mentions",
       "provenance": "llm",
       "status": "proposed",

@@ -1,22 +1,22 @@
 {
   "edges": [
     {
-      "confidence": 0.97,
+      "confidence": 0.9,
       "evidence": [
         {
           "node": "self",
-          "quote": "Mei Tanaka will own customer data request going forward, and the\nsign-off step moves to the owning team.",
+          "quote": "**Decided by:** Mei Tanaka",
           "span": [
-            202,
-            306
+            63,
+            89
           ]
         }
       ],
-      "object": "processes/data-request",
-      "predicate": "owns",
+      "object": "people/mei-tanaka",
+      "predicate": "mentions",
       "provenance": "llm",
-      "status": "proposed",
-      "subject": "people/mei-tanaka"
+      "status": "accepted",
+      "subject": null
     },
     {
       "confidence": 0.75,

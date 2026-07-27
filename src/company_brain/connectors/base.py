@@ -110,6 +110,10 @@ class Page:
     records: tuple[SourceRecord, ...]
     cursor: str | None
     has_more: bool = False
+    # Artifacts the cursor filtered out. Without this a clean sync reports
+    # "=0", which reads as "nothing there" rather than "nothing changed" —
+    # the two look identical and only one of them is good news.
+    cursor_skipped: int = 0
 
 
 @runtime_checkable

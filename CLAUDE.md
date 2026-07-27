@@ -108,6 +108,10 @@ src/company_brain/
   cli/         main.py — Typer commands
   api/         app.py — FastAPI, ACL-projected responses, X-Principal header
   resolve/     entity resolution: identity keys, aliases, candidate scoring — empty; M3
+  eval/        the M4 quality gate. questions.py (110 goldens, derived from the corpus
+               generator's tables) · harness.py (recall@k per principal class, leak
+               checking on every answer) · baseline.py + baseline.json (the committed
+               regression gate)
 corpus/synthetic/    committed corpus (201 files), regenerable byte-identically
 store/               generated markdown tree — COMMITTED, not gitignored: re-ingestion is
                      verified with `git diff --exit-code` over this tree
@@ -155,6 +159,8 @@ uv run cb ingest corpus/synthetic --frozen     # fail on extraction cache miss (
 uv run cb sync [--connector simulated-slack] [--no-deletes]   # incremental sync
 uv run cb index                          # rebuild the index and report its stats
 uv run cb doctor                         # store/index drift check; non-zero on drift
+uv run cb eval [--detail] [--json report.json]   # score 110 goldens x 4 principals
+uv run cb eval --update-baseline         # re-record the gate; a reviewed diff, never incidental
 uv run cb ask "who owns vendor renewals?" [--principal ceo|support-lead|eng-ic|contractor]
 uv run cb principals                     # what each synthetic principal can see
 uv run cb review list [--predicate owns] | uv run cb review stats
@@ -180,6 +186,10 @@ Things that surprise people:
   being free somewhere north of this corpus size — online, it also re-embeds every time.
 - **`cb ask` exit codes are load-bearing.** `2` = citation leak blocked, `3` = refused as
   uncited, `1` = ordinary failure. Never soften either into a printed warning.
+- **`cb eval` mirrors them:** `2` = a principal reached a source family they do not hold,
+  `1` = a metric fell below `eval/baseline.json`. It scores whatever store you point it at,
+  so run `cb doctor` before `--update-baseline` — a half-ingested store will happily record
+  its own bad numbers as the new bar.
 - **`./scripts/run.sh demo` starts with `rm -rf store`.** An interrupted demo leaves a
   half-ingested tree — documents but no entity nodes, and `cb doctor` reporting hundreds of
   dangling edges. Re-run the ingest; the state is not corruption, just incompleteness.
@@ -417,6 +427,36 @@ nodes, 364 chunks, 1122 accepted edges, and 32 edges pending review; `cb doctor`
 `cb sync` picks up 5 simulated channels. The online path is real, not theoretical — the
 extraction cache in `store/` carries `model: claude-sonnet-5` frontmatter from live runs.
 
+**M4 — the evaluation harness is in, ahead of the features it grades.** Every M4 capability
+is a retrieval-quality claim, so the gate landed first: `src/company_brain/eval/`, 110
+golden questions across the five ROADMAP classes, run once per principal (440 pairs, ~4s),
+scored against a committed baseline. Three properties are worth knowing before you touch it:
+
+| Property | Why it is built that way |
+|---|---|
+| goldens derive from `corpus/generate.py`'s own tables | a renamed process moves the question with it; `test_every_expected_pattern_resolves_to_a_real_node` catches the rest |
+| recall is measured against the evidence *that principal can see* | scoring the CEO and a contractor on one denominator reports a permissions boundary as a quality regression |
+| `VISIBLE_SOURCES` is restated by hand, not read from `GrantTable` | asking the ACL engine what should be visible makes a widened grant widen the expectation with it, and a leak reads as a pass |
+
+Baseline at the point it landed (offline, extractive synthesizer, k=10): overall recall@k
+**0.70**, hit@k 0.80, **zero leaks across all 440 pairs**, the ten M1 goldens at 1.00. By
+class: temporal 0.93, ownership 0.73, systemic 0.72, factual 0.60. What the numbers already
+say, and what M4 has to move:
+
+- **Refusal rate is 0.09.** On the 14 unanswerable questions the system almost never says
+  so — it answers from whatever the corpus happened to rank highest. That is the
+  insufficient-evidence gap, now measured rather than asserted.
+- **Tool and team pages are never retrieved.** All six `fact-tool-*` and all four
+  `fact-roster-*` questions score 0.0 even for the CEO, on three-line documents that state
+  the answer outright. Short authoritative pages lose to the dozens of Slack messages and
+  meeting notes that merely mention the same name. This is a ranking bug, not a corpus gap.
+- **Process, Person and Team nodes have empty bodies**, so they carry no chunks and are
+  reachable only by graph expansion. Process modelling (steps, owners, inputs/outputs) is
+  what gives them content, and the systemic class is what will register it.
+- **The contractor has zero visible evidence on all 110 questions and refuses on 13% of
+  them.** Not a leak — the other 87% are answered from the general channel — but answering
+  around a permission boundary instead of naming it is its own failure.
+
 **What the green suite still does not prove.** The offline extractor shares assumptions
 with the corpus generator — both know the same curated process list — so entity linking is
 easier here than on real data. The hashing embedder has no semantic content; it is a
@@ -441,3 +481,10 @@ mechanism — determinism is verified by tree hashing inside the acceptance suit
 3. Sensitivity tiers as physical store roots, and ARCHITECTURE §14 open questions 2 and 3
    (prod store backend, retention on delete) — both block the rest of M2.
 4. M3 — entity resolution layer 3 in `resolve/`, and the review surfaces that depend on it.
+5. M4, now that the gate exists, in this order: process modelling (curated Process nodes
+   with steps, owners and inputs/outputs — ARCHITECTURE §10.3 and §14 Q5, which is decided
+   in practice but still typeset as an open question); `handoff_to` enriched with observed
+   latency, volume and rework; the systemic queries; evidence-grade synthesis separating
+   asserted from inferred; and a real insufficient-evidence path with `ClaudeSynthesizer`
+   under an adversarial test. Each step moves a number in `eval/baseline.json` or it did
+   not happen.

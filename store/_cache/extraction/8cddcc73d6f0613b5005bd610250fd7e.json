@@ -1,7 +1,7 @@
 {
   "edges": [
     {
-      "confidence": 0.6,
+      "confidence": 0.75,
       "evidence": [
         {
           "node": "self",
@@ -13,13 +13,33 @@
         }
       ],
       "object": "teams/finance",
-      "predicate": "supersedes",
+      "predicate": "mentions",
       "provenance": "llm",
       "status": "proposed",
       "subject": null
+    },
+    {
+      "confidence": 0.97,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Ana Brito will own quarterly close going forward",
+          "span": [
+            189,
+            237
+          ]
+        }
+      ],
+      "object": "processes/quarterly-close",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "people/ana-brito"
     }
   ],
   "model": "claude-sonnet-5",
   "prompt_version": "claude-roster-v2",
-  "unresolved": []
+  "unresolved": [
+    "the owning team"
+  ]
 }

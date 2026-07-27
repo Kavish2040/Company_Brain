@@ -1,7 +1,7 @@
 {
   "edges": [
     {
-      "confidence": 0.9,
+      "confidence": 0.85,
       "evidence": [
         {
           "node": "self",
@@ -37,7 +37,7 @@
       "subject": "teams/support"
     },
     {
-      "confidence": 0.8,
+      "confidence": 0.9,
       "evidence": [
         {
           "node": "self",
@@ -51,7 +51,7 @@
       "object": "people/dev-oyelaran",
       "predicate": "mentions",
       "provenance": "llm",
-      "status": "proposed",
+      "status": "accepted",
       "subject": null
     },
     {
@@ -91,7 +91,7 @@
       "subject": null
     },
     {
-      "confidence": 0.9,
+      "confidence": 0.7,
       "evidence": [
         {
           "node": "self",
@@ -105,11 +105,47 @@
       "object": "people/tom-whelan",
       "predicate": "mentions",
       "provenance": "llm",
-      "status": "accepted",
+      "status": "proposed",
       "subject": null
     },
     {
-      "confidence": 0.85,
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Vendor renewal sync \u2014 2024-01-10",
+          "span": [
+            2,
+            34
+          ]
+        }
+      ],
+      "object": "processes/vendor-renewal",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Tom Whelan raised that vendor renewal is still blocked on\n PagerDuty.",
+          "span": [
+            115,
+            184
+          ]
+        }
+      ],
+      "object": "tools/pagerduty",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.75,
       "evidence": [
         {
           "node": "self",

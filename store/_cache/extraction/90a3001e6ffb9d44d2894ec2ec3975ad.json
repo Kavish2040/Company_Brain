@@ -1,7 +1,7 @@
 {
   "edges": [
     {
-      "confidence": 0.75,
+      "confidence": 0.85,
       "evidence": [
         {
           "node": "self",
@@ -19,7 +19,7 @@
       "subject": "processes/vendor-renewal"
     },
     {
-      "confidence": 0.55,
+      "confidence": 0.7,
       "evidence": [
         {
           "node": "self",
@@ -37,7 +37,7 @@
       "subject": "teams/product"
     },
     {
-      "confidence": 0.9,
+      "confidence": 0.85,
       "evidence": [
         {
           "node": "self",
@@ -55,7 +55,7 @@
       "subject": null
     },
     {
-      "confidence": 0.95,
+      "confidence": 0.9,
       "evidence": [
         {
           "node": "self",
@@ -73,31 +73,13 @@
       "subject": null
     },
     {
-      "confidence": 0.9,
+      "confidence": 0.8,
       "evidence": [
         {
           "node": "self",
-          "quote": "Sam Kaur confirmed they own the process.",
+          "quote": "**Attendees:** Mei Tanaka, Zo\u00eb Ravel, Tom Whelan, Ana Brito",
           "span": [
-            179,
-            219
-          ]
-        }
-      ],
-      "object": "people/sam-kaur",
-      "predicate": "mentions",
-      "provenance": "llm",
-      "status": "accepted",
-      "subject": null
-    },
-    {
-      "confidence": 0.7,
-      "evidence": [
-        {
-          "node": "self",
-          "quote": "Attendees:** Mei Tanaka, Zo\u00eb Ravel, Tom Whelan, Ana Brito",
-          "span": [
-            38,
+            36,
             95
           ]
         }
@@ -109,13 +91,13 @@
       "subject": null
     },
     {
-      "confidence": 0.7,
+      "confidence": 0.8,
       "evidence": [
         {
           "node": "self",
-          "quote": "Attendees:** Mei Tanaka, Zo\u00eb Ravel, Tom Whelan, Ana Brito",
+          "quote": "**Attendees:** Mei Tanaka, Zo\u00eb Ravel, Tom Whelan, Ana Brito",
           "span": [
-            38,
+            36,
             95
           ]
         }
@@ -145,7 +127,7 @@
       "subject": null
     },
     {
-      "confidence": 0.8,
+      "confidence": 0.85,
       "evidence": [
         {
           "node": "self",
@@ -159,11 +141,11 @@
       "object": "teams/engineering",
       "predicate": "mentions",
       "provenance": "llm",
-      "status": "proposed",
+      "status": "accepted",
       "subject": null
     },
     {
-      "confidence": 0.8,
+      "confidence": 0.85,
       "evidence": [
         {
           "node": "self",
@@ -177,7 +159,7 @@
       "object": "teams/product",
       "predicate": "mentions",
       "provenance": "llm",
-      "status": "proposed",
+      "status": "accepted",
       "subject": null
     },
     {
@@ -199,7 +181,7 @@
       "subject": null
     },
     {
-      "confidence": 0.85,
+      "confidence": 0.95,
       "evidence": [
         {
           "node": "self",

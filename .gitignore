@@ -30,3 +30,19 @@ web/dist/
 # Committing it as a gitlink gives clones an empty folder pointing at
 # a commit in another repository.
 sylph/
+
+# Mutable local demo state, not part of the graph.
+#   _sim/   the simulated source system's own state (a fake Slack workspace)
+#   _sync/  cursors, last-seen ids, and mirrored grants
+#   _audit/ who saw what, when — wall-clock by definition
+# All three are workflow state: invariant 2 lists acl_grants and cursors as the
+# things NOT rebuildable from markdown. Committing them would churn on every
+# demo run and make `git diff --exit-code` on the store meaningless.
+#
+# The audit log is ignored *here* and would not be in production, where it is
+# the record a security reviewer asks for and belongs in an append-only store
+# with retention (ARCHITECTURE §8.2, ROADMAP M5). A developer's local trail of
+# their own demo runs is not that record.
+store/_sim/
+store/_sync/
+store/_audit/

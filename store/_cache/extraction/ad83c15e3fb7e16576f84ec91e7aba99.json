@@ -5,9 +5,9 @@
       "evidence": [
         {
           "node": "self",
-          "quote": "employee onboarding is still blocked on\n NetSuite.",
+          "quote": "Ana Brito raised that employee onboarding is still blocked on\n NetSuite.",
           "span": [
-            137,
+            115,
             187
           ]
         }
@@ -19,7 +19,7 @@
       "subject": "processes/onboarding"
     },
     {
-      "confidence": 0.75,
+      "confidence": 0.5,
       "evidence": [
         {
           "node": "self",
@@ -55,7 +55,7 @@
       "subject": null
     },
     {
-      "confidence": 0.9,
+      "confidence": 0.85,
       "evidence": [
         {
           "node": "self",
@@ -77,14 +77,32 @@
       "evidence": [
         {
           "node": "self",
-          "quote": "**Attendees:** Ana Brito, Sam Kelly, Zo\u00eb Ravel, Dev Oyelaran",
+          "quote": "Handoff from Engineering to Product is unclear; two\n tickets bounced back last week.",
           "span": [
-            41,
-            101
+            234,
+            318
           ]
         }
       ],
-      "object": "people/sam-kelly",
+      "object": "teams/engineering",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Handoff from Engineering to Product is unclear; two\n tickets bounced back last week.",
+          "span": [
+            234,
+            318
+          ]
+        }
+      ],
+      "object": "teams/product",
       "predicate": "mentions",
       "provenance": "llm",
       "status": "proposed",
@@ -92,6 +110,24 @@
     },
     {
       "confidence": 0.8,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Ana Brito raised that employee onboarding is still blocked on\n NetSuite.",
+          "span": [
+            115,
+            187
+          ]
+        }
+      ],
+      "object": "tools/netsuite",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.85,
       "evidence": [
         {
           "node": "self",

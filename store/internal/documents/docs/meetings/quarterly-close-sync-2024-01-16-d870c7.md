@@ -21,31 +21,11 @@ extraction:
   cache_key: 245971176bb7518dc94accdf37246798
   status: accepted
 relations:
-  - predicate: depends_on
-    subject: processes/quarterly-close
-    object: tools/netsuite
-    confidence: 0.9
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [112, 183]
-        quote: "Nadia Hassan raised that quarterly close is still blocked on\n NetSuite."
-  - predicate: handoff_to
-    subject: teams/product
-    object: teams/finance
-    confidence: 0.55
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [230, 310]
-        quote: "Handoff from Product to Finance is unclear; two\n tickets bounced back last week."
   - predicate: mentions
     object: people/mei-tanaka
-    confidence: 0.85
+    confidence: 0.6
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
         span: [326, 370]

@@ -19,14 +19,32 @@
       "subject": null
     },
     {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "The existing vendor renewal process was taking too long.",
+          "span": [
+            115,
+            171
+          ]
+        }
+      ],
+      "object": "processes/vendor-renewal",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
       "confidence": 0.95,
       "evidence": [
         {
           "node": "self",
-          "quote": "Sam Kaur will own vendor renewal going forward",
+          "quote": "Sam Kaur will own vendor renewal going forward, and the\nsign-off step moves to the owning team.",
           "span": [
             186,
-            232
+            281
           ]
         }
       ],
@@ -37,7 +55,7 @@
       "subject": "people/sam-kaur"
     },
     {
-      "confidence": 0.5,
+      "confidence": 0.6,
       "evidence": [
         {
           "node": "self",

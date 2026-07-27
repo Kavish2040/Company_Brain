@@ -329,8 +329,13 @@ class TestAgentBoundary:
                 "company_brain.schemas.acl", fromlist=["Sensitivity"]
             ).Sensitivity.RESTRICTED,
         )
-        session = Session(app=app, agent_id="agent-x", delegated_by="contractor")
+        # Bound, not constructed: `bind` is what registers the agent, and an
+        # *unregistered* agent sees nothing at all — which would pass this
+        # assertion for the wrong reason. Registered and inheriting, the
+        # intersection is the only thing keeping C0LEAD out.
+        session = Session.bind(app, agent_id="agent-x", delegated_by="contractor")
         assert "slack:channel:C0LEAD" not in session.access.refs
+        assert session.access.refs, "an inheriting agent should see the contractor's refs"
 
     def test_write_node_produces_a_proposal_not_a_mutation(
         self, built: tuple[Path, Path]
@@ -340,7 +345,7 @@ class TestAgentBoundary:
         _, store = built
         app = build_app(store)
         app.load_index()
-        session = Session(app=app, agent_id="agent-x", delegated_by="ceo")
+        session = Session.bind(app, agent_id="agent-x", delegated_by="ceo")
         target = next(app.repo.walk_ids("Person"))
         before = app.repo.get(target)
 

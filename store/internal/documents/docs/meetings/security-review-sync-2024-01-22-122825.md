@@ -33,25 +33,25 @@ relations:
         quote: "Owen Fitzgerald raised that security review is still blocked on\n PagerDuty."
   - predicate: mentions
     object: people/dev-oyelaran
-    confidence: 0.7
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
         span: [347, 393]
         quote: Dev Oyelaran to document the handoff boundary.
   - predicate: mentions
     object: people/owen-fitz
-    confidence: 0.6
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
         span: [120, 195]
         quote: "Owen Fitzgerald raised that security review is still blocked on\n PagerDuty."
   - predicate: mentions
     object: people/priya-raman
-    confidence: 0.5
+    confidence: 0.6
     provenance: llm
     status: proposed
     evidence:
@@ -59,14 +59,14 @@ relations:
         span: [37, 106]
         quote: '**Attendees:** Owen Fitzgerald, Tom Whelan, Priya Raman, Dev Oyelaran'
   - predicate: mentions
-    object: teams/engineering
-    confidence: 0.5
+    object: processes/security-review
+    confidence: 0.8
     provenance: llm
     status: proposed
     evidence:
       - node: self
-        span: [243, 331]
-        quote: "Handoff from Engineering to Engineering is unclear; two\n tickets bounced back last week."
+        span: [2, 35]
+        quote: Security review sync — 2024-01-22
   - predicate: owns
     subject: people/tom-whelan
     object: processes/security-review

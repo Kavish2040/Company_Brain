@@ -21,21 +21,9 @@ extraction:
   cache_key: 87930b38b2a42ccecf2169b807fa3a78
   status: accepted
 relations:
-  - predicate: owns
-    subject: people/dev-oyelaran
-    object: processes/customer-escalation
-    confidence: 0.95
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [200, 304]
-        quote: 'Dev Oyelaran will own customer escalation going forward, and the
-
-          sign-off step moves to the owning team.'
   - predicate: supersedes
     object: teams/support
-    confidence: 0.7
+    confidence: 0.75
     provenance: llm
     status: proposed
     evidence:

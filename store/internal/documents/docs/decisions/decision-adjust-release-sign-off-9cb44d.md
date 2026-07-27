@@ -32,7 +32,7 @@ relations:
         quote: '**Decided by:** Priya Raman'
   - predicate: mentions
     object: processes/release-signoff
-    confidence: 0.95
+    confidence: 0.9
     provenance: llm
     status: accepted
     evidence:
@@ -40,15 +40,6 @@ relations:
         span: [120, 178]
         quote: The existing release sign-off process was taking too long.
   - predicate: mentions
-    object: teams/engineering
-    confidence: 0.8
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [310, 384]
-        quote: The previous informal arrangement documented in the Engineering team page.
-  - predicate: supersedes
     object: teams/engineering
     confidence: 0.75
     provenance: llm

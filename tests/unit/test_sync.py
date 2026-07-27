@@ -26,7 +26,7 @@ from company_brain.extract.rules import Roster, RosterEntry, RuleBasedExtractor
 from company_brain.normalize.formats import default_registry
 from company_brain.schemas.acl import Principal, PrincipalKind, Sensitivity
 from company_brain.schemas.edges import EdgeStatus
-from company_brain.schemas.nodes import NodeStatus, SourceRef
+from company_brain.schemas.nodes import NodeStatus
 from company_brain.store.backend import MemoryBackend
 from company_brain.store.repository import Repository
 
@@ -80,13 +80,15 @@ def doc_ids(repo: Repository) -> list[str]:
     return list(repo.walk_ids("Document"))
 
 
+# Channel ids (C0ENG) identify ACL refs; channel *names* (engineering) appear in
+# node paths and URIs, because those mirror the corpus layout.
+CHANNEL_NAME = {"C0ENG": "engineering", "C0LEAD": "leadership", "C0SUP": "support"}
+
+
 def node_in(repo: Repository, channel: str) -> str:
     """The document node backing one simulated channel."""
-    return next(
-        n
-        for n in doc_ids(repo)
-        if channel in (repo.get(n).frontmatter.source or SourceRef).uri  # type: ignore[union-attr]
-    )
+    name = CHANNEL_NAME.get(channel, channel)
+    return next(n for n in doc_ids(repo) if f"/slack/{name}/" in n)
 
 
 class TestInitialSync:
@@ -132,8 +134,9 @@ class TestEdits:
         node_id = doc_ids(repo)[0]
         before = repo.get(node_id).frontmatter.source.content_sha256
 
-        cid = node_id.split("/")[-1]
-        target = "C0ENG" if "C0ENG" in repo.get(node_id).frontmatter.source.uri else "C0LEAD"
+        uri = repo.get(node_id).frontmatter.source.uri
+        target = "C0ENG" if "/engineering/" in uri else "C0LEAD"
+        cid = target
         ts = next(iter(slack.channels[target].messages))
         slack.edit(target, ts, "Completely different content now.")
         eng.sync(slack, now=NOW)
@@ -445,3 +448,233 @@ class TestDepartureClassification:
         )
         hits = index.search_lexical("compensation bands", access, 10)
         assert not [h for h in hits if h.chunk.node_id == node_id]
+
+
+class TestSeededWorkspace:
+    """`seeded_workspace()` had four defects and zero tests. That is why.
+
+    The old version fabricated content, so every test built its own
+    SimulatedSlack by hand and nothing ever exercised the seeding path the CLI
+    actually used.
+    """
+
+    def test_seeding_is_deterministic(self, tmp_path) -> None:
+        """The old version chose a speaker with `hash(cid)`. Python randomises
+        string hashing per process, so that byte reached the record JSON, moved
+        content_sha256 every run, and produced phantom updates that busted the
+        extraction cache — real spend against a live model."""
+        from company_brain.connectors.simulated import seed_from_corpus
+
+        a, b = seed_from_corpus(), seed_from_corpus()
+        assert {c.id: sorted(c.days) for c in a.channels.values()} == {
+            c.id: sorted(c.days) for c in b.channels.values()
+        }
+        first_a = a.fetch(None).records
+        first_b = b.fetch(None).records
+        assert [r.raw for r in first_a] == [r.raw for r in first_b]
+
+    def test_it_serves_the_corpus_rather_than_inventing_content(self) -> None:
+        """The docstring used to claim it matched the corpus. It fabricated
+        one-line bodies at a made-up epoch, so sync ADDED nodes the corpus
+        ingest had never seen — and `cb ask` could cite them."""
+        import json
+        from pathlib import Path
+
+        from company_brain.connectors.simulated import seed_from_corpus
+
+        workspace = seed_from_corpus()
+        sample = Path("corpus/synthetic/slack/engineering/2024-01-08.json")
+        if not sample.exists():
+            pytest.skip("corpus not generated")
+
+        day = workspace.channel_by_name("engineering").days["2024-01-08"]
+        assert day.messages == json.loads(sample.read_text())
+
+    def test_record_uris_match_the_corpus_ingest(self) -> None:
+        """Same URI and path in means the same node id out, so sync updates the
+        corpus's nodes instead of shadowing them."""
+        from company_brain.connectors.simulated import seed_from_corpus
+
+        records = seed_from_corpus().fetch(None).records
+        if not records:
+            pytest.skip("corpus not generated")
+        record = records[0]
+        assert record.uri.startswith("file://corpus/slack/")
+        assert record.path.startswith("slack/")
+
+    def test_membership_has_one_source(self) -> None:
+        """It was hardcoded in seeded_workspace AND in build_grants(). They
+        agreed only by luck, and grant reconciliation depends on it."""
+        from company_brain.connectors.simulated import seed_from_corpus
+        from company_brain.corpus.generate import CHANNEL_MEMBERS
+
+        for channel in seed_from_corpus().channels.values():
+            assert channel.members == set(CHANNEL_MEMBERS.get(channel.name, frozenset()))
+
+
+class TestPersistence:
+    """State must survive the process, or no scenario composes.
+
+    With an in-memory workspace every invocation rebuilt at revision 0 while the
+    cursor persisted, so a second `cb sync` reported nothing at all — and no
+    mutation lived long enough to be synced.
+    """
+
+    def test_a_round_trip_preserves_the_workspace(self) -> None:
+        from company_brain.connectors.simulated import SimulatedSlack, seed_from_corpus
+
+        backend = MemoryBackend()
+        original = seed_from_corpus()
+        original.edit_latest("engineering", "changed")
+        original.save(backend)
+
+        restored = SimulatedSlack.load(backend)
+        assert restored is not None
+        assert {c.id for c in restored.channels.values()} == {
+            c.id for c in original.channels.values()
+        }
+        assert restored.latest_day("engineering").revision == 1
+
+    def test_load_or_seed_seeds_once_then_reuses(self) -> None:
+        from company_brain.connectors.simulated import load_or_seed
+
+        backend = MemoryBackend()
+        first = load_or_seed(backend)
+        first.leave("engineering", "eng-ic")
+        first.save(backend)
+
+        second = load_or_seed(backend)
+        assert "eng-ic" not in second.channel_by_name("engineering").members
+
+    def test_a_second_sync_reports_unchanged_not_nothing(self) -> None:
+        """The structural bug: `+0 ~0 -0 =0` reads as "nothing there", which is
+        indistinguishable from "nothing changed". Only one is good news."""
+        from company_brain.connectors.simulated import seed_from_corpus
+
+        backend = MemoryBackend()
+        repo = Repository(backend)
+        eng = SyncEngine(
+            repo,
+            default_registry(),
+            CachedExtractor(RuleBasedExtractor(roster()), backend),
+            GrantTable(),
+        )
+        workspace = seed_from_corpus()
+        workspace.save(backend)
+
+        eng.sync(workspace, now=NOW)
+        second = eng.sync(workspace, now=NOW)
+
+        assert second.quiet
+        assert second.unchanged > 0, "a no-op must say how much it skipped"
+
+
+class TestScenarioLevers:
+    """Each lever routes through a different mechanism. The point of separating
+    them is that an enumeration diff cannot."""
+
+    def _engine(self, backend: MemoryBackend) -> tuple[SyncEngine, Repository, GrantTable]:
+        repo = Repository(backend)
+        grants = GrantTable()
+        return (
+            SyncEngine(
+                repo,
+                default_registry(),
+                CachedExtractor(RuleBasedExtractor(roster()), backend),
+                grants,
+            ),
+            repo,
+            grants,
+        )
+
+    def test_edit_produces_an_update(self) -> None:
+        from company_brain.connectors.simulated import seed_from_corpus
+
+        backend = MemoryBackend()
+        eng, _, _ = self._engine(backend)
+        workspace = seed_from_corpus()
+        eng.sync(workspace, now=NOW)
+
+        workspace.edit_latest("engineering", "EDITED UPSTREAM")
+        report = eng.sync(workspace, now=NOW)
+        assert report.updated == 1
+        assert report.added == 0
+
+    def test_unshare_does_not_tombstone(self) -> None:
+        """The lever that would have destroyed live documents. `--unshare` is
+        *we* lost visibility, not a delete."""
+        from company_brain.connectors.simulated import seed_from_corpus
+
+        backend = MemoryBackend()
+        eng, repo, _ = self._engine(backend)
+        workspace = seed_from_corpus()
+        eng.sync(workspace, now=NOW)
+        before = len(list(repo.walk_ids("Document")))
+
+        workspace.mark_gone("engineering", "unshared")
+        report = eng.sync(workspace, now=NOW)
+
+        assert report.deleted == 0
+        assert report.access_lost == 1
+        assert all(
+            repo.get(n).frontmatter.status is NodeStatus.ACTIVE
+            for n in repo.walk_ids("Document")
+        )
+        assert len(list(repo.walk_ids("Document"))) == before
+
+    def test_delete_tombstones_and_trash_retains(self) -> None:
+        from company_brain.connectors.simulated import seed_from_corpus
+
+        for how, expect_retained in (("deleted", False), ("trashed", True)):
+            backend = MemoryBackend()
+            eng, repo, _ = self._engine(backend)
+            workspace = seed_from_corpus()
+            eng.sync(workspace, now=NOW)
+
+            workspace.mark_gone("support", how)
+            report = eng.sync(workspace, now=NOW)
+
+            tombstones = [
+                repo.get(n)
+                for n in repo.walk_ids("Document")
+                if repo.get(n).frontmatter.status is NodeStatus.DELETED
+            ]
+            assert len(tombstones) == 1, how
+            assert tombstones[0].frontmatter.content_retained is expect_retained
+            assert (report.deleted, report.trashed) == ((1, 0) if how == "deleted" else (0, 1))
+
+    def test_leave_revokes_a_grant(self) -> None:
+        from company_brain.connectors.simulated import seed_from_corpus
+
+        backend = MemoryBackend()
+        eng, _, grants = self._engine(backend)
+        workspace = seed_from_corpus()
+        eng.sync(workspace, now=NOW)
+
+        eng_ic = Principal(id="eng-ic", kind=PrincipalKind.USER, display="Eng IC")
+        assert AccessFilter(grants, eng_ic).allows("slack:channel:C0ENG", INTERNAL)
+
+        workspace.leave("engineering", "eng-ic")
+        report = eng.sync(workspace, now=NOW)
+
+        assert report.grants_revoked == 1
+        assert not AccessFilter(grants, eng_ic).allows("slack:channel:C0ENG", INTERNAL)
+
+    def test_grants_are_mirrored_to_disk(self) -> None:
+        """Without this a revocation dies with the process: build_grants()
+        rebuilds from CHANNEL_MEMBERS every time, so `cb sync --leave` would
+        report a revocation and the next `cb ask` would still see the channel."""
+        import json
+
+        from company_brain.connectors.simulated import seed_from_corpus
+
+        backend = MemoryBackend()
+        eng, _, _ = self._engine(backend)
+        workspace = seed_from_corpus()
+        workspace.leave("engineering", "eng-ic")
+        eng.sync(workspace, now=NOW)
+
+        raw = backend.read_text("_sync/grants/slack.json")
+        assert raw is not None
+        mirrored = json.loads(raw)["grants"]
+        assert "slack:channel:C0ENG" not in mirrored.get("eng-ic", [])

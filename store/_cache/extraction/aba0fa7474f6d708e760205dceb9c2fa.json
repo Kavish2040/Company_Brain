@@ -1,21 +1,21 @@
 {
   "edges": [
     {
-      "confidence": 0.8,
+      "confidence": 0.9,
       "evidence": [
         {
           "node": "self",
-          "quote": "Nadia Hassan to document the handoff boundary.",
+          "quote": "Zo\u00eb Ravel raised that refund approval is still blocked on\n Linear.",
           "span": [
-            321,
-            367
+            112,
+            178
           ]
         }
       ],
-      "object": "people/nadia-hassan",
+      "object": "people/zoe-ravel",
       "predicate": "mentions",
       "provenance": "llm",
-      "status": "proposed",
+      "status": "accepted",
       "subject": null
     },
     {

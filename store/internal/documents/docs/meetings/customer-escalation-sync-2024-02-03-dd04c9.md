@@ -34,7 +34,7 @@ relations:
   - predicate: handoff_to
     subject: teams/product
     object: teams/finance
-    confidence: 0.7
+    confidence: 0.6
     provenance: llm
     status: proposed
     evidence:
@@ -48,8 +48,8 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [332, 375]
-        quote: Ana Brito to document the handoff boundary.
+        span: [41, 99]
+        quote: '**Attendees:** Priya Raman, Zoë Ravel, Sam Kaur, Ana Brito'
   - predicate: mentions
     object: people/priya-raman
     confidence: 0.9
@@ -57,11 +57,11 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [113, 186]
-        quote: "Priya Raman raised that customer escalation is still blocked on\n Datadog."
+        span: [41, 99]
+        quote: '**Attendees:** Priya Raman, Zoë Ravel, Sam Kaur, Ana Brito'
   - predicate: mentions
     object: people/sam-kaur
-    confidence: 0.85
+    confidence: 0.9
     provenance: llm
     status: accepted
     evidence:
@@ -70,17 +70,35 @@ relations:
         quote: '**Attendees:** Priya Raman, Zoë Ravel, Sam Kaur, Ana Brito'
   - predicate: mentions
     object: people/zoe-ravel
-    confidence: 0.85
+    confidence: 0.9
     provenance: llm
     status: accepted
     evidence:
       - node: self
         span: [41, 99]
         quote: '**Attendees:** Priya Raman, Zoë Ravel, Sam Kaur, Ana Brito'
+  - predicate: mentions
+    object: processes/customer-escalation
+    confidence: 0.95
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [113, 186]
+        quote: "Priya Raman raised that customer escalation is still blocked on\n Datadog."
+  - predicate: mentions
+    object: tools/datadog
+    confidence: 0.95
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [113, 186]
+        quote: "Priya Raman raised that customer escalation is still blocked on\n Datadog."
   - predicate: owns
     subject: people/dev-oyelaran
     object: processes/customer-escalation
-    confidence: 0.8
+    confidence: 0.75
     provenance: llm
     status: proposed
     evidence:

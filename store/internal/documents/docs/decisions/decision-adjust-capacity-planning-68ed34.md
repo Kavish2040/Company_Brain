@@ -23,7 +23,7 @@ extraction:
 relations:
   - predicate: supersedes
     object: teams/engineering
-    confidence: 0.75
+    confidence: 0.6
     provenance: llm
     status: proposed
     evidence:

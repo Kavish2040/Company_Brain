@@ -1,14 +1,50 @@
 {
   "edges": [
     {
-      "confidence": 0.6,
+      "confidence": 0.85,
       "evidence": [
         {
           "node": "self",
-          "quote": "Dev Oyelaran",
+          "quote": "Sam Kaur raised that customer data request is still blocked on\n Datadog.",
           "span": [
-            85,
-            97
+            125,
+            197
+          ]
+        }
+      ],
+      "object": "tools/datadog",
+      "predicate": "depends_on",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "processes/data-request"
+    },
+    {
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Handoff from Engineering to Support is unclear; two\n tickets bounced back last week.",
+          "span": [
+            245,
+            329
+          ]
+        }
+      ],
+      "object": "teams/support",
+      "predicate": "handoff_to",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "teams/engineering"
+    },
+    {
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "**Attendees:** Sam Kaur, Owen Fitzgerald, Dev Oyelaran, Nadia Hassan",
+          "span": [
+            43,
+            111
           ]
         }
       ],
@@ -37,32 +73,32 @@
       "subject": null
     },
     {
-      "confidence": 0.9,
+      "confidence": 0.8,
       "evidence": [
         {
           "node": "self",
-          "quote": "Nadia Hassan to document the handoff boundary.",
+          "quote": "**Attendees:** Sam Kaur, Owen Fitzgerald, Dev Oyelaran, Nadia Hassan",
           "span": [
-            345,
-            391
+            43,
+            111
           ]
         }
       ],
       "object": "people/nadia-hassan",
       "predicate": "mentions",
       "provenance": "llm",
-      "status": "accepted",
+      "status": "proposed",
       "subject": null
     },
     {
-      "confidence": 0.6,
+      "confidence": 0.8,
       "evidence": [
         {
           "node": "self",
-          "quote": "Owen Fitzgerald",
+          "quote": "**Attendees:** Sam Kaur, Owen Fitzgerald, Dev Oyelaran, Nadia Hassan",
           "span": [
-            68,
-            83
+            43,
+            111
           ]
         }
       ],
@@ -70,6 +106,78 @@
       "predicate": "mentions",
       "provenance": "llm",
       "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.95,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Sam Kaur raised that customer data request is still blocked on\n Datadog.",
+          "span": [
+            125,
+            197
+          ]
+        }
+      ],
+      "object": "people/sam-kaur",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Handoff from Engineering to Support is unclear; two\n tickets bounced back last week.",
+          "span": [
+            245,
+            329
+          ]
+        }
+      ],
+      "object": "teams/engineering",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Handoff from Engineering to Support is unclear; two\n tickets bounced back last week.",
+          "span": [
+            245,
+            329
+          ]
+        }
+      ],
+      "object": "teams/support",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Sam Kaur raised that customer data request is still blocked on\n Datadog.",
+          "span": [
+            125,
+            197
+          ]
+        }
+      ],
+      "object": "tools/datadog",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
       "subject": null
     },
     {

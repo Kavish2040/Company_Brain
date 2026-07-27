@@ -19,7 +19,7 @@
       "subject": "processes/incident-response"
     },
     {
-      "confidence": 0.65,
+      "confidence": 0.85,
       "evidence": [
         {
           "node": "self",
@@ -37,14 +37,14 @@
       "subject": "teams/engineering"
     },
     {
-      "confidence": 0.9,
+      "confidence": 0.85,
       "evidence": [
         {
           "node": "self",
-          "quote": "Priya Raman, Sam Kelly, Dev Oyelaran, Ana Brito",
+          "quote": "Ana Brito to document the handoff boundary.",
           "span": [
-            54,
-            101
+            339,
+            382
           ]
         }
       ],
@@ -55,13 +55,13 @@
       "subject": null
     },
     {
-      "confidence": 0.9,
+      "confidence": 0.7,
       "evidence": [
         {
           "node": "self",
-          "quote": "Priya Raman, Sam Kelly, Dev Oyelaran, Ana Brito",
+          "quote": "**Attendees:** Priya Raman, Sam Kelly, Dev Oyelaran, Ana Brito",
           "span": [
-            54,
+            39,
             101
           ]
         }
@@ -69,7 +69,7 @@
       "object": "people/dev-oyelaran",
       "predicate": "mentions",
       "provenance": "llm",
-      "status": "accepted",
+      "status": "proposed",
       "subject": null
     },
     {
@@ -77,10 +77,10 @@
       "evidence": [
         {
           "node": "self",
-          "quote": "Priya Raman, Sam Kelly, Dev Oyelaran, Ana Brito",
+          "quote": "Priya Raman raised that incident response is still blocked on\n Datadog.",
           "span": [
-            54,
-            101
+            115,
+            186
           ]
         }
       ],
@@ -91,13 +91,13 @@
       "subject": null
     },
     {
-      "confidence": 0.9,
+      "confidence": 0.7,
       "evidence": [
         {
           "node": "self",
-          "quote": "Priya Raman, Sam Kelly, Dev Oyelaran, Ana Brito",
+          "quote": "**Attendees:** Priya Raman, Sam Kelly, Dev Oyelaran, Ana Brito",
           "span": [
-            54,
+            39,
             101
           ]
         }
@@ -105,11 +105,47 @@
       "object": "people/sam-kelly",
       "predicate": "mentions",
       "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Priya Raman raised that incident response is still blocked on\n Datadog.",
+          "span": [
+            115,
+            186
+          ]
+        }
+      ],
+      "object": "processes/incident-response",
+      "predicate": "mentions",
+      "provenance": "llm",
       "status": "accepted",
       "subject": null
     },
     {
-      "confidence": 0.85,
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Priya Raman raised that incident response is still blocked on\n Datadog.",
+          "span": [
+            115,
+            186
+          ]
+        }
+      ],
+      "object": "tools/datadog",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.8,
       "evidence": [
         {
           "node": "self",

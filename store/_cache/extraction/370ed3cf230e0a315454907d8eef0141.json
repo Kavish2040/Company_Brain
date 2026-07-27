@@ -1,5 +1,96 @@
 {
-  "edges": [],
+  "edges": [
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "capacity planning is still blocked on\n Snowflake.",
+          "span": [
+            134,
+            183
+          ]
+        }
+      ],
+      "object": "tools/snowflake",
+      "predicate": "depends_on",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "processes/capacity-planning"
+    },
+    {
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Handoff from Finance to Engineering is unclear; two\n tickets bounced back last week.",
+          "span": [
+            236,
+            320
+          ]
+        }
+      ],
+      "object": "teams/engineering",
+      "predicate": "handoff_to",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "teams/finance"
+    },
+    {
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Mei Tanaka to document the handoff boundary.",
+          "span": [
+            336,
+            380
+          ]
+        }
+      ],
+      "object": "people/mei-tanaka",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Mei Tanaka to document the handoff boundary.",
+          "span": [
+            336,
+            380
+          ]
+        }
+      ],
+      "object": "processes/capacity-planning",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Owen Fitzgerald confirmed they own the process.",
+          "span": [
+            186,
+            233
+          ]
+        }
+      ],
+      "object": "processes/capacity-planning",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "people/owen-fitz"
+    }
+  ],
   "model": "claude-sonnet-5",
   "prompt_version": "claude-roster-v2",
   "unresolved": []

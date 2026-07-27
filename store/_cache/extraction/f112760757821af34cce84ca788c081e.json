@@ -19,7 +19,7 @@
       "subject": "processes/customer-escalation"
     },
     {
-      "confidence": 0.7,
+      "confidence": 0.6,
       "evidence": [
         {
           "node": "self",
@@ -41,10 +41,10 @@
       "evidence": [
         {
           "node": "self",
-          "quote": "Ana Brito to document the handoff boundary.",
+          "quote": "**Attendees:** Priya Raman, Zo\u00eb Ravel, Sam Kaur, Ana Brito",
           "span": [
-            332,
-            375
+            41,
+            99
           ]
         }
       ],
@@ -59,10 +59,10 @@
       "evidence": [
         {
           "node": "self",
-          "quote": "Priya Raman raised that customer escalation is still blocked on\n Datadog.",
+          "quote": "**Attendees:** Priya Raman, Zo\u00eb Ravel, Sam Kaur, Ana Brito",
           "span": [
-            113,
-            186
+            41,
+            99
           ]
         }
       ],
@@ -73,7 +73,7 @@
       "subject": null
     },
     {
-      "confidence": 0.85,
+      "confidence": 0.9,
       "evidence": [
         {
           "node": "self",
@@ -91,7 +91,7 @@
       "subject": null
     },
     {
-      "confidence": 0.85,
+      "confidence": 0.9,
       "evidence": [
         {
           "node": "self",
@@ -109,7 +109,43 @@
       "subject": null
     },
     {
-      "confidence": 0.8,
+      "confidence": 0.95,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Priya Raman raised that customer escalation is still blocked on\n Datadog.",
+          "span": [
+            113,
+            186
+          ]
+        }
+      ],
+      "object": "processes/customer-escalation",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.95,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Priya Raman raised that customer escalation is still blocked on\n Datadog.",
+          "span": [
+            113,
+            186
+          ]
+        }
+      ],
+      "object": "tools/datadog",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.75,
       "evidence": [
         {
           "node": "self",

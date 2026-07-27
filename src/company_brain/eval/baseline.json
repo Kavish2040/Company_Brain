@@ -1,0 +1,334 @@
+{
+  "by_class": {
+    "factual": {
+      "errors": 0,
+      "graded": 102,
+      "hit_rate": 0.7059,
+      "leaks": 0,
+      "questions": 136,
+      "recall_at_k": 0.6029,
+      "refusal_expected": 34,
+      "refusal_rate": 0.2059
+    },
+    "ownership": {
+      "errors": 0,
+      "graded": 90,
+      "hit_rate": 0.8667,
+      "leaks": 0,
+      "questions": 120,
+      "recall_at_k": 0.7333,
+      "refusal_expected": 30,
+      "refusal_rate": 0.0333
+    },
+    "systemic": {
+      "errors": 0,
+      "graded": 54,
+      "hit_rate": 0.7778,
+      "leaks": 0,
+      "questions": 72,
+      "recall_at_k": 0.6759,
+      "refusal_expected": 18,
+      "refusal_rate": 0.0556
+    },
+    "temporal": {
+      "errors": 0,
+      "graded": 42,
+      "hit_rate": 0.9286,
+      "leaks": 0,
+      "questions": 56,
+      "recall_at_k": 0.9286,
+      "refusal_expected": 14,
+      "refusal_rate": 0.1429
+    },
+    "unanswerable": {
+      "errors": 0,
+      "graded": 0,
+      "hit_rate": 0.0,
+      "leaks": 0,
+      "questions": 56,
+      "recall_at_k": 0.0,
+      "refusal_expected": 56,
+      "refusal_rate": 0.0536
+    }
+  },
+  "by_principal": {
+    "ceo": {
+      "errors": 0,
+      "graded": 96,
+      "hit_rate": 0.8021,
+      "leaks": 0,
+      "questions": 110,
+      "recall_at_k": 0.7031,
+      "refusal_expected": 14,
+      "refusal_rate": 0.0
+    },
+    "contractor": {
+      "errors": 0,
+      "graded": 0,
+      "hit_rate": 0.0,
+      "leaks": 0,
+      "questions": 110,
+      "recall_at_k": 0.0,
+      "refusal_expected": 110,
+      "refusal_rate": 0.1273
+    },
+    "eng-ic": {
+      "errors": 0,
+      "graded": 96,
+      "hit_rate": 0.8021,
+      "leaks": 0,
+      "questions": 110,
+      "recall_at_k": 0.7083,
+      "refusal_expected": 14,
+      "refusal_rate": 0.0
+    },
+    "support-lead": {
+      "errors": 0,
+      "graded": 96,
+      "hit_rate": 0.8021,
+      "leaks": 0,
+      "questions": 110,
+      "recall_at_k": 0.7031,
+      "refusal_expected": 14,
+      "refusal_rate": 0.0
+    }
+  },
+  "by_principal_class": {
+    "ceo": {
+      "factual": {
+        "errors": 0,
+        "graded": 34,
+        "hit_rate": 0.7059,
+        "leaks": 0,
+        "questions": 34,
+        "recall_at_k": 0.6029,
+        "refusal_expected": 0,
+        "refusal_rate": 0.0
+      },
+      "ownership": {
+        "errors": 0,
+        "graded": 30,
+        "hit_rate": 0.8667,
+        "leaks": 0,
+        "questions": 30,
+        "recall_at_k": 0.7333,
+        "refusal_expected": 0,
+        "refusal_rate": 0.0
+      },
+      "systemic": {
+        "errors": 0,
+        "graded": 18,
+        "hit_rate": 0.7778,
+        "leaks": 0,
+        "questions": 18,
+        "recall_at_k": 0.6667,
+        "refusal_expected": 0,
+        "refusal_rate": 0.0
+      },
+      "temporal": {
+        "errors": 0,
+        "graded": 14,
+        "hit_rate": 0.9286,
+        "leaks": 0,
+        "questions": 14,
+        "recall_at_k": 0.9286,
+        "refusal_expected": 0,
+        "refusal_rate": 0.0
+      },
+      "unanswerable": {
+        "errors": 0,
+        "graded": 0,
+        "hit_rate": 0.0,
+        "leaks": 0,
+        "questions": 14,
+        "recall_at_k": 0.0,
+        "refusal_expected": 14,
+        "refusal_rate": 0.0
+      }
+    },
+    "contractor": {
+      "factual": {
+        "errors": 0,
+        "graded": 0,
+        "hit_rate": 0.0,
+        "leaks": 0,
+        "questions": 34,
+        "recall_at_k": 0.0,
+        "refusal_expected": 34,
+        "refusal_rate": 0.2059
+      },
+      "ownership": {
+        "errors": 0,
+        "graded": 0,
+        "hit_rate": 0.0,
+        "leaks": 0,
+        "questions": 30,
+        "recall_at_k": 0.0,
+        "refusal_expected": 30,
+        "refusal_rate": 0.0333
+      },
+      "systemic": {
+        "errors": 0,
+        "graded": 0,
+        "hit_rate": 0.0,
+        "leaks": 0,
+        "questions": 18,
+        "recall_at_k": 0.0,
+        "refusal_expected": 18,
+        "refusal_rate": 0.0556
+      },
+      "temporal": {
+        "errors": 0,
+        "graded": 0,
+        "hit_rate": 0.0,
+        "leaks": 0,
+        "questions": 14,
+        "recall_at_k": 0.0,
+        "refusal_expected": 14,
+        "refusal_rate": 0.1429
+      },
+      "unanswerable": {
+        "errors": 0,
+        "graded": 0,
+        "hit_rate": 0.0,
+        "leaks": 0,
+        "questions": 14,
+        "recall_at_k": 0.0,
+        "refusal_expected": 14,
+        "refusal_rate": 0.2143
+      }
+    },
+    "eng-ic": {
+      "factual": {
+        "errors": 0,
+        "graded": 34,
+        "hit_rate": 0.7059,
+        "leaks": 0,
+        "questions": 34,
+        "recall_at_k": 0.6029,
+        "refusal_expected": 0,
+        "refusal_rate": 0.0
+      },
+      "ownership": {
+        "errors": 0,
+        "graded": 30,
+        "hit_rate": 0.8667,
+        "leaks": 0,
+        "questions": 30,
+        "recall_at_k": 0.7333,
+        "refusal_expected": 0,
+        "refusal_rate": 0.0
+      },
+      "systemic": {
+        "errors": 0,
+        "graded": 18,
+        "hit_rate": 0.7778,
+        "leaks": 0,
+        "questions": 18,
+        "recall_at_k": 0.6944,
+        "refusal_expected": 0,
+        "refusal_rate": 0.0
+      },
+      "temporal": {
+        "errors": 0,
+        "graded": 14,
+        "hit_rate": 0.9286,
+        "leaks": 0,
+        "questions": 14,
+        "recall_at_k": 0.9286,
+        "refusal_expected": 0,
+        "refusal_rate": 0.0
+      },
+      "unanswerable": {
+        "errors": 0,
+        "graded": 0,
+        "hit_rate": 0.0,
+        "leaks": 0,
+        "questions": 14,
+        "recall_at_k": 0.0,
+        "refusal_expected": 14,
+        "refusal_rate": 0.0
+      }
+    },
+    "support-lead": {
+      "factual": {
+        "errors": 0,
+        "graded": 34,
+        "hit_rate": 0.7059,
+        "leaks": 0,
+        "questions": 34,
+        "recall_at_k": 0.6029,
+        "refusal_expected": 0,
+        "refusal_rate": 0.0
+      },
+      "ownership": {
+        "errors": 0,
+        "graded": 30,
+        "hit_rate": 0.8667,
+        "leaks": 0,
+        "questions": 30,
+        "recall_at_k": 0.7333,
+        "refusal_expected": 0,
+        "refusal_rate": 0.0
+      },
+      "systemic": {
+        "errors": 0,
+        "graded": 18,
+        "hit_rate": 0.7778,
+        "leaks": 0,
+        "questions": 18,
+        "recall_at_k": 0.6667,
+        "refusal_expected": 0,
+        "refusal_rate": 0.0
+      },
+      "temporal": {
+        "errors": 0,
+        "graded": 14,
+        "hit_rate": 0.9286,
+        "leaks": 0,
+        "questions": 14,
+        "recall_at_k": 0.9286,
+        "refusal_expected": 0,
+        "refusal_rate": 0.0
+      },
+      "unanswerable": {
+        "errors": 0,
+        "graded": 0,
+        "hit_rate": 0.0,
+        "leaks": 0,
+        "questions": 14,
+        "recall_at_k": 0.0,
+        "refusal_expected": 14,
+        "refusal_rate": 0.0
+      }
+    }
+  },
+  "k": 10,
+  "overall": {
+    "errors": 0,
+    "graded": 288,
+    "hit_rate": 0.8021,
+    "leaks": 0,
+    "questions": 440,
+    "recall_at_k": 0.7049,
+    "refusal_expected": 152,
+    "refusal_rate": 0.0921
+  },
+  "principals": [
+    "ceo",
+    "support-lead",
+    "eng-ic",
+    "contractor"
+  ],
+  "seeded": {
+    "errors": 0,
+    "graded": 10,
+    "hit_rate": 1.0,
+    "leaks": 0,
+    "questions": 10,
+    "recall_at_k": 1.0,
+    "refusal_expected": 0,
+    "refusal_rate": 0.0
+  },
+  "synthesizer": "extractive-offline"
+}

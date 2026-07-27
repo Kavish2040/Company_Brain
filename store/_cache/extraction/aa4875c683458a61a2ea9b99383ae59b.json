@@ -19,7 +19,7 @@
       "subject": null
     },
     {
-      "confidence": 0.95,
+      "confidence": 0.9,
       "evidence": [
         {
           "node": "self",
@@ -37,24 +37,6 @@
       "subject": null
     },
     {
-      "confidence": 0.8,
-      "evidence": [
-        {
-          "node": "self",
-          "quote": "The previous informal arrangement documented in the Engineering team page.",
-          "span": [
-            310,
-            384
-          ]
-        }
-      ],
-      "object": "teams/engineering",
-      "predicate": "mentions",
-      "provenance": "llm",
-      "status": "proposed",
-      "subject": null
-    },
-    {
       "confidence": 0.75,
       "evidence": [
         {
@@ -67,7 +49,7 @@
         }
       ],
       "object": "teams/engineering",
-      "predicate": "supersedes",
+      "predicate": "mentions",
       "provenance": "llm",
       "status": "proposed",
       "subject": null

@@ -23,7 +23,7 @@ extraction:
 relations:
   - predicate: supersedes
     object: teams/finance
-    confidence: 0.7
+    confidence: 0.75
     provenance: llm
     status: proposed
     evidence:

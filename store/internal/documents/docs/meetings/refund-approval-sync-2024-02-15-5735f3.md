@@ -22,14 +22,14 @@ extraction:
   status: accepted
 relations:
   - predicate: mentions
-    object: people/nadia-hassan
-    confidence: 0.8
+    object: people/zoe-ravel
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [321, 367]
-        quote: Nadia Hassan to document the handoff boundary.
+        span: [112, 178]
+        quote: "Zoë Ravel raised that refund approval is still blocked on\n Linear."
   - predicate: owns
     subject: people/ana-brito
     object: processes/refund-approval

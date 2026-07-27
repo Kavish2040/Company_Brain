@@ -21,15 +21,25 @@ extraction:
   cache_key: 8cddcc73d6f0613b5005bd610250fd7e
   status: accepted
 relations:
-  - predicate: supersedes
+  - predicate: mentions
     object: teams/finance
-    confidence: 0.6
+    confidence: 0.75
     provenance: llm
     status: proposed
     evidence:
       - node: self
         span: [303, 373]
         quote: The previous informal arrangement documented in the Finance team page.
+  - predicate: owns
+    subject: people/ana-brito
+    object: processes/quarterly-close
+    confidence: 0.97
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [189, 237]
+        quote: Ana Brito will own quarterly close going forward
 ---
 
 # Decision: adjust quarterly close

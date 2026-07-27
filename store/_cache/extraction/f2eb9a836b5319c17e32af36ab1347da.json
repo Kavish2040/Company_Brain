@@ -1,25 +1,7 @@
 {
   "edges": [
     {
-      "confidence": 0.95,
-      "evidence": [
-        {
-          "node": "self",
-          "quote": "Owen Fitzgerald will own incident response going forward, and the\nsign-off step moves to the owning team.",
-          "span": [
-            199,
-            304
-          ]
-        }
-      ],
-      "object": "processes/incident-response",
-      "predicate": "owns",
-      "provenance": "llm",
-      "status": "proposed",
-      "subject": "people/owen-fitz"
-    },
-    {
-      "confidence": 0.75,
+      "confidence": 0.6,
       "evidence": [
         {
           "node": "self",
@@ -39,5 +21,7 @@
   ],
   "model": "claude-sonnet-5",
   "prompt_version": "claude-roster-v2",
-  "unresolved": []
+  "unresolved": [
+    "the Engineering team page (specific document, not just the team)"
+  ]
 }

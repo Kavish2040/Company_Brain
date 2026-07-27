@@ -24,7 +24,7 @@ relations:
   - predicate: depends_on
     subject: processes/security-review
     object: tools/zendesk
-    confidence: 0.7
+    confidence: 0.85
     provenance: llm
     status: proposed
     evidence:
@@ -34,7 +34,7 @@ relations:
   - predicate: handoff_to
     subject: teams/product
     object: teams/support
-    confidence: 0.5
+    confidence: 0.55
     provenance: llm
     status: proposed
     evidence:
@@ -43,71 +43,44 @@ relations:
         quote: "Handoff from Product to Support is unclear; two\n tickets bounced back last week."
   - predicate: mentions
     object: people/dev-oyelaran
-    confidence: 0.8
+    confidence: 0.5
     provenance: llm
     status: proposed
     evidence:
       - node: self
-        span: [37, 102]
-        quote: '**Attendees:** Priya Raman, Zoë Ravel, Dev Oyelaran, Nadia Hassan'
+        span: [76, 88]
+        quote: Dev Oyelaran
   - predicate: mentions
     object: people/nadia-hassan
-    confidence: 0.85
+    confidence: 0.7
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
         span: [329, 375]
         quote: Nadia Hassan to document the handoff boundary.
   - predicate: mentions
     object: people/priya-raman
-    confidence: 0.9
+    confidence: 0.6
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
         span: [116, 185]
         quote: "Priya Raman raised that security review is still blocked on\n Zendesk."
-  - predicate: mentions
-    object: people/tom-whelan
-    confidence: 0.85
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [188, 230]
-        quote: Tom Whelan confirmed they own the process.
   - predicate: mentions
     object: people/zoe-ravel
-    confidence: 0.8
+    confidence: 0.5
     provenance: llm
     status: proposed
     evidence:
       - node: self
-        span: [37, 102]
-        quote: '**Attendees:** Priya Raman, Zoë Ravel, Dev Oyelaran, Nadia Hassan'
-  - predicate: mentions
-    object: processes/security-review
-    confidence: 0.7
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [188, 230]
-        quote: Tom Whelan confirmed they own the process.
-  - predicate: mentions
-    object: tools/zendesk
-    confidence: 0.85
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [116, 185]
-        quote: "Priya Raman raised that security review is still blocked on\n Zendesk."
+        span: [65, 74]
+        quote: Zoë Ravel
   - predicate: owns
     subject: people/tom-whelan
     object: processes/security-review
-    confidence: 0.75
+    confidence: 0.8
     provenance: llm
     status: proposed
     evidence:

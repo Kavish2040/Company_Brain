@@ -1,43 +1,7 @@
 {
   "edges": [
     {
-      "confidence": 0.9,
-      "evidence": [
-        {
-          "node": "self",
-          "quote": "Nadia Hassan raised that quarterly close is still blocked on\n NetSuite.",
-          "span": [
-            112,
-            183
-          ]
-        }
-      ],
-      "object": "tools/netsuite",
-      "predicate": "depends_on",
-      "provenance": "llm",
-      "status": "proposed",
-      "subject": "processes/quarterly-close"
-    },
-    {
-      "confidence": 0.55,
-      "evidence": [
-        {
-          "node": "self",
-          "quote": "Handoff from Product to Finance is unclear; two\n tickets bounced back last week.",
-          "span": [
-            230,
-            310
-          ]
-        }
-      ],
-      "object": "teams/finance",
-      "predicate": "handoff_to",
-      "provenance": "llm",
-      "status": "proposed",
-      "subject": "teams/product"
-    },
-    {
-      "confidence": 0.85,
+      "confidence": 0.6,
       "evidence": [
         {
           "node": "self",
@@ -51,7 +15,7 @@
       "object": "people/mei-tanaka",
       "predicate": "mentions",
       "provenance": "llm",
-      "status": "accepted",
+      "status": "proposed",
       "subject": null
     },
     {

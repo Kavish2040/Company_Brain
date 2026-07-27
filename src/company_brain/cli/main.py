@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 import shutil
 from pathlib import Path
-from typing import Annotated
+from typing import TYPE_CHECKING, Annotated
 
 import typer
 
@@ -16,6 +16,9 @@ from company_brain.synthesize.answer import (
     UncitedAnswerError,
     validate,
 )
+
+if TYPE_CHECKING:  # `eval` pulls the corpus tables in; keep it out of `cb --help`
+    from company_brain.eval.harness import Metrics
 
 app = typer.Typer(add_completion=False, help="company_brain — a company knowledge graph.")
 echo = typer.echo
@@ -89,6 +92,83 @@ def index_cmd(
         f"Indexed {stats['nodes']} nodes, {chunks} chunks, "
         f"{stats['edges']} accepted edges, {stats['terms']} terms"
     )
+
+
+@app.command("eval")
+def eval_cmd(
+    store: Annotated[Path, typer.Option()] = STORE_ROOT,
+    k: Annotated[int, typer.Option(help="Rank cutoff for recall@k.")] = 10,
+    json_out: Annotated[Path | None, typer.Option("--json", help="Write the report.")] = None,
+    update_baseline: Annotated[
+        bool, typer.Option(help="Record this run as the new baseline.")
+    ] = False,
+    detail: Annotated[bool, typer.Option(help="List every question that missed.")] = False,
+) -> None:
+    """Score the golden question set. Exit 1 on regression, 2 on any leak.
+
+    Deliberately mirrors `cb ask`'s exit codes: a leak outranks a quality
+    regression, and neither is ever a printed warning.
+
+    `--update-baseline` writes what this store scores, so run `cb doctor` first:
+    a half-ingested store scores badly and would record that as the new bar.
+    """
+    from company_brain.eval.baseline import compare, load_baseline, write_baseline
+    from company_brain.eval.harness import run_eval
+
+    instance = build_app(store)
+    instance.load_index()
+    report = run_eval(instance, k=k)
+
+    echo(f"{len(report.results)} question/principal pairs, synthesizer={report.synthesizer}\n")
+    header = f"{'':<16}{'graded':>7}{'recall@k':>10}{'hit@k':>8}{'refusals':>10}{'leaks':>7}"
+
+    def row(label: str, m: Metrics) -> None:
+        # A rate over an empty denominator is not zero, it is absent — printing
+        # 0.000 for a principal who legitimately sees nothing reads as a bug.
+        recall = f"{m.recall_at_k:.3f}" if m.graded else "—"
+        hit = f"{m.hit_rate:.3f}" if m.graded else "—"
+        refusal = f"{m.refusal_rate:.3f}/{m.refusal_expected}" if m.refusal_expected else "—"
+        echo(f"{label:<16}{m.graded:>7}{recall:>10}{hit:>8}{refusal:>10}{m.leaks:>7}")
+
+    echo("By question class" + "\n" + header)
+    for name, metrics in report.by_class.items():
+        row(name, metrics)
+    echo("\nBy principal" + "\n" + header)
+    for name, metrics in report.by_principal.items():
+        row(name, metrics)
+    echo("\n" + header)
+    row("overall", report.overall)
+    row("M1 goldens", report.seeded)
+
+    if detail:
+        echo("\nMisses:")
+        for result in report.results:
+            if result.graded_for_recall and result.recall < 1.0:
+                missing = [e for e in result.expected if e not in result.matched]
+                echo(f"  [{result.principal}] {result.question_id}: missing {missing}")
+
+    if json_out is not None:
+        json_out.write_text(json.dumps(report.to_json(), indent=2, sort_keys=True) + "\n")
+        echo(f"\nWrote {json_out}")
+
+    if update_baseline:
+        write_baseline(report)
+        echo("\nBaseline updated. Commit the diff — this is a deliberate act.")
+        return
+
+    if report.leaks:
+        for leak in report.leaks[:10]:
+            echo(f"  LEAK [{leak.principal}] {leak.question_id}: {list(leak.leaked)[:3]}")
+        echo(f"\n{len(report.leaks)} leaking question(s)")
+        raise typer.Exit(2)
+
+    regressions = compare(report, load_baseline())
+    if regressions:
+        echo("\nREGRESSION against the committed baseline:")
+        for regression in regressions:
+            echo(f"  {regression}")
+        raise typer.Exit(1)
+    echo("\nNo regression against the baseline.")
 
 
 @app.command()
@@ -173,15 +253,42 @@ def sync(
     deletes: Annotated[
         bool, typer.Option(help="Enumerate the source to detect deletions (expensive).")
     ] = True,
+    edit: Annotated[
+        str | None, typer.Option(help="CHANNEL — rewrite its newest message.")
+    ] = None,
+    delete: Annotated[
+        str | None, typer.Option(help="CHANNEL — delete its latest day upstream.")
+    ] = None,
+    trash: Annotated[
+        str | None, typer.Option(help="CHANNEL — move its latest day to trash (recoverable).")
+    ] = None,
+    unshare: Annotated[
+        str | None,
+        typer.Option(help="CHANNEL — WE lose access. Not a delete; must not tombstone."),
+    ] = None,
+    leave: Annotated[
+        str | None, typer.Option(help="PRINCIPAL@CHANNEL — a member leaves.")
+    ] = None,
+    join: Annotated[
+        str | None, typer.Option(help="PRINCIPAL@CHANNEL — a member joins.")
+    ] = None,
+    reset: Annotated[
+        bool, typer.Option(help="Reseed the workspace from the corpus and clear the cursor.")
+    ] = False,
 ) -> None:
     """Incrementally sync a source: content, deletions, and grants.
 
-    Only `simulated-slack` exists today — a working connector over mutable
-    in-memory state, used to exercise edits, deletions, stale evidence and grant
-    revocation without credentials. Real Slack and Drive replace three methods
-    and keep the rest (see connectors/base.py).
+    The scenario flags mutate the simulated workspace *before* syncing, so one
+    command shows cause and effect. The workspace persists in `store/_sim/`, so
+    the mutations compose across invocations.
+
+    `--unshare` and `--leave` are deliberately different. `--unshare` is *we*
+    lost visibility, which routes through `Disappearance.ACCESS_LOST` and must
+    leave the document alone; `--leave` is a principal losing a grant, which
+    narrows what `cb ask` returns for them. An enumeration diff cannot tell
+    those apart, which is the whole reason `classify_departure` exists.
     """
-    from company_brain.connectors.simulated import seeded_workspace
+    from company_brain.connectors.simulated import load_or_seed, seed_from_corpus
     from company_brain.connectors.sync import SyncEngine
 
     if connector != "simulated-slack":
@@ -189,7 +296,47 @@ def sync(
         raise typer.Exit(64)
 
     instance = build_app(store)
-    source = seeded_workspace()
+    backend = instance.repo.backend
+
+    if reset:
+        source = seed_from_corpus()
+        source.save(backend)
+        backend.delete("_sync/slack.json")
+        echo(f"reset: reseeded {len(source.channels)} channels from the corpus, cursor cleared")
+    else:
+        source = load_or_seed(backend)
+
+    def split(value: str) -> tuple[str, str]:
+        principal, _, channel = value.partition("@")
+        if not principal or not channel:
+            echo(f"expected PRINCIPAL@CHANNEL, got {value!r}")
+            raise typer.Exit(64)
+        return principal, channel
+
+    try:
+        if edit:
+            when = source.edit_latest(edit, "EDITED UPSTREAM: this message was rewritten.")
+            echo(f"upstream: edited #{edit} {when}")
+        if delete:
+            echo(f"upstream: deleted #{delete} {source.mark_gone(delete, 'deleted')}")
+        if trash:
+            echo(f"upstream: trashed #{trash} {source.mark_gone(trash, 'trashed')}")
+        if unshare:
+            echo(f"upstream: lost access to #{unshare} {source.mark_gone(unshare, 'unshared')}")
+        if leave:
+            who, channel = split(leave)
+            source.leave(channel, who)
+            echo(f"upstream: {who} left #{channel}")
+        if join:
+            who, channel = split(join)
+            source.join(channel, who)
+            echo(f"upstream: {who} joined #{channel}")
+    except KeyError as exc:
+        echo(str(exc))
+        raise typer.Exit(64) from exc
+
+    source.save(backend)
+
     engine = SyncEngine(
         instance.repo,
         instance.registry,
@@ -197,7 +344,10 @@ def sync(
         instance.grants,
     )
     report = engine.sync(source, detect_deletes=deletes)
+
     echo(report.summary())
+    if report.quiet:
+        echo("  no changes since the last sync")
     for external_id, error in report.skipped[:10]:
         echo(f"  skipped {external_id}: {error}")
 
@@ -219,11 +369,20 @@ def mcp_cmd(
     as_user: Annotated[
         str, typer.Option("--as", help=f"Human to act for: {', '.join(PRINCIPALS)}")
     ] = "ceo",
+    read_only: Annotated[
+        bool, typer.Option(help="Expose the read tools only; no proposals.")
+    ] = False,
 ) -> None:
     """Describe, or run, the MCP server.
 
-    `--as` binds the session's identity at startup. No tool accepts a principal
-    argument, so a connected model cannot claim a different one (invariant 8).
+    `--as` binds the session's identity at startup — for reads *and* for the
+    write path. No tool accepts a principal argument, so a connected model
+    cannot claim a different one (invariant 8), and a proposal it creates
+    carries both identities into the review queue.
+
+    `--read-only` drops the two write tools from the manifest entirely rather
+    than refusing them at call time: a tool a model cannot see is a tool it
+    cannot spend a turn discovering it may not use.
     """
     if not serve:
         from company_brain.mcp.server import describe
@@ -237,7 +396,7 @@ def mcp_cmd(
         echo(f"unknown principal {as_user!r}; try {', '.join(sorted(PRINCIPALS))}")
         raise typer.Exit(64)
     # stdout is the MCP transport — anything printed there corrupts the protocol.
-    run_stdio(store, agent_id=agent_id, delegated_by=as_user)
+    run_stdio(store, agent_id=agent_id, delegated_by=as_user, read_only=read_only)
 
 
 review_app = typer.Typer(help="The human review queue for proposed edges.")
@@ -250,20 +409,41 @@ def review_list(
     predicate: Annotated[str | None, typer.Option(help="Filter by predicate.")] = None,
     limit: Annotated[int, typer.Option()] = 20,
 ) -> None:
-    """Show proposed edges awaiting a decision."""
+    """Show everything awaiting a decision: agent proposals, then edges."""
     from company_brain.review.queue import ReviewQueue
 
     instance = build_app(store)
-    pending = ReviewQueue(instance.repo).pending_edges(predicate)
-    if not pending:
-        echo("Nothing pending.")
-        return
-    for item in pending[:limit]:
+    queue = ReviewQueue(instance.repo)
+
+    # Agent proposals lead: they are unreviewed input from outside the system,
+    # where a proposed edge is the system reporting its own uncertainty about a
+    # document a human already trusted.
+    proposals = queue.pending_proposals(predicate)
+    for diff in proposals[:limit]:
+        record = diff.record
+        echo(f"\n{record.proposal_id}   [agent]")
+        echo(f"  {record.summary}")
+        echo(
+            f"  by {record.proposed_by} for {record.delegated_by}"
+            + ("  STALE" if diff.stale else "")
+        )
+        echo(f"  `cb review show {record.proposal_id}` for the diff")
+
+    pending = queue.pending_edges(predicate)
+    for item in pending[: max(0, limit - len(proposals))]:
         echo(f"\n{item.key}")
         echo(f"  {item.node_title}  (confidence {item.edge.confidence:.2f})")
         if item.quote():
             echo(f"  evidence: {item.quote()[:120]!r}")
-    echo(f"\n{len(pending)} pending" + (f", showing {limit}" if len(pending) > limit else ""))
+
+    total = len(pending) + len(proposals)
+    if not total:
+        echo("Nothing pending.")
+        return
+    echo(
+        f"\n{total} pending ({len(proposals)} from agents)"
+        + (f", showing {limit}" if total > limit else "")
+    )
 
 
 @review_app.command("stats")
@@ -292,36 +472,177 @@ def review_stats(store: Annotated[Path, typer.Option()] = STORE_ROOT) -> None:
         echo(f"  {name:22} {accepted}/{decided} ({100 * accepted / decided:.0f}%)")
 
 
-@review_app.command("accept")
-def review_accept(
-    key: Annotated[str, typer.Argument(help="node_id|predicate|object")],
+@review_app.command("show")
+def review_show(
+    proposal_id: Annotated[str, typer.Argument(help="A proposal id from `review list`.")],
     store: Annotated[Path, typer.Option()] = STORE_ROOT,
 ) -> None:
-    """Accept a proposed edge into the graph."""
-    _decide(key, store, accept=True)
+    """Show one agent proposal as a diff.
+
+    The terminal version of the review UI's diff view. `+`/`-` here rather than
+    colour for the same reason the web version uses fill and not green/red: a
+    diff that is only legible in colour is not legible.
+    """
+    from company_brain.review.proposals import ProposalError, ProposalStore
+
+    instance = build_app(store)
+    try:
+        diff = ProposalStore(instance.repo).diff(proposal_id)
+    except ProposalError as exc:
+        echo(str(exc))
+        raise typer.Exit(1) from exc
+
+    record = diff.record
+    echo(f"{record.proposal_id}  [{record.state}]")
+    echo(f"  target     {record.target}  ({diff.target_title})")
+    echo(f"  proposed   {record.proposed_by} acting for {record.delegated_by}")
+    echo(f"  at         {record.created_at.isoformat()}  via {record.surface}")
+    echo(f"  inherits   {record.sensitivity}")
+    if diff.stale:
+        echo("  STALE — the target changed since this was proposed; re-propose it")
+
+    for edge in diff.added_relations:
+        echo(f"\n  + {edge.subject or record.target} -{edge.predicate}-> {edge.object}")
+        for evidence in edge.evidence:
+            if evidence.quote:
+                echo(f'      evidence: "{evidence.quote[:160]}"')
+    for edge in diff.removed_relations:
+        echo(f"\n  - {edge.subject or record.target} -{edge.predicate}-> {edge.object}")
+
+    if diff.body:
+        echo("")
+        for change in diff.body:
+            marker = {"added": "+", "removed": "-", "gap": " ", "context": " "}[change.kind]
+            echo(f"  {marker} {change.text}")
+    if diff.is_empty:
+        echo("\n  (no change — this proposal is a no-op)")
+
+
+@review_app.command("accept")
+def review_accept(
+    keys: Annotated[list[str], typer.Argument(help="Edge keys or proposal ids.")],
+    store: Annotated[Path, typer.Option()] = STORE_ROOT,
+    reviewer: Annotated[
+        str, typer.Option(help=f"Who is deciding: {', '.join(PRINCIPALS)}")
+    ] = "ceo",
+) -> None:
+    """Accept one or more proposals into the graph."""
+    _decide(keys, store, reviewer, accept=True)
 
 
 @review_app.command("reject")
 def review_reject(
-    key: Annotated[str, typer.Argument(help="node_id|predicate|object")],
+    keys: Annotated[list[str], typer.Argument(help="Edge keys or proposal ids.")],
     store: Annotated[Path, typer.Option()] = STORE_ROOT,
+    reviewer: Annotated[
+        str, typer.Option(help=f"Who is deciding: {', '.join(PRINCIPALS)}")
+    ] = "ceo",
 ) -> None:
-    """Reject a proposed edge. Retained, not deleted — it's the tuning signal."""
-    _decide(key, store, accept=False)
+    """Reject proposals. Retained, not deleted — they're the tuning signal."""
+    _decide(keys, store, reviewer, accept=False)
 
 
-def _decide(key: str, store: Path, *, accept: bool) -> None:
-    from company_brain.review.queue import Decision, ReviewQueue
+@review_app.command("bulk")
+def review_bulk(
+    predicate: Annotated[str, typer.Argument(help="Decide every pending edge of this type.")],
+    store: Annotated[Path, typer.Option()] = STORE_ROOT,
+    reject: Annotated[bool, typer.Option(help="Reject instead of accept.")] = False,
+    reviewer: Annotated[str, typer.Option()] = "ceo",
+    limit: Annotated[int, typer.Option(help="Cap the batch.")] = 100,
+) -> None:
+    """Decide a whole predicate at once.
+
+    The bet the review queue makes is that a reviewer recognises *patterns* —
+    "every `mentions` edge on this corpus is right" — faster than they evaluate
+    items. If that bet is wrong for a predicate, its accept rate will say so.
+    """
+    from company_brain.review.queue import ReviewQueue
 
     instance = build_app(store)
+    queue = ReviewQueue(instance.repo)
+    keys = [item.key for item in queue.pending_edges(predicate)][:limit]
+    if not keys:
+        echo(f"Nothing pending for {predicate!r}.")
+        return
+    _decide(keys, store, reviewer, accept=not reject)
+
+
+def _decide(keys: list[str], store: Path, reviewer: str, *, accept: bool) -> None:
+    from company_brain.audit.log import Surface
+    from company_brain.review.proposals import ProposalError
+    from company_brain.review.queue import Decision, ReviewQueue
+
+    app_instance = build_app(store)
+    who = app_instance.principal(reviewer)
+    queue = ReviewQueue(app_instance.repo, audit=app_instance.audit(Surface.CLI))
+    decision = Decision.ACCEPTED if accept else Decision.REJECTED
+
+    # One pass, same as the API. Consecutive edges accumulate and flush
+    # together so `decide_many` still pays one store write per node; the kind
+    # comes from `kind_of`, which asks the queue rather than reading the shape
+    # of the string a human typed.
+    run: list[str] = []
     try:
-        ReviewQueue(instance.repo).decide(
-            key, Decision.ACCEPTED if accept else Decision.REJECTED
-        )
-    except (KeyError, ValueError) as exc:
-        echo(f"Could not decide {key!r}: {exc}")
+        for key in keys:
+            if queue.kind_of(key) == "edge":
+                run.append(key)
+                continue
+            if run:
+                queue.decide_many(run, decision, reviewer=who)
+                run = []
+            queue.decide_proposal(key, decision, reviewer=who)
+        if run:
+            queue.decide_many(run, decision, reviewer=who)
+    except (KeyError, ValueError, ProposalError) as exc:
+        echo(f"Could not decide: {exc}")
         raise typer.Exit(1) from exc
-    echo(f"{'Accepted' if accept else 'Rejected'} {key}")
+    echo(f"{'Accepted' if accept else 'Rejected'} {len(keys)} item(s) as {who.display}")
+
+
+@app.command("audit")
+def audit_cmd(
+    store: Annotated[Path, typer.Option()] = STORE_ROOT,
+    actor: Annotated[str | None, typer.Option(help="Filter by principal or agent id.")] = None,
+    node: Annotated[str | None, typer.Option(help="Filter by node id.")] = None,
+    limit: Annotated[int, typer.Option()] = 25,
+    stats: Annotated[
+        bool, typer.Option(help="Volume per action instead of a listing.")
+    ] = False,
+) -> None:
+    """Who saw what, when.
+
+    Node IDs only — never content (invariant 15). Reading this tells you the
+    shape of activity against the graph, never the material in it.
+    """
+    from company_brain.audit.log import Surface, summarize
+
+    instance = build_app(store)
+    log = instance.audit(Surface.CLI)
+
+    if stats:
+        tally = summarize(log.scan())
+        if not tally:
+            echo("No audit records yet.")
+            return
+        for key, count in tally.items():
+            echo(f"  {key:34} {count}")
+        return
+
+    records = log.read(limit=limit, actor=actor, node_id=node)
+    if not records:
+        echo("No matching audit records.")
+        return
+    for entry in records:
+        acting = f" for {entry.delegated_by}" if entry.delegated_by else ""
+        ids = ", ".join(entry.node_ids[:3]) + ("…" if len(entry.node_ids) > 3 else "")
+        echo(f"{entry.at.isoformat()}  {entry.actor}{acting}")
+        echo(f"  {entry.action} -> {entry.outcome}  [{entry.surface}]")
+        if ids:
+            echo(f"  nodes: {ids}")
+        if entry.proposal_id:
+            echo(f"  proposal: {entry.proposal_id}")
+        if entry.detail:
+            echo(f"  {entry.detail}")
 
 
 if __name__ == "__main__":

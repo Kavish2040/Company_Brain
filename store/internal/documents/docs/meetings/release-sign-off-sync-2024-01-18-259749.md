@@ -24,7 +24,7 @@ relations:
   - predicate: depends_on
     subject: processes/release-signoff
     object: tools/zendesk
-    confidence: 0.7
+    confidence: 0.8
     provenance: llm
     status: proposed
     evidence:
@@ -34,7 +34,7 @@ relations:
   - predicate: handoff_to
     subject: teams/engineering
     object: teams/finance
-    confidence: 0.65
+    confidence: 0.55
     provenance: llm
     status: proposed
     evidence:
@@ -42,17 +42,8 @@ relations:
         span: [232, 316]
         quote: "Handoff from Engineering to Finance is unclear; two\n tickets bounced back last week."
   - predicate: mentions
-    object: people/ana-brito
-    confidence: 0.5
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [38, 101]
-        quote: '**Attendees:** Zoë Ravel, Sam Kelly, Ana Brito, Owen Fitzgerald'
-  - predicate: mentions
     object: people/owen-fitz
-    confidence: 0.8
+    confidence: 0.7
     provenance: llm
     status: proposed
     evidence:
@@ -60,17 +51,44 @@ relations:
         span: [332, 381]
         quote: Owen Fitzgerald to document the handoff boundary.
   - predicate: mentions
-    object: people/sam-kelly
-    confidence: 0.5
+    object: people/zoe-ravel
+    confidence: 0.75
     provenance: llm
     status: proposed
     evidence:
       - node: self
-        span: [38, 101]
-        quote: '**Attendees:** Zoë Ravel, Sam Kelly, Ana Brito, Owen Fitzgerald'
+        span: [115, 183]
+        quote: "Zoë Ravel raised that release sign-off is still blocked on\n Zendesk."
   - predicate: mentions
-    object: people/zoe-ravel
-    confidence: 0.7
+    object: processes/release-signoff
+    confidence: 0.6
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [332, 381]
+        quote: Owen Fitzgerald to document the handoff boundary.
+  - predicate: mentions
+    object: teams/engineering
+    confidence: 0.6
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [232, 316]
+        quote: "Handoff from Engineering to Finance is unclear; two\n tickets bounced back last week."
+  - predicate: mentions
+    object: teams/finance
+    confidence: 0.6
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [232, 316]
+        quote: "Handoff from Engineering to Finance is unclear; two\n tickets bounced back last week."
+  - predicate: mentions
+    object: tools/zendesk
+    confidence: 0.75
     provenance: llm
     status: proposed
     evidence:
@@ -80,7 +98,7 @@ relations:
   - predicate: owns
     subject: people/priya-raman
     object: processes/release-signoff
-    confidence: 0.75
+    confidence: 0.85
     provenance: llm
     status: proposed
     evidence:

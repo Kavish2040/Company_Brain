@@ -21,20 +21,28 @@ extraction:
   cache_key: 5f08cb6b1f2e1782bcbf312703fb7511
   status: accepted
 relations:
-  - predicate: depends_on
-    subject: processes/onboarding
-    object: tools/pagerduty
-    confidence: 0.75
+  - predicate: mentions
+    object: people/sam-kelly
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [327, 370]
+        quote: Sam Kelly to document the handoff boundary.
+  - predicate: mentions
+    object: processes/onboarding
+    confidence: 0.5
     provenance: llm
     status: proposed
     evidence:
       - node: self
-        span: [111, 184]
-        quote: "Ana Brito raised that employee onboarding is still blocked on\n PagerDuty."
+        span: [327, 370]
+        quote: Sam Kelly to document the handoff boundary.
   - predicate: owns
     subject: people/zoe-ravel
     object: processes/onboarding
-    confidence: 0.85
+    confidence: 0.75
     provenance: llm
     status: proposed
     evidence:

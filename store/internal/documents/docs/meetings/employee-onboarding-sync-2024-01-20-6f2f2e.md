@@ -29,12 +29,12 @@ relations:
     status: proposed
     evidence:
       - node: self
-        span: [137, 187]
-        quote: "employee onboarding is still blocked on\n NetSuite."
+        span: [115, 187]
+        quote: "Ana Brito raised that employee onboarding is still blocked on\n NetSuite."
   - predicate: handoff_to
     subject: teams/engineering
     object: teams/product
-    confidence: 0.75
+    confidence: 0.5
     provenance: llm
     status: proposed
     evidence:
@@ -52,7 +52,7 @@ relations:
         quote: "Ana Brito raised that employee onboarding is still blocked on\n NetSuite."
   - predicate: mentions
     object: people/dev-oyelaran
-    confidence: 0.9
+    confidence: 0.85
     provenance: llm
     status: accepted
     evidence:
@@ -60,18 +60,36 @@ relations:
         span: [334, 380]
         quote: Dev Oyelaran to document the handoff boundary.
   - predicate: mentions
-    object: people/sam-kelly
+    object: teams/engineering
     confidence: 0.7
     provenance: llm
     status: proposed
     evidence:
       - node: self
-        span: [41, 101]
-        quote: '**Attendees:** Ana Brito, Sam Kelly, Zoë Ravel, Dev Oyelaran'
+        span: [234, 318]
+        quote: "Handoff from Engineering to Product is unclear; two\n tickets bounced back last week."
+  - predicate: mentions
+    object: teams/product
+    confidence: 0.7
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [234, 318]
+        quote: "Handoff from Engineering to Product is unclear; two\n tickets bounced back last week."
+  - predicate: mentions
+    object: tools/netsuite
+    confidence: 0.8
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [115, 187]
+        quote: "Ana Brito raised that employee onboarding is still blocked on\n NetSuite."
   - predicate: owns
     subject: people/zoe-ravel
     object: processes/onboarding
-    confidence: 0.8
+    confidence: 0.85
     provenance: llm
     status: proposed
     evidence:

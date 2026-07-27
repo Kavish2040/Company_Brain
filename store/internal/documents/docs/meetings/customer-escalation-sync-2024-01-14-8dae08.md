@@ -21,20 +21,91 @@ extraction:
   cache_key: 7126a32681b819f8a4d7b2a5fb621c89
   status: accepted
 relations:
-  - predicate: depends_on
-    subject: processes/customer-escalation
-    object: tools/snowflake
+  - predicate: mentions
+    object: people/dev-oyelaran
     confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [192, 236]
+        quote: Dev Oyelaran confirmed they own the process.
+  - predicate: mentions
+    object: people/priya-raman
+    confidence: 0.7
     provenance: llm
     status: proposed
     evidence:
       - node: self
-        span: [138, 189]
-        quote: "customer escalation is still blocked on\n Snowflake."
+        span: [41, 101]
+        quote: '**Attendees:** Tom Whelan, Priya Raman, Zoë Ravel, Sam Kelly'
+  - predicate: mentions
+    object: people/sam-kelly
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [339, 382]
+        quote: Sam Kelly to document the handoff boundary.
+  - predicate: mentions
+    object: people/tom-whelan
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [115, 189]
+        quote: "Tom Whelan raised that customer escalation is still blocked on\n Snowflake."
+  - predicate: mentions
+    object: people/zoe-ravel
+    confidence: 0.7
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [41, 101]
+        quote: '**Attendees:** Tom Whelan, Priya Raman, Zoë Ravel, Sam Kelly'
+  - predicate: mentions
+    object: processes/customer-escalation
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [115, 189]
+        quote: "Tom Whelan raised that customer escalation is still blocked on\n Snowflake."
+  - predicate: mentions
+    object: teams/engineering
+    confidence: 0.85
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [239, 323]
+        quote: "Handoff from Engineering to Product is unclear; two\n tickets bounced back last week."
+  - predicate: mentions
+    object: teams/product
+    confidence: 0.85
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [239, 323]
+        quote: "Handoff from Engineering to Product is unclear; two\n tickets bounced back last week."
+  - predicate: mentions
+    object: tools/snowflake
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [115, 189]
+        quote: "Tom Whelan raised that customer escalation is still blocked on\n Snowflake."
   - predicate: owns
     subject: people/dev-oyelaran
     object: processes/customer-escalation
-    confidence: 0.85
+    confidence: 0.8
     provenance: llm
     status: proposed
     evidence:

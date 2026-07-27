@@ -34,7 +34,7 @@ relations:
   - predicate: handoff_to
     subject: teams/engineering
     object: teams/support
-    confidence: 0.65
+    confidence: 0.85
     provenance: llm
     status: proposed
     evidence:
@@ -43,22 +43,22 @@ relations:
         quote: "Handoff from Engineering to Support is unclear; two\n tickets bounced back last week."
   - predicate: mentions
     object: people/ana-brito
-    confidence: 0.9
+    confidence: 0.85
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [54, 101]
-        quote: Priya Raman, Sam Kelly, Dev Oyelaran, Ana Brito
+        span: [339, 382]
+        quote: Ana Brito to document the handoff boundary.
   - predicate: mentions
     object: people/dev-oyelaran
-    confidence: 0.9
+    confidence: 0.7
     provenance: llm
-    status: accepted
+    status: proposed
     evidence:
       - node: self
-        span: [54, 101]
-        quote: Priya Raman, Sam Kelly, Dev Oyelaran, Ana Brito
+        span: [39, 101]
+        quote: '**Attendees:** Priya Raman, Sam Kelly, Dev Oyelaran, Ana Brito'
   - predicate: mentions
     object: people/priya-raman
     confidence: 0.9
@@ -66,21 +66,39 @@ relations:
     status: accepted
     evidence:
       - node: self
-        span: [54, 101]
-        quote: Priya Raman, Sam Kelly, Dev Oyelaran, Ana Brito
+        span: [115, 186]
+        quote: "Priya Raman raised that incident response is still blocked on\n Datadog."
   - predicate: mentions
     object: people/sam-kelly
+    confidence: 0.7
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [39, 101]
+        quote: '**Attendees:** Priya Raman, Sam Kelly, Dev Oyelaran, Ana Brito'
+  - predicate: mentions
+    object: processes/incident-response
     confidence: 0.9
     provenance: llm
     status: accepted
     evidence:
       - node: self
-        span: [54, 101]
-        quote: Priya Raman, Sam Kelly, Dev Oyelaran, Ana Brito
+        span: [115, 186]
+        quote: "Priya Raman raised that incident response is still blocked on\n Datadog."
+  - predicate: mentions
+    object: tools/datadog
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [115, 186]
+        quote: "Priya Raman raised that incident response is still blocked on\n Datadog."
   - predicate: owns
     subject: people/owen-fitz
     object: processes/incident-response
-    confidence: 0.85
+    confidence: 0.8
     provenance: llm
     status: proposed
     evidence:

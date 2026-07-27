@@ -24,7 +24,7 @@ relations:
   - predicate: depends_on
     subject: processes/incident-response
     object: tools/snowflake
-    confidence: 0.9
+    confidence: 0.85
     provenance: llm
     status: proposed
     evidence:
@@ -34,7 +34,7 @@ relations:
   - predicate: handoff_to
     subject: teams/engineering
     object: teams/support
-    confidence: 0.75
+    confidence: 0.6
     provenance: llm
     status: proposed
     evidence:
@@ -52,7 +52,7 @@ relations:
         quote: Ana Brito to document the handoff boundary.
   - predicate: mentions
     object: people/mei-tanaka
-    confidence: 0.7
+    confidence: 0.6
     provenance: llm
     status: proposed
     evidence:
@@ -61,7 +61,7 @@ relations:
         quote: '**Attendees:** Zoë Ravel, Tom Whelan, Mei Tanaka, Ana Brito'
   - predicate: mentions
     object: people/tom-whelan
-    confidence: 0.7
+    confidence: 0.6
     provenance: llm
     status: proposed
     evidence:
@@ -79,7 +79,34 @@ relations:
         quote: "Zoë Ravel raised that incident response is still blocked on\n Snowflake."
   - predicate: mentions
     object: processes/incident-response
-    confidence: 0.9
+    confidence: 0.85
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [112, 183]
+        quote: "Zoë Ravel raised that incident response is still blocked on\n Snowflake."
+  - predicate: mentions
+    object: teams/engineering
+    confidence: 0.7
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [236, 320]
+        quote: "Handoff from Engineering to Support is unclear; two\n tickets bounced back last week."
+  - predicate: mentions
+    object: teams/support
+    confidence: 0.7
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [236, 320]
+        quote: "Handoff from Engineering to Support is unclear; two\n tickets bounced back last week."
+  - predicate: mentions
+    object: tools/snowflake
+    confidence: 0.85
     provenance: llm
     status: accepted
     evidence:
@@ -89,7 +116,7 @@ relations:
   - predicate: owns
     subject: people/owen-fitz
     object: processes/incident-response
-    confidence: 0.85
+    confidence: 0.7
     provenance: llm
     status: proposed
     evidence:

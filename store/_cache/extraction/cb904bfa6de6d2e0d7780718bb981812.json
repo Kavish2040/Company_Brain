@@ -1,7 +1,7 @@
 {
   "edges": [
     {
-      "confidence": 0.9,
+      "confidence": 0.85,
       "evidence": [
         {
           "node": "self",
@@ -19,7 +19,7 @@
       "subject": "processes/incident-response"
     },
     {
-      "confidence": 0.75,
+      "confidence": 0.6,
       "evidence": [
         {
           "node": "self",
@@ -55,7 +55,7 @@
       "subject": null
     },
     {
-      "confidence": 0.7,
+      "confidence": 0.6,
       "evidence": [
         {
           "node": "self",
@@ -73,7 +73,7 @@
       "subject": null
     },
     {
-      "confidence": 0.7,
+      "confidence": 0.6,
       "evidence": [
         {
           "node": "self",
@@ -109,7 +109,7 @@
       "subject": null
     },
     {
-      "confidence": 0.9,
+      "confidence": 0.85,
       "evidence": [
         {
           "node": "self",
@@ -127,7 +127,61 @@
       "subject": null
     },
     {
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Handoff from Engineering to Support is unclear; two\n tickets bounced back last week.",
+          "span": [
+            236,
+            320
+          ]
+        }
+      ],
+      "object": "teams/engineering",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Handoff from Engineering to Support is unclear; two\n tickets bounced back last week.",
+          "span": [
+            236,
+            320
+          ]
+        }
+      ],
+      "object": "teams/support",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
       "confidence": 0.85,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Zo\u00eb Ravel raised that incident response is still blocked on\n Snowflake.",
+          "span": [
+            112,
+            183
+          ]
+        }
+      ],
+      "object": "tools/snowflake",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.7,
       "evidence": [
         {
           "node": "self",

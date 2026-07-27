@@ -16,7 +16,7 @@ from __future__ import annotations
 import asyncio
 from functools import lru_cache
 from pathlib import Path
-from typing import Annotated, Any
+from typing import Annotated, Any, Literal
 
 from fastapi import Depends, FastAPI, Header, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
@@ -24,11 +24,13 @@ from pydantic import BaseModel, Field
 
 from company_brain.acl.grants import AccessFilter
 from company_brain.app import PRINCIPALS, STORE_ROOT, App, build_app
+from company_brain.audit.log import Action, AuditLog, Outcome, Surface, summarize
 from company_brain.collab.guard import FenceViolation
 from company_brain.collab.hub import CollabHub
 from company_brain.collab.session import SessionRegistry, participant_color
 from company_brain.retrieve.hybrid import HybridRetriever
-from company_brain.schemas.edges import EdgeStatus
+from company_brain.schemas.acl import Principal
+from company_brain.schemas.edges import Edge, EdgeStatus
 from company_brain.store.repository import NodeNotFoundError
 from company_brain.synthesize.answer import (
     CitationLeakError,
@@ -56,8 +58,34 @@ def _app(store: str = str(STORE_ROOT)) -> App:
     return instance
 
 
+# Set when a review decision changes the graph. The index is disposable
+# (invariant 2), so the fix is always "rebuild it from markdown" — the only
+# question is when. Rebuilding inside the decision handler put a full reindex of
+# every node on the reviewer's critical path, fifty times over, which is a
+# meaningful share of the fifteen-minute budget the ROADMAP allows for the whole
+# queue. So the decision marks the index stale and returns, and the next request
+# that actually needs retrieval pays for one rebuild covering all of them.
+_index_stale = False
+
+
+def mark_index_stale() -> None:
+    global _index_stale
+    _index_stale = True
+
+
 def get_app() -> App:
-    return _app()
+    """The app, with a fresh index if a decision invalidated it.
+
+    Review and audit routes never call this path's rebuild — they read the store
+    directly — so clearing a queue costs no reindexing at all until the reviewer
+    asks a question again.
+    """
+    global _index_stale
+    instance = _app()
+    if _index_stale:
+        instance.load_index()
+        _index_stale = False
+    return instance
 
 
 def get_access(
@@ -67,6 +95,21 @@ def get_access(
     if x_principal not in PRINCIPALS:
         raise HTTPException(400, f"unknown principal {x_principal!r}")
     return instance.access(PRINCIPALS[x_principal])
+
+
+def get_reviewer(x_principal: Annotated[str, Header()] = "ceo") -> Principal:
+    """Who is deciding. Out-of-band, exactly like every other identity here.
+
+    A review decision is a graph write, so it needs a name on it — and the name
+    comes from the header, never from the request body carrying the decision.
+    """
+    if x_principal not in PRINCIPALS:
+        raise HTTPException(400, f"unknown principal {x_principal!r}")
+    return PRINCIPALS[x_principal]
+
+
+def get_audit(instance: Annotated[App, Depends(get_app)]) -> AuditLog:
+    return instance.audit(Surface.API)
 
 
 # ---- models ------------------------------------------------------------
@@ -131,22 +174,101 @@ class NodeDetail(BaseModel):
     relations: list[EdgeOut]
 
 
-class PendingOut(BaseModel):
-    key: str
-    node_id: str
-    node_title: str
+class RelationDiffOut(BaseModel):
+    """One edge, as a line in a diff rather than as a fact."""
+
     predicate: str
     subject: str | None
     subject_title: str | None
     object: str
+    object_title: str | None
     confidence: float
+    provenance: str
     quote: str
+
+
+class DiffLineOut(BaseModel):
+    # context | added | removed | gap
+    kind: str
+    text: str
+
+
+class PendingOut(BaseModel):
+    """One queue item, whatever produced it.
+
+    Extraction-proposed edges and agent proposals are rendered through the same
+    shape on purpose: to a reviewer they are the same job, and a UI with two
+    layouts for one decision is a UI that costs twice as much to work through.
+    An extraction-proposed edge *is* a diff — one added relation — so it is
+    reported as one.
+    """
+
+    key: str
+    kind: str  # "edge" — from extraction; "proposal" — from an agent
+    node_id: str
+    node_title: str
+    predicate: str | None
+    subject: str | None
+    subject_title: str | None
+    object: str | None
+    confidence: float | None
+    quote: str
+    summary: str
+    # Present only for agent proposals: who proposed it, and for which human.
+    # A suggestion nobody can attribute is a suggestion nobody should accept.
+    proposed_by: str | None = None
+    delegated_by: str | None = None
+    # The target moved after the proposal was made; accepting would revert it.
+    stale: bool = False
+    body_diff: list[DiffLineOut] = []
+    added_relations: list[RelationDiffOut] = []
+    removed_relations: list[RelationDiffOut] = []
 
 
 class ReviewStatsOut(BaseModel):
     pending: int
+    pending_proposals: int
     by_predicate: dict[str, int]
     accept_rate: dict[str, list[int]]
+    proposal_accept_rate: dict[str, list[int]]
+
+
+class DecideItem(BaseModel):
+    """One thing being decided, tagged with what it is.
+
+    ``kind`` is the same discriminator the queue handed the client, validated
+    back on the way in — so the server never infers a code path from the shape
+    of a key, and a client cannot reach the proposal path by crafting a string
+    that happens to look like a proposal id.
+    """
+
+    key: str = Field(min_length=1, max_length=400)
+    kind: Literal["edge", "proposal"]
+
+
+class DecideIn(BaseModel):
+    """A decision over one or many items, in the order the reviewer worked them.
+
+    One list rather than one per kind: a mixed batch is the normal case, and
+    splitting it at the wire would throw away the reviewer's ordering for no
+    gain. Edges are still grouped by node before they are written — that
+    batching is a store concern, decided here rather than asked of the caller.
+    """
+
+    items: list[DecideItem] = Field(default_factory=list, max_length=500)
+    decision: str
+
+
+class AuditOut(BaseModel):
+    at: str
+    surface: str
+    actor: str
+    delegated_by: str | None
+    action: str
+    outcome: str
+    node_ids: list[str]
+    proposal_id: str | None
+    detail: str
 
 
 # ---- routes ------------------------------------------------------------
@@ -296,32 +418,89 @@ def get_node(
     )
 
 
+def _title(instance: App, node_id: str | None) -> str | None:
+    if not node_id:
+        return None
+    indexed = instance.index.get_node(node_id)
+    return indexed.title if indexed else None
+
+
+def _relation_out(instance: App, edge: Edge) -> RelationDiffOut:
+    return RelationDiffOut(
+        predicate=str(edge.predicate),
+        subject=edge.subject,
+        subject_title=_title(instance, edge.subject),
+        object=edge.object,
+        object_title=_title(instance, edge.object),
+        confidence=edge.confidence,
+        provenance=str(edge.provenance),
+        quote=next((e.quote for e in edge.evidence if e.quote), "") or "",
+    )
+
+
 @api.get("/api/review", response_model=list[PendingOut])
 def review_pending(
     instance: Annotated[App, Depends(get_app)],
     predicate: str | None = None,
     limit: int = 100,
 ) -> list[PendingOut]:
+    """The queue: agent proposals first, then extraction-proposed edges.
+
+    Agent proposals lead because they are the smaller, newer, and more
+    consequential pile — an agent's suggestion is unreviewed input from outside
+    the system, where an extraction-proposed edge is the system reporting its
+    own uncertainty about a document a human already trusted.
+    """
     from company_brain.review.queue import ReviewQueue
 
-    return [
-        PendingOut(
-            key=item.key,
-            node_id=item.node_id,
-            node_title=item.node_title,
-            predicate=str(item.edge.predicate),
-            subject=item.edge.subject,
-            subject_title=(
-                node.title
-                if item.edge.subject and (node := instance.index.get_node(item.edge.subject))
-                else None
-            ),
-            object=item.edge.object,
-            confidence=item.edge.confidence,
-            quote=item.quote(),
+    queue = ReviewQueue(instance.repo)
+    out: list[PendingOut] = []
+
+    for diff in queue.pending_proposals(predicate):
+        record = diff.record
+        out.append(
+            PendingOut(
+                key=record.proposal_id,
+                kind="proposal",
+                node_id=record.target,
+                node_title=diff.target_title,
+                predicate=record.predicate,
+                subject=None,
+                subject_title=None,
+                object=record.object,
+                confidence=None,
+                quote="",
+                summary=record.summary,
+                proposed_by=record.proposed_by,
+                delegated_by=record.delegated_by,
+                stale=diff.stale,
+                body_diff=[DiffLineOut(kind=c.kind, text=c.text) for c in diff.body],
+                added_relations=[_relation_out(instance, e) for e in diff.added_relations],
+                removed_relations=[_relation_out(instance, e) for e in diff.removed_relations],
+            )
         )
-        for item in ReviewQueue(instance.repo).pending_edges(predicate)[:limit]
-    ]
+
+    for item in queue.pending_edges(predicate)[: max(0, limit - len(out))]:
+        out.append(
+            PendingOut(
+                key=item.key,
+                kind="edge",
+                node_id=item.node_id,
+                node_title=item.node_title,
+                predicate=str(item.edge.predicate),
+                subject=item.edge.subject,
+                subject_title=_title(instance, item.edge.subject),
+                object=item.edge.object,
+                confidence=item.edge.confidence,
+                quote=item.quote(),
+                summary=f"{item.edge.subject or item.node_id} "
+                f"-{item.edge.predicate}-> {item.edge.object}",
+                # An extraction-proposed edge is a one-line diff: nothing is
+                # removed, one relation is added.
+                added_relations=[_relation_out(instance, item.edge)],
+            )
+        )
+    return out
 
 
 @api.get("/api/review/stats", response_model=ReviewStatsOut)
@@ -331,27 +510,92 @@ def review_stats(instance: Annotated[App, Depends(get_app)]) -> ReviewStatsOut:
     queue = ReviewQueue(instance.repo)
     stats = queue.stats()
     return ReviewStatsOut(
-        pending=stats.total,
+        pending=stats.total + stats.proposals,
+        pending_proposals=stats.proposals,
         by_predicate=stats.by_predicate,
         accept_rate={k: [a, d] for k, (a, d) in queue.accept_rate().items()},
+        proposal_accept_rate={k: [a, d] for k, (a, d) in queue.proposals.accept_rate().items()},
     )
 
 
 @api.post("/api/review/decide")
 def review_decide(
-    body: dict[str, str], instance: Annotated[App, Depends(get_app)]
-) -> dict[str, str]:
+    body: DecideIn,
+    instance: Annotated[App, Depends(get_app)],
+    reviewer: Annotated[Principal, Depends(get_reviewer)],
+    audit: Annotated[AuditLog, Depends(get_audit)],
+) -> dict[str, Any]:
+    """Decide one item or five hundred, under the reviewer's own identity.
+
+    Bulk is not a convenience here, it is the acceptance criterion: fifty
+    proposals in fifteen minutes means a reviewer who has recognised a pattern
+    ("every `mentions` edge on this document is right") must be able to act on
+    the pattern rather than re-confirming it fifty times.
+
+    One pass over ``items``, dispatching on the tag the queue itself supplied.
+    Consecutive edges accumulate and flush together, because ``decide_many``
+    groups them by node and pays for one store write per node rather than one
+    per edge — the reviewer's order survives, and so does the batching.
+    """
+    from company_brain.review.proposals import ProposalError, StaleProposalError
     from company_brain.review.queue import Decision, ReviewQueue
 
-    key, decision = body.get("key", ""), body.get("decision", "")
-    if decision not in ("accepted", "rejected"):
-        raise HTTPException(400, "decision must be 'accepted' or 'rejected'")
+    if body.decision not in ("accepted", "rejected", "pending"):
+        raise HTTPException(400, "decision must be 'accepted', 'rejected', or 'pending'")
+    if not body.items:
+        raise HTTPException(400, "nothing to decide")
+
+    decision = Decision(body.decision)
+    queue = ReviewQueue(instance.repo, audit=audit)
+    run: list[str] = []
+
     try:
-        ReviewQueue(instance.repo).decide(key, Decision(decision))
-    except (KeyError, ValueError) as exc:
+        for item in body.items:
+            if item.kind == "edge":
+                run.append(item.key)
+                continue
+            if run:
+                queue.decide_many(run, decision, reviewer=reviewer)
+                run = []
+            queue.decide_proposal(item.key, decision, reviewer=reviewer)
+        if run:
+            queue.decide_many(run, decision, reviewer=reviewer)
+    except StaleProposalError as exc:
+        # 409, not 404: the item is there, the world moved. The distinction is
+        # what tells the reviewer to re-read rather than to go looking.
+        raise HTTPException(409, str(exc)) from exc
+    except (KeyError, ValueError, ProposalError) as exc:
+        failed = Action.REVIEW_REJECT if decision is Decision.REJECTED else Action.REVIEW_ACCEPT
+        audit.record(actor=reviewer, action=failed, outcome=Outcome.ERROR, detail=str(exc))
         raise HTTPException(404, str(exc)) from exc
-    _app.cache_clear()  # the graph changed; next request rebuilds the index
-    return {"key": key, "decision": decision}
+
+    mark_index_stale()
+    return {"decided": len(body.items), "decision": body.decision, "by": reviewer.id}
+
+
+@api.get("/api/audit", response_model=list[AuditOut])
+def audit_trail(
+    audit: Annotated[AuditLog, Depends(get_audit)],
+    actor: str | None = None,
+    node_id: str | None = None,
+    limit: int = 100,
+) -> list[AuditOut]:
+    """Who saw what, when.
+
+    Unfiltered by principal, and deliberately so: this is an operator surface,
+    and an audit log each actor can filter to their own good behaviour is not
+    one. It returns node IDs and never node content (invariant 15), so reading
+    it discloses the shape of activity, not the material.
+    """
+    return [
+        AuditOut(**{**record.to_dict(), "node_ids": list(record.node_ids)})
+        for record in audit.read(limit=min(limit, 500), actor=actor, node_id=node_id)
+    ]
+
+
+@api.get("/api/audit/stats")
+def audit_stats(audit: Annotated[AuditLog, Depends(get_audit)]) -> dict[str, int]:
+    return summarize(audit.scan())
 
 
 # ---- live collaboration -------------------------------------------------

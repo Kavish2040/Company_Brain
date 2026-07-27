@@ -1,7 +1,7 @@
 {
   "edges": [
     {
-      "confidence": 0.7,
+      "confidence": 0.85,
       "evidence": [
         {
           "node": "self",
@@ -19,7 +19,7 @@
       "subject": "processes/security-review"
     },
     {
-      "confidence": 0.5,
+      "confidence": 0.55,
       "evidence": [
         {
           "node": "self",
@@ -37,14 +37,14 @@
       "subject": "teams/product"
     },
     {
-      "confidence": 0.8,
+      "confidence": 0.5,
       "evidence": [
         {
           "node": "self",
-          "quote": "**Attendees:** Priya Raman, Zo\u00eb Ravel, Dev Oyelaran, Nadia Hassan",
+          "quote": "Dev Oyelaran",
           "span": [
-            37,
-            102
+            76,
+            88
           ]
         }
       ],
@@ -55,7 +55,7 @@
       "subject": null
     },
     {
-      "confidence": 0.85,
+      "confidence": 0.7,
       "evidence": [
         {
           "node": "self",
@@ -69,11 +69,11 @@
       "object": "people/nadia-hassan",
       "predicate": "mentions",
       "provenance": "llm",
-      "status": "accepted",
+      "status": "proposed",
       "subject": null
     },
     {
-      "confidence": 0.9,
+      "confidence": 0.6,
       "evidence": [
         {
           "node": "self",
@@ -87,36 +87,18 @@
       "object": "people/priya-raman",
       "predicate": "mentions",
       "provenance": "llm",
-      "status": "accepted",
+      "status": "proposed",
       "subject": null
     },
     {
-      "confidence": 0.85,
+      "confidence": 0.5,
       "evidence": [
         {
           "node": "self",
-          "quote": "Tom Whelan confirmed they own the process.",
+          "quote": "Zo\u00eb Ravel",
           "span": [
-            188,
-            230
-          ]
-        }
-      ],
-      "object": "people/tom-whelan",
-      "predicate": "mentions",
-      "provenance": "llm",
-      "status": "accepted",
-      "subject": null
-    },
-    {
-      "confidence": 0.8,
-      "evidence": [
-        {
-          "node": "self",
-          "quote": "**Attendees:** Priya Raman, Zo\u00eb Ravel, Dev Oyelaran, Nadia Hassan",
-          "span": [
-            37,
-            102
+            65,
+            74
           ]
         }
       ],
@@ -127,43 +109,7 @@
       "subject": null
     },
     {
-      "confidence": 0.7,
-      "evidence": [
-        {
-          "node": "self",
-          "quote": "Tom Whelan confirmed they own the process.",
-          "span": [
-            188,
-            230
-          ]
-        }
-      ],
-      "object": "processes/security-review",
-      "predicate": "mentions",
-      "provenance": "llm",
-      "status": "proposed",
-      "subject": null
-    },
-    {
-      "confidence": 0.85,
-      "evidence": [
-        {
-          "node": "self",
-          "quote": "Priya Raman raised that security review is still blocked on\n Zendesk.",
-          "span": [
-            116,
-            185
-          ]
-        }
-      ],
-      "object": "tools/zendesk",
-      "predicate": "mentions",
-      "provenance": "llm",
-      "status": "accepted",
-      "subject": null
-    },
-    {
-      "confidence": 0.75,
+      "confidence": 0.8,
       "evidence": [
         {
           "node": "self",

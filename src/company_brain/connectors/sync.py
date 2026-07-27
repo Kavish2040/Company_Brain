@@ -19,6 +19,7 @@ deleted, and re-shared, and permissions change. Four things have to hold:
 
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 
@@ -26,6 +27,7 @@ from company_brain.acl.grants import GrantTable
 from company_brain.connectors.base import (
     Connector,
     Disappearance,
+    Page,
     SourceRecord,
     SyncState,
 )
@@ -46,6 +48,8 @@ from company_brain.schemas.nodes import (
 )
 from company_brain.store.repository import Repository
 
+GRANTS_PREFIX = "_sync/grants"
+
 
 @dataclass(slots=True)
 class SyncReport:
@@ -62,15 +66,27 @@ class SyncReport:
 
     @property
     def changed(self) -> int:
-        return self.added + self.updated + self.deleted
+        return self.added + self.updated + self.deleted + self.trashed
+
+    @property
+    def quiet(self) -> bool:
+        """Nothing moved. Distinct from "nothing was there", which is why
+        `unchanged` is counted rather than left at zero."""
+        return (
+            self.changed == 0
+            and self.access_lost == 0
+            and self.grants_added == 0
+            and self.grants_revoked == 0
+        )
 
     def summary(self) -> str:
         return (
-            f"+{self.added} ~{self.updated} -{self.deleted} "
-            f"={self.unchanged} · {self.trashed} trashed, "
-            f"{self.access_lost} hidden (not deleted) · "
-            f"{self.stale_edges} edges stale · "
-            f"grants +{self.grants_added}/-{self.grants_revoked}"
+            f"+{self.added} added  ~{self.updated} updated  "
+            f"-{self.deleted} deleted  ={self.unchanged} unchanged"
+            + (f"  {self.trashed} trashed" if self.trashed else "")
+            + (f"  {self.access_lost} hidden (NOT deleted)" if self.access_lost else "")
+            + (f"  {self.stale_edges} edges stale" if self.stale_edges else "")
+            + f"  ·  grants +{self.grants_added}/-{self.grants_revoked}"
         )
 
 
@@ -96,8 +112,10 @@ class SyncEngine:
 
         # 1. content -------------------------------------------------------
         cursor = state.cursor
+        page = Page(records=(), cursor=cursor)
         while True:
             page = connector.fetch(cursor)
+            report.unchanged += page.cursor_skipped
             for record in page.records:
                 try:
                     self._apply(record, connector.name, report)
@@ -123,6 +141,7 @@ class SyncEngine:
 
         # 3. permissions ---------------------------------------------------
         self._sync_grants(connector, report)
+        self._persist_grants(connector)
 
         state.cursor = cursor
         state.save(self.repo.backend, now=moment)
@@ -185,6 +204,9 @@ class SyncEngine:
             and existing.frontmatter.source.content_sha256 == sha
             and existing.frontmatter.status is NodeStatus.ACTIVE
         ):
+            # The cursor handed it to us, but the bytes are the ones we already
+            # have — a re-fetch, not a change. Counted, because an uncounted
+            # no-op prints "=0", which reads as an empty source.
             report.unchanged += 1
             return
 
@@ -283,7 +305,11 @@ class SyncEngine:
         ID up, which is what delete detection needs.
         """
         if record is not None and title is not None:
-            slug = f"{connector}/{document_slug(title, record.uri)}"
+            # `record.path` lets a connector place its nodes where another
+            # connector already put them. The simulated Slack serves the
+            # corpus's own channel-days, so it must land on the corpus's node
+            # ids or every sync writes a second copy of the whole workspace.
+            slug = f"{record.path or connector}/{document_slug(title, record.uri)}"
             return make_id("Document", slug)
         for node_id in self.repo.walk_ids("Document"):
             node = self.repo.find(node_id)
@@ -297,6 +323,34 @@ class SyncEngine:
         return ""
 
     # ---- permissions -----------------------------------------------------
+
+    def _persist_grants(self, connector: Connector) -> None:
+        """Mirror this connector's grants to disk.
+
+        `build_grants()` reconstructs from CHANNEL_MEMBERS on every process, so
+        without this a revocation dies the moment the CLI exits — `cb sync
+        --leave` would report a revocation and `cb ask` in the next process
+        would still see the channel. Invariant 2 already names `acl_grants` as
+        state that is *not* derivable from markdown; this is that state.
+        """
+        prefix = f"{connector.name}:"
+        mirrored = {
+            principal: sorted(r for r in refs if r.startswith(prefix))
+            for principal, refs in self.grants.snapshot().items()
+        }
+        self.repo.backend.write_text(
+            f"{GRANTS_PREFIX}/{connector.name}.json",
+            json.dumps(
+                {
+                    "connector": connector.name,
+                    "grants": {p: r for p, r in sorted(mirrored.items()) if r},
+                    "tiers": {g.acl_ref: str(g.sensitivity) for g in connector.grants()},
+                },
+                indent=2,
+                sort_keys=True,
+            )
+            + "\n",
+        )
 
     def _sync_grants(self, connector: Connector, report: SyncReport) -> None:
         """Mirror source membership into the grant table.

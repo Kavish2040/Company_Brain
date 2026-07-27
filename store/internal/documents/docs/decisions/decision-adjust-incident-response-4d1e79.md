@@ -21,21 +21,9 @@ extraction:
   cache_key: f2eb9a836b5319c17e32af36ab1347da
   status: accepted
 relations:
-  - predicate: owns
-    subject: people/owen-fitz
-    object: processes/incident-response
-    confidence: 0.95
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [199, 304]
-        quote: 'Owen Fitzgerald will own incident response going forward, and the
-
-          sign-off step moves to the owning team.'
   - predicate: supersedes
     object: teams/engineering
-    confidence: 0.75
+    confidence: 0.6
     provenance: llm
     status: proposed
     evidence:

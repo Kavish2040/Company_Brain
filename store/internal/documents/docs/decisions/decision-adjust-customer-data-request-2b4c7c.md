@@ -21,18 +21,15 @@ extraction:
   cache_key: 363bef249d220402c3d2f52145b22896
   status: accepted
 relations:
-  - predicate: owns
-    subject: people/mei-tanaka
-    object: processes/data-request
-    confidence: 0.97
+  - predicate: mentions
+    object: people/mei-tanaka
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
-        span: [202, 306]
-        quote: 'Mei Tanaka will own customer data request going forward, and the
-
-          sign-off step moves to the owning team.'
+        span: [63, 89]
+        quote: '**Decided by:** Mei Tanaka'
   - predicate: supersedes
     object: teams/support
     confidence: 0.75

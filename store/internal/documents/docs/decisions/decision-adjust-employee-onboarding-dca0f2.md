@@ -21,30 +21,9 @@ extraction:
   cache_key: a9b0f4761d563c82c8500344d1cf863e
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/zoe-ravel
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [61, 86]
-        quote: '**Decided by:** Zoë Ravel'
-  - predicate: owns
-    subject: people/zoe-ravel
-    object: processes/onboarding
-    confidence: 0.95
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [197, 298]
-        quote: 'Zoë Ravel will own employee onboarding going forward, and the
-
-          sign-off step moves to the owning team.'
   - predicate: supersedes
     object: teams/product
-    confidence: 0.75
+    confidence: 0.7
     provenance: llm
     status: proposed
     evidence:

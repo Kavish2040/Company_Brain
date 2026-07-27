@@ -1,25 +1,7 @@
 {
   "edges": [
     {
-      "confidence": 0.95,
-      "evidence": [
-        {
-          "node": "self",
-          "quote": "Dev Oyelaran will own customer escalation going forward, and the\nsign-off step moves to the owning team.",
-          "span": [
-            200,
-            304
-          ]
-        }
-      ],
-      "object": "processes/customer-escalation",
-      "predicate": "owns",
-      "provenance": "llm",
-      "status": "proposed",
-      "subject": "people/dev-oyelaran"
-    },
-    {
-      "confidence": 0.7,
+      "confidence": 0.75,
       "evidence": [
         {
           "node": "self",

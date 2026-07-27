@@ -24,7 +24,7 @@ relations:
   - predicate: depends_on
     subject: processes/vendor-renewal
     object: tools/pagerduty
-    confidence: 0.9
+    confidence: 0.85
     provenance: llm
     status: proposed
     evidence:
@@ -43,9 +43,9 @@ relations:
         quote: "Handoff from Support to Product is unclear; two\n tickets bounced back last week."
   - predicate: mentions
     object: people/dev-oyelaran
-    confidence: 0.8
+    confidence: 0.9
     provenance: llm
-    status: proposed
+    status: accepted
     evidence:
       - node: self
         span: [326, 372]
@@ -70,9 +70,27 @@ relations:
         quote: '**Attendees:** Tom Whelan, Mei Tanaka, Nadia Hassan, Dev Oyelaran'
   - predicate: mentions
     object: people/tom-whelan
-    confidence: 0.9
+    confidence: 0.7
     provenance: llm
-    status: accepted
+    status: proposed
+    evidence:
+      - node: self
+        span: [115, 184]
+        quote: "Tom Whelan raised that vendor renewal is still blocked on\n PagerDuty."
+  - predicate: mentions
+    object: processes/vendor-renewal
+    confidence: 0.6
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [2, 34]
+        quote: Vendor renewal sync — 2024-01-10
+  - predicate: mentions
+    object: tools/pagerduty
+    confidence: 0.8
+    provenance: llm
+    status: proposed
     evidence:
       - node: self
         span: [115, 184]
@@ -80,7 +98,7 @@ relations:
   - predicate: owns
     subject: people/sam-kaur
     object: processes/vendor-renewal
-    confidence: 0.85
+    confidence: 0.75
     provenance: llm
     status: proposed
     evidence:

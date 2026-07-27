@@ -1,0 +1,41 @@
+# Local Supabase stack. Only the database matters for the index — Auth, Realtime
+# and Studio are along for the ride because `supabase start` brings the whole
+# stack up. The index is a derived cache (invariant 2); nothing here is
+# authoritative, and `supabase db reset` is a supported thing to do at any time.
+project_id = "company_brain"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[db]
+port = 54322
+shadow_port = 54320
+# Postgres 16, per ARCHITECTURE §5.
+major_version = 16
+
+[db.pooler]
+enabled = false
+
+[studio]
+enabled = true
+port = 54323
+
+[inbucket]
+enabled = false
+
+[storage]
+enabled = true
+file_size_limit = "50MiB"
+
+[auth]
+enabled = false
+
+[analytics]
+enabled = false
+
+[realtime]
+enabled = false

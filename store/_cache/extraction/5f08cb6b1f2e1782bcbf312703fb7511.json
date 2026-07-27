@@ -1,25 +1,43 @@
 {
   "edges": [
     {
-      "confidence": 0.75,
+      "confidence": 0.9,
       "evidence": [
         {
           "node": "self",
-          "quote": "Ana Brito raised that employee onboarding is still blocked on\n PagerDuty.",
+          "quote": "Sam Kelly to document the handoff boundary.",
           "span": [
-            111,
-            184
+            327,
+            370
           ]
         }
       ],
-      "object": "tools/pagerduty",
-      "predicate": "depends_on",
+      "object": "people/sam-kelly",
+      "predicate": "mentions",
       "provenance": "llm",
-      "status": "proposed",
-      "subject": "processes/onboarding"
+      "status": "accepted",
+      "subject": null
     },
     {
-      "confidence": 0.85,
+      "confidence": 0.5,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Sam Kelly to document the handoff boundary.",
+          "span": [
+            327,
+            370
+          ]
+        }
+      ],
+      "object": "processes/onboarding",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.75,
       "evidence": [
         {
           "node": "self",
