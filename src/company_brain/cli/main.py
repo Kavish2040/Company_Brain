@@ -167,6 +167,42 @@ def ask(
 
 
 @app.command()
+def sync(
+    store: Annotated[Path, typer.Option()] = STORE_ROOT,
+    connector: Annotated[str, typer.Option(help="Connector name.")] = "simulated-slack",
+    deletes: Annotated[
+        bool, typer.Option(help="Enumerate the source to detect deletions (expensive).")
+    ] = True,
+) -> None:
+    """Incrementally sync a source: content, deletions, and grants.
+
+    Only `simulated-slack` exists today — a working connector over mutable
+    in-memory state, used to exercise edits, deletions, stale evidence and grant
+    revocation without credentials. Real Slack and Drive replace three methods
+    and keep the rest (see connectors/base.py).
+    """
+    from company_brain.connectors.simulated import SimulatedSlack
+    from company_brain.connectors.sync import SyncEngine
+
+    if connector != "simulated-slack":
+        echo(f"unknown connector {connector!r}; only 'simulated-slack' exists so far")
+        raise typer.Exit(64)
+
+    instance = build_app(store)
+    source = SimulatedSlack()
+    engine = SyncEngine(
+        instance.repo,
+        instance.registry,
+        cached_extractor(instance, store, frozen=False),
+        instance.grants,
+    )
+    report = engine.sync(source, detect_deletes=deletes)
+    echo(report.summary())
+    for external_id, error in report.skipped[:10]:
+        echo(f"  skipped {external_id}: {error}")
+
+
+@app.command()
 def principals(store: Annotated[Path, typer.Option()] = STORE_ROOT) -> None:
     """Show what each synthetic principal can see."""
     instance = build_app(store)

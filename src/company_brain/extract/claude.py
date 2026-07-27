@@ -170,6 +170,8 @@ class ClaudeExtractor:
                     ],
                 }
             ],
+            # The SDK's ToolParam TypedDict does not model `strict`, which is
+            # a real API field; the dict is correct on the wire.
             tools=[self._tool],  # type: ignore[list-item]
         )
 
@@ -180,7 +182,7 @@ class ClaudeExtractor:
         for block in response.content:
             if block.type != "tool_use" or block.name != "record_relations":
                 continue
-            payload: dict[str, Any] = dict(block.input)  # type: ignore[arg-type]
+            payload: dict[str, Any] = dict(block.input)
             unresolved = tuple(sorted(set(payload.get("unresolved", []))))
             for item in payload.get("relations", []):
                 edge = self._to_edge(item, spans, request.body)

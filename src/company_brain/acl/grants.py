@@ -88,6 +88,14 @@ class GrantTable:
             return frozenset()
         return human if inherit else self._tiers_for(principal.id) & human
 
+    def snapshot(self) -> dict[str, frozenset[str]]:
+        """Direct grants per principal, for reconciling against a source.
+
+        Direct only — group-derived access is not something a connector can
+        revoke, because it does not own the group.
+        """
+        return {p: frozenset(refs) for p, refs in self._direct.items() if refs}
+
     def _expand(self, principal_id: str) -> frozenset[str]:
         refs = set(self._direct.get(principal_id, ()))
         for group in self._members.get(principal_id, ()):
