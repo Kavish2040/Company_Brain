@@ -213,6 +213,14 @@ it is enforced today — if you change that code, you are changing the contract.
    `None`, no `Optional`. Elevated access exists only via one audited helper in `acl/` and
    is never used in a request path.
    → `HybridRetriever(index, access)`; `AccessFilter`; `acl.grants.elevate()`.
+5a. **A grant is a (ref, ceiling) pair, and `allows` is the only implementation.** Never
+   store or pass the halves separately: independent ref and tier checks make access a
+   cross-product, so one restricted grant silently raises the ceiling on every other ref
+   the principal holds, and revoking it leaves the ceiling behind. Tiers are ordered — a
+   ceiling admits everything below it. Callers pass the `AccessFilter` itself; an index
+   receives it as `index.base.Visibility` and asks, rather than re-deriving the decision.
+   → `GrantTable._direct: principal -> ref -> ceiling`; `schemas.acl.at_least`;
+   `TestGrantPairing`, `TestOneEnforcementPoint`.
 6. **Never widen an ACL.** A derived node, summary, embedding, or proposal inherits the
    narrowest ACL of its inputs. Extraction cannot broaden visibility. Enforced in the
    writer, not by convention.
@@ -343,7 +351,10 @@ determinism violations. Degrade gracefully only on ranking quality.
   (`tests/acceptance/test_m1.py::SEEDED`) that depends on it.
 - **A new node type** → `schemas/nodes.py` and `TYPE_PLURALS`, a store subdirectory, a
   resolution policy (or an explicit "no auto-merge"), and corpus fixtures.
-- **A real index backend** → implement the `Index` protocol in `index/base.py`.
+- **A real index backend** → implement the `Index` protocol in `index/base.py`. Searches
+  take a `Visibility` and must translate it into a predicate over (acl_ref, sensitivity)
+  *pairs* — a SQL `acl_ref IN (…) AND sensitivity IN (…)` is a different, wider question
+  (invariant 5a).
   `MemoryIndex` stays as the test double rather than being replaced.
 - **A new UI component** → `web/src/components/ui/` in the DESIGN_SYSTEM language. Data
   comes in as props — no module-scope mock data. Controlled/uncontrolled dual API
