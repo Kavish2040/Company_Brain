@@ -148,6 +148,129 @@ export function Sensitivity({ tier }: { tier: string }) {
   );
 }
 
+/* ---- live collaboration ------------------------------------------------- */
+
+/**
+ * Presence colour.
+ *
+ * The one place this system uses palette colours rather than semantic tokens.
+ * "Which of six people is this caret" has no semantic token to express it, and
+ * the alternative — colour-free carets — makes two editors indistinguishable,
+ * which defeats the feature. Bounded and explicit: six named entries, written
+ * out in full so Tailwind's scanner can see them (a `bg-${name}-500` template
+ * would be purged from the build).
+ *
+ * The server sends the *name*; the mapping to a class lives here, so no hex
+ * ever crosses the wire.
+ */
+const PRESENCE: Record<string, { fill: string; ring: string }> = {
+  amber: { fill: "bg-amber-500", ring: "ring-amber-500/40" },
+  cyan: { fill: "bg-cyan-500", ring: "ring-cyan-500/40" },
+  emerald: { fill: "bg-emerald-500", ring: "ring-emerald-500/40" },
+  fuchsia: { fill: "bg-fuchsia-500", ring: "ring-fuchsia-500/40" },
+  rose: { fill: "bg-rose-500", ring: "ring-rose-500/40" },
+  violet: { fill: "bg-violet-500", ring: "ring-violet-500/40" },
+};
+
+const FALLBACK = { fill: "bg-primary", ring: "ring-primary/40" };
+
+export type Presence = {
+  connection: string;
+  display: string;
+  color: string;
+  anchor?: number;
+  head?: number;
+};
+
+function initials(display: string): string {
+  return display
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((word) => word[0]?.toUpperCase() ?? "")
+    .join("");
+}
+
+/** Who else is in this document right now. Overlapped avatars, quiet. */
+export function PresenceStack({ participants }: { participants: Presence[] }) {
+  if (participants.length === 0) return null;
+  return (
+    <div className="flex items-center -space-x-1.5">
+      {participants.map((p) => {
+        const tone = PRESENCE[p.color] ?? FALLBACK;
+        return (
+          <span
+            key={p.connection}
+            title={p.display}
+            className={cx(
+              "inline-flex items-center justify-center w-5 h-5 rounded-full",
+              "text-[9px] font-medium text-white ring-2 ring-card",
+              tone.fill,
+            )}
+          >
+            {initials(p.display)}
+          </span>
+        );
+      })}
+    </div>
+  );
+}
+
+/**
+ * Remote carets, drawn over a textarea.
+ *
+ * One absolutely-positioned mirror per participant: an invisible copy of the
+ * text up to their offset, then a visible caret. The mirror inherits the
+ * textarea's exact typography via `textClass`, so the caret lands where the
+ * character does without measuring anything.
+ *
+ * `pointer-events-none` throughout — this is decoration over a live input.
+ */
+export function RemoteCarets({
+  body,
+  participants,
+  textClass,
+}: {
+  body: string;
+  participants: Presence[];
+  textClass: string;
+}) {
+  return (
+    <>
+      {participants.map((p) => {
+        const tone = PRESENCE[p.color] ?? FALLBACK;
+        const offset = Math.max(0, Math.min(p.head ?? 0, body.length));
+        return (
+          <div
+            key={p.connection}
+            aria-hidden
+            className={cx(
+              "absolute inset-0 pointer-events-none select-none overflow-hidden",
+              textClass,
+            )}
+          >
+            <span className="invisible">{body.slice(0, offset)}</span>
+            <span className="relative inline-block align-baseline">
+              <span
+                className={cx("absolute left-0 top-0 w-[2px] h-[1.35em] rounded-full", tone.fill)}
+              />
+              <span
+                className={cx(
+                  "absolute left-0 -top-4 px-1 h-4 rounded-[3px] whitespace-nowrap",
+                  "text-[9px] font-medium text-white",
+                  tone.fill,
+                )}
+              >
+                {p.display}
+              </span>
+            </span>
+          </div>
+        );
+      })}
+    </>
+  );
+}
+
 /* ---- controls ----------------------------------------------------------- */
 
 export function Row({

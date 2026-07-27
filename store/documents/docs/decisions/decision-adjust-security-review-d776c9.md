@@ -21,21 +21,9 @@ extraction:
   cache_key: 498657a7f118e13cdac468c7d544f262
   status: accepted
 relations:
-  - predicate: owns
-    subject: people/tom-whelan
-    object: processes/security-review
-    confidence: 0.95
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [190, 288]
-        quote: 'Tom Whelan will own security review going forward, and the
-
-          sign-off step moves to the owning team.'
   - predicate: supersedes
     object: teams/engineering
-    confidence: 0.6
+    confidence: 0.75
     provenance: llm
     status: proposed
     evidence:

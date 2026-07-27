@@ -1,0 +1,97 @@
+{
+  "edges": [
+    {
+      "confidence": 0.95,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Engineering hands off to Finance when a cost approval is required.",
+          "span": [
+            468,
+            534
+          ]
+        }
+      ],
+      "object": "teams/finance",
+      "predicate": "handoff_to",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "teams/engineering"
+    },
+    {
+      "confidence": 0.95,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Support hands off to Engineering when the root cause is a product defect.",
+          "span": [
+            537,
+            610
+          ]
+        }
+      ],
+      "object": "teams/engineering",
+      "predicate": "handoff_to",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "teams/support"
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Request is raised in Datadog.",
+          "span": [
+            239,
+            268
+          ]
+        }
+      ],
+      "object": "tools/datadog",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.95,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "**Owner:** Priya Raman (priya@meridian.example)",
+          "span": [
+            20,
+            67
+          ]
+        }
+      ],
+      "object": "processes/release-signoff",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "people/priya-raman"
+    },
+    {
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "**Team:** Engineering",
+          "span": [
+            68,
+            89
+          ]
+        }
+      ],
+      "object": "processes/release-signoff",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "teams/engineering"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v2",
+  "unresolved": []
+}

@@ -1,24 +1,7 @@
 {
   "edges": [
     {
-      "confidence": 0.95,
-      "evidence": [
-        {
-          "node": "self",
-          "quote": "Tom Whelan will own security review going forward, and the\nsign-off step moves to the owning team.",
-          "span": [
-            190,
-            288
-          ]
-        }
-      ],
-      "object": "processes/security-review",
-      "predicate": "owns",
-      "provenance": "llm",
-      "status": "proposed"
-    },
-    {
-      "confidence": 0.6,
+      "confidence": 0.75,
       "evidence": [
         {
           "node": "self",
@@ -32,12 +15,11 @@
       "object": "teams/engineering",
       "predicate": "supersedes",
       "provenance": "llm",
-      "status": "proposed"
+      "status": "proposed",
+      "subject": null
     }
   ],
   "model": "claude-sonnet-5",
   "prompt_version": "claude-roster-v2",
-  "unresolved": [
-    "the owning team"
-  ]
+  "unresolved": []
 }

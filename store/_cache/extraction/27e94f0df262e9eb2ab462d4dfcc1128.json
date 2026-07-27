@@ -1,0 +1,115 @@
+{
+  "edges": [
+    {
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Customer escalation is blocked until Engineering signs off on the security review.",
+          "span": [
+            104,
+            186
+          ]
+        }
+      ],
+      "object": "processes/security-review",
+      "predicate": "depends_on",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "processes/customer-escalation"
+    },
+    {
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Customer data request is blocked until Engineering signs off on the security review.",
+          "span": [
+            210,
+            294
+          ]
+        }
+      ],
+      "object": "processes/security-review",
+      "predicate": "depends_on",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "processes/data-request"
+    },
+    {
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Reminder: Release sign-off closes Friday.",
+          "span": [
+            319,
+            360
+          ]
+        }
+      ],
+      "object": "processes/release-signoff",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Customer escalation is blocked until Engineering signs off on the security review.",
+          "span": [
+            104,
+            186
+          ]
+        }
+      ],
+      "object": "teams/engineering",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "The Zendesk renewal lands in April.",
+          "span": [
+            22,
+            57
+          ]
+        }
+      ],
+      "object": "tools/zendesk",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "I own that end to end.",
+          "span": [
+            58,
+            80
+          ]
+        }
+      ],
+      "object": "processes/vendor-renewal",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "people/sam-kaur"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v2",
+  "unresolved": []
+}

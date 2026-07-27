@@ -1,24 +1,7 @@
 {
   "edges": [
     {
-      "confidence": 0.8,
-      "evidence": [
-        {
-          "node": "self",
-          "quote": "The existing refund approval process was taking too long.",
-          "span": [
-            117,
-            174
-          ]
-        }
-      ],
-      "object": "processes/refund-approval",
-      "predicate": "mentions",
-      "provenance": "llm",
-      "status": "proposed"
-    },
-    {
-      "confidence": 0.6,
+      "confidence": 0.7,
       "evidence": [
         {
           "node": "self",
@@ -32,7 +15,8 @@
       "object": "teams/finance",
       "predicate": "supersedes",
       "provenance": "llm",
-      "status": "proposed"
+      "status": "proposed",
+      "subject": null
     }
   ],
   "model": "claude-sonnet-5",

@@ -1,0 +1,97 @@
+{
+  "edges": [
+    {
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Ana Brito** (12:47): Reminder: Quarterly close closes Friday.",
+          "span": [
+            72,
+            133
+          ]
+        }
+      ],
+      "object": "people/ana-brito",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Sam Kaur** (12:40): Reminder: Customer data request closes Friday.",
+          "span": [
+            2,
+            68
+          ]
+        }
+      ],
+      "object": "people/sam-kaur",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Reminder: Customer data request closes Friday.",
+          "span": [
+            22,
+            68
+          ]
+        }
+      ],
+      "object": "processes/data-request",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Reminder: Quarterly close closes Friday.",
+          "span": [
+            93,
+            133
+          ]
+        }
+      ],
+      "object": "processes/quarterly-close",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Reminder: Refund approval closes Friday.",
+          "span": [
+            158,
+            198
+          ]
+        }
+      ],
+      "object": "processes/refund-approval",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v2",
+  "unresolved": []
+}

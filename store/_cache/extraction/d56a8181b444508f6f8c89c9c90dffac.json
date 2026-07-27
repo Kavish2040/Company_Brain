@@ -1,0 +1,205 @@
+{
+  "edges": [
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Sam Kelly raised that capacity planning is still blocked on\n PagerDuty.",
+          "span": [
+            113,
+            184
+          ]
+        }
+      ],
+      "object": "tools/pagerduty",
+      "predicate": "depends_on",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "processes/capacity-planning"
+    },
+    {
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Handoff from Finance to Engineering is unclear; two\n tickets bounced back last week.",
+          "span": [
+            237,
+            321
+          ]
+        }
+      ],
+      "object": "teams/engineering",
+      "predicate": "handoff_to",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "teams/finance"
+    },
+    {
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Nadia Hassan to document the handoff boundary.",
+          "span": [
+            337,
+            383
+          ]
+        }
+      ],
+      "object": "people/nadia-hassan",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "**Attendees:** Sam Kelly, Sam Kaur, Tom Whelan, Nadia Hassan",
+          "span": [
+            39,
+            99
+          ]
+        }
+      ],
+      "object": "people/sam-kaur",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Sam Kelly raised that capacity planning is still blocked on\n PagerDuty.",
+          "span": [
+            113,
+            184
+          ]
+        }
+      ],
+      "object": "people/sam-kelly",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "**Attendees:** Sam Kelly, Sam Kaur, Tom Whelan, Nadia Hassan",
+          "span": [
+            39,
+            99
+          ]
+        }
+      ],
+      "object": "people/tom-whelan",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Sam Kelly raised that capacity planning is still blocked on\n PagerDuty.",
+          "span": [
+            113,
+            184
+          ]
+        }
+      ],
+      "object": "processes/capacity-planning",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Handoff from Finance to Engineering is unclear; two\n tickets bounced back last week.",
+          "span": [
+            237,
+            321
+          ]
+        }
+      ],
+      "object": "teams/engineering",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Handoff from Finance to Engineering is unclear; two\n tickets bounced back last week.",
+          "span": [
+            237,
+            321
+          ]
+        }
+      ],
+      "object": "teams/finance",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Sam Kelly raised that capacity planning is still blocked on\n PagerDuty.",
+          "span": [
+            113,
+            184
+          ]
+        }
+      ],
+      "object": "tools/pagerduty",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Owen Fitzgerald confirmed they own the process.",
+          "span": [
+            187,
+            234
+          ]
+        }
+      ],
+      "object": "processes/capacity-planning",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "people/owen-fitz"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v2",
+  "unresolved": []
+}

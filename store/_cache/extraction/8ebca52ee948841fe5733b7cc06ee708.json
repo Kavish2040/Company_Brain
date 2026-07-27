@@ -1,0 +1,43 @@
+{
+  "edges": [
+    {
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Onboarding docs are in Drive.",
+          "span": [
+            47,
+            76
+          ]
+        }
+      ],
+      "object": "processes/onboarding",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Reminder that Quarterly close kicks off next week.",
+          "span": [
+            107,
+            157
+          ]
+        }
+      ],
+      "object": "processes/quarterly-close",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v2",
+  "unresolved": []
+}

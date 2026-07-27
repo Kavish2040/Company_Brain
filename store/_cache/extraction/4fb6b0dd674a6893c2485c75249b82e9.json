@@ -1,0 +1,151 @@
+{
+  "edges": [
+    {
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Nadia Hassan raised that vendor renewal is still blocked on\n PagerDuty.",
+          "span": [
+            117,
+            188
+          ]
+        }
+      ],
+      "object": "tools/pagerduty",
+      "predicate": "depends_on",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "processes/vendor-renewal"
+    },
+    {
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Handoff from Product to Support is unclear; two\n tickets bounced back last week.",
+          "span": [
+            234,
+            314
+          ]
+        }
+      ],
+      "object": "teams/support",
+      "predicate": "handoff_to",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "teams/product"
+    },
+    {
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "**Attendees:** Nadia Hassan, Zo\u00eb Ravel, Mei Tanaka, Owen Fitzgerald",
+          "span": [
+            36,
+            103
+          ]
+        }
+      ],
+      "object": "people/mei-tanaka",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Nadia Hassan raised that vendor renewal is still blocked on\n PagerDuty.",
+          "span": [
+            117,
+            188
+          ]
+        }
+      ],
+      "object": "people/nadia-hassan",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Owen Fitzgerald to document the handoff boundary.",
+          "span": [
+            330,
+            379
+          ]
+        }
+      ],
+      "object": "people/owen-fitz",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "**Attendees:** Nadia Hassan, Zo\u00eb Ravel, Mei Tanaka, Owen Fitzgerald",
+          "span": [
+            36,
+            103
+          ]
+        }
+      ],
+      "object": "people/zoe-ravel",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Nadia Hassan raised that vendor renewal is still blocked on\n PagerDuty.",
+          "span": [
+            117,
+            188
+          ]
+        }
+      ],
+      "object": "tools/pagerduty",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Sam Kaur confirmed they own the process.",
+          "span": [
+            191,
+            231
+          ]
+        }
+      ],
+      "object": "processes/vendor-renewal",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "people/sam-kaur"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v2",
+  "unresolved": []
+}

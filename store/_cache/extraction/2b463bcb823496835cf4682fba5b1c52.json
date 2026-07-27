@@ -1,0 +1,133 @@
+{
+  "edges": [
+    {
+      "confidence": 0.95,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Support hands off to Engineering when the root cause is a product defect.",
+          "span": [
+            536,
+            609
+          ]
+        }
+      ],
+      "object": "teams/engineering",
+      "predicate": "handoff_to",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "teams/support"
+    },
+    {
+      "confidence": 0.95,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Support hands off to Finance when a cost approval is required.",
+          "span": [
+            471,
+            533
+          ]
+        }
+      ],
+      "object": "teams/finance",
+      "predicate": "handoff_to",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "teams/support"
+    },
+    {
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Mei Tanaka signs off before the request is closed.",
+          "span": [
+            404,
+            454
+          ]
+        }
+      ],
+      "object": "people/mei-tanaka",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Tickets frequently bounce between Support and Engineering when ownership of the\nroot cause is unclear.",
+          "span": [
+            628,
+            730
+          ]
+        }
+      ],
+      "object": "teams/engineering",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Request is raised in Zendesk.",
+          "span": [
+            247,
+            276
+          ]
+        }
+      ],
+      "object": "tools/zendesk",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.95,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "**Owner:** Mei Tanaka (mei@meridian.example)",
+          "span": [
+            25,
+            69
+          ]
+        }
+      ],
+      "object": "processes/data-request",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "people/mei-tanaka"
+    },
+    {
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "**Team:** Support",
+          "span": [
+            70,
+            87
+          ]
+        }
+      ],
+      "object": "processes/data-request",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "teams/support"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v2",
+  "unresolved": []
+}

@@ -1,0 +1,115 @@
+{
+  "edges": [
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Customer escalation is blocked until Engineering signs off on the security review.",
+          "span": [
+            23,
+            105
+          ]
+        }
+      ],
+      "object": "processes/security-review",
+      "predicate": "depends_on",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "processes/customer-escalation"
+    },
+    {
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Reminder: Customer escalation closes Friday.",
+          "span": [
+            129,
+            173
+          ]
+        }
+      ],
+      "object": "processes/customer-escalation",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Reminder: Employee onboarding closes Friday.",
+          "span": [
+            197,
+            241
+          ]
+        }
+      ],
+      "object": "processes/onboarding",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Customer escalation is blocked until Engineering signs off on the security review.",
+          "span": [
+            23,
+            105
+          ]
+        }
+      ],
+      "object": "teams/engineering",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "The Linear renewal lands in April.",
+          "span": [
+            266,
+            300
+          ]
+        }
+      ],
+      "object": "tools/linear",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "I own that end to end.",
+          "span": [
+            301,
+            323
+          ]
+        }
+      ],
+      "object": "processes/vendor-renewal",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "people/ana-brito"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v2",
+  "unresolved": []
+}

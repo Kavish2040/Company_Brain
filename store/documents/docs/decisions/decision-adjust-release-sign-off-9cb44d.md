@@ -21,9 +21,36 @@ extraction:
   cache_key: aa4875c683458a61a2ea9b99383ae59b
   status: accepted
 relations:
+  - predicate: mentions
+    object: people/priya-raman
+    confidence: 0.9
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [58, 85]
+        quote: '**Decided by:** Priya Raman'
+  - predicate: mentions
+    object: processes/release-signoff
+    confidence: 0.95
+    provenance: llm
+    status: accepted
+    evidence:
+      - node: self
+        span: [120, 178]
+        quote: The existing release sign-off process was taking too long.
+  - predicate: mentions
+    object: teams/engineering
+    confidence: 0.8
+    provenance: llm
+    status: proposed
+    evidence:
+      - node: self
+        span: [310, 384]
+        quote: The previous informal arrangement documented in the Engineering team page.
   - predicate: supersedes
     object: teams/engineering
-    confidence: 0.7
+    confidence: 0.75
     provenance: llm
     status: proposed
     evidence:

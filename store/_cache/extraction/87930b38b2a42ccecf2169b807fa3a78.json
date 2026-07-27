@@ -1,40 +1,6 @@
 {
   "edges": [
     {
-      "confidence": 0.9,
-      "evidence": [
-        {
-          "node": "self",
-          "quote": "**Decided by:** Dev Oyelaran",
-          "span": [
-            61,
-            89
-          ]
-        }
-      ],
-      "object": "people/dev-oyelaran",
-      "predicate": "mentions",
-      "provenance": "llm",
-      "status": "accepted"
-    },
-    {
-      "confidence": 0.9,
-      "evidence": [
-        {
-          "node": "self",
-          "quote": "The existing customer escalation process was taking too long.",
-          "span": [
-            124,
-            185
-          ]
-        }
-      ],
-      "object": "processes/customer-escalation",
-      "predicate": "mentions",
-      "provenance": "llm",
-      "status": "accepted"
-    },
-    {
       "confidence": 0.95,
       "evidence": [
         {
@@ -49,10 +15,11 @@
       "object": "processes/customer-escalation",
       "predicate": "owns",
       "provenance": "llm",
-      "status": "proposed"
+      "status": "proposed",
+      "subject": "people/dev-oyelaran"
     },
     {
-      "confidence": 0.6,
+      "confidence": 0.7,
       "evidence": [
         {
           "node": "self",
@@ -66,7 +33,8 @@
       "object": "teams/support",
       "predicate": "supersedes",
       "provenance": "llm",
-      "status": "proposed"
+      "status": "proposed",
+      "subject": null
     }
   ],
   "model": "claude-sonnet-5",

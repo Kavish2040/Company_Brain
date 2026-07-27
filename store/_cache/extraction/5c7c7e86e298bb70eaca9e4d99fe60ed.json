@@ -1,0 +1,61 @@
+{
+  "edges": [
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "This policy governs customer escalation at Meridian Logistics.",
+          "span": [
+            61,
+            123
+          ]
+        }
+      ],
+      "object": "processes/customer-escalation",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Team: Support",
+          "span": [
+            47,
+            60
+          ]
+        }
+      ],
+      "object": "teams/support",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.95,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Customer escalation Policy\nOwner: Dev Oyelaran",
+          "span": [
+            0,
+            46
+          ]
+        }
+      ],
+      "object": "processes/customer-escalation",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "people/dev-oyelaran"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v2",
+  "unresolved": []
+}

@@ -1,0 +1,43 @@
+{
+  "edges": [
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Compensation bands for the Engineering ladder need revisiting before Q3.",
+          "span": [
+            25,
+            97
+          ]
+        }
+      ],
+      "object": "people/priya-raman",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Compensation bands for the Engineering ladder need revisiting before Q3.",
+          "span": [
+            25,
+            97
+          ]
+        }
+      ],
+      "object": "teams/engineering",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v2",
+  "unresolved": []
+}

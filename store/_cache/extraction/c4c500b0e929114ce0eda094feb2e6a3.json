@@ -1,0 +1,43 @@
+{
+  "edges": [
+    {
+      "confidence": 0.98,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Customer escalation (owner: Dev Oyelaran)",
+          "span": [
+            154,
+            195
+          ]
+        }
+      ],
+      "object": "processes/customer-escalation",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "people/dev-oyelaran"
+    },
+    {
+      "confidence": 0.98,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Customer data request (owner: Mei Tanaka)",
+          "span": [
+            198,
+            239
+          ]
+        }
+      ],
+      "object": "processes/data-request",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "people/mei-tanaka"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v2",
+  "unresolved": []
+}

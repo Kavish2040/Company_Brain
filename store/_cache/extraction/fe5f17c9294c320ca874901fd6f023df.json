@@ -1,0 +1,115 @@
+{
+  "edges": [
+    {
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Escalating this to Engineering \u2014 it's a PagerDuty integration bug, not config.",
+          "span": [
+            23,
+            101
+          ]
+        }
+      ],
+      "object": "teams/engineering",
+      "predicate": "handoff_to",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "people/tom-whelan"
+    },
+    {
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Escalating this to Engineering \u2014 it's a PagerDuty integration bug, not config.",
+          "span": [
+            23,
+            101
+          ]
+        }
+      ],
+      "object": "teams/engineering",
+      "predicate": "handoff_to",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "people/zoe-ravel"
+    },
+    {
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "This is the fourth ticket bounced back from Engineering on Refund approval.",
+          "span": [
+            231,
+            306
+          ]
+        }
+      ],
+      "object": "processes/refund-approval",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "This is the fourth ticket bounced back from Engineering on Vendor renewal.",
+          "span": [
+            330,
+            404
+          ]
+        }
+      ],
+      "object": "processes/vendor-renewal",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "This is the fourth ticket bounced back from Engineering on Refund approval.",
+          "span": [
+            231,
+            306
+          ]
+        }
+      ],
+      "object": "teams/engineering",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "it's a PagerDuty integration bug, not config",
+          "span": [
+            56,
+            100
+          ]
+        }
+      ],
+      "object": "tools/pagerduty",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v2",
+  "unresolved": []
+}

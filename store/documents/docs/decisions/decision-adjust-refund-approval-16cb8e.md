@@ -21,18 +21,9 @@ extraction:
   cache_key: 9c33b3ea223f1574967dd0ea8612aff2
   status: accepted
 relations:
-  - predicate: mentions
-    object: processes/refund-approval
-    confidence: 0.8
-    provenance: llm
-    status: proposed
-    evidence:
-      - node: self
-        span: [117, 174]
-        quote: The existing refund approval process was taking too long.
   - predicate: supersedes
     object: teams/finance
-    confidence: 0.6
+    confidence: 0.7
     provenance: llm
     status: proposed
     evidence:

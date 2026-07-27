@@ -1,0 +1,97 @@
+{
+  "edges": [
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Support hands off to Engineering when the root cause is a product defect.",
+          "span": [
+            516,
+            589
+          ]
+        }
+      ],
+      "object": "teams/engineering",
+      "predicate": "handoff_to",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "teams/support"
+    },
+    {
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Sam Kaur signs off before the request is closed.",
+          "span": [
+            386,
+            434
+          ]
+        }
+      ],
+      "object": "people/sam-kaur",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "**Team:** Finance",
+          "span": [
+            66,
+            83
+          ]
+        }
+      ],
+      "object": "teams/finance",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Request is raised in Datadog.",
+          "span": [
+            229,
+            258
+          ]
+        }
+      ],
+      "object": "tools/datadog",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.95,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "**Owner:** Sam Kaur (sam.kaur@meridian.example)",
+          "span": [
+            18,
+            65
+          ]
+        }
+      ],
+      "object": "processes/vendor-renewal",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "people/sam-kaur"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v2",
+  "unresolved": []
+}

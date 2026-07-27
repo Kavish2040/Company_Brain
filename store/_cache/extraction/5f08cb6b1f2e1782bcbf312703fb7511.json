@@ -1,0 +1,43 @@
+{
+  "edges": [
+    {
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Ana Brito raised that employee onboarding is still blocked on\n PagerDuty.",
+          "span": [
+            111,
+            184
+          ]
+        }
+      ],
+      "object": "tools/pagerduty",
+      "predicate": "depends_on",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "processes/onboarding"
+    },
+    {
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Zo\u00eb Ravel confirmed they own the process.",
+          "span": [
+            187,
+            228
+          ]
+        }
+      ],
+      "object": "processes/onboarding",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "people/zoe-ravel"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v2",
+  "unresolved": []
+}

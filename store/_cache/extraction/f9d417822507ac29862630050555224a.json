@@ -1,0 +1,99 @@
+{
+  "edges": [
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Handing the Employee onboarding ticket over to Support, they own the customer comms.",
+          "span": [
+            109,
+            193
+          ]
+        }
+      ],
+      "object": "teams/support",
+      "predicate": "handoff_to",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "processes/onboarding"
+    },
+    {
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Handing the Employee onboarding ticket over to Support, they own the customer comms.",
+          "span": [
+            109,
+            193
+          ]
+        }
+      ],
+      "object": "people/priya-raman",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.55,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Can someone from Finance confirm the Linear renewal date?",
+          "span": [
+            25,
+            82
+          ]
+        }
+      ],
+      "object": "processes/vendor-renewal",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Can someone from Finance confirm the Linear renewal date?",
+          "span": [
+            25,
+            82
+          ]
+        }
+      ],
+      "object": "teams/finance",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Can someone from Finance confirm the Linear renewal date?",
+          "span": [
+            25,
+            82
+          ]
+        }
+      ],
+      "object": "tools/linear",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v2",
+  "unresolved": [
+    "customer comms"
+  ]
+}

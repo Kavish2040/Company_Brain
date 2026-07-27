@@ -1,0 +1,81 @@
+{
+  "edges": [
+    {
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "**Sam Kaur** (14:18): Welcome to the team!",
+          "span": [
+            0,
+            42
+          ]
+        }
+      ],
+      "object": "people/sam-kaur",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "**Sam Kelly** (14:25): All-hands moved to Thursday.",
+          "span": [
+            74,
+            125
+          ]
+        }
+      ],
+      "object": "people/sam-kelly",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "**Zo\u00eb Ravel** (14:32): All-hands moved to Thursday.",
+          "span": [
+            127,
+            178
+          ]
+        }
+      ],
+      "object": "people/zoe-ravel",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Onboarding docs are in Drive.",
+          "span": [
+            43,
+            72
+          ]
+        }
+      ],
+      "object": "processes/onboarding",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v2",
+  "unresolved": [
+    "All-hands"
+  ]
+}

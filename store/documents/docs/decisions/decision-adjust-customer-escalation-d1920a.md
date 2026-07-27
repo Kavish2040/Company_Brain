@@ -21,24 +21,6 @@ extraction:
   cache_key: 87930b38b2a42ccecf2169b807fa3a78
   status: accepted
 relations:
-  - predicate: mentions
-    object: people/dev-oyelaran
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [61, 89]
-        quote: '**Decided by:** Dev Oyelaran'
-  - predicate: mentions
-    object: processes/customer-escalation
-    confidence: 0.9
-    provenance: llm
-    status: accepted
-    evidence:
-      - node: self
-        span: [124, 185]
-        quote: The existing customer escalation process was taking too long.
   - predicate: owns
     subject: people/dev-oyelaran
     object: processes/customer-escalation
@@ -53,7 +35,7 @@ relations:
           sign-off step moves to the owning team.'
   - predicate: supersedes
     object: teams/support
-    confidence: 0.6
+    confidence: 0.7
     provenance: llm
     status: proposed
     evidence:

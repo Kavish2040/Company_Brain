@@ -131,6 +131,12 @@ def _to_json(result: ExtractionResult) -> str:
         "edges": [
             {
                 "predicate": str(e.predicate),
+                # Lossy without this: the extractor sets `subject` for
+                # third-party predicates, the node gets it on a cache miss, and
+                # then a cache *hit* replays an edge with no subject — which the
+                # Frontmatter validator now rejects. Frozen re-ingest would fail
+                # on a cache the same pipeline wrote.
+                "subject": e.subject,
                 "object": e.object,
                 "confidence": round(e.confidence, 4),
                 "provenance": str(e.provenance),
@@ -156,6 +162,7 @@ def _from_json(payload: dict[str, Any]) -> ExtractionResult:
     edges = tuple(
         Edge(
             predicate=Predicate(e["predicate"]),
+            subject=e.get("subject"),
             object=e["object"],
             confidence=e["confidence"],
             provenance=Provenance(e["provenance"]),

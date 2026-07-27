@@ -1,0 +1,99 @@
+{
+  "edges": [
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Ana Brito** (10:57): Reminder that Quarterly close kicks off next week.",
+          "span": [
+            136,
+            207
+          ]
+        }
+      ],
+      "object": "people/ana-brito",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Priya Raman** (10:50): Reminder that Employee onboarding kicks off next week.",
+          "span": [
+            55,
+            132
+          ]
+        }
+      ],
+      "object": "people/priya-raman",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Sam Kelly** (10:43): All-hands moved to Thursday.",
+          "span": [
+            2,
+            51
+          ]
+        }
+      ],
+      "object": "people/sam-kelly",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Reminder that Employee onboarding kicks off next week.",
+          "span": [
+            78,
+            132
+          ]
+        }
+      ],
+      "object": "processes/onboarding",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Reminder that Quarterly close kicks off next week.",
+          "span": [
+            157,
+            207
+          ]
+        }
+      ],
+      "object": "processes/quarterly-close",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v2",
+  "unresolved": [
+    "All-hands"
+  ]
+}

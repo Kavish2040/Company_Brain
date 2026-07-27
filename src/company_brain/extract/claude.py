@@ -239,6 +239,13 @@ class ClaudeExtractor:
         if subject is not None and predicate not in THIRD_PARTY:
             subject = None  # mentions/supersedes are always about the document
 
+        if subject == item["object"]:
+            # "Finance hands off to Finance" is meaningless, and the Frontmatter
+            # validator rejects it — which would drop the *whole document*,
+            # losing its other edges. Cheaper and less destructive to discard
+            # the one bad edge here.
+            return None
+
         confidence = max(0.0, min(1.0, float(item["confidence"])))
         evidence = (Evidence(node="self", span=span, quote=body[span[0] : span[1]].strip()),)
         return Edge(

@@ -1,0 +1,133 @@
+{
+  "edges": [
+    {
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "the PagerDuty step is blocked on your team",
+          "span": [
+            200,
+            242
+          ]
+        }
+      ],
+      "object": "tools/pagerduty",
+      "predicate": "depends_on",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "processes/incident-response"
+    },
+    {
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "**From:** Mei Tanaka <mei@meridian.example>",
+          "span": [
+            0,
+            43
+          ]
+        }
+      ],
+      "object": "people/mei-tanaka",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Owen Fitzgerald owns this process, but the PagerDuty step is blocked on your team.",
+          "span": [
+            161,
+            243
+          ]
+        }
+      ],
+      "object": "people/owen-fitz",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "**To:** sam.kaur@meridian.example",
+          "span": [
+            45,
+            78
+          ]
+        }
+      ],
+      "object": "people/sam-kaur",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Following up on incident response.",
+          "span": [
+            126,
+            160
+          ]
+        }
+      ],
+      "object": "processes/incident-response",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "the PagerDuty step is blocked on your team",
+          "span": [
+            200,
+            242
+          ]
+        }
+      ],
+      "object": "tools/pagerduty",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.95,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Owen Fitzgerald owns this process, but the PagerDuty step is blocked on your team.",
+          "span": [
+            161,
+            243
+          ]
+        }
+      ],
+      "object": "processes/incident-response",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "people/owen-fitz"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v2",
+  "unresolved": []
+}

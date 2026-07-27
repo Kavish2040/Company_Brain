@@ -13,6 +13,7 @@ from datetime import UTC, datetime
 from email import message_from_bytes
 from email import utils as email_utils
 from email.message import Message
+from threading import Lock
 from typing import Any
 
 from company_brain.normalize.base import (
@@ -84,6 +85,15 @@ class PdfNormalizer:
         return Normalized(body=body, title=title, author_hints=(author,) if author else ())
 
 
+# python-docx builds on lxml, whose element objects are not thread-safe. Under
+# concurrent ingest this surfaced intermittently as
+# `'lxml.etree._Element' object has no attribute 'Relationship_lst'` — a torn
+# read of a partially-initialised part, not a corrupt file. One lock is cheaper
+# than serialising the whole normalize phase, and docx is a small slice of any
+# corpus.
+_DOCX_LOCK = Lock()
+
+
 class DocxNormalizer:
     """Word documents. Headings map to markdown levels; tables become pipe tables."""
 
@@ -102,7 +112,8 @@ class DocxNormalizer:
         import io
 
         try:
-            document = docx.Document(io.BytesIO(raw))
+            with _DOCX_LOCK:
+                document = docx.Document(io.BytesIO(raw))
         except Exception as exc:
             raise NormalizeError(f"could not read docx: {exc}") from exc
 

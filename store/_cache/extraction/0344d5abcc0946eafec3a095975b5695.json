@@ -1,0 +1,97 @@
+{
+  "edges": [
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Reminder: Customer escalation closes Friday.",
+          "span": [
+            23,
+            67
+          ]
+        }
+      ],
+      "object": "processes/customer-escalation",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "The Datadog renewal lands in April.",
+          "span": [
+            92,
+            127
+          ]
+        }
+      ],
+      "object": "tools/datadog",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "The PagerDuty renewal lands in April.",
+          "span": [
+            175,
+            212
+          ]
+        }
+      ],
+      "object": "tools/pagerduty",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "I own that end to end.",
+          "span": [
+            128,
+            150
+          ]
+        }
+      ],
+      "object": "processes/vendor-renewal",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "people/ana-brito"
+    },
+    {
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "I own that end to end.",
+          "span": [
+            128,
+            150
+          ]
+        }
+      ],
+      "object": "processes/vendor-renewal",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "people/sam-kaur"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v2",
+  "unresolved": []
+}

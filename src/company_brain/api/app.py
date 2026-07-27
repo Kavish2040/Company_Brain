@@ -13,18 +13,23 @@ ACL-projected data, so if the client is doing access control, this file has a bu
 
 from __future__ import annotations
 
+import asyncio
 from functools import lru_cache
 from pathlib import Path
 from typing import Annotated, Any
 
-from fastapi import Depends, FastAPI, Header, HTTPException
+from fastapi import Depends, FastAPI, Header, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 from company_brain.acl.grants import AccessFilter
 from company_brain.app import PRINCIPALS, STORE_ROOT, App, build_app
+from company_brain.collab.guard import FenceViolation
+from company_brain.collab.hub import CollabHub
+from company_brain.collab.session import SessionRegistry, participant_color
 from company_brain.retrieve.hybrid import HybridRetriever
 from company_brain.schemas.edges import EdgeStatus
+from company_brain.store.repository import NodeNotFoundError
 from company_brain.synthesize.answer import (
     CitationLeakError,
     UncitedAnswerError,
@@ -164,25 +169,26 @@ def principals(instance: Annotated[App, Depends(get_app)]) -> list[PrincipalOut]
     ]
 
 
-@api.post("/api/ask", response_model=AskOut)
-def ask(
-    body: AskIn,
-    instance: Annotated[App, Depends(get_app)],
-    access: Annotated[AccessFilter, Depends(get_access)],
-) -> AskOut:
-    retrieval = HybridRetriever(instance.index, access).retrieve(
-        body.question, limit=body.limit
-    )
-    answer = instance.providers.synthesizer().synthesize(
-        body.question, retrieval, instance.index
-    )
+class CitationLeakBlocked(RuntimeError):
+    """A synthesized answer cited a node the principal cannot read."""
+
+
+def answer_for(instance: App, access: AccessFilter, question: str, limit: int) -> AskOut:
+    """Retrieve, synthesize, validate — the one path that produces an answer.
+
+    Both the REST route and the shared ask room call this. Duplicating it would
+    mean two citation validators, and the second one is always the one that
+    rots: invariant 11 has to hold on every surface, not the one we remembered.
+    """
+    retrieval = HybridRetriever(instance.index, access).retrieve(question, limit=limit)
+    answer = instance.providers.synthesizer().synthesize(question, retrieval, instance.index)
 
     refused: str | None = None
     try:
         validate(answer, retrieval, access, instance.index)
     except CitationLeakError as exc:
         # Never return the offending text. A leak is surfaced as a refusal.
-        raise HTTPException(500, f"citation leak blocked: {exc}") from exc
+        raise CitationLeakBlocked(str(exc)) from exc
     except UncitedAnswerError as exc:
         # Invariant 11: an uncited answer is an error, not a degraded response.
         # The UI renders this as a designed error state, not as prose.
@@ -191,7 +197,7 @@ def ask(
         answer.citations = []
 
     return AskOut(
-        question=body.question,
+        question=question,
         text=answer.text,
         citations=[
             CitationOut(node_id=c.node_id, title=c.title, snippet=c.snippet)
@@ -205,6 +211,18 @@ def ask(
         withheld_by_acl=retrieval.filtered_out,
         refused=refused,
     )
+
+
+@api.post("/api/ask", response_model=AskOut)
+def ask(
+    body: AskIn,
+    instance: Annotated[App, Depends(get_app)],
+    access: Annotated[AccessFilter, Depends(get_access)],
+) -> AskOut:
+    try:
+        return answer_for(instance, access, body.question, body.limit)
+    except CitationLeakBlocked as exc:
+        raise HTTPException(500, f"citation leak blocked: {exc}") from exc
 
 
 @api.get("/api/nodes", response_model=list[NodeSummary])
@@ -318,6 +336,226 @@ def review_decide(
         raise HTTPException(404, str(exc)) from exc
     _app.cache_clear()  # the graph changed; next request rebuilds the index
     return {"key": key, "decision": decision}
+
+
+# ---- live collaboration -------------------------------------------------
+#
+# Demo-grade: server-authoritative, last-write-wins, no CRDT. See
+# docs/ARCHITECTURE.md §15 and company_brain/collab/session.py.
+
+SUBPROTOCOL_PREFIX = "cb.principal."
+# One code for "gone" and "not yours" alike. Distinguishing them would confirm a
+# node exists to someone who cannot read it (§6.3), which is the same reason
+# `get_node` 404s rather than 403s.
+CLOSE_NOT_VISIBLE = 4404
+CLOSE_BAD_IDENTITY = 4401
+
+
+@lru_cache(maxsize=1)
+def _hub(store: str = str(STORE_ROOT)) -> CollabHub:
+    return CollabHub(SessionRegistry(_app(store).repo))
+
+
+def get_hub() -> CollabHub:
+    return _hub()
+
+
+def principal_from_subprotocol(websocket: WebSocket) -> str | None:
+    """Read the principal out of the WebSocket subprotocol.
+
+    A browser cannot set `X-Principal` on a WebSocket, so the header stand-in
+    does not carry over. The subprotocol is the closest equivalent: it is fixed
+    at connect time and cannot be restated per message, which is what invariant
+    8 actually requires — identity arrives out-of-band and is never a parameter
+    the caller can vary to become somebody else.
+
+    Still a demo stand-in for a session cookie, exactly as `X-Principal` is.
+    """
+    # scope is a plain dict, so subprotocols come back untyped.
+    offered_list: list[str] = list(websocket.scope.get("subprotocols", []))
+    for offered in offered_list:
+        if offered.startswith(SUBPROTOCOL_PREFIX):
+            candidate = offered[len(SUBPROTOCOL_PREFIX) :]
+            if candidate in PRINCIPALS:
+                return candidate
+    return None
+
+
+@api.websocket("/api/collab/node/{node_id:path}")
+async def collab_node(
+    websocket: WebSocket,
+    node_id: str,
+    instance: Annotated[App, Depends(get_app)],
+    hub: Annotated[CollabHub, Depends(get_hub)],
+) -> None:
+    """Live editing for one node's human-authored text."""
+    name = principal_from_subprotocol(websocket)
+    if name is None:
+        await websocket.accept()
+        await websocket.close(CLOSE_BAD_IDENTITY, "unknown or missing principal")
+        return
+
+    await websocket.accept(subprotocol=f"{SUBPROTOCOL_PREFIX}{name}")
+    access = instance.access(PRINCIPALS[name])
+
+    indexed = instance.index.get_node(node_id)
+    if indexed is None or not access.allows(indexed.acl_ref, indexed.sensitivity):
+        await websocket.close(CLOSE_NOT_VISIBLE, "not found, or not visible to you")
+        return
+
+    try:
+        room = hub.registry.open(node_id)
+    except NodeNotFoundError:
+        # Indexed but absent from the store: drift, not a permission problem.
+        await websocket.close(CLOSE_NOT_VISIBLE, "not found, or not visible to you")
+        return
+
+    connection = hub.next_connection_id()
+    room.join(connection, name, PRINCIPALS[name].display)
+    hub.attach(node_id, connection, websocket)
+
+    await websocket.send_json(
+        {
+            "type": "welcome",
+            "connection": connection,
+            "revision": room.revision,
+            "body": room.body,
+            "participants": room.presence(),
+        }
+    )
+    await hub.announce_presence(room)
+
+    try:
+        while True:
+            message = await websocket.receive_json()
+            kind = message.get("type")
+
+            if kind == "edit":
+                try:
+                    outcome = room.apply_edit(
+                        connection,
+                        int(message.get("base_revision", room.revision)),
+                        str(message.get("body", "")),
+                    )
+                except FenceViolation as exc:
+                    # Refuse and resync. The browser is not a trust boundary.
+                    await websocket.send_json(
+                        {
+                            "type": "rejected",
+                            "reason": str(exc),
+                            "revision": room.revision,
+                            "body": room.body,
+                        }
+                    )
+                    continue
+                await hub.broadcast(
+                    node_id,
+                    {
+                        "type": "sync",
+                        "revision": outcome.revision,
+                        "body": outcome.body,
+                        "by": connection,
+                        "clobbered": outcome.clobbered,
+                    },
+                )
+                hub.schedule_flush(node_id)
+
+            elif kind == "cursor":
+                room.move_cursor(
+                    connection, int(message.get("anchor", 0)), int(message.get("head", 0))
+                )
+                await hub.announce_presence(room)
+
+    except WebSocketDisconnect:
+        pass
+    finally:
+        room.leave(connection)
+        hub.detach(node_id, connection)
+        if room.empty:
+            # Flush and rebuild once the last editor leaves, not per keystroke:
+            # re-indexing 232 nodes on every character would make the demo crawl.
+            if await hub.shutdown_room(node_id):
+                _app.cache_clear()
+        else:
+            await hub.announce_presence(room)
+
+
+ASK_ROOM = "__ask__"
+
+
+@api.websocket("/api/collab/ask")
+async def collab_ask(
+    websocket: WebSocket,
+    instance: Annotated[App, Depends(get_app)],
+    hub: Annotated[CollabHub, Depends(get_hub)],
+) -> None:
+    """One shared ask session the whole team sits inside.
+
+    A question asked by anyone is answered for *everyone* — but each answer is
+    computed against the asking-back principal's own grants, never the asker's.
+    Broadcasting one principal's answer to the room would be a leak wearing a
+    collaboration costume, and it is the obvious way to get this wrong.
+    """
+    name = principal_from_subprotocol(websocket)
+    if name is None:
+        await websocket.accept()
+        await websocket.close(CLOSE_BAD_IDENTITY, "unknown or missing principal")
+        return
+
+    await websocket.accept(subprotocol=f"{SUBPROTOCOL_PREFIX}{name}")
+    connection = hub.next_connection_id()
+    hub.attach(ASK_ROOM, connection, websocket, principal=name)
+
+    await websocket.send_json({"type": "welcome", "connection": connection})
+    await _announce_ask_room(hub)
+
+    try:
+        while True:
+            message = await websocket.receive_json()
+            if message.get("type") != "ask":
+                continue
+            question = str(message.get("question", "")).strip()
+            if not question:
+                continue
+            limit = int(message.get("limit", 6))
+
+            await hub.broadcast(
+                ASK_ROOM,
+                {"type": "asking", "question": question, "by": PRINCIPALS[name].display},
+            )
+
+            # Fan out per participant, each under their own grants. Sequential
+            # on purpose: with a live synthesizer this is one model call each,
+            # and a room of four should not open four at once.
+            for peer, peer_principal in hub.members(ASK_ROOM).items():
+                access = instance.access(PRINCIPALS[peer_principal])
+                try:
+                    result = await asyncio.to_thread(
+                        answer_for, instance, access, question, limit
+                    )
+                    payload = result.model_dump()
+                except CitationLeakBlocked as exc:
+                    payload = {"question": question, "refused": f"citation leak blocked: {exc}"}
+                await hub.send_to(ASK_ROOM, peer, {"type": "answer", **payload})
+
+    except WebSocketDisconnect:
+        pass
+    finally:
+        hub.detach(ASK_ROOM, connection)
+        await _announce_ask_room(hub)
+
+
+async def _announce_ask_room(hub: CollabHub) -> None:
+    participants = [
+        {
+            "connection": conn,
+            "principal": principal,
+            "display": PRINCIPALS[principal].display,
+            "color": participant_color(principal),
+        }
+        for conn, principal in hub.members(ASK_ROOM).items()
+    ]
+    await hub.broadcast(ASK_ROOM, {"type": "presence", "participants": participants})
 
 
 app = api

@@ -1,0 +1,25 @@
+{
+  "edges": [
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Reminder that Vendor renewal kicks off next week.",
+          "span": [
+            24,
+            73
+          ]
+        }
+      ],
+      "object": "processes/vendor-renewal",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v2",
+  "unresolved": []
+}

@@ -60,11 +60,21 @@ cmd_fmt() {
   uv run ruff check --fix .
 }
 
-cmd_test()       { need_uv; uv run pytest "$@"; }
-cmd_unit()       { need_uv; uv run pytest -m unit "$@"; }
-cmd_integration(){ need_uv; uv run pytest -m integration "$@"; }   # needs Postgres
-cmd_acceptance() { need_uv; uv run pytest -m acceptance "$@"; }    # the M1 gate
-cmd_llm()        { need_uv; uv run pytest -m llm "$@"; }           # live model calls
+# Tests run offline unless you say otherwise. With a populated .env the providers
+# go online and the acceptance fixture re-extracts all 201 corpus documents through
+# Claude on every run — 12+ minutes and real spend, against 24s offline, with a temp
+# store so nothing amortizes. Export COMPANY_BRAIN_OFFLINE=0 to opt back in.
+pytest_offline() {
+  need_uv
+  COMPANY_BRAIN_OFFLINE="${COMPANY_BRAIN_OFFLINE:-1}" uv run pytest "$@"
+}
+
+cmd_test()       { pytest_offline "$@"; }
+# Unit tests carry no marker — `-m unit` selects nothing. Select by path.
+cmd_unit()       { pytest_offline tests/unit "$@"; }
+cmd_integration(){ pytest_offline -m integration "$@"; }   # needs Postgres
+cmd_acceptance() { pytest_offline -m acceptance "$@"; }    # the M1 gate
+cmd_llm()        { need_uv; uv run pytest -m llm "$@"; }   # live model calls, on purpose
 
 cmd_all() { cmd_check; say "pytest"; cmd_test "$@"; }
 

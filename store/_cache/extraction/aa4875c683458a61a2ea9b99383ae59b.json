@@ -1,7 +1,61 @@
 {
   "edges": [
     {
-      "confidence": 0.7,
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "**Decided by:** Priya Raman",
+          "span": [
+            58,
+            85
+          ]
+        }
+      ],
+      "object": "people/priya-raman",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.95,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "The existing release sign-off process was taking too long.",
+          "span": [
+            120,
+            178
+          ]
+        }
+      ],
+      "object": "processes/release-signoff",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "The previous informal arrangement documented in the Engineering team page.",
+          "span": [
+            310,
+            384
+          ]
+        }
+      ],
+      "object": "teams/engineering",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.75,
       "evidence": [
         {
           "node": "self",
@@ -15,7 +69,8 @@
       "object": "teams/engineering",
       "predicate": "supersedes",
       "provenance": "llm",
-      "status": "proposed"
+      "status": "proposed",
+      "subject": null
     }
   ],
   "model": "claude-sonnet-5",

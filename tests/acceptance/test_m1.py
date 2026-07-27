@@ -22,9 +22,13 @@ from pathlib import Path
 import pytest
 
 from company_brain.app import build_app, cached_extractor
+from company_brain.collab.guard import FenceViolation
+from company_brain.collab.session import SessionRegistry
 from company_brain.connectors.local_fs import LocalIngest
 from company_brain.corpus.generate import generate
 from company_brain.retrieve.hybrid import HybridRetriever
+from company_brain.schemas.nodes import Node
+from company_brain.store.fences import upsert_region
 from company_brain.synthesize.answer import (
     CitationLeakError,
     ExtractiveSynthesizer,
@@ -345,3 +349,80 @@ class TestAgentBoundary:
         assert result["state"] == "pending_review"
         assert app.repo.get(target).body == before.body, "agent mutated the graph"
         assert result["proposal_id"] in list(app.repo.walk_proposal_ids())
+
+
+class TestLiveEditDurability:
+    """What a live edit survives, and what it does not.
+
+    Live collaboration writes human text straight into the canonical store, so
+    the question "does the next ingest eat it?" is an acceptance concern, not a
+    UI detail. The answer differs by node type, and the difference is by design
+    rather than an oversight — so both halves are pinned here.
+    """
+
+    def test_a_live_edit_to_an_entity_page_survives_re_ingestion(
+        self, built: tuple[Path, Path]
+    ) -> None:
+        """The M3 criterion, pulled forward: a human annotation on an entity
+        page outlives ingest cycles. `_write_entities` skips nodes that already
+        exist precisely so this holds."""
+        corpus, store = built
+        app = build_app(store)
+        target = next(app.repo.walk_ids("Person"))
+
+        registry = SessionRegistry(app.repo)
+        room = registry.open(target)
+        room.join("c1", "ceo", "Chief Executive")
+        room.apply_edit("c1", 0, "Sam is the person to ask about renewals. — added by hand")
+        registry.persist(target)
+
+        for _ in range(3):
+            fresh = build_app(store)
+            LocalIngest(
+                fresh.repo, fresh.registry, cached_extractor(fresh, store, frozen=True)
+            ).run(corpus)
+
+        assert "added by hand" in build_app(store).repo.get(target).body
+
+    def test_a_live_edit_to_a_document_page_is_replaced_by_its_source(
+        self, built: tuple[Path, Path]
+    ) -> None:
+        """The boundary. A Document node mirrors an upstream artifact, so the
+        next ingest of that artifact rewrites the body — by design (invariant 1:
+        the source wins for sourced content). Live editing is durable on entity
+        pages; on documents it lasts until the source is re-read.
+        """
+        corpus, store = built
+        app = build_app(store)
+        target = next(app.repo.walk_ids("Document"))
+        original = app.repo.get(target).body
+
+        registry = SessionRegistry(app.repo)
+        room = registry.open(target)
+        room.join("c1", "ceo", "Chief Executive")
+        room.apply_edit("c1", 0, "TYPED OVER THE SOURCE")
+        registry.persist(target)
+        assert build_app(store).repo.get(target).body == "TYPED OVER THE SOURCE"
+
+        fresh = build_app(store)
+        LocalIngest(
+            fresh.repo, fresh.registry, cached_extractor(fresh, store, frozen=True)
+        ).run(corpus)
+
+        assert build_app(store).repo.get(target).body == original
+
+    def test_a_live_edit_cannot_reach_generated_content(self, built: tuple[Path, Path]) -> None:
+        """Invariant 13 holds across the live path too: the fence guard refuses
+        the write rather than trusting the client that sent it."""
+        _, store = built
+        app = build_app(store)
+        target = next(app.repo.walk_ids("Person"))
+        fenced = upsert_region("Human notes.", "mentions", "Mentioned in 12 documents.")
+        app.repo.put(Node(frontmatter=app.repo.get(target).frontmatter, body=fenced))
+
+        registry = SessionRegistry(app.repo)
+        room = registry.open(target)
+        room.join("c1", "ceo", "Chief Executive")
+
+        with pytest.raises(FenceViolation):
+            room.apply_edit("c1", 0, fenced.replace("12 documents", "9000 documents"))

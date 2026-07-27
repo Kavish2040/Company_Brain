@@ -1,0 +1,61 @@
+{
+  "edges": [
+    {
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Incident response is blocked until Engineering signs off on the security review.",
+          "span": [
+            23,
+            103
+          ]
+        }
+      ],
+      "object": "processes/security-review",
+      "predicate": "depends_on",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "processes/incident-response"
+    },
+    {
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Incident response is blocked until Engineering signs off on the security review.",
+          "span": [
+            23,
+            103
+          ]
+        }
+      ],
+      "object": "teams/engineering",
+      "predicate": "depends_on",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "processes/incident-response"
+    },
+    {
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Reminder: Security review closes Friday.",
+          "span": [
+            128,
+            168
+          ]
+        }
+      ],
+      "object": "processes/security-review",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v2",
+  "unresolved": []
+}

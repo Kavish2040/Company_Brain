@@ -1,0 +1,43 @@
+{
+  "edges": [
+    {
+      "confidence": 0.95,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Owner: Mei Tanaka (mei@meridian.example)",
+          "span": [
+            35,
+            75
+          ]
+        }
+      ],
+      "object": "processes/data-request",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "people/mei-tanaka"
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Owning team: Support",
+          "span": [
+            77,
+            97
+          ]
+        }
+      ],
+      "object": "processes/data-request",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "teams/support"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v2",
+  "unresolved": []
+}

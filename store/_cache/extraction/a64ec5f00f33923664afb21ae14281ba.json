@@ -1,0 +1,133 @@
+{
+  "edges": [
+    {
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Capacity planning is blocked until Engineering signs off on the security review.",
+          "span": [
+            292,
+            372
+          ]
+        }
+      ],
+      "object": "processes/security-review",
+      "predicate": "depends_on",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "processes/capacity-planning"
+    },
+    {
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Release sign-off is blocked until Engineering signs off on the security review.",
+          "span": [
+            106,
+            185
+          ]
+        }
+      ],
+      "object": "processes/security-review",
+      "predicate": "depends_on",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "processes/release-signoff"
+    },
+    {
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Release sign-off is blocked until Engineering signs off on the security review.",
+          "span": [
+            106,
+            185
+          ]
+        }
+      ],
+      "object": "teams/engineering",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "The Datadog renewal lands in April.",
+          "span": [
+            210,
+            245
+          ]
+        }
+      ],
+      "object": "tools/datadog",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "The PagerDuty renewal lands in April.",
+          "span": [
+            22,
+            59
+          ]
+        }
+      ],
+      "object": "tools/pagerduty",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "The Datadog renewal lands in April. I own that end to end.",
+          "span": [
+            210,
+            268
+          ]
+        }
+      ],
+      "object": "tools/datadog",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "people/ana-brito"
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "The PagerDuty renewal lands in April. I own that end to end.",
+          "span": [
+            22,
+            82
+          ]
+        }
+      ],
+      "object": "tools/pagerduty",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "people/sam-kaur"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v2",
+  "unresolved": []
+}

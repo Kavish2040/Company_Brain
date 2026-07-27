@@ -1,0 +1,99 @@
+{
+  "edges": [
+    {
+      "confidence": 0.95,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Sam Kaur (sam.kaur@meridian.example), Finance Lead, Finance",
+          "span": [
+            59,
+            118
+          ]
+        }
+      ],
+      "object": "people/sam-kaur",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.95,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Sam Kelly (sam.kelly@meridian.example), Backend Engineer, Engineering",
+          "span": [
+            121,
+            190
+          ]
+        }
+      ],
+      "object": "people/sam-kelly",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Sam Kelly (sam.kelly@meridian.example), Backend Engineer, Engineering",
+          "span": [
+            121,
+            190
+          ]
+        }
+      ],
+      "object": "teams/engineering",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Sam Kaur (sam.kaur@meridian.example), Finance Lead, Finance",
+          "span": [
+            59,
+            118
+          ]
+        }
+      ],
+      "object": "teams/finance",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.4,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "They work together on Project Snowflake, so context alone is often not enough\nto tell them apart.",
+          "span": [
+            192,
+            289
+          ]
+        }
+      ],
+      "object": "tools/snowflake",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v2",
+  "unresolved": [
+    "Project Snowflake"
+  ]
+}

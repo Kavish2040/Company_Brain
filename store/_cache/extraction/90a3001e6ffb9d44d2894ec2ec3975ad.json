@@ -1,0 +1,223 @@
+{
+  "edges": [
+    {
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Mei Tanaka raised that vendor renewal is still blocked on\n Zendesk.",
+          "span": [
+            109,
+            176
+          ]
+        }
+      ],
+      "object": "tools/zendesk",
+      "predicate": "depends_on",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "processes/vendor-renewal"
+    },
+    {
+      "confidence": 0.55,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Handoff from Product to Engineering is unclear; two\n tickets bounced back last week.",
+          "span": [
+            222,
+            306
+          ]
+        }
+      ],
+      "object": "teams/engineering",
+      "predicate": "handoff_to",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "teams/product"
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Ana Brito to document the handoff boundary.",
+          "span": [
+            322,
+            365
+          ]
+        }
+      ],
+      "object": "people/ana-brito",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.95,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Mei Tanaka raised that vendor renewal is still blocked on\n Zendesk.",
+          "span": [
+            109,
+            176
+          ]
+        }
+      ],
+      "object": "people/mei-tanaka",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Sam Kaur confirmed they own the process.",
+          "span": [
+            179,
+            219
+          ]
+        }
+      ],
+      "object": "people/sam-kaur",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Attendees:** Mei Tanaka, Zo\u00eb Ravel, Tom Whelan, Ana Brito",
+          "span": [
+            38,
+            95
+          ]
+        }
+      ],
+      "object": "people/tom-whelan",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Attendees:** Mei Tanaka, Zo\u00eb Ravel, Tom Whelan, Ana Brito",
+          "span": [
+            38,
+            95
+          ]
+        }
+      ],
+      "object": "people/zoe-ravel",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Mei Tanaka raised that vendor renewal is still blocked on\n Zendesk.",
+          "span": [
+            109,
+            176
+          ]
+        }
+      ],
+      "object": "processes/vendor-renewal",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Handoff from Product to Engineering is unclear; two\n tickets bounced back last week.",
+          "span": [
+            222,
+            306
+          ]
+        }
+      ],
+      "object": "teams/engineering",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Handoff from Product to Engineering is unclear; two\n tickets bounced back last week.",
+          "span": [
+            222,
+            306
+          ]
+        }
+      ],
+      "object": "teams/product",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Mei Tanaka raised that vendor renewal is still blocked on\n Zendesk.",
+          "span": [
+            109,
+            176
+          ]
+        }
+      ],
+      "object": "tools/zendesk",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Sam Kaur confirmed they own the process.",
+          "span": [
+            179,
+            219
+          ]
+        }
+      ],
+      "object": "processes/vendor-renewal",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "people/sam-kaur"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v2",
+  "unresolved": []
+}

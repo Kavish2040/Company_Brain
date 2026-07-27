@@ -1,0 +1,61 @@
+{
+  "edges": [
+    {
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Security review is blocked until Engineering signs off on the security review.",
+          "span": [
+            23,
+            101
+          ]
+        }
+      ],
+      "object": "teams/engineering",
+      "predicate": "depends_on",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "processes/security-review"
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "The Snowflake renewal lands in April.",
+          "span": [
+            126,
+            163
+          ]
+        }
+      ],
+      "object": "tools/snowflake",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "I own that end to end.",
+          "span": [
+            164,
+            186
+          ]
+        }
+      ],
+      "object": "processes/vendor-renewal",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "people/ana-brito"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v2",
+  "unresolved": []
+}

@@ -1,0 +1,43 @@
+{
+  "edges": [
+    {
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Nadia Hassan to document the handoff boundary.",
+          "span": [
+            321,
+            367
+          ]
+        }
+      ],
+      "object": "people/nadia-hassan",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.95,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Ana Brito confirmed they own the process.",
+          "span": [
+            181,
+            222
+          ]
+        }
+      ],
+      "object": "processes/refund-approval",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "people/ana-brito"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v2",
+  "unresolved": []
+}

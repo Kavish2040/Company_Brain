@@ -1,0 +1,97 @@
+{
+  "edges": [
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Nadia Hassan raised that quarterly close is still blocked on\n NetSuite.",
+          "span": [
+            112,
+            183
+          ]
+        }
+      ],
+      "object": "tools/netsuite",
+      "predicate": "depends_on",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "processes/quarterly-close"
+    },
+    {
+      "confidence": 0.55,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Handoff from Product to Finance is unclear; two\n tickets bounced back last week.",
+          "span": [
+            230,
+            310
+          ]
+        }
+      ],
+      "object": "teams/finance",
+      "predicate": "handoff_to",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "teams/product"
+    },
+    {
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Mei Tanaka to document the handoff boundary.",
+          "span": [
+            326,
+            370
+          ]
+        }
+      ],
+      "object": "people/mei-tanaka",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "**Attendees:** Nadia Hassan, Zo\u00eb Ravel, Ana Brito, Mei Tanaka",
+          "span": [
+            37,
+            98
+          ]
+        }
+      ],
+      "object": "people/zoe-ravel",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Ana Brito confirmed they own the process.",
+          "span": [
+            186,
+            227
+          ]
+        }
+      ],
+      "object": "processes/quarterly-close",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "people/ana-brito"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v2",
+  "unresolved": []
+}

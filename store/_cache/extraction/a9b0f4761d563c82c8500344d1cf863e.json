@@ -1,0 +1,61 @@
+{
+  "edges": [
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "**Decided by:** Zo\u00eb Ravel",
+          "span": [
+            61,
+            86
+          ]
+        }
+      ],
+      "object": "people/zoe-ravel",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.95,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Zo\u00eb Ravel will own employee onboarding going forward, and the\nsign-off step moves to the owning team.",
+          "span": [
+            197,
+            298
+          ]
+        }
+      ],
+      "object": "processes/onboarding",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "people/zoe-ravel"
+    },
+    {
+      "confidence": 0.75,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "The previous informal arrangement documented in the Product team page.",
+          "span": [
+            315,
+            385
+          ]
+        }
+      ],
+      "object": "teams/product",
+      "predicate": "supersedes",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v2",
+  "unresolved": []
+}

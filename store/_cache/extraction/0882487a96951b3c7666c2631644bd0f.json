@@ -1,0 +1,25 @@
+{
+  "edges": [
+    {
+      "confidence": 0.95,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Following up on quarterly close.",
+          "span": [
+            121,
+            153
+          ]
+        }
+      ],
+      "object": "processes/quarterly-close",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v2",
+  "unresolved": []
+}

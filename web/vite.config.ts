@@ -8,6 +8,10 @@ export default defineConfig({
     port: 5173,
     // The API runs on 8000; proxying keeps the browser on one origin so the
     // X-Principal header never becomes a cross-origin preflight in dev.
-    proxy: { "/api": { target: "http://127.0.0.1:8000", changeOrigin: true } },
+    // `ws: true` is what carries the live-collaboration sockets through — the
+    // proxy silently 404s WebSocket upgrades without it.
+    proxy: {
+      "/api": { target: "http://127.0.0.1:8000", changeOrigin: true, ws: true },
+    },
   },
 });

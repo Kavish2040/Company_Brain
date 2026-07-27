@@ -450,3 +450,77 @@ class TestThirdPartySubjects:
                     ),
                 )
             )
+
+
+class TestExtractionCacheFidelity:
+    """The cache must round-trip every field an Edge carries.
+
+    `subject` was added to Edge and to the markdown serializer but not to the
+    extraction cache. Nodes were correct on a cache *miss* and lost their
+    subjects on a cache *hit* — so frozen re-ingest would have failed against a
+    cache this same pipeline wrote. Silent, and only visible one run later.
+    """
+
+    def test_cache_round_trip_preserves_every_edge_field(self) -> None:
+        import json as _json
+
+        from company_brain.extract.base import ExtractionResult, _from_json, _to_json
+
+        original = ExtractionResult(
+            edges=(
+                Edge(
+                    predicate=Predicate.OWNS,
+                    subject="people/owen",
+                    object="processes/capacity-planning",
+                    confidence=0.75,
+                    provenance=Provenance.LLM,
+                    status=EdgeStatus.PROPOSED,
+                    evidence=(Evidence(node="self", span=(10, 40), quote="Owen owns it"),),
+                ),
+                Edge(
+                    predicate=Predicate.MENTIONS,
+                    object="tools/netsuite",
+                    confidence=0.9,
+                    provenance=Provenance.LLM,
+                    status=EdgeStatus.ACCEPTED,
+                    evidence=(Evidence(node="self", span=(1, 9)),),
+                ),
+            ),
+            model="claude-sonnet-5",
+            prompt_version="v2",
+            unresolved=("Sam K.",),
+        )
+        restored = _from_json(_json.loads(_to_json(original)))
+        # The cache canonicalizes edge order, so compare by sort key rather than
+        # position — the point of the test is field fidelity, not ordering.
+        assert sorted(restored.edges, key=lambda e: e.sort_key()) == sorted(
+            original.edges, key=lambda e: e.sort_key()
+        )
+        assert restored.model == original.model
+        assert restored.prompt_version == original.prompt_version
+        assert restored.unresolved == original.unresolved
+
+    def test_a_third_party_edge_survives_the_cache(self) -> None:
+        import json as _json
+
+        from company_brain.extract.base import ExtractionResult, _from_json, _to_json
+
+        result = ExtractionResult(
+            edges=(
+                Edge(
+                    predicate=Predicate.HANDOFF_TO,
+                    subject="teams/support",
+                    object="teams/engineering",
+                    confidence=0.6,
+                    provenance=Provenance.LLM,
+                    status=EdgeStatus.PROPOSED,
+                    evidence=(Evidence(span=(0, 5)),),
+                ),
+            ),
+            model="m",
+            prompt_version="v2",
+        )
+        restored = _from_json(_json.loads(_to_json(result)))
+        # Without the subject this replays as `document --handoff_to--> team`,
+        # which the Frontmatter validator rejects.
+        assert restored.edges[0].subject == "teams/support"

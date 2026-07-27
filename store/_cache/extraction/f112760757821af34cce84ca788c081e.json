@@ -1,0 +1,133 @@
+{
+  "edges": [
+    {
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Priya Raman raised that customer escalation is still blocked on\n Datadog.",
+          "span": [
+            113,
+            186
+          ]
+        }
+      ],
+      "object": "tools/datadog",
+      "predicate": "depends_on",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "processes/customer-escalation"
+    },
+    {
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Handoff from Product to Finance is unclear; two\n tickets bounced back last week.",
+          "span": [
+            236,
+            316
+          ]
+        }
+      ],
+      "object": "teams/finance",
+      "predicate": "handoff_to",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "teams/product"
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Ana Brito to document the handoff boundary.",
+          "span": [
+            332,
+            375
+          ]
+        }
+      ],
+      "object": "people/ana-brito",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Priya Raman raised that customer escalation is still blocked on\n Datadog.",
+          "span": [
+            113,
+            186
+          ]
+        }
+      ],
+      "object": "people/priya-raman",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "**Attendees:** Priya Raman, Zo\u00eb Ravel, Sam Kaur, Ana Brito",
+          "span": [
+            41,
+            99
+          ]
+        }
+      ],
+      "object": "people/sam-kaur",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "**Attendees:** Priya Raman, Zo\u00eb Ravel, Sam Kaur, Ana Brito",
+          "span": [
+            41,
+            99
+          ]
+        }
+      ],
+      "object": "people/zoe-ravel",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Dev Oyelaran confirmed they own the process.",
+          "span": [
+            189,
+            233
+          ]
+        }
+      ],
+      "object": "processes/customer-escalation",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "people/dev-oyelaran"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v2",
+  "unresolved": []
+}

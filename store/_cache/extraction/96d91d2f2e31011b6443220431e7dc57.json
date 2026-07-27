@@ -1,0 +1,99 @@
+{
+  "edges": [
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Attendees: Sam K., Priya Raman, Ana Brito",
+          "span": [
+            21,
+            62
+          ]
+        }
+      ],
+      "object": "people/ana-brito",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Attendees: Sam K., Priya Raman, Ana Brito",
+          "span": [
+            21,
+            62
+          ]
+        }
+      ],
+      "object": "people/priya-raman",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.6,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Sam K. confirmed the NetSuite renewal is on track for April.",
+          "span": [
+            64,
+            124
+          ]
+        }
+      ],
+      "object": "processes/vendor-renewal",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Sam K. confirmed the NetSuite renewal is on track for April.",
+          "span": [
+            64,
+            124
+          ]
+        }
+      ],
+      "object": "tools/netsuite",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Sam is also\npicking up the Snowflake contract review.",
+          "span": [
+            125,
+            178
+          ]
+        }
+      ],
+      "object": "tools/snowflake",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v2",
+  "unresolved": [
+    "Sam K."
+  ]
+}

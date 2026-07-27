@@ -1,0 +1,115 @@
+{
+  "edges": [
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Customer data request is blocked until Engineering signs off on the security review.",
+          "span": [
+            275,
+            359
+          ]
+        }
+      ],
+      "object": "processes/security-review",
+      "predicate": "depends_on",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "processes/data-request"
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Quarterly close is blocked until Engineering signs off on the security review.",
+          "span": [
+            173,
+            251
+          ]
+        }
+      ],
+      "object": "processes/security-review",
+      "predicate": "depends_on",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "processes/quarterly-close"
+    },
+    {
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Reminder: Capacity planning closes Friday.",
+          "span": [
+            23,
+            65
+          ]
+        }
+      ],
+      "object": "processes/capacity-planning",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.7,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Quarterly close is blocked until Engineering signs off on the security review.",
+          "span": [
+            173,
+            251
+          ]
+        }
+      ],
+      "object": "teams/engineering",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": null
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "The NetSuite renewal lands in April.",
+          "span": [
+            90,
+            126
+          ]
+        }
+      ],
+      "object": "tools/netsuite",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "I own that end to end.",
+          "span": [
+            127,
+            149
+          ]
+        }
+      ],
+      "object": "processes/vendor-renewal",
+      "predicate": "owns",
+      "provenance": "llm",
+      "status": "proposed",
+      "subject": "people/ana-brito"
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v2",
+  "unresolved": []
+}

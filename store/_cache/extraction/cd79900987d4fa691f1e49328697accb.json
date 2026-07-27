@@ -1,0 +1,97 @@
+{
+  "edges": [
+    {
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "**Dev Oyelaran** (12:03): Reminder that Employee onboarding kicks off next week.",
+          "span": [
+            133,
+            213
+          ]
+        }
+      ],
+      "object": "people/dev-oyelaran",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "**Nadia Hassan** (11:56): All-hands moved to Thursday.",
+          "span": [
+            77,
+            131
+          ]
+        }
+      ],
+      "object": "people/nadia-hassan",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.85,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "**Priya Raman** (11:49): Reminder that Security review kicks off next week.",
+          "span": [
+            0,
+            75
+          ]
+        }
+      ],
+      "object": "people/priya-raman",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Reminder that Employee onboarding kicks off next week.",
+          "span": [
+            159,
+            213
+          ]
+        }
+      ],
+      "object": "processes/onboarding",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Reminder that Security review kicks off next week.",
+          "span": [
+            25,
+            75
+          ]
+        }
+      ],
+      "object": "processes/security-review",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    }
+  ],
+  "model": "claude-sonnet-5",
+  "prompt_version": "claude-roster-v2",
+  "unresolved": []
+}
