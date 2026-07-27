@@ -23,10 +23,11 @@ import {
   Network,
   Search,
   ShieldOff,
+  type LucideIcon,
 } from "lucide-react";
 
 import { api, ApiError, type AskResult, type Overview, type OverviewNode } from "../lib/api";
-import { NODE_TYPES, iconFor } from "../lib/nodeTypes";
+import { iconFor, labelFor, orderTypes } from "../lib/nodeTypes";
 import {
   Card,
   CitationChip,
@@ -295,21 +296,27 @@ function Landing({
       </div>
 
       <Panel title="What you can see" icon={Eye}>
+        {/* Driven by the response, not by the sidebar's six rows: a type the
+            Browse nav has not caught up with still has to be counted, or the
+            breakdown stops summing to the total above it. */}
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-4">
-          {NODE_TYPES.filter(({ type }) => data.by_type[type]).map(
-            ({ type, label, icon: TypeIcon }) => (
+          {orderTypes(Object.keys(data.by_type)).map((type) => {
+            const TypeIcon = iconFor(type);
+            return (
               <div key={type} className="flex items-center gap-2.5 px-2.5 py-[7px] min-w-0">
                 <TypeIcon
                   className="w-[16px] h-[16px] text-muted-foreground/70 shrink-0"
                   strokeWidth={1.5}
                 />
-                <span className="text-[13px] text-muted-foreground truncate">{label}</span>
+                <span className="text-[13px] text-muted-foreground truncate">
+                  {labelFor(type)}
+                </span>
                 <span className="ml-auto text-[10px] font-mono text-muted-foreground/50 shrink-0">
                   {data.by_type[type]}
                 </span>
               </div>
-            ),
-          )}
+            );
+          })}
         </div>
 
         <div className="border-t border-border/50 my-2" />
@@ -360,7 +367,7 @@ function Panel({
   children,
 }: {
   title: string;
-  icon: typeof Network;
+  icon: LucideIcon;
   children: ReactNode;
 }) {
   return (

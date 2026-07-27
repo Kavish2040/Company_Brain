@@ -266,18 +266,22 @@ def run_local_oauth_flow(
     provider: str,
     *,
     timeout: int = 300,
+    port: int = 8080,
 ) -> GoogleOAuthCredentials:
     """Run the full OAuth installed-app flow with a loopback callback server.
 
     1. Generate PKCE and state params.
-    2. Start an HTTP server on 127.0.0.1:0 (OS-assigned ephemeral port).
+    2. Start an HTTP server on 127.0.0.1:{port} (default 8080).
     3. Open the authorization URL in the browser (and print it as a fallback).
     4. Serve exactly one request (the redirect callback) within `timeout` seconds.
     5. Exchange the authorization code for tokens.
     6. Store the refresh token via TokenStore.
     7. Return the credentials.
 
-    Raises OAuthError on any failure (timeout, CSRF, network, rejected grant, etc.).
+    The port MUST match your Google Cloud OAuth app's authorized redirect URI.
+    If the port is in use, pass a different one (e.g., port=9090).
+
+    Raises OAuthError on any failure (timeout, port conflict, CSRF, network, etc.).
     """
     # Generate PKCE and CSRF params.
     state = secrets.token_urlsafe(32)
@@ -288,11 +292,18 @@ def run_local_oauth_flow(
         .decode()
     )
 
-    # Start the loopback server on an ephemeral port.
+    # Start the loopback server on the configured port.
     handler = _make_callback_handler()
-    server = http.server.HTTPServer(("127.0.0.1", 0), handler)
-    _, port = server.server_address
-    redirect_uri = f"http://127.0.0.1:{port}/callback"
+    try:
+        server = http.server.HTTPServer(("127.0.0.1", port), handler)
+    except OSError as exc:
+        raise OAuthError(
+            f"could not bind loopback server to 127.0.0.1:{port} — "
+            f"is it already in use? Try a different port (e.g., port=9090) "
+            f"or kill the process using it."
+        ) from exc
+    _, bound_port = server.server_address
+    redirect_uri = f"http://127.0.0.1:{bound_port}/callback"
 
     # Build and open the authorization URL.
     auth_url = build_authorization_url(client_id, redirect_uri, scope, state, code_challenge)

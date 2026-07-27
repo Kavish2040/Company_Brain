@@ -76,7 +76,11 @@ _index_stale = False
 # document was last touched upstream, and giving it one would be inventing a
 # field. Parsing the tree is cheap on this corpus but it is still per-request
 # work with no reason to be, so it is cached beside the index and dropped with it.
-_modified: dict[str, str] | None = None
+#
+# Held against the App that produced it rather than as a bare dict: a test that
+# overrides `get_app` to point at a temp store must not be served another
+# store's timestamps, and identity is the one key that cannot get that wrong.
+_modified: tuple[App, dict[str, str]] | None = None
 
 
 def mark_index_stale() -> None:
@@ -87,15 +91,15 @@ def mark_index_stale() -> None:
 
 def _modified_times(instance: App) -> dict[str, str]:
     global _modified
-    if _modified is None:
+    if _modified is None or _modified[0] is not instance:
         found: dict[str, str] = {}
         for node in instance.repo.walk():
             stamps = node.frontmatter.timestamps
             when = stamps.modified or stamps.created
             if when is not None:
                 found[node.id] = when.isoformat()
-        _modified = found
-    return _modified
+        _modified = (instance, found)
+    return _modified[1]
 
 
 def get_app() -> App:
@@ -530,8 +534,7 @@ def overview(
         withheld_sources=len(store_refs - access.refs),
         connected=[_overview_node(n, degree[n.id]) for n in connected],
         recent=[
-            _overview_node(n, degree[n.id], modified=when)
-            for when, n in dated[:OVERVIEW_LIMIT]
+            _overview_node(n, degree[n.id], modified=when) for when, n in dated[:OVERVIEW_LIMIT]
         ],
     )
 

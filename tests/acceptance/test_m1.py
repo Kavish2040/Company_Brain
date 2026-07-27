@@ -17,9 +17,11 @@ from __future__ import annotations
 
 import hashlib
 import shutil
+from collections.abc import Iterator
 from pathlib import Path
 
 import pytest
+from fastapi.testclient import TestClient
 
 from company_brain.app import build_app, cached_extractor
 from company_brain.collab.guard import FenceViolation
@@ -240,6 +242,85 @@ class TestPermissions:
                 .text
             )
         assert texts["ceo"] != texts["contractor"]
+
+
+class TestOverviewProjection:
+    """The Ask landing surface, held to criterion 4.
+
+    `/api/overview` is the one endpoint that describes the graph rather than
+    answering a question about it, which makes it the easiest place to leak by
+    accident: a shape, a count, or a ranking derived from nodes the caller
+    cannot open is still a disclosure. So it is asserted the same way the
+    retrieval path is — against the planted comp canary, per principal.
+    """
+
+    @pytest.fixture
+    def client(self, built: tuple[Path, Path]) -> Iterator[TestClient]:
+        from company_brain.api.app import _app, api, get_app
+
+        _, store = built
+        instance = build_app(store)
+        instance.load_index()
+        api.dependency_overrides[get_app] = lambda: instance
+        with TestClient(api) as test_client:
+            yield test_client
+        api.dependency_overrides.clear()
+        _app.cache_clear()
+
+    @pytest.mark.parametrize("principal", ["support-lead", "eng-ic", "contractor"])
+    def test_the_canary_never_appears_in_the_landing_graph(
+        self, client: TestClient, principal: str
+    ) -> None:
+        body = client.get("/api/overview", headers={"X-Principal": principal}).json()
+        listed = [n["id"] for n in body["connected"] + body["recent"]]
+        assert not any("leadership-comp" in node_id for node_id in listed)
+        # The refs are named, so the restricted channel must not be among them
+        # even though its node count is folded into `withheld_nodes`.
+        assert not any("C0LEAD" in s["ref"] for s in body["sources"])
+
+    def test_the_ceo_sees_the_whole_graph_and_nothing_is_withheld(
+        self, client: TestClient
+    ) -> None:
+        """The counterweight — without it, a projection that returned nothing
+        at all would pass every assertion above."""
+        body = client.get("/api/overview", headers={"X-Principal": "ceo"}).json()
+        assert body["withheld_nodes"] == 0
+        assert body["withheld_sources"] == 0
+        assert body["connected"], "no entities on a fully ingested corpus"
+        assert sum(body["by_type"].values()) == body["nodes"]
+
+    def test_a_narrower_principal_sees_a_smaller_graph(self, client: TestClient) -> None:
+        seen = {
+            name: client.get("/api/overview", headers={"X-Principal": name}).json()
+            for name in ("ceo", "eng-ic", "contractor")
+        }
+        assert seen["ceo"]["nodes"] > seen["eng-ic"]["nodes"] > seen["contractor"]["nodes"]
+        assert seen["ceo"]["edges"] > seen["eng-ic"]["edges"]
+        assert seen["contractor"]["withheld_nodes"] > seen["eng-ic"]["withheld_nodes"] > 0
+
+    def test_degree_counts_only_edges_the_principal_can_traverse(
+        self, client: TestClient
+    ) -> None:
+        """A stored degree would rank identically for everyone, and the ranking
+        would then describe the half of the graph the caller was refused."""
+
+        def connected(name: str) -> list[tuple[str, int]]:
+            body = client.get("/api/overview", headers={"X-Principal": name}).json()
+            return [(n["id"], n["degree"]) for n in body["connected"]]
+
+        ranked = {name: connected(name) for name in ("ceo", "eng-ic")}
+        ceo = dict(ranked["ceo"])
+        overlap = [(nid, d) for nid, d in ranked["eng-ic"] if nid in ceo]
+        assert overlap, "the two principals share no entities; the check is vacuous"
+        assert all(d < ceo[nid] for nid, d in overlap)
+
+    def test_every_listed_node_is_one_the_principal_can_open(self, client: TestClient) -> None:
+        """The end-to-end version: whatever the landing page offers as a link
+        must resolve, or the UI is advertising doors that 404."""
+        headers = {"X-Principal": "contractor"}
+        body = client.get("/api/overview", headers=headers).json()
+        for node in body["connected"] + body["recent"]:
+            assert client.get(f"/api/nodes/{node['id']}", headers=headers).status_code == 200
 
 
 class TestCitationContract:
