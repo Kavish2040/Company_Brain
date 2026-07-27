@@ -103,8 +103,10 @@ export type DiffLine = {
  */
 export type Pending = {
   key: string;
-  /** "edge" — the §11 gates held it back; "proposal" — an agent wrote it. */
-  kind: "edge" | "proposal";
+  /** "edge" — the §11 gates held it back; "proposal" — an agent wrote it;
+   *  "outreach" — a message drafted for a real person, which carries a body
+   *  rather than a relation diff. */
+  kind: "edge" | "proposal" | "outreach";
   node_id: string;
   node_title: string;
   predicate: string | null;
@@ -123,15 +125,58 @@ export type Pending = {
   body_diff: DiffLine[];
   added_relations: RelationDiff[];
   removed_relations: RelationDiff[];
+  /** Set only when kind is "outreach". */
+  outreach: Outreach | null;
 };
 
 export type ReviewStats = {
   pending: number;
   pending_proposals: number;
+  pending_outreach: number;
   by_predicate: Record<string, number>;
   /** predicate -> [accepted, decided]. 100% means the gate is theatre. */
   accept_rate: Record<string, [number, number]>;
   proposal_accept_rate: Record<string, [number, number]>;
+  outreach_accept_rate: Record<string, [number, number]>;
+};
+
+/**
+ * The contact Apollo resolved. `source` is "apollo" when a live lookup found
+ * them and "offline" when it did not run — an offline lead carries a name and
+ * no contact details, never a fabricated address.
+ */
+export type Lead = {
+  name: string;
+  email: string | null;
+  title: string | null;
+  organization: string | null;
+  linkedin_url: string | null;
+  source: string;
+};
+
+export type OutreachState = "pending" | "approved" | "rejected" | "sent";
+
+/**
+ * A drafted message. Never sent by drafting it, and never sent by approving
+ * it either — dispatch is a third, separate act against /outreach/send.
+ */
+export type Outreach = {
+  draft_id: string;
+  node_id: string;
+  node_title: string;
+  sensitivity: string;
+  drafted_by: string;
+  created_at: string;
+  subject: string;
+  body: string;
+  /** The graph statements the body was built from — the reviewer's evidence. */
+  facts: string[];
+  lead: Lead | null;
+  lead_source: string;
+  state: OutreachState;
+  decided_by: string | null;
+  sent_by: string | null;
+  sent_at: string | null;
 };
 
 export type Decision = "accepted" | "rejected" | "pending";
@@ -143,6 +188,29 @@ export type Health = {
   nodes: number;
   chunks: number;
   edges: number;
+};
+
+export type GmailMessage = {
+  id: string;
+  threadId: string;
+  subject: string;
+  from: string;
+  snippet: string;
+  receivedAt: string;
+  bucket: "urgent" | "promotional" | "social" | "updates" | "normal";
+  labels: string[];
+};
+
+export type GmailStatus = {
+  linked: boolean;
+  email: string | null;
+  lastRefreshed: string | null;
+};
+
+export type GmailTriage = {
+  email: string;
+  lastRefreshed: string;
+  buckets: Record<string, GmailMessage[]>;
 };
 
 export class ApiError extends Error {
@@ -159,15 +227,21 @@ export class ApiError extends Error {
 async function request<T>(
   path: string,
   principal: string,
-  init?: RequestInit,
+  // Narrowed from RequestInit: `HeadersInit` also admits `Headers` and
+  // `string[][]`, neither of which survives the object spread below.
+  init?: Omit<RequestInit, "headers"> & { headers?: Record<string, string> },
 ): Promise<T> {
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    ...(init?.headers ?? {}),
+  };
+  if (principal) {
+    headers["X-Principal"] = principal;
+  }
   const response = await fetch(`/api${path}`, {
     ...init,
-    headers: {
-      "Content-Type": "application/json",
-      "X-Principal": principal,
-      ...(init?.headers ?? {}),
-    },
+    credentials: "include",
+    headers,
   });
   if (!response.ok) {
     let detail = response.statusText;
@@ -204,6 +278,23 @@ export const api = {
     ),
   reviewStats: (p: string) => request<ReviewStats>("/review/stats", p),
   /**
+   * Draft outreach from a node. Composes from the graph and queues for review
+   * — it does not send, and there is no parameter that would make it.
+   */
+  outreachDraft: (p: string, nodeId: string) =>
+    request<Outreach>("/outreach/draft", p, {
+      method: "POST",
+      body: JSON.stringify({ node_id: nodeId }),
+    }),
+  /** Dispatch an approved draft. 409s on anything not yet approved. */
+  outreachSend: (p: string, draftId: string) =>
+    request<Outreach>("/outreach/send", p, {
+      method: "POST",
+      body: JSON.stringify({ draft_id: draftId }),
+    }),
+  outreachList: (p: string, state?: OutreachState) =>
+    request<Outreach[]>(`/outreach${state ? `?state=${state}` : ""}`, p),
+  /**
    * Decide one item or many, in the order the reviewer worked them. Each item
    * carries back the `kind` the queue gave it, so the server validates a tag
    * rather than inferring a code path from the shape of a key.
@@ -220,4 +311,15 @@ export const api = {
         }),
       },
     ),
+  gmailStatus: () => request<GmailStatus>("/gmail/status", ""),
+  gmailTriage: (forceRefresh?: boolean) =>
+    request<GmailTriage>(
+      `/gmail/triage${forceRefresh ? "?force_refresh=true" : ""}`,
+      "",
+    ),
+  gmailOauthStart: () => "/api/gmail/oauth/start",
+  gmailLogout: () =>
+    request<{ status: string }>("/gmail/oauth/logout", "", {
+      method: "POST",
+    }),
 };

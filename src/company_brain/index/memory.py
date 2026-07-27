@@ -162,6 +162,18 @@ class MemoryIndex:
     def edges_of(self, node_id: str) -> list[tuple[str, str]]:
         return sorted(self._out.get(node_id, []))
 
+    def edges_into(self, node_id: str) -> list[tuple[str, str]]:
+        """Inbound (predicate, subject) pairs.
+
+        The mirror of `edges_of`, and neither is part of the `Index` protocol —
+        `neighbours` is, but it merges both directions and drops the predicate,
+        which is exactly the information a caller asking "what does the graph
+        say about this node" needs. Entity nodes make the asymmetry matter: a
+        Person's own frontmatter carries no relations at all, so everything
+        known about them arrives here, as edges other nodes point at them.
+        """
+        return sorted(self._in.get(node_id, []))
+
     def stats(self) -> dict[str, int]:
         return {
             "nodes": len(self._nodes),

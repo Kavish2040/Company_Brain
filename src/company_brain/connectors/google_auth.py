@@ -194,6 +194,21 @@ class GoogleOAuthCredentials:
         self._expiry = datetime.now(UTC) + timedelta(seconds=expires_in)
 
 
+def generate_pkce_and_state() -> tuple[str, str, str]:
+    """Generate PKCE verifier, challenge (S256), and state (CSRF) tokens.
+
+    Returns a tuple of (state, code_verifier, code_challenge).
+    """
+    state = secrets.token_urlsafe(32)
+    code_verifier = secrets.token_urlsafe(64)
+    code_challenge = (
+        base64.urlsafe_b64encode(hashlib.sha256(code_verifier.encode()).digest())
+        .rstrip(b"=")
+        .decode()
+    )
+    return state, code_verifier, code_challenge
+
+
 def build_authorization_url(
     client_id: str,
     redirect_uri: str,
@@ -283,14 +298,14 @@ def run_local_oauth_flow(
 
     Raises OAuthError on any failure (timeout, port conflict, CSRF, network, etc.).
     """
+    # Reset global callback state to ensure clean start.
+    _callback_state["received_callback"] = False
+    _callback_state["code"] = None
+    _callback_state["state"] = None
+    _callback_state["error"] = None
+
     # Generate PKCE and CSRF params.
-    state = secrets.token_urlsafe(32)
-    code_verifier = secrets.token_urlsafe(64)
-    code_challenge = (
-        base64.urlsafe_b64encode(hashlib.sha256(code_verifier.encode()).digest())
-        .rstrip(b"=")
-        .decode()
-    )
+    state, code_verifier, code_challenge = generate_pkce_and_state()
 
     # Start the loopback server on the configured port.
     handler = _make_callback_handler()
@@ -323,15 +338,15 @@ def run_local_oauth_flow(
                 f"or your firewall for the loopback port"
             )
         server.handle_request()
-        if handler.received_callback:
+        if _callback_state["received_callback"]:
             break
 
-    # Extract the callback result.
-    received_code = handler.received_code
-    received_state = handler.received_state
-    received_error = handler.received_error
-
     server.server_close()
+
+    # Extract the callback result (from global state, not handler class properties).
+    received_code = _callback_state["code"]
+    received_state = _callback_state["state"]
+    received_error = _callback_state["error"]
 
     if received_error:
         raise OAuthError(f"authorization denied: {received_error}")
@@ -405,13 +420,5 @@ def _make_callback_handler() -> type[http.server.BaseHTTPRequestHandler]:
         def log_message(self, format: str, *args: Any) -> None:
             """Suppress default request logging (which would include the auth code)."""
             pass  # No-op: never log the request line
-
-    # Attach state to the handler class so we can access it via closure.
-    CallbackHandler.received_callback = property(
-        lambda self: _callback_state["received_callback"]
-    )
-    CallbackHandler.received_code = property(lambda self: _callback_state["code"])
-    CallbackHandler.received_state = property(lambda self: _callback_state["state"])
-    CallbackHandler.received_error = property(lambda self: _callback_state["error"])
 
     return CallbackHandler

@@ -16,6 +16,7 @@ import {
   Building2,
   ChevronDown,
   Inbox,
+  Mail,
   Moon,
   PanelLeftClose,
   PanelLeftOpen,
@@ -36,9 +37,10 @@ import {
 import { AskView } from "./views/AskView";
 import { ReviewView } from "./views/ReviewView";
 import { BrowseView } from "./views/BrowseView";
+import { GmailView } from "./views/GmailView";
 import { NodeDrawer } from "./views/NodeDrawer";
 
-type View = { kind: "ask" } | { kind: "review" } | { kind: "browse"; type: string };
+type View = { kind: "ask" } | { kind: "review" } | { kind: "browse"; type: string } | { kind: "gmail" };
 
 export default function App() {
   const [principal, setPrincipal] = useState("ceo");
@@ -71,7 +73,13 @@ export default function App() {
   const openNodeCb = useCallback((id: string) => setOpenNode(id), []);
 
   const breadcrumb =
-    view.kind === "ask" ? "Ask" : view.kind === "review" ? "Review" : view.type;
+    view.kind === "ask"
+      ? "Ask"
+      : view.kind === "review"
+        ? "Review"
+        : view.kind === "gmail"
+          ? "Gmail"
+          : view.type;
 
   return (
     <div className="flex h-full bg-background text-foreground">
@@ -157,6 +165,13 @@ export default function App() {
                 trailing={pendingCount > 0 ? <Badge>{pendingCount}</Badge> : undefined}
               >
                 Review
+              </Row>
+              <Row
+                active={view.kind === "gmail"}
+                onClick={() => setView({ kind: "gmail" })}
+                icon={<Icon of={Mail} active={view.kind === "gmail"} />}
+              >
+                Gmail
               </Row>
             </div>
 
@@ -262,6 +277,7 @@ export default function App() {
           {view.kind === "browse" && (
             <BrowseView principal={principal} type={view.type} onOpenNode={openNodeCb} />
           )}
+          {view.kind === "gmail" && <GmailView />}
         </main>
       </div>
 

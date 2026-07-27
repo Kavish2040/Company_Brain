@@ -93,6 +93,12 @@ class Action(StrEnum):
     REVIEW_REOPEN = "review.reopen"
     PROPOSAL_APPLY = "proposal.apply"
     PROPOSAL_DISCARD = "proposal.discard"
+    # Outreach. The only actions here that address a real person, so all three
+    # are recorded — including the refusal, which is the one that proves the
+    # restricted tier never reached a draft.
+    OUTREACH_DRAFT = "outreach.draft"
+    OUTREACH_SEND = "outreach.send"
+    OUTREACH_REFUSED = "outreach.refused"
 
 
 class Outcome(StrEnum):

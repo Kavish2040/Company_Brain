@@ -288,14 +288,30 @@ class DriveConnector:
             self._removed.add(file_id)
 
     def _record(self, meta: dict[str, Any]) -> SourceRecord | None:
-        readable = _READABLE.get(str(meta.get("mimeType", "")))
+        mime = str(meta.get("mimeType", ""))
+        readable = _READABLE.get(mime)
         if readable is None:
+            # Log skipped files so the user knows why nothing was ingested.
+            file_name = meta.get("name", "unknown")
+            print(f"  [skipped] {file_name} ({mime}): not in supported types")
             return None
         suffix, export_mime = readable
 
         file_id = str(meta["id"])
-        raw = self.transport.download(file_id, export_mime)
-        permissions = self.transport.permissions(file_id)
+        file_name = meta.get("name", "unknown")
+
+        try:
+            raw = self.transport.download(file_id, export_mime)
+        except Exception as e:
+            print(f"  [error] {file_name}: download failed — {e.__class__.__name__}: {e}")
+            raise
+
+        try:
+            permissions = self.transport.permissions(file_id)
+        except Exception as e:
+            print(f"  [error] {file_name}: permissions fetch failed — {e.__class__.__name__}: {e}")
+            raise
+
         parents = meta.get("parents")
         parent = parents[0] if isinstance(parents, list) and parents else ""
 
@@ -312,6 +328,20 @@ class DriveConnector:
             created=_parse_time(meta.get("createdTime")),
             modified=_parse_time(meta.get("modifiedTime")),
         )
+
+    def fetch_file_by_id(self, file_id: str) -> SourceRecord | None:
+        """Fetch metadata and content for a specific file by ID.
+
+        Used by the sync engine when a file is discovered by enumerate_ids()
+        but wasn't in the changes feed (e.g., pre-existing files in a new folder
+        where changes.startPageToken() was after the file was created).
+        """
+        try:
+            meta = self.transport.get_file(file_id)
+        except Exception:
+            return None
+
+        return self._record(meta)
 
     # ---- existence -------------------------------------------------------
 

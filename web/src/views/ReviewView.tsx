@@ -33,6 +33,8 @@ import {
   CheckCheck,
   Inbox,
   Loader2,
+  Mail,
+  Send,
   TriangleAlert,
   Undo2,
   X,
@@ -43,6 +45,7 @@ import {
   ApiError,
   type Decision,
   type DiffLine,
+  type Outreach,
   type Pending,
   type RelationDiff,
   type ReviewStats,
@@ -76,15 +79,21 @@ export function ReviewView({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [last, setLast] = useState<LastAction | null>(null);
+  const [approved, setApproved] = useState<Outreach[]>([]);
 
   const load = useCallback(async () => {
     setLoading(true);
-    const [items, s] = await Promise.all([
+    const [items, s, waiting] = await Promise.all([
       api.review(principal, filter),
       api.reviewStats(principal),
+      // Approved outreach is not "pending" — it has cleared review and is
+      // waiting on a separate, deliberate dispatch. It gets its own section
+      // rather than sitting in a queue whose whole verb is "decide".
+      api.outreachList(principal, "approved").catch(() => [] as Outreach[]),
     ]);
     setPending(items);
     setStats(s);
+    setApproved(waiting);
     setCursor(0);
     setLoading(false);
   }, [principal, filter]);
@@ -107,6 +116,14 @@ export function ReviewView({
         setLast(decision === "pending" ? null : { items, decision });
         onChanged();
         void api.reviewStats(principal).then(setStats);
+        // An approved outreach draft moves into the dispatch list, so that
+        // section has to catch up with the decision that fed it.
+        if (items.some((i) => i.kind === "outreach")) {
+          void api
+            .outreachList(principal, "approved")
+            .then(setApproved)
+            .catch(() => undefined);
+        }
       } catch (exc) {
         // Put them back. A queue that silently drops a failed decision is a
         // queue that quietly loses work.
@@ -124,6 +141,26 @@ export function ReviewView({
   );
 
   const current = pending[cursor];
+
+  const dispatch = useCallback(
+    async (draft: Outreach) => {
+      setError(null);
+      // Not optimistic. Every other decision here is reversible and can afford
+      // to move the list before the server agrees; a dispatch is the one act
+      // that is not, so the row stays until the server confirms it.
+      try {
+        await api.outreachSend(principal, draft.draft_id);
+        setApproved((current) =>
+          current.filter((d) => d.draft_id !== draft.draft_id),
+        );
+      } catch (exc) {
+        setError(
+          exc instanceof ApiError ? exc.message : "the dispatch did not land",
+        );
+      }
+    },
+    [principal],
+  );
 
   const undo = useCallback(() => {
     if (!last) return;
@@ -259,6 +296,53 @@ export function ReviewView({
         </Card>
       )}
 
+      {approved.length > 0 && (
+        <Card className="p-4">
+          <div className="flex items-center gap-2 mb-3">
+            <Send className="w-3.5 h-3.5 text-muted-foreground/50" strokeWidth={1.5} />
+            <SectionHeading>Approved — awaiting dispatch</SectionHeading>
+          </div>
+          <div className="flex flex-col gap-2">
+            {approved.map((draft) => (
+              <div
+                key={draft.draft_id}
+                className="flex items-center gap-3 px-3 py-2 rounded-lg bg-black/5 dark:bg-white/5"
+              >
+                <Mail
+                  className="w-3.5 h-3.5 text-muted-foreground/70 shrink-0"
+                  strokeWidth={1.5}
+                />
+                <div className="min-w-0 flex-1">
+                  <button
+                    onClick={() => onOpenNode(draft.node_id)}
+                    className="text-[13px] truncate hover:underline block max-w-full text-left"
+                  >
+                    {draft.subject}
+                  </button>
+                  <p className="text-[11px] text-muted-foreground/70 truncate">
+                    to {draft.node_title} · approved by {draft.decided_by}
+                    {draft.lead?.email ? ` · ${draft.lead.email}` : " · no address"}
+                  </p>
+                </div>
+                <button
+                  onClick={() => void dispatch(draft)}
+                  className="shrink-0 inline-flex items-center gap-1.5 h-7 px-2.5 rounded-[6px]
+                             text-[11px] font-medium text-primary hover:bg-primary/10
+                             transition-colors"
+                >
+                  <Send className="w-3.5 h-3.5" strokeWidth={1.5} />
+                  Dispatch
+                </button>
+              </div>
+            ))}
+          </div>
+          <p className="mt-3 pt-3 border-t border-border/50 text-[11px] text-muted-foreground/70">
+            Apollo is wired for lead lookup only. Dispatch records the send and
+            audits it; no message leaves this system yet.
+          </p>
+        </Card>
+      )}
+
       {loading ? (
         <Empty icon={<Loader2 className="w-6 h-6 animate-spin" strokeWidth={1.5} />}>
           Loading queue…
@@ -377,6 +461,15 @@ function ProposalCard({
                   {item.proposed_by}
                 </span>
               )}
+              {item.kind === "outreach" && (
+                <span
+                  title={`drafted by ${item.proposed_by}`}
+                  className="inline-flex items-center gap-1 h-5 px-1.5 text-[10px] font-medium rounded-full bg-primary/10 text-primary"
+                >
+                  <Mail className="w-3 h-3" strokeWidth={1.5} />
+                  outreach
+                </span>
+              )}
               {item.stale && (
                 <span className="inline-flex items-center gap-1 h-5 px-1.5 text-[10px] rounded-full border border-dashed border-border/50 text-muted-foreground/70">
                   <TriangleAlert className="w-3 h-3" strokeWidth={1.5} />
@@ -457,6 +550,14 @@ function Diff({
   item: Pending;
   onOpenNode: (id: string) => void;
 }) {
+  // An outreach draft is not a change to the graph, so there is no diff to
+  // show. What the reviewer has to check is the message itself and the graph
+  // statements it was built from — the same "check the evidence, not the
+  // prose" rule the edge gates apply, pointed at a different artifact.
+  if (item.kind === "outreach") {
+    return item.outreach ? <OutreachBody draft={item.outreach} /> : null;
+  }
+
   const empty =
     item.added_relations.length === 0 &&
     item.removed_relations.length === 0 &&
@@ -497,6 +598,59 @@ function Diff({
           ))}
         </div>
       )}
+    </div>
+  );
+}
+
+/**
+ * The message, then what it was built from.
+ *
+ * The lead line is not decoration. Approving outreach to a contact nobody
+ * verified is the mistake this whole review step exists to catch, so where the
+ * address came from — a live Apollo match, or nothing at all — is stated on
+ * the row rather than left to be assumed.
+ */
+function OutreachBody({ draft }: { draft: Outreach }) {
+  return (
+    <div className="mt-3 flex flex-col gap-3">
+      <div className="rounded-lg border border-border/50 bg-black/5 dark:bg-white/5 p-3">
+        <pre className="text-[12px] leading-relaxed whitespace-pre-wrap font-sans text-muted-foreground">
+          {draft.body}
+        </pre>
+      </div>
+
+      {draft.facts.length > 0 && (
+        <div>
+          <p className="text-[11px] font-semibold tracking-wider text-muted-foreground/50 uppercase mb-1.5">
+            Built from
+          </p>
+          <div className="flex flex-col gap-1">
+            {draft.facts.map((fact) => (
+              <p
+                key={fact}
+                className="text-[12px] text-muted-foreground border-l-2 border-border/50 pl-3"
+              >
+                {fact}
+              </p>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <p className="text-[11px] text-muted-foreground/70 flex items-center gap-2 flex-wrap">
+        <Mail className="w-3 h-3 shrink-0" strokeWidth={1.5} />
+        {draft.lead?.email ? (
+          <>
+            <span className="font-mono">{draft.lead.email}</span>
+            <span>· resolved by {draft.lead_source}</span>
+          </>
+        ) : (
+          <span>
+            No contact details — {draft.lead_source} lookup returned no address.
+          </span>
+        )}
+        {draft.lead?.title && <span>· {draft.lead.title}</span>}
+      </p>
     </div>
   );
 }

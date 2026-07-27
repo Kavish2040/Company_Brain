@@ -125,11 +125,28 @@ class SyncEngine:
             if not page.has_more:
                 break
 
-        # 2. deletions -----------------------------------------------------
+        # 2. deletions and pre-existing files ---------------------------------
         # Enumeration is the only reliable signal; most sources do not push
         # delete events. Skippable because it is the expensive half of a sync.
         if detect_deletes:
             live = connector.enumerate_ids()
+
+            # For connectors like Drive where changes.startPageToken() returns "now"
+            # and pre-existing files won't appear in the changes feed, fetch them
+            # explicitly. This handles the "cold start" case where files exist in
+            # the source folder before we start tracking changes.
+            fetched_ids = {r.external_id for r in page.records}
+            for pre_existing_id in sorted(live - state.seen):
+                if pre_existing_id not in fetched_ids:
+                    try:
+                        # Try to fetch the file if the connector supports it.
+                        if hasattr(connector, "fetch_file_by_id"):
+                            record = connector.fetch_file_by_id(pre_existing_id)
+                            if record is not None:
+                                self._apply(record, connector.name, report)
+                    except Exception as exc:
+                        report.skipped.append((pre_existing_id, str(exc)))
+
             for gone in sorted(state.seen - live):
                 node_id = self._node_id_for(connector.name, gone)
                 if not node_id or not self.repo.exists(node_id):

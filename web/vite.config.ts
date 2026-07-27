@@ -11,7 +11,7 @@ export default defineConfig({
     // `ws: true` is what carries the live-collaboration sockets through — the
     // proxy silently 404s WebSocket upgrades without it.
     proxy: {
-      "/api": { target: "http://127.0.0.1:8000", changeOrigin: true, ws: true },
+      "/api": { target: "http://127.0.0.1:9000", changeOrigin: true, ws: true },
     },
   },
 });

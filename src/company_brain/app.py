@@ -50,6 +50,8 @@ def build_grants(store_root: Path = STORE_ROOT) -> GrantTable:
     grants = GrantTable()
     docs = ("fs:corpus:docs", Sensitivity.INTERNAL)
     mail = ("gmail:mailbox:meridian", Sensitivity.INTERNAL)
+    # Google Drive folder (synced from real account)
+    gdrive = ("gdrive:folder:1vztLkTRfEeZIzgSdXf9KJxLvsZUX8p1R", Sensitivity.PUBLIC)
 
     def channel(name: str) -> tuple[str, Sensitivity]:
         cid, _, tier = next(c for c in CHANNELS if c[1] == name)
@@ -59,7 +61,7 @@ def build_grants(store_root: Path = STORE_ROOT) -> GrantTable:
     # simulated workspace reads the same map, and grant reconciliation is only
     # correct while the two agree.
     plan: dict[str, list[tuple[str, Sensitivity]]] = {
-        "ceo": [docs, mail],
+        "ceo": [docs, mail, gdrive],
         "support-lead": [docs, mail],
         "eng-ic": [docs, mail],
         "contractor": [],

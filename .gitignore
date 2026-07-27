@@ -46,3 +46,9 @@ sylph/
 store/_sim/
 store/_sync/
 store/_audit/
+
+# Drafted outreach. Workflow state like the above, and additionally the one
+# thing in the store addressed to a named person — a developer's local drafts
+# do not belong in a shared repository, and committing them would put contact
+# details resolved from Apollo into git history.
+store/_outreach/

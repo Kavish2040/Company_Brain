@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import asyncio
 from collections import Counter
+from datetime import UTC, datetime
 from functools import lru_cache
 from pathlib import Path
 from typing import Annotated, Any, Literal
@@ -29,9 +30,21 @@ from company_brain.audit.log import Action, AuditLog, Outcome, Surface, summariz
 from company_brain.collab.guard import FenceViolation
 from company_brain.collab.hub import CollabHub
 from company_brain.collab.session import SessionRegistry, participant_color
+from company_brain.gmail_triage.oauth import router as gmail_oauth_router
+from company_brain.gmail_triage.routes import router as gmail_routes_router
 from company_brain.index.base import IndexedNode
+from company_brain.outreach.apollo import ApolloError, choose_lead_source
+from company_brain.outreach.drafts import (
+    MAX_FACTS,
+    OutreachDraft,
+    OutreachError,
+    OutreachState,
+    OutreachStore,
+    compose,
+    draft_id,
+)
 from company_brain.retrieve.hybrid import HybridRetriever
-from company_brain.schemas.acl import Principal
+from company_brain.schemas.acl import Principal, Sensitivity
 from company_brain.schemas.edges import Edge, EdgeStatus
 from company_brain.schemas.nodes import NodeStatus, NodeType
 from company_brain.store.repository import NodeNotFoundError
@@ -263,6 +276,51 @@ class DiffLineOut(BaseModel):
     text: str
 
 
+class LeadOut(BaseModel):
+    """The contact Apollo resolved, or as much of one as it had.
+
+    ``source`` is carried to the reviewer rather than dropped: "Apollo holds
+    this address" and "we have a name and nothing else" are different claims,
+    and approving a message to a contact nobody verified is the mistake this
+    field exists to prevent.
+    """
+
+    name: str
+    email: str | None
+    title: str | None
+    organization: str | None
+    linkedin_url: str | None
+    source: str
+
+
+class OutreachOut(BaseModel):
+    draft_id: str
+    node_id: str
+    node_title: str
+    sensitivity: str
+    drafted_by: str
+    created_at: str
+    subject: str
+    body: str
+    # The graph statements the body was built from. The reviewer's equivalent
+    # of edge evidence: check the source, not the prose.
+    facts: list[str]
+    lead: LeadOut | None
+    lead_source: str
+    state: str
+    decided_by: str | None = None
+    sent_by: str | None = None
+    sent_at: str | None = None
+
+
+class OutreachDraftIn(BaseModel):
+    node_id: str = Field(min_length=1, max_length=400)
+
+
+class OutreachSendIn(BaseModel):
+    draft_id: str = Field(min_length=1, max_length=200)
+
+
 class PendingOut(BaseModel):
     """One queue item, whatever produced it.
 
@@ -274,7 +332,10 @@ class PendingOut(BaseModel):
     """
 
     key: str
-    kind: str  # "edge" — from extraction; "proposal" — from an agent
+    # "edge" — from extraction; "proposal" — from an agent; "outreach" — a
+    # message drafted for a real person, which is why it carries a body rather
+    # than a relation diff.
+    kind: str
     node_id: str
     node_title: str
     predicate: str | None
@@ -293,14 +354,19 @@ class PendingOut(BaseModel):
     body_diff: list[DiffLineOut] = []
     added_relations: list[RelationDiffOut] = []
     removed_relations: list[RelationDiffOut] = []
+    # Outreach only: the message itself, so the reviewer reads what would go
+    # out rather than a summary of it.
+    outreach: OutreachOut | None = None
 
 
 class ReviewStatsOut(BaseModel):
     pending: int
     pending_proposals: int
+    pending_outreach: int
     by_predicate: dict[str, int]
     accept_rate: dict[str, list[int]]
     proposal_accept_rate: dict[str, list[int]]
+    outreach_accept_rate: dict[str, list[int]]
 
 
 class DecideItem(BaseModel):
@@ -313,7 +379,7 @@ class DecideItem(BaseModel):
     """
 
     key: str = Field(min_length=1, max_length=400)
-    kind: Literal["edge", "proposal"]
+    kind: Literal["edge", "proposal", "outreach"]
 
 
 class DecideIn(BaseModel):
@@ -602,6 +668,324 @@ def _relation_out(instance: App, edge: Edge) -> RelationDiffOut:
     )
 
 
+def _outreach_out(draft: OutreachDraft) -> OutreachOut:
+    return OutreachOut(
+        draft_id=draft.draft_id,
+        node_id=draft.node_id,
+        node_title=draft.node_title,
+        sensitivity=str(draft.sensitivity),
+        drafted_by=draft.drafted_by,
+        created_at=draft.created_at.isoformat(),
+        subject=draft.subject,
+        body=draft.body,
+        facts=list(draft.facts),
+        lead=LeadOut(**draft.lead.to_dict()) if draft.lead else None,
+        lead_source=draft.lead_source,
+        state=str(draft.state),
+        decided_by=draft.decided_by,
+        sent_by=draft.sent_by,
+        sent_at=draft.sent_at.isoformat() if draft.sent_at else None,
+    )
+
+
+def _decide_outreach(
+    store: OutreachStore,
+    draft_id: str,
+    decision: Any,
+    reviewer: Principal,
+    audit: AuditLog,
+) -> None:
+    """Approve, reject, or reopen one draft, under the reviewer's identity.
+
+    Approving does **not** send. It moves the draft to `approved`, which is the
+    only state `/api/outreach/send` will accept — so the reviewer's accept and
+    the decision to contact someone stay two separate acts with two separate
+    records.
+    """
+    from company_brain.review.queue import Decision
+
+    if decision is Decision.PENDING:
+        store.reopen(draft_id, reviewer=reviewer.id)
+        return
+    state = OutreachState.APPROVED if decision is Decision.ACCEPTED else OutreachState.REJECTED
+    draft = store.decide(draft_id, state, reviewer=reviewer.id)
+    audit.record(
+        actor=reviewer,
+        action=Action.REVIEW_ACCEPT if decision is Decision.ACCEPTED else Action.REVIEW_REJECT,
+        outcome=Outcome.OK,
+        node_ids=[draft.node_id],
+        detail=f"outreach {state}",
+    )
+
+
+@api.post("/api/outreach/draft", response_model=OutreachOut)
+def outreach_draft(
+    body: OutreachDraftIn,
+    instance: Annotated[App, Depends(get_app)],
+    access: Annotated[AccessFilter, Depends(get_access)],
+    principal: Annotated[Principal, Depends(get_reviewer)],
+    audit: Annotated[AuditLog, Depends(get_audit)],
+) -> OutreachOut:
+    """Draft a message from what the graph knows about a person. Never sends.
+
+    Three refusals, in order, and the order matters:
+
+    1. **Invisible node → 404.** Identical to `get_node`, and for the same
+       reason: a 403 here would confirm the node exists to someone who may not
+       know that (§6.3).
+    2. **Restricted node → 403, audited.** Not because the caller lacks the
+       grant — they may well hold it — but because an outbound message composed
+       from restricted material is an exfiltration path, and the honest way to
+       close it is for the path not to exist. This is the one refusal that
+       fires *against* a principal who is otherwise allowed.
+    3. **Non-person node → 400.** Outreach addresses a person. Drafting one for
+       a Document produces a message to nobody.
+
+    Everything the body says comes from edges this principal can already
+    traverse, so the draft can never carry a fact its author could not read.
+    """
+    indexed = instance.index.get_node(body.node_id)
+    if indexed is None or not access.allows(indexed.acl_ref, indexed.sensitivity):
+        raise HTTPException(404, "not found")
+
+    if indexed.sensitivity is Sensitivity.RESTRICTED:
+        audit.record(
+            actor=principal,
+            action=Action.OUTREACH_REFUSED,
+            outcome=Outcome.REFUSED,
+            node_ids=[indexed.id],
+            detail="restricted content may not be drafted into outreach",
+        )
+        raise HTTPException(403, "restricted content cannot be drafted into outreach")
+
+    if indexed.type not in (str(NodeType.PERSON), str(NodeType.ACCOUNT)):
+        raise HTTPException(400, f"{indexed.type} is not a person; outreach needs one")
+
+    facts = _visible_facts(instance, access, indexed)
+    provider = choose_lead_source()
+    org = _organization(instance, access, indexed)
+    try:
+        lead = provider.source.find(indexed.title, organization=org)
+    except ApolloError as exc:
+        # A lookup failure is not a draft failure — the graph facts stand on
+        # their own. Recorded so a silently key-less deployment is visible.
+        audit.record(
+            actor=principal,
+            action=Action.OUTREACH_DRAFT,
+            outcome=Outcome.ERROR,
+            node_ids=[indexed.id],
+            detail=f"lead lookup failed: {exc}",
+        )
+        lead = None
+
+    subject, text = compose(
+        node_title=indexed.title,
+        node_type=indexed.type,
+        facts=facts,
+        lead=lead,
+        sender_display=principal.display,
+    )
+    store = OutreachStore(instance.repo)
+    draft = store.put(
+        OutreachDraft(
+            draft_id=draft_id(indexed.id, principal.id, text),
+            node_id=indexed.id,
+            node_title=indexed.title,
+            sensitivity=indexed.sensitivity,
+            drafted_by=principal.id,
+            created_at=datetime.now(UTC),
+            subject=subject,
+            body=text,
+            facts=tuple(facts),
+            lead=lead,
+            lead_source=provider.source.name,
+        )
+    )
+    audit.record(
+        actor=principal,
+        action=Action.OUTREACH_DRAFT,
+        outcome=Outcome.OK,
+        node_ids=[indexed.id],
+        proposal_id=draft.draft_id,
+        detail=f"{len(facts)} fact(s), lead via {provider.source.name}",
+    )
+    return _outreach_out(draft)
+
+
+@api.post("/api/outreach/send", response_model=OutreachOut)
+def outreach_send(
+    body: OutreachSendIn,
+    instance: Annotated[App, Depends(get_app)],
+    access: Annotated[AccessFilter, Depends(get_access)],
+    principal: Annotated[Principal, Depends(get_reviewer)],
+    audit: Annotated[AuditLog, Depends(get_audit)],
+) -> OutreachOut:
+    """Dispatch an approved draft. Only an approved one.
+
+    The state check lives in `OutreachStore.dispatch`, so a pending or rejected
+    id is refused by the store rather than by a condition in this handler that
+    a second caller could forget to repeat.
+
+    The visibility re-check is not redundant with the draft-time one. Grants are
+    mirrored from source systems and are eventually consistent by construction
+    (`acl/grants.py`), so a principal can lose access between drafting and
+    sending — and the send is the irreversible half. A draft whose subject the
+    sender can no longer see does not go out.
+
+    **No message is transmitted.** Apollo is wired for lead lookup only. This
+    records an approved dispatch and audits it; when a send channel lands it
+    plugs in behind these same guards.
+    """
+    store = OutreachStore(instance.repo)
+    try:
+        draft = store.get(body.draft_id)
+    except OutreachError as exc:
+        raise HTTPException(404, str(exc)) from exc
+
+    indexed = instance.index.get_node(draft.node_id)
+    if indexed is None or not access.allows(indexed.acl_ref, indexed.sensitivity):
+        audit.record(
+            actor=principal,
+            action=Action.OUTREACH_REFUSED,
+            outcome=Outcome.NOT_FOUND,
+            proposal_id=draft.draft_id,
+            detail="sender can no longer see the subject of this draft",
+        )
+        raise HTTPException(404, "not found")
+
+    try:
+        sent = store.dispatch(body.draft_id, sender=principal.id)
+    except OutreachError as exc:
+        audit.record(
+            actor=principal,
+            action=Action.OUTREACH_REFUSED,
+            outcome=Outcome.REFUSED,
+            node_ids=[draft.node_id],
+            proposal_id=draft.draft_id,
+            detail=str(exc),
+        )
+        raise HTTPException(409, str(exc)) from exc
+
+    audit.record(
+        actor=principal,
+        action=Action.OUTREACH_SEND,
+        outcome=Outcome.OK,
+        node_ids=[sent.node_id],
+        proposal_id=sent.draft_id,
+        detail=f"approved by {sent.decided_by}, dispatched by {principal.id}",
+    )
+    return _outreach_out(sent)
+
+
+@api.get("/api/outreach", response_model=list[OutreachOut])
+def outreach_list(
+    instance: Annotated[App, Depends(get_app)],
+    access: Annotated[AccessFilter, Depends(get_access)],
+    state: str | None = None,
+) -> list[OutreachOut]:
+    """Drafts, ACL-projected on the way out.
+
+    A draft is filtered by whether the *reader* can see its subject, not by who
+    wrote it: the draft body quotes the graph, so listing one to a principal
+    who cannot open the node it came from would route around the node's ACL.
+    """
+    store = OutreachStore(instance.repo)
+    wanted = OutreachState(state) if state else None
+    out: list[OutreachOut] = []
+    for draft in store.records(state=wanted):
+        indexed = instance.index.get_node(draft.node_id)
+        if indexed is None or not access.allows(indexed.acl_ref, indexed.sensitivity):
+            continue
+        out.append(_outreach_out(draft))
+    return out
+
+
+def _organization(instance: App, access: AccessFilter, node: IndexedNode) -> str | None:
+    """The team this person belongs to, if the principal can see it.
+
+    Passed to Apollo to disambiguate a common name. Skipped when the edge
+    points somewhere invisible — narrowing a lead lookup with a team name the
+    caller cannot read would leak it into a third party's query log.
+    """
+    # Adjacency, not frontmatter — see `_visible_facts` for why an entity node's
+    # own relations are empty.
+    for predicate, obj in instance.index.edges_of(node.id):
+        if predicate != "member_of":
+            continue
+        target = instance.index.get_node(obj)
+        if target is not None and access.allows(target.acl_ref, target.sensitivity):
+            return target.title
+    return None
+
+
+# Inbound edges point *at* the person, so reading them out unchanged produces
+# fragments — "Quarterly close runbook — authored by". Each entry inverts the
+# relation into a sentence with the person as its subject. A predicate with no
+# entry falls back to naming the relation rather than guessing at English.
+_INBOUND_PHRASE: dict[str, str] = {
+    "authored_by": "authored {title}",
+    "mentions": "mentioned in {title}",
+    "owns": "owned by {title}",
+    "operated_by": "operates {title}",
+    "handoff_to": "receives handoffs from {title}",
+    "depends_on": "depended on by {title}",
+}
+
+
+def _visible_facts(instance: App, access: AccessFilter, node: IndexedNode) -> list[str]:
+    """Graph statements about this person, filtered to what the caller can see.
+
+    Reads the index adjacency rather than the node's own frontmatter: an entity
+    node carries no relations of its own, so everything the graph knows about a
+    person arrives as edges pointing *at* them. Drafting from `node.edges`
+    produces an empty message for every Person in the corpus.
+
+    Only accepted edges (invariant 10). The informative predicates for a person
+    — `owns` above all — are exactly the ones §11 holds back for review, so a
+    draft that used proposed edges would put the system's unreviewed guesses
+    into a message addressed to the person they are about. What survives is
+    weaker and true, which is the right trade here.
+
+    Outbound first: `mentions` is the most common edge and the least
+    informative (CLAUDE.md), and an unweighted list of it drowns everything
+    else.
+    """
+    facts: list[str] = []
+    # Deduped on the rendered sentence, not on the node id. Two documents can
+    # share a title ("Re: Security review — status" appears twice in the
+    # corpus), and a reviewer reading the same line twice cannot tell a real
+    # repetition from a bug.
+    seen: set[str] = set()
+
+    def title_of(other_id: str) -> str | None:
+        other = instance.index.get_node(other_id)
+        if other is None or not access.allows(other.acl_ref, other.sensitivity):
+            return None
+        return other.title
+
+    def add(sentence: str) -> None:
+        if sentence not in seen:
+            seen.add(sentence)
+            facts.append(sentence)
+
+    for predicate, obj in instance.index.edges_of(node.id):
+        if len(facts) >= MAX_FACTS:
+            return facts
+        title = title_of(obj)
+        if title is not None:
+            add(f"{predicate.replace('_', ' ')} {title}")
+
+    for predicate, subject in instance.index.edges_into(node.id):
+        if len(facts) >= MAX_FACTS:
+            return facts
+        title = title_of(subject)
+        if title is None:
+            continue
+        template = _INBOUND_PHRASE.get(predicate, f"{{title}} — {predicate.replace('_', ' ')}")
+        add(template.format(title=title))
+    return facts
+
+
 @api.get("/api/review", response_model=list[PendingOut])
 def review_pending(
     instance: Annotated[App, Depends(get_app)],
@@ -644,6 +1028,33 @@ def review_pending(
             )
         )
 
+    # Outreach next. Ahead of extraction edges for the same reason agent
+    # proposals are: this is the only queue item that, once approved, results
+    # in contacting a person. `predicate` does not apply to it — an outreach
+    # draft has no predicate — so a predicate-filtered queue omits it rather
+    # than pretending one.
+    if predicate is None:
+        store = OutreachStore(instance.repo)
+        for draft in store.records(state=OutreachState.PENDING):
+            out.append(
+                PendingOut(
+                    key=draft.draft_id,
+                    kind="outreach",
+                    node_id=draft.node_id,
+                    node_title=draft.node_title,
+                    predicate=None,
+                    subject=None,
+                    subject_title=None,
+                    object=None,
+                    confidence=None,
+                    quote="",
+                    summary=draft.subject,
+                    proposed_by=draft.drafted_by,
+                    delegated_by=None,
+                    outreach=_outreach_out(draft),
+                )
+            )
+
     for item in queue.pending_edges(predicate)[: max(0, limit - len(out))]:
         out.append(
             PendingOut(
@@ -673,12 +1084,16 @@ def review_stats(instance: Annotated[App, Depends(get_app)]) -> ReviewStatsOut:
 
     queue = ReviewQueue(instance.repo)
     stats = queue.stats()
+    outreach = OutreachStore(instance.repo)
+    waiting = len(outreach.records(state=OutreachState.PENDING))
     return ReviewStatsOut(
-        pending=stats.total + stats.proposals,
+        pending=stats.total + stats.proposals + waiting,
         pending_proposals=stats.proposals,
+        pending_outreach=waiting,
         by_predicate=stats.by_predicate,
         accept_rate={k: [a, d] for k, (a, d) in queue.accept_rate().items()},
         proposal_accept_rate={k: [a, d] for k, (a, d) in queue.proposals.accept_rate().items()},
+        outreach_accept_rate={k: [a, d] for k, (a, d) in outreach.accept_rate().items()},
     )
 
 
@@ -713,6 +1128,8 @@ def review_decide(
     queue = ReviewQueue(instance.repo, audit=audit)
     run: list[str] = []
 
+    outreach = OutreachStore(instance.repo)
+
     try:
         for item in body.items:
             if item.kind == "edge":
@@ -721,12 +1138,23 @@ def review_decide(
             if run:
                 queue.decide_many(run, decision, reviewer=reviewer)
                 run = []
+            if item.kind == "outreach":
+                _decide_outreach(outreach, item.key, decision, reviewer, audit)
+                continue
             queue.decide_proposal(item.key, decision, reviewer=reviewer)
         if run:
             queue.decide_many(run, decision, reviewer=reviewer)
     except StaleProposalError as exc:
         # 409, not 404: the item is there, the world moved. The distinction is
         # what tells the reviewer to re-read rather than to go looking.
+        raise HTTPException(409, str(exc)) from exc
+    except OutreachError as exc:
+        audit.record(
+            actor=reviewer,
+            action=Action.OUTREACH_REFUSED,
+            outcome=Outcome.ERROR,
+            detail=str(exc),
+        )
         raise HTTPException(409, str(exc)) from exc
     except (KeyError, ValueError, ProposalError) as exc:
         failed = Action.REVIEW_REJECT if decision is Decision.REJECTED else Action.REVIEW_ACCEPT
@@ -981,5 +1409,8 @@ async def _announce_ask_room(hub: CollabHub) -> None:
     ]
     await hub.broadcast(ASK_ROOM, {"type": "presence", "participants": participants})
 
+
+api.include_router(gmail_oauth_router, tags=["gmail"])
+api.include_router(gmail_routes_router)
 
 app = api

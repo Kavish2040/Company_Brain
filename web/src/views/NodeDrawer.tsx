@@ -8,9 +8,17 @@
  */
 
 import { useEffect, useRef, useState } from "react";
-import { Eye, FileQuestion, Loader2, PenLine, ShieldAlert, X } from "lucide-react";
+import {
+  Eye,
+  FileQuestion,
+  Loader2,
+  Mail,
+  PenLine,
+  ShieldAlert,
+  X,
+} from "lucide-react";
 
-import { api, ApiError, type NodeDetail } from "../lib/api";
+import { api, ApiError, type NodeDetail, type Outreach } from "../lib/api";
 import { useCollab } from "../lib/collab";
 import {
   Confidence,
@@ -51,6 +59,78 @@ function LiveBadge({ status }: { status: string }) {
   );
 }
 
+/**
+ * Draft outreach from this node.
+ *
+ * The button says "Draft outreach", not "Send" — because that is what it does.
+ * Drafting queues a message for review; approving it in the Review view still
+ * does not send it; dispatch is a third act. Labelling the first step "send"
+ * would be the interface lying about which of those three has happened, on the
+ * one surface in this app that can result in contacting a real person.
+ */
+function OutreachActions({
+  node,
+  drafted,
+  drafting,
+  error,
+  onDraft,
+}: {
+  node: NodeDetail;
+  drafted: Outreach | null;
+  drafting: boolean;
+  error: string | null;
+  onDraft: () => void;
+}) {
+  return (
+    <div>
+      <SectionHeading>Outreach</SectionHeading>
+      <div className="mt-2 flex flex-col gap-2">
+        {!drafted && (
+          <button
+            onClick={onDraft}
+            disabled={drafting}
+            className="inline-flex items-center justify-center gap-2 h-8 px-3 rounded-[6px]
+                       text-[13px] font-medium border border-border/50 text-muted-foreground
+                       hover:bg-black/5 dark:hover:bg-white/5 hover:text-foreground
+                       transition-colors disabled:opacity-40"
+          >
+            {drafting ? (
+              <Loader2 className="w-3.5 h-3.5 animate-spin" strokeWidth={1.5} />
+            ) : (
+              <Mail className="w-3.5 h-3.5" strokeWidth={1.5} />
+            )}
+            Draft outreach to {node.title}
+          </button>
+        )}
+
+        {error && (
+          <p
+            className="px-3 py-2 rounded-lg text-[12px] text-muted-foreground
+                       border border-dashed border-border/50 bg-black/5 dark:bg-white/5"
+          >
+            {error}
+          </p>
+        )}
+
+        {drafted && (
+          <div className="rounded-lg border border-dashed border-border/50 p-3 flex flex-col gap-2">
+            <p className="text-[13px] font-medium">{drafted.subject}</p>
+            <pre className="text-[12px] leading-relaxed whitespace-pre-wrap font-sans text-muted-foreground">
+              {drafted.body}
+            </pre>
+            <p className="text-[11px] text-muted-foreground/70 pt-2 border-t border-border/50">
+              Queued for review — nothing has been sent.
+              {drafted.lead?.email
+                ? ` Lead ${drafted.lead.email} via ${drafted.lead_source}.`
+                : ` No contact details (lead source: ${drafted.lead_source}).`}
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export function NodeDrawer({
   principal,
   nodeId,
@@ -66,6 +146,9 @@ export function NodeDrawer({
   const [missing, setMissing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
+  const [drafted, setDrafted] = useState<Outreach | null>(null);
+  const [drafting, setDrafting] = useState(false);
+  const [draftError, setDraftError] = useState<string | null>(null);
   const textarea = useRef<HTMLTextAreaElement>(null);
 
   const collab = useCollab(nodeId, principal, editing);
@@ -76,12 +159,29 @@ export function NodeDrawer({
     setMissing(false);
     setNode(null);
     setEditing(false); // a new node starts read-only
+    setDrafted(null);
+    setDraftError(null);
     api
       .node(principal, nodeId)
       .then(setNode)
       .catch((e) => setMissing(e instanceof ApiError && e.status === 404))
       .finally(() => setLoading(false));
   }, [principal, nodeId]);
+
+  async function draftOutreach() {
+    if (drafting) return;
+    setDrafting(true);
+    setDraftError(null);
+    try {
+      setDrafted(await api.outreachDraft(principal, nodeId));
+    } catch (exc) {
+      setDraftError(
+        exc instanceof ApiError ? exc.message : "the draft did not land",
+      );
+    } finally {
+      setDrafting(false);
+    }
+  }
 
   const reportCursor = () => {
     const element = textarea.current;
@@ -154,6 +254,20 @@ export function NodeDrawer({
               </div>
               <h2 className="text-[17px] font-medium">{node.title}</h2>
             </div>
+
+            {/* Outreach addresses a person, so the action only exists on one.
+                Restricted nodes keep the button and are refused by the server
+                — the UI never makes the access decision (invariant 17), and a
+                hidden button would teach the reader the wrong rule. */}
+            {(node.type === "Person" || node.type === "Account") && (
+              <OutreachActions
+                node={node}
+                drafted={drafted}
+                drafting={drafting}
+                error={draftError}
+                onDraft={draftOutreach}
+              />
+            )}
 
             {node.relations.length > 0 && (
               <div>

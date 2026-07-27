@@ -100,6 +100,11 @@ src/company_brain/
   synthesize/  answer.py (Synthesizer protocol, extractive fallback, citation validator)
                claude.py (claude-opus-5; output still goes through the same validator)
   review/      queue.py — proposal queue: list, accept, reject, per-predicate accept rate
+  outreach/    apollo.py (httpx lead lookup, APOLLO_API_KEY, offline fallback)
+               drafts.py (OutreachDraft + store under store/_outreach/).
+               LOOKUP ONLY — nothing here sends email. Never writes to the graph:
+               approving a draft is not a claim about the company, which is why it
+               does not go through review/proposals.py
   collab/      DEMO-GRADE live editing. session.py (rooms, last-write-wins, debounced
                flush) · guard.py (a human edit may never touch a generated region)
                hub.py (fan-out, flush timer). Read ARCHITECTURE §15 first — this one
@@ -121,6 +126,8 @@ store/               generated markdown tree — COMMITTED, not gitignored: re-i
   store/_cache/      committed extraction cache — what makes `--frozen` CI possible
   store/_proposals/  agent writes land here, never in the graph
   store/_sync/       connector cursors and last-seen id sets (NOT derived — see invariant 2)
+  store/_outreach/   drafted messages awaiting review, then dispatch. Workflow state,
+                     same category as _sync/ and _proposals/' queue rows
 supabase/            config.toml + migrations/*.sql (not created yet)
 web/                 src/App.tsx (shell + principal switcher) · views/ (Ask, Browse,
                      Review, NodeDrawer) · components/ui/primitives.tsx · lib/api.ts
@@ -211,8 +218,10 @@ it is enforced today — if you change that code, you are changing the contract.
 2. **The index is disposable.** A from-scratch rebuild must fully reproduce the index from
    `store/` alone. Anything that can't be rebuilt from markdown doesn't belong in it.
    By-design exceptions, all workflow state rather than derived data: `principals`,
-   `acl_grants`, `review_queue`, `ingest_runs`, and **connector sync state**
-   (`store/_sync/` — cursors and last-seen id sets, moving to the `sources` table).
+   `acl_grants`, `review_queue`, `ingest_runs`, **connector sync state**
+   (`store/_sync/` — cursors and last-seen id sets, moving to the `sources` table), and
+   **outreach drafts** (`store/_outreach/` — a drafted message is not derived from the
+   graph even though it quotes it, and a rebuild must not resurrect a rejected one).
    → `App.load_index`; `tests/acceptance/test_m1.py::TestIndexRebuild`.
 3. **Normalization is pure.** `normalize/` is a function of `(source bytes, normalizer
    version, config)` and nothing else. No wall-clock, no `uuid4`, no randomness, no
