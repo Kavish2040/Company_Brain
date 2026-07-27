@@ -69,22 +69,41 @@ Two invariants define the shape of everything below:
 
 ```
 store/
-  documents/
-    slack/2024/03/eng-standup-2024-03-14-a91f3c.md
-    gdrive/vendor-renewal-policy-4d20be.md
-    email/re-netsuite-renewal-thread-77c0a1.md
-  people/sam-kaur.md
-  teams/support.md
-  tools/netsuite.md
-  processes/vendor-renewal.md
-  decisions/2024-03-adopt-netsuite-4e91.md
+  public/
+    documents/gdrive/vendor-renewal-policy-4d20be.md
+    tools/netsuite.md
+  internal/
+    documents/slack/2024/03/eng-standup-2024-03-14-a91f3c.md
+    documents/email/re-netsuite-renewal-thread-77c0a1.md
+    people/sam-kaur.md
+    teams/support.md
+    processes/vendor-renewal.md
+    decisions/2024-03-adopt-netsuite-4e91.md
+  restricted/
+    documents/slack/2024/03/comp-planning-2024-03-02-1d84f7.md
   _proposals/                      # agent + low-confidence writes, not yet graph
   _cache/extraction/<key>.json     # committed; see §4
-  _tombstones/                     # deleted upstream, retained as redirects
 ```
 
-Directory structure is for humans and for `git log --follow`. It is not load-bearing:
-the index is built by walking `store/**/*.md`, not by parsing paths.
+**The first segment is the sensitivity tier, and it is load-bearing** — §6.2. A node's
+path is `<tier>/<node_id>.md`, the tier is written from `acl.sensitivity`, and a
+repository pinned to one tier refuses everything else (`TierMismatchError`) rather than
+writing it somewhere merely mislabelled. In production each root is its own bucket with
+its own IAM (`TieredBackend`), so a credential scoped to `internal` cannot read a
+restricted node even if a bug asks it to; the tier segment stays in the key so a dev
+subtree and the bucket it is promoted into hold identical paths.
+
+Everything *below* the tier is for humans, and is not load-bearing: the index is built
+by walking the tree, not by parsing paths. Node IDs are unchanged and carry no tier —
+a document reclassified from `internal` to `restricted` keeps its ID and moves roots
+(invariant 12 is about identity, not location).
+
+The workflow trees sit beside the tier roots rather than inside them, which is what
+excludes them from a node walk structurally instead of by a denylist. Two of them —
+`_proposals/` and `_cache/extraction/` — hold content derived from nodes and are
+therefore **not yet tier-partitioned when they should be**; see §6.2. `_sync/` holds
+cursors and ID sets only. There is no `_tombstones/`: a delete rewrites the node in
+place (§9.3), so a tombstone lives at its own ID, in its own tier root.
 
 ### 2.2 Node IDs
 
@@ -399,14 +418,56 @@ Obsidian" affordance actively encourages handing people the repo.
 
 Consequences we should accept now:
 
-- The store is classified at the **maximum** sensitivity of anything in it.
+- Each root is classified at the **maximum** sensitivity of anything in it. Tiering is
+  what stops that maximum from being the whole corpus's maximum.
 - Dev machines get the synthetic corpus, never a production store.
-- For prod, sensitivity tiers are **physically separated** into distinct store roots
-  (`store-public/`, `store-internal/`, `store-restricted/`) with separate object-store
-  buckets and IAM. A tier is the coarse-grained boundary; `acl_ref` is the
+- Sensitivity tiers are **physically separated** into distinct store roots
+  (`public/`, `internal/`, `restricted/`), which in production are distinct buckets
+  with distinct IAM. A tier is the coarse-grained boundary; `acl_ref` is the
   fine-grained one within a tier. This also gives us the ANN partitioning in §6.4.
 - Connectors must be able to refuse: a `restricted` source cannot be ingested into a
   store root that is not `restricted`. Enforced in the writer, not by convention.
+
+#### 6.2.1 How the tier boundary is actually enforced
+
+Three mechanisms, in `store/`:
+
+- **Placement.** `Repository.put` writes to `<tier>/<node_id>.md`, where the tier comes
+  from the node's own `acl.sensitivity`. There is no path by which a caller chooses the
+  root; the content chooses it.
+- **Pinning.** `Repository(backend, tier=…)` refuses any node of another tier with
+  `TierMismatchError`, *before* the write. This is the production configuration — one
+  repository per root — and it is what makes "structurally unable to write a restricted
+  source into a non-restricted root" true rather than aspirational. The bytes never
+  land; they are not written somewhere and relabelled.
+- **Routing.** `TieredBackend` maps the leading path segment to a per-tier backend, so
+  in a deployment the boundary is a credential rather than a directory name.
+
+**Reclassification is the interesting case, and it is where a naïve tiering leaks.**
+When a channel goes from `internal` to `restricted`, writing the new node into
+`restricted/` is not enough — yesterday's copy is still sitting in `internal/`, still
+readable by everyone with internal access, forever. So a write into a stricter root
+first clears the looser ones, and a write into a looser root clears the stricter ones
+after. There is no atomic rename between buckets, so the ordering is chosen by which
+half-done state is survivable: an interrupted *narrowing* leaves the node missing,
+which is loud and self-healing on the next sync; an interrupted *widening* leaves a
+duplicate whose stale copy is in the stricter root, which is safe. The state we never
+reach is a stale copy in a root looser than the node now belongs to. Enumeration raises
+`DuplicateNodeError` on either leftover rather than picking one, so a half-done move
+surfaces at the next `cb doctor` or index rebuild instead of becoming permanent.
+
+Only an unpinned repository can do this, because no single bucket can see both sides of
+the move. That is the honest cost of per-bucket separation: tier migration needs a
+component holding all three roots, and in production that component is more privileged
+than anything else in the system.
+
+**Two gaps, stated rather than glossed.** `_proposals/` and `_cache/extraction/` hold
+content derived from nodes — a proposal quoting a restricted document, an extraction
+result carrying its evidence spans — and both currently live in a single root shared by
+every tier. Invariant 6 says a derived artifact inherits its narrowest input; these two
+trees do not yet honour that *physically*, only in frontmatter. They must be partitioned
+before a production store exists. `_sync/` is fine as it is: cursors and external ID
+sets, no content.
 
 ### 6.3 Derived nodes and ACL propagation
 
@@ -562,19 +623,141 @@ dangling ID.
 
 **Three things I want a decision on, not a default:**
 
-1. **Retention on delete.** Do we keep the content of a deleted doc? Keeping it is
-   great for "why did we decide X" and legally dangerous. My proposal: retain for
-   `internal`, purge body for `restricted`, tier-configurable.
-2. **Git makes true deletion hard.** A GDPR erasure request or a leaked-credential
-   commit cannot be satisfied by a new commit; it needs history rewriting across every
-   clone. Proposal: for regulated tenants, the prod store is object-store-with-versioning
-   plus a revisions table (both support real hard-delete), and git-backed stores are a
-   dev-and-small-tenant affordance only. This partly contradicts the "open the repo in
-   an editor" pitch for enterprise and is worth an explicit call.
-3. **Detecting deletes at all.** Most connectors don't push delete events reliably;
-   detection means periodic full enumeration and diffing. That is a real cost at scale
-   and needs a stated SLA ("deletions reflected within 24h") rather than an implied
-   one.
+1. ~~**Retention on delete.**~~ **Decided (§14 Q3).** Purge the body on delete, retain
+   the graph always, retain the body only under explicit per-connector opt-in.
+   Sensitivity is *not* the axis — the original proposal (retain `internal`, purge
+   `restricted`) tied an irreversible action to a field that describes who may read a
+   document, not whether it still exists. The axis is the connector's delete signal.
+   See §9.3.1.
+2. ~~**Git makes true deletion hard.**~~ **Decided (§14 Q2).** No production store is
+   git-backed. Object store with versioning, one bucket per tier, plus `node_revisions`
+   in the same Postgres as the index. Git stays where it is — this repo, dev and CI —
+   and never backs a tenant. Purging a body therefore means deleting *every* version of
+   the object and the corresponding revision rows, not writing an empty one; a versioned
+   bucket reproduces git's problem exactly if you let it. See §9.3.3.
+3. ~~**Detecting deletes at all.**~~ **Answered by §9.3.2**, per connector, because the
+   cost of enumeration differs per source and one global number would be either a lie
+   or the slowest source's number applied to everything.
+
+#### 9.3.1 What a disappearance means
+
+Absence is not one signal, and the outcomes are not symmetric. `Disappearance` in
+`connectors/base.py` is the vocabulary:
+
+| Signal | Meaning | Node | Body |
+|---|---|---|---|
+| `TRASHED` | recoverable upstream for a window | tombstone | **retained** |
+| `DELETED` | permanent upstream | tombstone | **purged** |
+| `ACCESS_LOST` | the artifact exists; we can't see it | untouched | untouched |
+| `UNKNOWN` | the source cannot say | untouched | untouched |
+
+`UNKNOWN` is treated exactly as `ACCESS_LOST`. A connector that cannot distinguish a
+delete from an unshare **must** say `UNKNOWN` rather than guess, because the two
+mistakes cost different amounts: a delete detected late is correct but stale, while a
+delete inferred wrongly purges a body that still exists upstream and nothing brings it
+back. Every connector picks the reversible side.
+
+This is why the seen-set diff alone never drives a purge. Google's changes feed is
+explicit that `removed` means "removed from this list of changes, *for example* by
+deletion or loss of access"; an enumeration diff inherits that ambiguity. Classifying
+is a second, deliberate question asked of the source — `classify_departure` — not an
+inference from the first.
+
+#### 9.3.2 Deletion freshness SLA
+
+Stated per connector and per signal, since the detection costs differ:
+
+| Connector | Edits & trashes | Permanent deletion | Permission changes |
+|---|---|---|---|
+| Google Drive | 5 min (`changes.list`) | **24 h** (full `files.list` diff) | 5 min |
+| Slack | 5 min (`conversations.history`) | not distinguishable — see below | 5 min |
+| Local FS | per ingest run | per ingest run | n/a |
+
+The incremental feeds are cheap and run every 5 minutes; full enumeration is O(corpus)
+and runs daily. So a Drive file whose trash is emptied may keep its body for up to 24
+hours after the purge. That window is the price of never purging on a guess, and it is
+the right trade in that direction.
+
+Slack has no row for permanent deletion on purpose: `conversations.history` on a
+channel you have left returns the same error as one that was archived, so the
+connector reports `UNKNOWN` and the content stays. Making that a delete would require
+an audit-log integration, not a shorter interval.
+
+Permission changes carry their own window (`base.py`): a principal removed upstream
+can still retrieve until the next grant sync. Bounded and reported via `synced_at`,
+never claimed to be zero.
+
+#### 9.3.3 The production store — **resolved**
+
+**Decision: object store with versioning, one bucket per sensitivity tier, plus a
+`node_revisions` table in the same Postgres as the index. Git backs no tenant, at any
+size.** The kickoff's third option — git for small tenants, object store for regulated
+ones — is rejected along with plain git.
+
+The obvious argument is §9.3.1: we purge bodies by default now, and git cannot delete.
+An erasure request or a leaked credential needs `filter-repo` across every clone that
+was ever taken, which is not an operation, it is a fire drill with no completion
+criterion. But that argument alone would leave option (c) standing, so here is why it
+does not.
+
+**Git's remaining value is distributed authorship, and we already forbade distributed
+authorship.** Strip out what git is not actually providing here:
+
+- *Diffability* is a property of the format, not the storage. Canonical markdown with
+  declared key order and sorted collections (§2.3, invariant 3) diffs identically
+  whether it came from a bucket or a commit. `cb diff <id> --from <rev>` over
+  `node_revisions` renders the same unified diff.
+- *History* is better in a table than in a log. Git gives history per *commit*; we want
+  it per *node*, and `git log --follow` is a rename heuristic that our own invariant 12
+  defeats — an ID never moves, so a rename is a new file plus a tombstone, which git
+  follows worse than a foreign key does.
+- *Open it in an editor* is a property of checkout. `cb export` writes a real directory
+  from a real revision; Obsidian does not know or care where the bytes came from. What
+  you lose is that the directory is authoritative.
+
+That last loss is the whole of it, and §15 and invariant 13 already took it. Writes are
+server-authoritative, human edits are validated against fences *server-side* "because a
+browser is not a trust boundary", and agents cannot write at all (invariant 9). A git
+remote accepting pushes is a less controlled write path than the browser we already
+refused to trust: it would make the store the permission boundary, which §6.2 exists to
+deny. We would be paying git's costs for a capability the architecture rules out.
+
+**And git is specifically corrosive to §6.2.** Physical tier roots only mean something
+if content that moves between them stops existing in the looser one. A reclassification
+from `internal` to `restricted` — the exact case `Repository._place` handles — leaves
+the internal-era bytes in git history permanently, readable by anyone holding a clone at
+the internal tier. Git would undo, in history, the boundary this design enforces in the
+tree. That is not a corner case; it is the mechanism.
+
+The option-(c) split also inverts its own risk. It hands the un-deletable store to small
+tenants, who are the least equipped to run a history rewrite across their clones, and it
+means every store invariant is implemented twice with the weaker implementation setting
+the real guarantee — while the backend carrying 5% of deployments gets 5% of the
+testing.
+
+*What this costs, stated plainly.* The enterprise pitch is no longer "your knowledge
+graph is a git repo you can push to." It is "your knowledge graph is canonical markdown
+you can read, diff, export, and edit through a reviewed path." Read, diff and export
+survive as first-class features and are cheap to build. Round-trip authoring by `git
+push` does not survive; that traffic goes to the live editor and the proposal queue,
+which is where invariants 9 and 13 already said the write path was. Anyone who wanted
+git as *the* interface is being told no, and should be told so directly rather than
+discovering it during a pilot.
+
+*Consequences to build against.*
+
+- A purge deletes all object versions plus the body column of every `node_revisions`
+  row, and is idempotent and auditable. A soft-delete that writes an empty version is
+  not a purge and must not be called one.
+- `node_revisions` stores bodies, so it inherits the tier boundary: partitioned by tier
+  or one table per tier, never one shared table under three separated buckets. Same
+  requirement as the `_proposals/` and `_cache/` gaps in §6.2.
+- Object versioning is the revision *store*; the table is the revision *index*. They can
+  disagree after a partial failure, so reconciliation is a `cb doctor` check, not an
+  assumption.
+- Git keeps its current job unchanged: this repository, the committed synthetic corpus,
+  the committed extraction cache, and `git diff --exit-code` over `store/` as the
+  determinism gate. Nothing about dev changes.
 
 ---
 
@@ -697,11 +880,14 @@ and `acl/`, Typer for the CLI, Alembic for migrations.
    needs a lexical leg too: this corpus is full of exact identifiers (tool names,
    ticket IDs, people) that embeddings blur. Free with Postgres, so this is a
    no-brainer.
-2. **Object store for prod markdown loses git.** The kickoff leans on diffability, and
-   S3 is not a version-control system. Options: (a) git-backed bare repo, versioning
-   for free, poor at 10M files; (b) S3 + object versioning + a `node_revisions` table,
-   scales, and we rebuild "diff" ourselves; (c) both, tier-dependent. I lean (c) with
-   git only for dev and small tenants — see §9.3(2). **Needs your call.**
+2. ~~**Object store for prod markdown loses git.**~~ **Resolved: (b).** Object store
+   plus versioning plus a `node_revisions` table, one bucket per tier; git for dev and
+   CI only, never for a tenant. (c) is rejected too — two production backends means the
+   weaker one sets the real guarantee, and the weaker one here cannot hard-delete, which
+   §9.3.1 now requires. Diffability was never git's to give: it comes from the canonical
+   format, so `cb diff` and `cb export` keep it. What is actually lost is authoring by
+   `git push`, which §15 and invariants 9 and 13 had already ruled out. Full reasoning
+   and the consequences to build against are in §9.3.3.
 3. **Don't generate SQL from Pydantic.** §5.
 4. **Pin document converters exactly and version them in frontmatter.** §4. This is a
    real constraint on dependency updates and should be stated in CLAUDE.md, which it is.
@@ -735,10 +921,20 @@ and `acl/`, Typer for the CLI, Alembic for migrations.
 
 1. **Commit the extraction cache to the repo?** (§4) It makes the acceptance criterion
    honest but adds ~1 JSON per document to version control.
-2. **Prod store: git, S3+revisions, or tiered?** (§9.3, §12.2) This determines whether
-   "open it in an editor" is a real enterprise story or a dev-only one.
-3. **Retention policy on upstream delete** (§9.3.1) — retain by default, or purge by
-   default with opt-in retention?
+2. ~~**Prod store: git, S3+revisions, or tiered?**~~ (§9.3, §12.2) — **decided: object
+   store with versioning, one bucket per tier, plus `node_revisions`. Git backs no
+   tenant at any size.** Forced by Q3: purging bodies requires hard-delete, and git
+   cannot. The tiered compromise is rejected separately — it would give the
+   un-deletable backend to the tenants least able to rewrite history. "Open it in an
+   editor" stays real as read, diff and export (`cb export`, `cb diff`); it stops being
+   real as `git push`, which §15 and invariants 9 and 13 had already ruled out.
+   Reasoning in §9.3.3, enforcement of the per-tier buckets in §6.2.1.
+3. ~~**Retention policy on upstream delete**~~ (§9.3.1) — **decided: purge by default,
+   with per-connector opt-in retention.** The graph is always retained; only the body
+   is purged, so citations still resolve to a dated tombstone. Keyed on the connector's
+   delete signal, never on sensitivity. Implemented in `SyncEngine._depart` and
+   classified per source by `Connector.classify_departure`; the freshness windows that
+   make "delete" a meaningful word are in §9.3.2.
 4. **Is the ACL enforcement boundary at the API acceptable for the first enterprise
    conversation**, given the store itself is all-or-nothing? (§6.2) If not, per-tier
    encryption moves from M5 to M1 and changes the store design.

@@ -19,7 +19,9 @@ from company_brain.store.backend import (
     MemoryBackend,
     StoreBackend,
     StorePathError,
+    TieredBackend,
     safe_relpath,
+    tier_root,
 )
 from company_brain.store.fences import (
     FenceError,
@@ -33,7 +35,9 @@ from company_brain.store.fences import (
     upsert_region,
 )
 from company_brain.store.repository import (
+    TIER_ORDER,
     AclWideningError,
+    DuplicateNodeError,
     NodeNotFoundError,
     Repository,
     StoreError,
@@ -250,9 +254,31 @@ class TestRepository:
     def test_round_trip_through_store_is_byte_identical(self, repo: Repository) -> None:
         node = person("people/sam-kaur")
         repo.put(node)
-        first = repo.backend.read_text("people/sam-kaur.md")
+        path = Repository.path_for("people/sam-kaur", Sensitivity.INTERNAL)
+        first = repo.backend.read_text(path)
         repo.put(repo.get("people/sam-kaur"))
-        assert repo.backend.read_text("people/sam-kaur.md") == first
+        assert repo.backend.read_text(path) == first
+
+    def test_walk_ids_sorted_across_tiers_not_grouped_by_tier(self, repo: Repository) -> None:
+        # Determinism: enumeration order must not depend on which root a node
+        # happens to live in, or `cb doctor` reports drift on a reclassification.
+        repo.put(person("people/a", Sensitivity.RESTRICTED))
+        repo.put(person("people/b", Sensitivity.PUBLIC))
+        repo.put(person("people/c", Sensitivity.INTERNAL))
+        assert list(repo.walk_ids()) == ["people/a", "people/b", "people/c"]
+
+    def test_walk_ids_filters_by_type_within_every_tier(self, repo: Repository) -> None:
+        repo.put(person("people/a", Sensitivity.PUBLIC))
+        repo.put(person("people/b", Sensitivity.RESTRICTED))
+        assert list(repo.walk_ids("Person")) == ["people/a", "people/b"]
+        assert list(repo.walk_ids("Team")) == []
+
+    def test_a_non_node_markdown_file_under_a_tier_root_is_drift(
+        self, repo: Repository
+    ) -> None:
+        repo.backend.write_text("internal/scratch.md", "not a node")
+        with pytest.raises(ValueError, match="malformed node id"):
+            list(repo.walk_ids())
 
 
 class TestAclInvariants:
@@ -280,6 +306,158 @@ class TestAclInvariants:
         internal = Repository(MemoryBackend(), tier=Sensitivity.INTERNAL)
         with pytest.raises(TierMismatchError, match="holds internal only"):
             internal.put(person("people/sam-kaur", Sensitivity.RESTRICTED))
+
+    def test_a_refused_write_leaves_nothing_behind(self) -> None:
+        # The point of the tier boundary is that the bytes never land, not that
+        # they land somewhere and get relabelled.
+        backend = MemoryBackend()
+        internal = Repository(backend, tier=Sensitivity.INTERNAL)
+        with pytest.raises(TierMismatchError):
+            internal.put(person("people/sam-kaur", Sensitivity.RESTRICTED))
+        assert list(backend.walk()) == []
+
+
+class TestTierRoots:
+    """§6.2: a node's sensitivity picks the physical root it is written into."""
+
+    @pytest.mark.parametrize("tier", list(Sensitivity))
+    def test_a_node_is_written_under_its_own_tier_root(
+        self, repo: Repository, tier: Sensitivity
+    ) -> None:
+        repo.put(person("people/sam-kaur", tier))
+        assert list(repo.backend.walk()) == [f"{tier_root(tier)}/people/sam-kaur.md"]
+
+    def test_tier_roots_cannot_collide_with_a_type_segment(self) -> None:
+        from company_brain.schemas.ids import TYPE_PLURALS
+
+        assert not {tier_root(t) for t in Sensitivity} & set(TYPE_PLURALS.values())
+
+    def test_a_pinned_root_reads_only_its_own_tier(self) -> None:
+        backend = MemoryBackend()
+        Repository(backend).put(person("people/sam-kaur", Sensitivity.RESTRICTED))
+        internal = Repository(backend, tier=Sensitivity.INTERNAL)
+        assert internal.find("people/sam-kaur") is None
+        assert Repository(backend).find("people/sam-kaur") is not None
+
+    def test_tier_of_reports_the_root_actually_holding_the_node(self, repo: Repository) -> None:
+        repo.put(person("people/sam-kaur", Sensitivity.RESTRICTED))
+        assert repo.tier_of("people/sam-kaur") is Sensitivity.RESTRICTED
+        assert repo.tier_of("people/nobody") is None
+
+    def test_reclassifying_up_removes_the_looser_copy(self, repo: Repository) -> None:
+        # The leak this whole layout exists to prevent: a channel goes
+        # restricted, and yesterday's copy of its content stays readable in the
+        # internal root forever.
+        repo.put(person("people/sam-kaur", Sensitivity.INTERNAL))
+        repo.put(person("people/sam-kaur", Sensitivity.RESTRICTED))
+        assert list(repo.backend.walk()) == ["restricted/people/sam-kaur.md"]
+        assert repo.tier_of("people/sam-kaur") is Sensitivity.RESTRICTED
+
+    def test_reclassifying_down_removes_the_stricter_copy(self, repo: Repository) -> None:
+        repo.put(person("people/sam-kaur", Sensitivity.RESTRICTED))
+        repo.put(person("people/sam-kaur", Sensitivity.PUBLIC))
+        assert list(repo.backend.walk()) == ["public/people/sam-kaur.md"]
+
+    def test_a_reclassified_node_is_not_double_counted(self, repo: Repository) -> None:
+        repo.put(person("people/sam-kaur", Sensitivity.PUBLIC))
+        repo.put(person("people/sam-kaur", Sensitivity.RESTRICTED))
+        assert list(repo.walk_ids()) == ["people/sam-kaur"]
+
+    def test_a_duplicate_across_tiers_is_raised_not_silently_picked(
+        self, repo: Repository
+    ) -> None:
+        # Only reachable by an interrupted move or a hand edit, which is exactly
+        # why enumeration — what `cb doctor` and the index rebuild both run —
+        # must refuse to paper over it.
+        repo.put(person("people/sam-kaur", Sensitivity.INTERNAL))
+        repo.backend.write_text(
+            "public/people/sam-kaur.md",
+            repo.backend.read_text("internal/people/sam-kaur.md") or "",
+        )
+        with pytest.raises(DuplicateNodeError, match="tier move was interrupted"):
+            list(repo.walk_ids())
+
+    def test_pinned_roots_skip_the_cross_tier_sweep(self) -> None:
+        # A single-tier root can be neither source nor destination of a move, so
+        # it must not pay two extra deletes — object-store calls — per write.
+        backend = MemoryBackend()
+        deletes: list[str] = []
+        original = backend.delete
+
+        def counting_delete(path: str) -> bool:
+            deletes.append(path)
+            return original(path)
+
+        backend.delete = counting_delete  # type: ignore[method-assign]
+        Repository(backend, tier=Sensitivity.INTERNAL).put(person("people/sam-kaur"))
+        assert deletes == []
+
+    def test_tier_order_runs_least_to_most_restrictive(self) -> None:
+        assert TIER_ORDER == (Sensitivity.PUBLIC, Sensitivity.INTERNAL, Sensitivity.RESTRICTED)
+
+
+class TestTieredBackend:
+    """The prod shape: one backend per tier, so the boundary is IAM, not a path."""
+
+    @pytest.fixture
+    def parts(self) -> dict[Sensitivity, MemoryBackend]:
+        return {t: MemoryBackend() for t in Sensitivity}
+
+    def test_a_node_reaches_only_its_own_tier_backend(
+        self, parts: dict[Sensitivity, MemoryBackend]
+    ) -> None:
+        repo = Repository(TieredBackend(parts))
+        repo.put(person("people/sam-kaur", Sensitivity.RESTRICTED))
+        assert list(parts[Sensitivity.RESTRICTED].walk()) == ["restricted/people/sam-kaur.md"]
+        assert list(parts[Sensitivity.INTERNAL].walk()) == []
+        assert list(parts[Sensitivity.PUBLIC].walk()) == []
+
+    def test_keys_match_the_pinned_single_bucket_layout(
+        self, parts: dict[Sensitivity, MemoryBackend]
+    ) -> None:
+        # Promotion from dev to prod has to be a copy, not a rewrite.
+        Repository(TieredBackend(parts)).put(person("people/sam-kaur", Sensitivity.RESTRICTED))
+        pinned = MemoryBackend()
+        Repository(pinned, tier=Sensitivity.RESTRICTED).put(
+            person("people/sam-kaur", Sensitivity.RESTRICTED)
+        )
+        assert list(parts[Sensitivity.RESTRICTED].walk()) == list(pinned.walk())
+
+    def test_round_trip_through_the_router(
+        self, parts: dict[Sensitivity, MemoryBackend]
+    ) -> None:
+        repo = Repository(TieredBackend(parts))
+        for tier in Sensitivity:
+            repo.put(person(f"people/{tier.value}", tier))
+        assert list(repo.walk_ids()) == [
+            "people/internal",
+            "people/public",
+            "people/restricted",
+        ]
+        assert (
+            repo.get("people/restricted").frontmatter.acl.sensitivity is Sensitivity.RESTRICTED
+        )
+
+    def test_a_missing_tier_backend_is_refused_at_construction(self) -> None:
+        with pytest.raises(ValueError, match="no backend for tier"):
+            TieredBackend({Sensitivity.PUBLIC: MemoryBackend()})
+
+    def test_untiered_paths_need_an_explicit_shared_root(
+        self, parts: dict[Sensitivity, MemoryBackend]
+    ) -> None:
+        with pytest.raises(StorePathError, match="outside every tier root"):
+            TieredBackend(parts).write_text("_proposals/p-001.md", "x")
+
+    def test_shared_root_takes_the_workflow_trees(
+        self, parts: dict[Sensitivity, MemoryBackend]
+    ) -> None:
+        shared = MemoryBackend()
+        repo = Repository(TieredBackend(parts, shared=shared))
+        repo.put(person("people/sam-kaur", Sensitivity.PUBLIC))
+        repo.put_proposal("p-001", person("people/sam-kelly"))
+        assert list(shared.walk()) == ["_proposals/p-001.md"]
+        assert list(repo.walk_proposal_ids()) == ["p-001"]
+        assert list(repo.walk_ids()) == ["people/sam-kaur"]
 
 
 class TestTombstonesAndRedirects:

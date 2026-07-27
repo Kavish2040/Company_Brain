@@ -111,6 +111,9 @@ src/company_brain/
 corpus/synthetic/    committed corpus (201 files), regenerable byte-identically
 store/               generated markdown tree — COMMITTED, not gitignored: re-ingestion is
                      verified with `git diff --exit-code` over this tree
+  store/<tier>/      public/ · internal/ · restricted/ — the node tree, one physical root
+                     per sensitivity tier. Path is `<tier>/<node_id>.md`; the tier comes
+                     from the node's own acl.sensitivity, never from the caller
   store/_cache/      committed extraction cache — what makes `--frozen` CI possible
   store/_proposals/  agent writes land here, never in the graph
   store/_sync/       connector cursors and last-seen id sets (NOT derived — see invariant 2)
@@ -225,9 +228,13 @@ it is enforced today — if you change that code, you are changing the contract.
    narrowest ACL of its inputs. Extraction cannot broaden visibility. Enforced in the
    writer, not by convention.
    → `Repository.put(input_tiers=…)` raises `AclWideningError`; `schemas.acl.narrowest`.
-7. **The store is not a permission boundary.** Enforcement is at API/MCP/CLI. Treat the
-   whole store as classified at its most sensitive content. Never put production content on
-   a dev machine.
+7. **A store root is not a permission boundary.** Enforcement is at API/MCP/CLI. Treat
+   each root as classified at its most sensitive content — which is the whole point of
+   the tier roots: `internal/` stays internal-classified instead of inheriting the
+   restricted tier's classification. A node is written to the root named by its own
+   `acl.sensitivity` and a pinned root refuses everything else, before the write. Never
+   put production content on a dev machine.
+   → `Repository.put` / `_place`; `TierMismatchError`; `TieredBackend`; `TestTierRoots`.
 8. **Principals are never a tool/API parameter.** Identity comes from the session. An
    agent's effective visibility is the intersection of its own grants and the invoking
    human's.

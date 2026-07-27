@@ -17,13 +17,27 @@ from __future__ import annotations
 
 import os
 import tempfile
-from collections.abc import Iterator
+from collections.abc import Iterator, Mapping
 from pathlib import Path, PurePosixPath
 from typing import Protocol, runtime_checkable
+
+from company_brain.schemas.acl import Sensitivity
 
 
 class StorePathError(ValueError):
     """A path was absolute, escaped the root, or was otherwise unusable."""
+
+
+def tier_root(tier: Sensitivity) -> str:
+    """Leading path segment for a sensitivity tier.
+
+    The tier's own name, so the tree is self-describing to anyone who opens it
+    in an editor — which is half the reason the store is markdown at all.
+    """
+    return tier.value
+
+
+_TIER_ROOTS: dict[str, Sensitivity] = {tier_root(t): t for t in Sensitivity}
 
 
 def safe_relpath(path: str) -> PurePosixPath:
@@ -181,6 +195,76 @@ class LocalFsBackend:
             if p.is_file() and not p.name.startswith(".")
         ]
         yield from sorted(found)
+
+
+class TieredBackend:
+    """One logical store spread over a separate backend per sensitivity tier.
+
+    §6.2 asks for tiers that are *physically* separated — distinct buckets with
+    distinct IAM — and a directory inside one bucket is not that. This routes on
+    the leading path segment, which :class:`Repository` guarantees is the tier
+    root, so a credential scoped to the internal bucket cannot read a restricted
+    node even if some future bug asks it to.
+
+    Paths are passed through verbatim, tier segment and all. A per-tier bucket
+    therefore holds exactly the keys of the matching dev subtree, which makes
+    promotion a copy rather than a rewrite, and makes an ``internal/`` key
+    inside the restricted bucket visible as misplacement rather than as an
+    ordinary node.
+
+    ``shared`` takes the workflow trees that are not tier-partitioned
+    (``_proposals/``, ``_cache/``, ``_sync/``). Omitting it makes them an error
+    rather than a silent write into an arbitrary tier.
+    """
+
+    def __init__(
+        self,
+        tiers: Mapping[Sensitivity, StoreBackend],
+        *,
+        shared: StoreBackend | None = None,
+    ) -> None:
+        missing = [t for t in Sensitivity if t not in tiers]
+        if missing:
+            raise ValueError(f"no backend for tier(s): {', '.join(missing)}")
+        self._tiers = dict(tiers)
+        self._shared = shared
+
+    def _route(self, path: str) -> StoreBackend:
+        head = safe_relpath(path).parts[0]
+        tier = _TIER_ROOTS.get(head)
+        if tier is not None:
+            return self._tiers[tier]
+        if self._shared is None:
+            raise StorePathError(
+                f"{path!r} is outside every tier root and no shared backend is configured"
+            )
+        return self._shared
+
+    def read_text(self, path: str) -> str | None:
+        return self._route(path).read_text(path)
+
+    def write_text(self, path: str, text: str) -> None:
+        self._route(path).write_text(path, text)
+
+    def delete(self, path: str) -> bool:
+        return self._route(path).delete(path)
+
+    def exists(self, path: str) -> bool:
+        return self._route(path).exists(path)
+
+    def walk(self, prefix: str = "") -> Iterator[str]:
+        if prefix:
+            yield from self._route(prefix).walk(prefix)
+            return
+        # Merge rather than concatenate: callers hash and diff this, and the
+        # order must not depend on which tier a node happens to live in.
+        seen: list[str] = []
+        for tier in Sensitivity:
+            seen.extend(self._tiers[tier].walk(tier_root(tier)))
+        if self._shared is not None:
+            others = self._shared.walk()
+            seen.extend(p for p in others if p.partition("/")[0] not in _TIER_ROOTS)
+        yield from sorted(seen)
 
 
 class SupabaseStorageBackend:
