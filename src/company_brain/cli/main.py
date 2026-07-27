@@ -44,6 +44,9 @@ def ingest(
     frozen: Annotated[
         bool, typer.Option(help="Fail on an extraction cache miss (CI mode).")
     ] = False,
+    workers: Annotated[
+        int, typer.Option(help="Concurrent extractions. Extraction is network-bound.")
+    ] = 8,
 ) -> None:
     """Normalize a directory into the markdown store."""
     from company_brain.connectors.local_fs import LocalIngest
@@ -55,7 +58,13 @@ def ingest(
     instance = build_app(store)
     echo(f"Providers: {instance.providers.reason}")
     extractor = cached_extractor(instance, store, frozen=frozen)
-    report = LocalIngest(instance.repo, instance.registry, extractor).run(source)
+    ingest_run = LocalIngest(instance.repo, instance.registry, extractor, workers=workers)
+
+    def progress(done: int, total: int) -> None:
+        if done % 10 == 0 or done == total:
+            typer.echo(f"  {done}/{total}", err=True)
+
+    report = ingest_run.run(source, progress=progress)
 
     echo(
         f"Ingested {report.documents} documents, {report.entities} new entities "

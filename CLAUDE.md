@@ -38,14 +38,21 @@ when reading code; §Current state says what stands in for each today.
 | ⏳ Migrations | **Supabase CLI, plain SQL in `supabase/migrations/`** — hand-written, **not** generated from Pydantic, and **not** Alembic (two migration tools on one database is a footgun) |
 | ⏳ DB driver | `psycopg[binary,pool]` v3 direct — not `supabase-py`, which can't express the vector + FTS + RRF queries |
 | ⏳ Lexical search | Postgres FTS (`tsvector`) — no Elasticsearch |
-| ⏳ Extraction | `claude-sonnet-5` (volume path, Batch API) |
-| ⏳ Synthesis | `claude-opus-5` |
-| ⏳ Embeddings | OpenAI `text-embedding-3-large` at **`dimensions=1536`** — pgvector's HNSW index caps at 2000 dims for `vector`, so native 3072 can't be indexed without `halfvec` |
-| ⏳ API | FastAPI |
-| ⏳ Frontend | React + TypeScript (strict), Tailwind, shadcn/ui in `components/ui/`, `lucide-react` |
+| Extraction | `claude-sonnet-5` — strict tool + citations in one call (ARCHITECTURE §4.1); falls back to a deterministic roster matcher with no key |
+| Synthesis | `claude-opus-5`, with an explicit INSUFFICIENT_EVIDENCE path |
+| Embeddings | OpenAI `text-embedding-3-large` at **`dimensions=1536`** — pgvector's HNSW index caps at 2000 dims for `vector`, so native 3072 can't be indexed without `halfvec` |
+| API | FastAPI in `api/app.py`; principal arrives in `X-Principal`, never a request body |
+| Frontend | `web/` — Vite + React + TS strict, Tailwind v4, `lucide-react`. Built to docs/DESIGN_SYSTEM.md |
 
 Frontend lives in `web/`, separate from the Python package, and talks to the FastAPI app
-over HTTP. No frontend code exists yet.
+over HTTP (`./scripts/run.sh api` + `./scripts/run.sh web`).
+
+**Both API keys or neither.** `choose_providers()` refuses a half-configured run: Claude
+extraction scored against hash embeddings is a hybrid nobody asked for, and "offline
+because OPENAI_API_KEY is unset" is far easier to diagnose than unexplained retrieval
+quality. `COMPANY_BRAIN_OFFLINE=1` forces offline, which is how CI stays deterministic
+and free. `.env` auto-loads from `company_brain/__init__.py` — not from `app.py`, so a
+script importing a single module still gets credentials.
 
 The offline/online decision is made in exactly one place — `choose_providers()` in
 `app.py` — and it prints its reason on every `cb ingest`, so a run is never silently
@@ -295,30 +302,42 @@ Shape of a run: 201 documents → 232 nodes, 364 chunks, 1122 accepted edges, 39
 pending human review. `ceo` sees 7 ACL refs, `contractor` 1, and the same question returns
 visibly different, still-cited answers to each. 136 tests; the acceptance suite takes ~20s.
 
-**What stands in for the ⏳ rows today** — all offline, all deterministic, all behind the
-protocol the real thing will implement:
+**Every provider has two implementations**, chosen once in `choose_providers()` and
+reported on every ingest, so a run is never silently degraded:
 
-| Target | M1 stand-in |
-|---|---|
-| Supabase Postgres + pgvector | `MemoryIndex` — BM25 lexical + cosine, rebuilt per process |
-| `text-embedding-3-large` @1536 | `HashingEmbedder` — same dimensionality, no model call |
-| `claude-sonnet-5` extraction | `RuleBasedExtractor` — regex + a curated roster |
-| `claude-opus-5` synthesis | `ExtractiveSynthesizer` — selects sentences, never generates prose |
+| Protocol | Live (both keys set) | Offline (no keys, or `COMPANY_BRAIN_OFFLINE=1`) |
+|---|---|---|
+| `Extractor` | `ClaudeExtractor` — `claude-sonnet-5`, strict tool + citations | `RuleBasedExtractor` — regex + curated roster |
+| `Embedder` | `OpenAIEmbedder` — `text-embedding-3-large` @1536 | `HashingEmbedder` — same dims, no model call |
+| `Synthesizer` | `ClaudeSynthesizer` — `claude-opus-5` | `ExtractiveSynthesizer` — selects sentences, never generates |
+| `Index` | ⏳ `PostgresIndex` | `MemoryIndex` — BM25 + cosine, rebuilt per process |
+| `StoreBackend` | ⏳ `SupabaseStorageBackend` (written, never executed) | `LocalFsBackend` / `MemoryBackend` |
 
-**What the green suite does not prove.** The extractor shares assumptions with the corpus
-generator — both know the same curated process list — so entity linking is easier here than
-it will ever be on real data. The hashing embedder has no semantic content; it is a lexical
-trick with a vector interface, and `search_vector` will behave differently the moment a real
-embedder replaces it. Extractive synthesis cannot hallucinate, so invariant 11 has never had
-to stop a real fabrication. M1 proves the skeleton holds, not that the answers are good.
+CI runs the offline column: no keys, no database, no network, and deterministic.
+
+**What the green suite does not prove.** The extractor shares a curated roster with the
+corpus generator, so entity linking is easier here than it will ever be on real data — and
+that is true of `ClaudeExtractor` too, since the roster is an enum in its tool schema.
+The offline embedder has no semantic content; it is a lexical trick with a vector interface,
+so `search_vector` behaves differently between the two columns. Deletion, upstream edits,
+and grant *staleness* are untested: `AccessFilter` is a per-request snapshot, which
+`TestAclDrift` documents rather than fixes.
+
+One thing changed with live providers: extractive synthesis **could not** hallucinate, so
+invariant 11 had never stopped a real fabrication. `ClaudeSynthesizer` can, which is the
+first time the citation validator has been load-bearing rather than theoretical.
 
 **Next, in order:**
 
-1. `supabase/` — `config.toml`, `migrations/*.sql`, and a `psycopg` `Index` implementation
-   behind the existing protocol. `tests/integration/` stays empty until this lands.
-2. Real providers behind `choose_providers`: the OpenAI embedder, then `claude-sonnet-5`
-   extraction via the Batch API, with the rule-based path kept as the frozen-mode baseline.
+1. `supabase/` — `config.toml`, `migrations/*.sql`, and a `psycopg` `Index` behind the
+   existing protocol. `tests/integration/` stays empty until this lands, and
+   `SupabaseStorageBackend` gets its first real execution against the shared conformance
+   suite.
+2. Visual verification of `web/` — it type-checks, builds, and serves, but has never been
+   looked at. Playwright screenshots of each surface in both themes.
 3. Then M2 — live connectors, incremental sync, change and deletion handling, grant sync.
+   This is the risky boundary: M1 runs against a corpus we wrote, so we have unconsciously
+   made it tractable.
 
-The FastAPI app and the `web/` frontend follow the API surface. The open questions in
-ARCHITECTURE §14 and DESIGN_SYSTEM §8 are still open.
+ARCHITECTURE §4.1 is now **resolved** (measured against the live API; the measured result
+contradicts the documented one). The open questions in §14 and DESIGN_SYSTEM §8 stand.

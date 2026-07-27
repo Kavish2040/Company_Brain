@@ -12,9 +12,11 @@ permission object — that is M2's whole problem (§6.1).
 
 from __future__ import annotations
 
-from collections.abc import Iterator
+from collections.abc import Callable, Iterator
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from pathlib import Path
+from threading import Lock
 
 from company_brain.corpus.generate import CHANNELS, PEOPLE, PROCESSES, TOOLS
 from company_brain.extract.base import CachedExtractor, ExtractionRequest
@@ -126,20 +128,56 @@ class LocalIngest:
     """Runs discover -> normalize -> extract -> write."""
 
     def __init__(
-        self, repo: Repository, registry: Registry, extractor: CachedExtractor
+        self,
+        repo: Repository,
+        registry: Registry,
+        extractor: CachedExtractor,
+        *,
+        workers: int = 8,
     ) -> None:
         self.repo = repo
         self.registry = registry
         self.extractor = extractor
         self.roster = build_roster()
+        self.workers = max(1, workers)
+        self._report_lock = Lock()
 
-    def run(self, root: Path) -> IngestReport:
+    def run(
+        self, root: Path, *, progress: Callable[[int, int], None] | None = None
+    ) -> IngestReport:
+        """Ingest a directory.
+
+        Documents are processed concurrently because extraction is entirely
+        network-bound — sequentially, 201 documents against a live model takes
+        roughly two hours. Concurrency is safe for determinism: each document
+        writes its own file, so the resulting tree does not depend on
+        completion order. Entity nodes are written afterwards, sequentially,
+        because they are shared.
+        """
         report = IngestReport()
-        for item in discover(root, self.registry):
+        items = list(discover(root, self.registry))
+        done = 0
+
+        def one(item: Discovered) -> None:
+            nonlocal done
             try:
                 self._ingest_one(item, report)
             except Exception as exc:
-                report.skipped.append((item.relative, str(exc)))
+                with self._report_lock:
+                    report.skipped.append((item.relative, str(exc)))
+            finally:
+                with self._report_lock:
+                    done += 1
+                    if progress:
+                        progress(done, len(items))
+
+        if self.workers == 1:
+            for item in items:
+                one(item)
+        else:
+            with ThreadPoolExecutor(max_workers=self.workers) as pool:
+                list(pool.map(one, items))
+
         self._write_entities(report)
         report.cache_hits = self.extractor.hits
         report.cache_misses = self.extractor.misses
@@ -211,7 +249,8 @@ class LocalIngest:
             body=result.body,
         )
         self.repo.put(node, input_tiers=(item.acl.sensitivity,))
-        report.documents += 1
+        with self._report_lock:
+            report.documents += 1
 
     def _write_entities(self, report: IngestReport) -> None:
         """Create the curated entity nodes the documents point at.

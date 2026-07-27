@@ -95,6 +95,27 @@ class TestDeterminism:
         assert report.cache_misses == 0, "frozen re-ingest called the extractor"
         assert tree_hash(store) == before
 
+    def test_concurrency_does_not_change_the_tree(self, tmp_path: Path) -> None:
+        """Ingest is parallel because extraction is network-bound. That must not
+        cost determinism: each document writes its own file, so completion order
+        cannot affect the result. This asserts it rather than assuming it."""
+        corpus = tmp_path / "corpus"
+        generate(corpus)
+
+        hashes = []
+        for workers in (1, 8):
+            store = tmp_path / f"store-{workers}"
+            app = build_app(store)
+            LocalIngest(
+                app.repo,
+                app.registry,
+                cached_extractor(app, store, frozen=False),
+                workers=workers,
+            ).run(corpus)
+            hashes.append(tree_hash(store))
+
+        assert hashes[0] == hashes[1], "parallel ingest produced a different tree"
+
     def test_frozen_mode_refuses_an_uncached_document(
         self, built: tuple[Path, Path], tmp_path: Path
     ) -> None:

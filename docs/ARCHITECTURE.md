@@ -8,6 +8,10 @@ deterministic and model-generated content. It records rejected alternatives
 alongside the choices, because in most cases the rejected option was reasonable
 and we may want to revisit it.
 
+§4.1 was an open question and is now **resolved against the live API** — the
+measured result contradicts the documented one, so read that table before
+touching `extract/`.
+
 Three items the kickoff asked me to flag rather than solve are in
 [§10 Entity resolution](#10-entity-resolution-flagged),
 [§9.3 Upstream deletes and edits](#93-upstream-deletes-and-edits), and
@@ -264,29 +268,43 @@ which is the behaviour we want anyway.
 > equivalence. Semantic-equivalence assertions are themselves flaky and give up the
 > git-diffability that makes the markdown store worth having.
 
-### 4.1 Evidence spans: an unresolved conflict — **flagged**
+### 4.1 Evidence spans — **resolved**
 
 §11 requires every LLM-derived edge to carry an evidence span. Two mechanisms
-could supply one, and they are mutually exclusive within a single API call:
+could supply one:
 
-1. **Structured outputs** (`output_config.format`, or `client.messages.parse()`
-   against our Pydantic models) — schema-validated extraction with no parsing
-   layer, but any span the model reports is self-asserted and routinely off by a
-   few characters.
+1. **Structured outputs** (`output_config.format`) — schema-validated extraction
+   with no parsing layer, but any span the model reports is self-asserted and
+   routinely off by a few characters.
 2. **Native citations** (`citations: {enabled: true}` on a document block) —
-   returns `cited_text` plus exact `start_char_index` / `end_char_index` computed
-   by the API rather than guessed by the model. Far more trustworthy.
+   returns `cited_text` plus exact `start_char_index` / `end_char_index`
+   computed by the API rather than guessed by the model.
 
-**Citations return a 400 when combined with `output_config.format`.** So we can't
-have both in one call. Options: a two-pass extraction (structured pass for
-entities and predicates, citations pass to locate evidence), or strict tool use
-(`strict: true`) in place of `output_config.format`, if citations coexist with
-tool use. M1 tests both against the synthetic corpus and takes whichever produces
-spans that actually resolve.
+These were believed mutually exclusive. Measured against the live API they are
+not — the exclusion is narrower than documented:
 
-Flagged because it shapes the `extract/` module, and because self-reported spans
-would quietly undermine the §11 gates — a reviewer checking evidence that points
-at the wrong text is worse than having no gate at all.
+| shape | result |
+|---|---|
+| `output_config.format` + citations | **400** — "Citations cannot be enabled when output format is set" |
+| forced `tool_choice` + citations | accepted, but returns a lone `tool_use` block; no cited text is emitted, so no spans come back |
+| **`tool_choice: auto` + strict tool + citations** | **both** — cited text blocks carrying API-computed offsets, followed by a schema-validated `tool_use` block |
+
+**Decision: the third shape.** `extract/claude.py` asks for prose *and* a tool
+call. Citations attach to the prose; the strict tool carries the structure. No
+two-pass, no separate reconciliation step.
+
+Two consequences worth keeping:
+
+* An offset is **never** taken from the model. `_match_span` resolves a quote
+  against an API-computed citation span, or failing that against a literal
+  search of the body we sent. An edge whose quote resolves to neither is
+  **dropped**, not recorded — an `Edge` with `llm` provenance and no evidence is
+  rejected at construction anyway, and a §11 gate whose evidence a reviewer
+  cannot check is not a gate.
+* The tool's `object` field is an **enum of curated roster ids**, so the model
+  selects entities rather than naming them (§10.3). Measured on the synthetic
+  corpus, "Sam K." comes back in `unresolved` rather than being guessed into
+  either Sam — the §10.2 trap holds under Claude, not just under the rules.
 
 ---
 

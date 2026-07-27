@@ -10,8 +10,6 @@ import os
 from dataclasses import dataclass
 from pathlib import Path
 
-from dotenv import load_dotenv
-
 from company_brain.acl.grants import AccessFilter, GrantTable, elevate
 from company_brain.corpus.generate import CHANNELS
 from company_brain.extract.base import CachedExtractor, Extractor
@@ -27,11 +25,6 @@ from company_brain.synthesize.answer import Synthesizer
 
 STORE_ROOT = Path("store")
 CORPUS_ROOT = Path("corpus/synthetic")
-
-# Load .env once, at import, without clobbering anything already exported.
-# The alternative — requiring `set -a; source .env` — is a step people forget,
-# and forgetting it produces a silently offline run rather than an error.
-load_dotenv(override=False)
 
 # Synthetic principals for M1. M2 replaces these with directory-synced grants.
 PRINCIPALS: dict[str, Principal] = {

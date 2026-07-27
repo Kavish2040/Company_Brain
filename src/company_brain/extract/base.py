@@ -16,6 +16,7 @@ from __future__ import annotations
 import hashlib
 import json
 from dataclasses import dataclass
+from threading import Lock
 from typing import Any, Protocol, runtime_checkable
 
 from company_brain.schemas.edges import Edge, EdgeStatus, Evidence, Predicate, Provenance
@@ -86,6 +87,10 @@ class CachedExtractor:
         self.frozen = frozen
         self.hits = 0
         self.misses = 0
+        # Ingest runs extraction concurrently (it is network-bound), so the
+        # counters need a lock. Cache reads and writes do not: each document
+        # addresses a distinct file, and the backend's writes are atomic.
+        self._lock = Lock()
 
     @property
     def model(self) -> str:
@@ -104,13 +109,15 @@ class CachedExtractor:
 
         cached = self.backend.read_text(path)
         if cached is not None:
-            self.hits += 1
+            with self._lock:
+                self.hits += 1
             return _from_json(json.loads(cached))
 
         if self.frozen:
             raise CacheMiss(request.node_id, key)
 
-        self.misses += 1
+        with self._lock:
+            self.misses += 1
         result = self.inner.extract(request)
         self.backend.write_text(path, _to_json(result))
         return result
