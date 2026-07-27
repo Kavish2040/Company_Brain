@@ -18,7 +18,7 @@ from typing import Self
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from company_brain.schemas.acl import AclRef
-from company_brain.schemas.edges import Edge
+from company_brain.schemas.edges import THIRD_PARTY, Edge
 from company_brain.schemas.ids import TYPE_PLURALS, split_id
 
 
@@ -174,8 +174,26 @@ class Frontmatter(BaseModel):
     @model_validator(mode="after")
     def _no_self_edges(self) -> Self:
         for edge in self.relations:
-            if edge.object == self.id:
+            if edge.object == edge.resolve_subject(self.id):
                 raise ValueError(f"node {self.id!r} has a self-edge via {edge.predicate}")
+        return self
+
+    @model_validator(mode="after")
+    def _third_party_edges_declare_a_subject(self) -> Self:
+        """A document cannot own, depend on, or hand off to anything.
+
+        Without this, `owns` edges extracted from a document read as
+        ``document --owns--> person`` — which is what shipped, and what this
+        rejects at parse time so it cannot ship again.
+        """
+        if self.type is not NodeType.DOCUMENT:
+            return self
+        for edge in self.relations:
+            if edge.predicate in THIRD_PARTY and edge.subject is None:
+                raise ValueError(
+                    f"{self.id!r}: {edge.predicate} needs an explicit subject — a "
+                    f"Document is never the subject of a third-party relation"
+                )
         return self
 
     @model_validator(mode="after")
@@ -190,7 +208,7 @@ class Frontmatter(BaseModel):
         keys = [e.sort_key() for e in self.relations]
         duplicates = {k for k in keys if keys.count(k) > 1}
         if duplicates:
-            listed = ", ".join(f"{p} -> {o}" for p, o in sorted(duplicates))
+            listed = ", ".join(f"{s or self.id} -{p}-> {o}" for p, s, o in sorted(duplicates))
             raise ValueError(f"node {self.id!r} has duplicate relations: {listed}")
 
         ordered = tuple(sorted(self.relations, key=lambda e: e.sort_key()))

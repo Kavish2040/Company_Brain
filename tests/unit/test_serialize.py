@@ -322,3 +322,131 @@ class TestIds:
     def test_unknown_type_segment_rejected(self) -> None:
         with pytest.raises(ValueError, match="unknown type segment"):
             split_id("widgets/foo")
+
+
+class TestThirdPartySubjects:
+    """The `owns` bug: a Document is never the subject of a third-party relation.
+
+    Before this, extraction produced `document --owns--> person`, which reads as
+    "this document owns Owen Fitzgerald". Answers hid it because synthesis reads
+    text, not edges — but traverse and read_node returned nonsense.
+    """
+
+    def _doc(self, relations: tuple[Edge, ...]) -> Frontmatter:
+        return Frontmatter(
+            id="documents/x-abc123",
+            type=NodeType.DOCUMENT,
+            title="x",
+            acl=AclRef(ref="fs:corpus:public", sensitivity=Sensitivity.PUBLIC),
+            source=SourceRef(
+                connector="t", uri="file://x", external_id="x", content_sha256=SHA
+            ),
+            relations=relations,
+        )
+
+    def test_owns_without_a_subject_is_rejected(self) -> None:
+        with pytest.raises(ValueError, match="needs an explicit subject"):
+            self._doc(
+                (
+                    Edge(
+                        predicate=Predicate.OWNS,
+                        object="people/owen",
+                        confidence=0.9,
+                        provenance=Provenance.HUMAN,
+                        status=EdgeStatus.ACCEPTED,
+                    ),
+                )
+            )
+
+    def test_owns_with_a_subject_is_accepted(self) -> None:
+        fm = self._doc(
+            (
+                Edge(
+                    predicate=Predicate.OWNS,
+                    subject="people/owen",
+                    object="processes/capacity-planning",
+                    confidence=0.9,
+                    provenance=Provenance.HUMAN,
+                    status=EdgeStatus.ACCEPTED,
+                ),
+            )
+        )
+        edge = fm.relations[0]
+        assert edge.resolve_subject(fm.id) == "people/owen"
+
+    def test_mentions_needs_no_subject(self) -> None:
+        fm = self._doc(
+            (
+                Edge(
+                    predicate=Predicate.MENTIONS,
+                    object="tools/netsuite",
+                    confidence=1.0,
+                    provenance=Provenance.HUMAN,
+                    status=EdgeStatus.ACCEPTED,
+                ),
+            )
+        )
+        # Absent subject means "the document", which is correct for mentions.
+        assert fm.relations[0].resolve_subject(fm.id) == fm.id
+
+    def test_subject_survives_the_round_trip(self) -> None:
+        node = Node(
+            frontmatter=self._doc(
+                (
+                    Edge(
+                        predicate=Predicate.OWNS,
+                        subject="people/owen",
+                        object="processes/capacity-planning",
+                        confidence=0.9,
+                        provenance=Provenance.HUMAN,
+                        status=EdgeStatus.ACCEPTED,
+                    ),
+                )
+            ),
+            body="",
+        )
+        text = dump_node(node)
+        assert "subject: people/owen" in text
+        assert parse_node(text) == node
+
+    def test_same_predicate_and_object_differing_by_subject_is_not_a_duplicate(
+        self,
+    ) -> None:
+        fm = self._doc(
+            (
+                Edge(
+                    predicate=Predicate.OWNS,
+                    subject="people/owen",
+                    object="processes/capacity-planning",
+                    confidence=0.9,
+                    provenance=Provenance.HUMAN,
+                    status=EdgeStatus.ACCEPTED,
+                ),
+                Edge(
+                    predicate=Predicate.OWNS,
+                    subject="people/sam-kaur",
+                    object="processes/capacity-planning",
+                    confidence=0.5,
+                    provenance=Provenance.HUMAN,
+                    status=EdgeStatus.PROPOSED,
+                ),
+            )
+        )
+        # Two people claiming the same process is a real disagreement worth
+        # surfacing, not a duplicate to collapse.
+        assert len(fm.relations) == 2
+
+    def test_a_subjectful_self_edge_is_still_rejected(self) -> None:
+        with pytest.raises(ValueError, match="self-edge"):
+            self._doc(
+                (
+                    Edge(
+                        predicate=Predicate.OWNS,
+                        subject="people/owen",
+                        object="people/owen",
+                        confidence=0.9,
+                        provenance=Provenance.HUMAN,
+                        status=EdgeStatus.ACCEPTED,
+                    ),
+                )
+            )

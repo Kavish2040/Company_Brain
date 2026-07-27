@@ -60,8 +60,13 @@ class MemoryIndex:
             for edge in node.edges:
                 if edge.status is not EdgeStatus.ACCEPTED:
                     continue
-                self._out[node.id].append((str(edge.predicate), edge.object))
-                self._in[edge.object].append((str(edge.predicate), node.id))
+                # Adjacency uses the *resolved* subject, so a document
+                # reporting "Owen owns capacity planning" produces the edge
+                # people/owen-fitz -> processes/capacity-planning, not one
+                # rooted at the document.
+                subject = edge.resolve_subject(node.id)
+                self._out[subject].append((str(edge.predicate), edge.object))
+                self._in[edge.object].append((str(edge.predicate), subject))
             pending.extend(
                 chunk_node(node.id, node.title, body, node.acl_ref, node.sensitivity)
             )

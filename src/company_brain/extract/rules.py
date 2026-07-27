@@ -66,7 +66,7 @@ class RuleBasedExtractor:
     """Roster-matching extractor. Pure: same input, same edges, always."""
 
     model = "rules-offline"
-    prompt_version = "roster-v1"
+    prompt_version = "roster-v2"
 
     def __init__(self, roster: Roster) -> None:
         self.roster = roster
@@ -113,9 +113,9 @@ class RuleBasedExtractor:
 
         # De-duplicate on (predicate, object); Frontmatter would reject dupes
         # anyway, and losing the second span is fine — the first is evidence enough.
-        seen: dict[tuple[str, str], Edge] = {}
+        seen: dict[tuple[str, str, str], Edge] = {}
         for edge in edges:
-            seen.setdefault((str(edge.predicate), edge.object), edge)
+            seen.setdefault(edge.sort_key(), edge)
 
         return ExtractionResult(
             edges=tuple(sorted(seen.values(), key=lambda e: e.sort_key())),
@@ -130,9 +130,11 @@ class RuleBasedExtractor:
         obj: str,
         confidence: float,
         evidence: tuple[Evidence, ...],
+        subject: str | None = None,
     ) -> Edge:
         return Edge(
             predicate=predicate,
+            subject=subject,
             object=obj,
             confidence=confidence,
             provenance=Provenance.LLM,
@@ -150,15 +152,31 @@ class RuleBasedExtractor:
             span = (match.start(), match.end())
             # Confidence is high and it still proposes rather than accepts —
             # `owns` has no auto-accept threshold at any confidence (§11).
+            # The person is the subject; what they own is not recoverable from
+            # an "Owner:" line alone, so the object is the document's topic and
+            # a reviewer supplies the rest. Emitting person-as-object here was
+            # the original bug.
+            target = self._owned_target(body)
+            if target is None:
+                continue
             out.append(
                 self._edge(
                     Predicate.OWNS,
-                    person,
+                    target,
                     0.75,
                     (Evidence(node="self", span=span, quote=body[span[0] : span[1]].strip()),),
+                    subject=person,
                 )
             )
         return out
+
+    def _owned_target(self, body: str) -> str | None:
+        """The process this document is about, if any — the object of `owns`."""
+        lowered = body.lower()
+        for entry in self.roster.processes:
+            if any(surface.lower() in lowered for surface in entry.surfaces):
+                return entry.node_id
+        return None
 
     def _handoffs(self, body: str) -> list[Edge]:
         out: list[Edge] = []
@@ -168,12 +186,16 @@ class RuleBasedExtractor:
             if team is None:
                 continue
             span = (match.start(), match.end())
+            source = self._team_by_surface.get((match.group("from") or "").strip().lower())
+            if source is None or source == team:
+                continue
             out.append(
                 self._edge(
                     Predicate.HANDOFF_TO,
                     team,
                     0.6,
                     (Evidence(node="self", span=span, quote=body[span[0] : span[1]].strip()),),
+                    subject=source,
                 )
             )
         return out

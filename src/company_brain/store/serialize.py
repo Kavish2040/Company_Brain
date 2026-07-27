@@ -118,8 +118,10 @@ def _evidence_to_dict(ev: Evidence) -> dict[str, Any]:
 
 
 def _edge_to_dict(edge: Edge) -> dict[str, Any]:
-    out: dict[str, Any] = {
-        "predicate": str(edge.predicate),
+    out: dict[str, Any] = {"predicate": str(edge.predicate)}
+    if edge.subject is not None:
+        out["subject"] = edge.subject
+    out |= {
         "object": edge.object,
         "confidence": round(edge.confidence, 4),
         "provenance": str(edge.provenance),

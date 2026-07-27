@@ -37,7 +37,12 @@ class PendingEdge:
 
     @property
     def key(self) -> str:
-        return f"{self.node_id}|{self.edge.predicate}|{self.edge.object}"
+        """Identifies one pending edge. Includes the subject, because two edges
+        on the same document can share a predicate and object and differ only
+        in who the subject is."""
+        return (
+            f"{self.node_id}|{self.edge.subject or ''}|{self.edge.predicate}|{self.edge.object}"
+        )
 
     def quote(self) -> str:
         for evidence in self.edge.evidence:
@@ -90,14 +95,18 @@ class ReviewQueue:
         proposals are the only signal available for tuning the §11 thresholds —
         throwing them away means never learning that a gate is miscalibrated.
         """
-        node_id, predicate, obj = key.split("|", 2)
+        node_id, subject, predicate, obj = key.split("|", 3)
         node = self.repo.get(node_id)
 
         target = EdgeStatus.ACCEPTED if decision is Decision.ACCEPTED else EdgeStatus.REJECTED
         updated: list[Edge] = []
         found = False
         for edge in node.frontmatter.relations:
-            if str(edge.predicate) == predicate and edge.object == obj:
+            if (
+                str(edge.predicate) == predicate
+                and edge.object == obj
+                and (edge.subject or "") == subject
+            ):
                 if edge.status is not EdgeStatus.PROPOSED:
                     raise ValueError(f"{key} is {edge.status}, not pending")
                 updated.append(edge.model_copy(update={"status": target}))

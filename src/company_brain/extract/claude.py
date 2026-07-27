@@ -31,6 +31,7 @@ import anthropic
 from company_brain.extract.base import ExtractionRequest, ExtractionResult
 from company_brain.extract.rules import Roster
 from company_brain.schemas.edges import (
+    THIRD_PARTY,
     Edge,
     Evidence,
     Predicate,
@@ -38,7 +39,7 @@ from company_brain.schemas.edges import (
     decide_status,
 )
 
-PROMPT_VERSION = "claude-roster-v1"
+PROMPT_VERSION = "claude-roster-v2"
 DEFAULT_MODEL = "claude-sonnet-5"
 
 # Closed vocabulary. The model selects from the curated roster rather than
@@ -66,6 +67,13 @@ Rules:
   Prefer mentions when unsure; a wrong ownership edge is expensive to undo.
 - Report nothing rather than guessing. Recall is not the goal here; a reviewer
   has to be able to check every edge you emit.
+- `owns`, `handoff_to`, `depends_on` describe a relation between two *other*
+  things, so they need an explicit `subject` from the roster. "Owen owns
+  capacity planning" is subject=people/owen-fitz, object=processes/capacity-
+  planning. The document is the evidence, never the subject — a document does
+  not own anything.
+- `mentions` and `supersedes` take no subject: the document itself is the
+  subject. Leave the field out for those.
 
 First state, in prose, what the document establishes about ownership, handoffs
 and dependencies, quoting the source exactly. Then call record_relations."""
@@ -91,11 +99,21 @@ def _tool_schema(roster: Roster) -> dict[str, Any]:
                                 "type": "string",
                                 "enum": [str(p) for p in _EXTRACTABLE],
                             },
+                            # Required by the schema, but "" means "the
+                            # document itself" — strict tool use has no clean
+                            # way to make a field conditionally required.
+                            "subject": {"type": "string", "enum": ["", *ids]},
                             "object": {"type": "string", "enum": ids},
                             "quote": {"type": "string"},
                             "confidence": {"type": "number"},
                         },
-                        "required": ["predicate", "object", "quote", "confidence"],
+                        "required": [
+                            "predicate",
+                            "subject",
+                            "object",
+                            "quote",
+                            "confidence",
+                        ],
                         "additionalProperties": False,
                     },
                 },
@@ -189,9 +207,9 @@ class ClaudeExtractor:
                 if edge is not None:
                     edges.append(edge)
 
-        deduped: dict[tuple[str, str], Edge] = {}
+        deduped: dict[tuple[str, str, str], Edge] = {}
         for edge in edges:
-            deduped.setdefault((str(edge.predicate), edge.object), edge)
+            deduped.setdefault(edge.sort_key(), edge)
 
         return ExtractionResult(
             edges=tuple(sorted(deduped.values(), key=lambda e: e.sort_key())),
@@ -213,10 +231,19 @@ class ClaudeExtractor:
             return None
 
         predicate = Predicate(item["predicate"])
+        subject = (item.get("subject") or "").strip() or None
+        if predicate in THIRD_PARTY and subject is None:
+            # A third-party relation with no subject would serialize as
+            # `document --owns--> person`. Drop it rather than record nonsense.
+            return None
+        if subject is not None and predicate not in THIRD_PARTY:
+            subject = None  # mentions/supersedes are always about the document
+
         confidence = max(0.0, min(1.0, float(item["confidence"])))
         evidence = (Evidence(node="self", span=span, quote=body[span[0] : span[1]].strip()),)
         return Edge(
             predicate=predicate,
+            subject=subject,
             object=item["object"],
             confidence=confidence,
             provenance=Provenance.LLM,

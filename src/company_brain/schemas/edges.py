@@ -68,11 +68,25 @@ class Evidence(BaseModel):
 
 
 class Edge(BaseModel):
-    """One typed relation. Serialized into the frontmatter ``relations`` block."""
+    """One typed relation. Serialized into the frontmatter ``relations`` block.
+
+    ``subject`` is normally omitted, meaning "the node holding this edge" — a
+    document *mentions* a tool, a document *was authored by* a person. But a
+    document also reports relations between two third parties: "Owen owns
+    capacity planning". Those need an explicit subject, or the triple reads as
+    ``document --owns--> person``, which is nonsense and was exactly the bug
+    this field fixes.
+
+    The edge still lives on the document, because the document is the evidence.
+    Writing it onto the entity node instead would make one document's ingest
+    mutate many files — breaking parallel determinism and colliding with the
+    human-edit fences on entity pages (invariant 13).
+    """
 
     model_config = ConfigDict(frozen=True)
 
     predicate: Predicate
+    subject: str | None = None
     object: str
     confidence: float = Field(ge=0.0, le=1.0)
     provenance: Provenance
@@ -87,9 +101,13 @@ class Edge(BaseModel):
             raise ValueError(f"llm-derived {self.predicate} edge must carry evidence")
         return self
 
-    def sort_key(self) -> tuple[str, str]:
+    def resolve_subject(self, container_id: str) -> str:
+        """The real subject of this triple."""
+        return self.subject or container_id
+
+    def sort_key(self) -> tuple[str, str, str]:
         """Deterministic ordering for canonical emit (invariant 3)."""
-        return (str(self.predicate), self.object)
+        return (str(self.predicate), self.subject or "", self.object)
 
 
 class Gate(BaseModel):
@@ -100,6 +118,18 @@ class Gate(BaseModel):
     auto_accept_above: float | None  # None => never auto-accept from an LLM
     min_evidence: int = 1
     distinct_source_docs: int = 1
+
+
+# Predicates that describe a relation between two third parties. A document can
+# never be their subject, so extraction must supply one.
+THIRD_PARTY: Final[frozenset[Predicate]] = frozenset(
+    {
+        Predicate.OWNS,
+        Predicate.HANDOFF_TO,
+        Predicate.DEPENDS_ON,
+        Predicate.OPERATED_BY,
+    }
+)
 
 
 # docs/ARCHITECTURE.md §11. Structural edges bypass this table entirely — they
