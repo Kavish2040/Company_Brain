@@ -1,0 +1,43 @@
+{
+  "edges": [
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Mei Tanaka",
+          "span": [
+            2,
+            12
+          ]
+        }
+      ],
+      "object": "people/mei-tanaka",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    },
+    {
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "node": "self",
+          "quote": "Owen Fitzgerald",
+          "span": [
+            56,
+            71
+          ]
+        }
+      ],
+      "object": "people/owen-fitz",
+      "predicate": "mentions",
+      "provenance": "llm",
+      "status": "accepted",
+      "subject": null
+    }
+  ],
+  "model": "rules-offline",
+  "prompt_version": "roster-v2",
+  "unresolved": []
+}

@@ -14,6 +14,7 @@ ACL-projected data, so if the client is doing access control, this file has a bu
 from __future__ import annotations
 
 import asyncio
+from collections import Counter
 from functools import lru_cache
 from pathlib import Path
 from typing import Annotated, Any, Literal
@@ -28,9 +29,11 @@ from company_brain.audit.log import Action, AuditLog, Outcome, Surface, summariz
 from company_brain.collab.guard import FenceViolation
 from company_brain.collab.hub import CollabHub
 from company_brain.collab.session import SessionRegistry, participant_color
+from company_brain.index.base import IndexedNode
 from company_brain.retrieve.hybrid import HybridRetriever
 from company_brain.schemas.acl import Principal
 from company_brain.schemas.edges import Edge, EdgeStatus
+from company_brain.schemas.nodes import NodeStatus, NodeType
 from company_brain.store.repository import NodeNotFoundError
 from company_brain.synthesize.answer import (
     CitationLeakError,
@@ -67,10 +70,32 @@ def _app(store: str = str(STORE_ROOT)) -> App:
 # that actually needs retrieval pays for one rebuild covering all of them.
 _index_stale = False
 
+# Source-artifact modification times, node id -> RFC-3339. Read from the store
+# rather than from the index because invariant 4 keeps every timestamp in the
+# markdown and out of everything derived from it — the index has no idea when a
+# document was last touched upstream, and giving it one would be inventing a
+# field. Parsing the tree is cheap on this corpus but it is still per-request
+# work with no reason to be, so it is cached beside the index and dropped with it.
+_modified: dict[str, str] | None = None
+
 
 def mark_index_stale() -> None:
-    global _index_stale
+    global _index_stale, _modified
     _index_stale = True
+    _modified = None
+
+
+def _modified_times(instance: App) -> dict[str, str]:
+    global _modified
+    if _modified is None:
+        found: dict[str, str] = {}
+        for node in instance.repo.walk():
+            stamps = node.frontmatter.timestamps
+            when = stamps.modified or stamps.created
+            if when is not None:
+                found[node.id] = when.isoformat()
+        _modified = found
+    return _modified
 
 
 def get_app() -> App:
@@ -172,6 +197,47 @@ class NodeDetail(BaseModel):
     body: str
     sensitivity: str
     relations: list[EdgeOut]
+
+
+class OverviewSource(BaseModel):
+    """One ACL ref this principal holds, and how much of the store sits under it."""
+
+    ref: str
+    ceiling: str
+    nodes: int
+
+
+class OverviewNode(BaseModel):
+    id: str
+    type: str
+    title: str
+    sensitivity: str
+    # Visible degree — see `overview` for why it is not the stored degree.
+    degree: int = 0
+    modified: str | None = None
+
+
+class OverviewOut(BaseModel):
+    """The graph as it looks from where this principal is standing.
+
+    Two of these counts describe things the caller cannot open —
+    ``withheld_nodes`` and ``withheld_sources``. That is a deliberate
+    disclosure and not a slip. It is already established in both directions:
+    ``/api/principals`` publishes every principal's visible-source count to
+    every caller, and every ``/api/ask`` response carries ``withheld_by_acl``.
+    The *names* stay out, which is the part that would be new — only the
+    magnitude is reported, because a contractor who sees eleven nodes and no
+    other signal will read eleven nodes as the whole company.
+    """
+
+    nodes: int
+    edges: int
+    by_type: dict[str, int]
+    sources: list[OverviewSource]
+    withheld_nodes: int
+    withheld_sources: int
+    connected: list[OverviewNode]
+    recent: list[OverviewNode]
 
 
 class RelationDiffOut(BaseModel):
@@ -373,6 +439,101 @@ def list_nodes(
         if len(out) >= limit:
             break
     return out
+
+
+OVERVIEW_LIMIT = 8
+
+
+def _overview_node(node: IndexedNode, degree: int, modified: str | None = None) -> OverviewNode:
+    return OverviewNode(
+        id=node.id,
+        type=node.type,
+        title=node.title,
+        sensitivity=str(node.sensitivity),
+        degree=degree,
+        modified=modified,
+    )
+
+
+@api.get("/api/overview", response_model=OverviewOut)
+def overview(
+    instance: Annotated[App, Depends(get_app)],
+    access: Annotated[AccessFilter, Depends(get_access)],
+) -> OverviewOut:
+    """What the graph contains, before anyone has asked it anything.
+
+    The Ask surface opens on this rather than on an empty page: the useful
+    first question depends on what is in there, and a principal cannot form one
+    against a blank box. Every field is projected through `access` here, so the
+    client renders what it is given and holds no filtering logic (invariant 17).
+    """
+    visible: dict[str, IndexedNode] = {}
+    total = 0
+    store_refs: set[str] = set()
+
+    for node_id in instance.repo.walk_ids():
+        indexed = instance.index.get_node(node_id)
+        # Tombstones stay resolvable so old citations still land somewhere, but
+        # they are not part of what the graph currently knows.
+        if indexed is None or indexed.status != str(NodeStatus.ACTIVE):
+            continue
+        total += 1
+        store_refs.add(indexed.acl_ref)
+        if access.allows(indexed.acl_ref, indexed.sensitivity):
+            visible[node_id] = indexed
+
+    # Degree over edges with *both* endpoints visible. An edge into something
+    # the principal cannot open is not a connection they have, and ranking on
+    # it would let the ordering here describe the shape of the half of the
+    # graph they were refused.
+    degree: Counter[str] = Counter()
+    edges = 0
+    for indexed in visible.values():
+        for edge in indexed.edges:
+            if edge.status is not EdgeStatus.ACCEPTED:
+                continue
+            subject = edge.resolve_subject(indexed.id)
+            if subject not in visible or edge.object not in visible:
+                continue
+            edges += 1
+            degree[subject] += 1
+            degree[edge.object] += 1
+
+    per_ref: Counter[str] = Counter(n.acl_ref for n in visible.values())
+    sources = sorted(
+        (
+            OverviewSource(ref=ref, ceiling=str(access.ceiling(ref) or ""), nodes=count)
+            for ref, count in per_ref.items()
+        ),
+        key=lambda s: (-s.nodes, s.ref),
+    )
+
+    # Entities only. Documents are the bulk of the corpus and would fill the
+    # list with the artifacts a fact came from rather than the fact's subject —
+    # "who and what this company is made of" is the question being answered.
+    entities = [n for n in visible.values() if n.type != str(NodeType.DOCUMENT)]
+    connected = sorted(entities, key=lambda n: (-degree[n.id], n.id))[:OVERVIEW_LIMIT]
+
+    stamps = _modified_times(instance)
+    dated = sorted(
+        ((stamps[n.id], n) for n in visible.values() if n.id in stamps),
+        key=lambda pair: (pair[0], pair[1].id),
+        reverse=True,
+    )
+
+    return OverviewOut(
+        nodes=len(visible),
+        edges=edges,
+        by_type=dict(sorted(Counter(n.type for n in visible.values()).items())),
+        sources=sources,
+        withheld_nodes=total - len(visible),
+        withheld_sources=len(store_refs - access.refs),
+        connected=[_overview_node(n, degree[n.id]) for n in connected],
+        recent=[
+            _overview_node(n, degree[n.id], modified=when)
+            for when, n in dated[:OVERVIEW_LIMIT]
+        ],
+    )
 
 
 @api.get("/api/nodes/{node_id:path}", response_model=NodeDetail)

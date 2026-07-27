@@ -32,6 +32,35 @@ export type AskResult = {
 
 export type NodeSummary = { id: string; type: string; title: string };
 
+/** One ACL ref this principal holds, with the tier it reaches on that ref. */
+export type OverviewSource = { ref: string; ceiling: string; nodes: number };
+
+export type OverviewNode = {
+  id: string;
+  type: string;
+  title: string;
+  sensitivity: string;
+  /** Edges with both endpoints visible — not the stored degree. */
+  degree: number;
+  modified: string | null;
+};
+
+/**
+ * What the graph holds, seen from one principal. Already projected: the
+ * `withheld_*` counts describe nodes and sources this principal cannot open,
+ * and the server deliberately reports their number and never their names.
+ */
+export type Overview = {
+  nodes: number;
+  edges: number;
+  by_type: Record<string, number>;
+  sources: OverviewSource[];
+  withheld_nodes: number;
+  withheld_sources: number;
+  connected: OverviewNode[];
+  recent: OverviewNode[];
+};
+
 export type Relation = {
   predicate: string;
   object: string;
@@ -160,6 +189,7 @@ export const api = {
       method: "POST",
       body: JSON.stringify({ question, limit }),
     }),
+  overview: (p: string) => request<Overview>("/overview", p),
   nodes: (p: string, type?: string, q?: string) => {
     const params = new URLSearchParams();
     if (type) params.set("type", type);

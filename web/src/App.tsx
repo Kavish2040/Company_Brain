@@ -13,23 +13,18 @@
 import { useCallback, useEffect, useState } from "react";
 import {
   Activity,
-  Boxes,
   Building2,
   ChevronDown,
-  FileText,
   Inbox,
   Moon,
   PanelLeftClose,
   PanelLeftOpen,
   Search,
   Sun,
-  User,
-  Users,
-  Workflow,
-  Wrench,
 } from "lucide-react";
 
 import { api, type Health, type Principal } from "./lib/api";
+import { NODE_TYPES } from "./lib/nodeTypes";
 import {
   Badge,
   Chevron,
@@ -42,15 +37,6 @@ import { AskView } from "./views/AskView";
 import { ReviewView } from "./views/ReviewView";
 import { BrowseView } from "./views/BrowseView";
 import { NodeDrawer } from "./views/NodeDrawer";
-
-const NODE_TYPES = [
-  { type: "Person", label: "People", icon: User },
-  { type: "Team", label: "Teams", icon: Users },
-  { type: "Process", label: "Processes", icon: Workflow },
-  { type: "Tool", label: "Tools", icon: Wrench },
-  { type: "Decision", label: "Decisions", icon: Boxes },
-  { type: "Document", label: "Documents", icon: FileText },
-];
 
 type View = { kind: "ask" } | { kind: "review" } | { kind: "browse"; type: string };
 

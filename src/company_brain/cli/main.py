@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING, Annotated
 import typer
 
 from company_brain.app import CORPUS_ROOT, PRINCIPALS, STORE_ROOT, build_app, cached_extractor
+from company_brain.cli.auth import auth_app
 from company_brain.retrieve.hybrid import HybridRetriever
 from company_brain.synthesize.answer import (
     CitationLeakError,
@@ -21,6 +22,7 @@ if TYPE_CHECKING:  # `eval` pulls the corpus tables in; keep it out of `cb --hel
     from company_brain.eval.harness import Metrics
 
 app = typer.Typer(add_completion=False, help="company_brain — a company knowledge graph.")
+app.add_typer(auth_app, name="auth")
 echo = typer.echo
 
 
@@ -249,51 +251,88 @@ def ask(
 @app.command()
 def sync(
     store: Annotated[Path, typer.Option()] = STORE_ROOT,
-    connector: Annotated[str, typer.Option(help="Connector name.")] = "simulated-slack",
+    connector: Annotated[str, typer.Option(help="Connector name: 'simulated-slack' or 'gdrive'.")] = "simulated-slack",
+    folder: Annotated[
+        str | None, typer.Option(help="Drive folder ID (overrides GOOGLE_DRIVE_SCOPE_ID env var).")
+    ] = None,
     deletes: Annotated[
         bool, typer.Option(help="Enumerate the source to detect deletions (expensive).")
     ] = True,
     edit: Annotated[
-        str | None, typer.Option(help="CHANNEL — rewrite its newest message.")
+        str | None, typer.Option(help="CHANNEL — rewrite its newest message (simulated-slack only).")
     ] = None,
     delete: Annotated[
-        str | None, typer.Option(help="CHANNEL — delete its latest day upstream.")
+        str | None, typer.Option(help="CHANNEL — delete its latest day upstream (simulated-slack only).")
     ] = None,
     trash: Annotated[
-        str | None, typer.Option(help="CHANNEL — move its latest day to trash (recoverable).")
+        str | None, typer.Option(help="CHANNEL — move its latest day to trash (simulated-slack only).")
     ] = None,
     unshare: Annotated[
         str | None,
-        typer.Option(help="CHANNEL — WE lose access. Not a delete; must not tombstone."),
+        typer.Option(help="CHANNEL — WE lose access (simulated-slack only)."),
     ] = None,
     leave: Annotated[
-        str | None, typer.Option(help="PRINCIPAL@CHANNEL — a member leaves.")
+        str | None, typer.Option(help="PRINCIPAL@CHANNEL — a member leaves (simulated-slack only).")
     ] = None,
     join: Annotated[
-        str | None, typer.Option(help="PRINCIPAL@CHANNEL — a member joins.")
+        str | None, typer.Option(help="PRINCIPAL@CHANNEL — a member joins (simulated-slack only).")
     ] = None,
     reset: Annotated[
-        bool, typer.Option(help="Reseed the workspace from the corpus and clear the cursor.")
+        bool, typer.Option(help="Reseed the workspace from the corpus and clear the cursor (simulated-slack only).")
     ] = False,
 ) -> None:
     """Incrementally sync a source: content, deletions, and grants.
 
-    The scenario flags mutate the simulated workspace *before* syncing, so one
-    command shows cause and effect. The workspace persists in `store/_sim/`, so
-    the mutations compose across invocations.
+    For `--connector simulated-slack`: the scenario flags (`--edit`, `--delete`,
+    etc.) mutate the simulated workspace *before* syncing, so one command shows
+    cause and effect. The workspace persists in `store/_sim/`, composing across
+    invocations.
+
+    For `--connector gdrive`: requires `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`
+    (from `.env`), and a stored refresh token (from `cb auth drive`). The
+    `--folder` ID is required (or set `GOOGLE_DRIVE_SCOPE_ID`). Direct children
+    only (non-recursive).
 
     `--unshare` and `--leave` are deliberately different. `--unshare` is *we*
-    lost visibility, which routes through `Disappearance.ACCESS_LOST` and must
-    leave the document alone; `--leave` is a principal losing a grant, which
-    narrows what `cb ask` returns for them. An enumeration diff cannot tell
-    those apart, which is the whole reason `classify_departure` exists.
+    lost visibility, routing through `Disappearance.ACCESS_LOST` and leaving the
+    document alone; `--leave` is a principal losing a grant, narrowing what
+    `cb ask` returns for them. An enumeration diff cannot tell those apart,
+    which is the whole reason `classify_departure` exists.
     """
+    if connector == "simulated-slack":
+        _sync_simulated_slack(
+            store,
+            deletes=deletes,
+            edit=edit,
+            delete=delete,
+            trash=trash,
+            unshare=unshare,
+            leave=leave,
+            join=join,
+            reset=reset,
+        )
+    elif connector == "gdrive":
+        _sync_gdrive(store, folder=folder, detect_deletes=deletes)
+    else:
+        echo(f"unknown connector {connector!r}; try 'simulated-slack' or 'gdrive'")
+        raise typer.Exit(64)
+
+
+def _sync_simulated_slack(
+    store: Path,
+    *,
+    deletes: bool,
+    edit: str | None,
+    delete: str | None,
+    trash: str | None,
+    unshare: str | None,
+    leave: str | None,
+    join: str | None,
+    reset: bool,
+) -> None:
+    """Sync the simulated Slack workspace (scenario-mutable for testing)."""
     from company_brain.connectors.simulated import load_or_seed, seed_from_corpus
     from company_brain.connectors.sync import SyncEngine
-
-    if connector != "simulated-slack":
-        echo(f"unknown connector {connector!r}; only 'simulated-slack' exists so far")
-        raise typer.Exit(64)
 
     instance = build_app(store)
     backend = instance.repo.backend
@@ -344,7 +383,57 @@ def sync(
         instance.grants,
     )
     report = engine.sync(source, detect_deletes=deletes)
+    _print_sync_report(report)
 
+
+def _sync_gdrive(
+    store: Path,
+    *,
+    folder: str | None,
+    detect_deletes: bool,
+) -> None:
+    """Sync Google Drive (requires OAuth credentials)."""
+    import os
+
+    from company_brain.connectors.drive import DriveConnector
+    from company_brain.connectors.gdrive_transport import GoogleDriveTransport
+    from company_brain.connectors.google_auth import GoogleOAuthCredentials, OAuthError
+    from company_brain.connectors.sync import SyncEngine
+
+    # Resolve folder scope.
+    scope_id = folder or os.environ.get("GOOGLE_DRIVE_SCOPE_ID", "").strip()
+    if not scope_id:
+        echo("No Drive folder ID provided. Pass --folder <id> or set GOOGLE_DRIVE_SCOPE_ID.")
+        echo("  To find a folder's ID: open it in Drive; it's the last path segment after /folders/")
+        raise typer.Exit(64)
+
+    # Load credentials.
+    try:
+        credentials = GoogleOAuthCredentials.load("gdrive")
+    except OAuthError as exc:
+        echo(f"OAuth error: {exc}")
+        raise typer.Exit(64) from exc
+
+    # Build the connector and sync.
+    instance = build_app(store)
+    engine = SyncEngine(
+        instance.repo,
+        instance.registry,
+        cached_extractor(instance, store, frozen=False),
+        instance.grants,
+    )
+    connector = DriveConnector(
+        transport=GoogleDriveTransport(
+            credentials=credentials,
+            scope_folder_id=scope_id,
+        )
+    )
+    report = engine.sync(connector, detect_deletes=detect_deletes)
+    _print_sync_report(report)
+
+
+def _print_sync_report(report) -> None:
+    """Print a sync report summary."""
     echo(report.summary())
     if report.quiet:
         echo("  no changes since the last sync")

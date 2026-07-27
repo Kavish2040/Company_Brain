@@ -12,11 +12,29 @@
  * prevent.
  */
 
-import { useState, type FormEvent } from "react";
-import { AlertTriangle, CornerDownLeft, Loader2, Search, ShieldOff } from "lucide-react";
+import { useEffect, useState, type FormEvent, type ReactNode } from "react";
+import {
+  AlertTriangle,
+  Clock,
+  CornerDownLeft,
+  Eye,
+  EyeOff,
+  Loader2,
+  Network,
+  Search,
+  ShieldOff,
+} from "lucide-react";
 
-import { api, ApiError, type AskResult } from "../lib/api";
-import { Card, CitationChip, Empty, cx } from "../components/ui/primitives";
+import { api, ApiError, type AskResult, type Overview, type OverviewNode } from "../lib/api";
+import { NODE_TYPES, iconFor } from "../lib/nodeTypes";
+import {
+  Card,
+  CitationChip,
+  Empty,
+  Row,
+  Sensitivity,
+  cx,
+} from "../components/ui/primitives";
 
 const SUGGESTIONS = [
   "who owns vendor renewals?",
@@ -87,21 +105,24 @@ export function AskView({
       </form>
 
       {!result && !error && !busy && (
-        <div className="flex flex-wrap gap-2">
-          {SUGGESTIONS.map((s) => (
-            <button
-              key={s}
-              onClick={() => {
-                setQuestion(s);
-                void run(s);
-              }}
-              className="px-3 py-1.5 text-[13px] rounded-lg border border-border/50 text-muted-foreground
-                         hover:bg-black/5 dark:hover:bg-white/5 hover:text-foreground transition-colors"
-            >
-              {s}
-            </button>
-          ))}
-        </div>
+        <>
+          <div className="flex flex-wrap gap-2">
+            {SUGGESTIONS.map((s) => (
+              <button
+                key={s}
+                onClick={() => {
+                  setQuestion(s);
+                  void run(s);
+                }}
+                className="px-3 py-1.5 text-[13px] rounded-lg border border-border/50 text-muted-foreground
+                           hover:bg-black/5 dark:hover:bg-white/5 hover:text-foreground transition-colors"
+              >
+                {s}
+              </button>
+            ))}
+          </div>
+          <Landing principal={principal} onOpenNode={onOpenNode} />
+        </>
       )}
 
       {error && (
@@ -176,6 +197,238 @@ export function AskView({
           </p>
         </>
       )}
+    </div>
+  );
+}
+
+/* ---- the empty state --------------------------------------------------- *
+ *
+ * A search box over nothing asks the reader to guess what is in there. This
+ * shows them instead: the entities the graph is densest around, what changed
+ * most recently, and the edges of their own permissions — the last one because
+ * a contractor looking at eleven visible nodes has no way to tell a small
+ * company from a narrow grant, and the honest answer is to say which it is.
+ *
+ * Nothing here filters (invariant 17); `/api/overview` returns one principal's
+ * projection and this renders it.
+ */
+
+function Landing({
+  principal,
+  onOpenNode,
+}: {
+  principal: string;
+  onOpenNode: (id: string) => void;
+}) {
+  const [data, setData] = useState<Overview | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let live = true;
+    setLoading(true);
+    api
+      .overview(principal)
+      .then((d) => live && setData(d))
+      .catch(() => live && setData(null))
+      .finally(() => live && setLoading(false));
+    return () => {
+      live = false;
+    };
+  }, [principal]);
+
+  if (loading) return <LandingSkeleton />;
+  // The box still works without this; a failed overview should not stand in
+  // front of it with an error.
+  if (!data) return null;
+
+  return (
+    <div className="flex flex-col gap-6">
+      <p className="text-[11px] text-muted-foreground/60 px-1">
+        {data.nodes} nodes · {data.edges} edges · {data.sources.length}{" "}
+        {data.sources.length === 1 ? "source" : "sources"} visible to you
+      </p>
+
+      <div className="grid md:grid-cols-2 gap-6">
+        <Panel title="Most connected" icon={Network}>
+          {data.connected.length === 0 ? (
+            <Quiet>No entities are visible to you yet.</Quiet>
+          ) : (
+            data.connected.map((n) => (
+              <NodeRow
+                key={n.id}
+                node={n}
+                onOpenNode={onOpenNode}
+                trailing={
+                  <span
+                    className="text-[10px] font-mono text-muted-foreground/50"
+                    title={`${n.degree} visible edges`}
+                  >
+                    {n.degree}
+                  </span>
+                }
+              />
+            ))
+          )}
+        </Panel>
+
+        <Panel title="Recently changed" icon={Clock}>
+          {data.recent.length === 0 ? (
+            <Quiet>Nothing here carries a source date.</Quiet>
+          ) : (
+            data.recent.map((n) => (
+              <NodeRow
+                key={n.id}
+                node={n}
+                onOpenNode={onOpenNode}
+                trailing={
+                  <span className="text-[10px] font-mono text-muted-foreground/50">
+                    {/* The source artifact's own date — never ingest time
+                        (invariant 4). Sliced rather than localised so it reads
+                        the same in every locale the demo lands in. */}
+                    {(n.modified ?? "").slice(0, 10)}
+                  </span>
+                }
+              />
+            ))
+          )}
+        </Panel>
+      </div>
+
+      <Panel title="What you can see" icon={Eye}>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-4">
+          {NODE_TYPES.filter(({ type }) => data.by_type[type]).map(
+            ({ type, label, icon: TypeIcon }) => (
+              <div key={type} className="flex items-center gap-2.5 px-2.5 py-[7px] min-w-0">
+                <TypeIcon
+                  className="w-[16px] h-[16px] text-muted-foreground/70 shrink-0"
+                  strokeWidth={1.5}
+                />
+                <span className="text-[13px] text-muted-foreground truncate">{label}</span>
+                <span className="ml-auto text-[10px] font-mono text-muted-foreground/50 shrink-0">
+                  {data.by_type[type]}
+                </span>
+              </div>
+            ),
+          )}
+        </div>
+
+        <div className="border-t border-border/50 my-2" />
+
+        {data.sources.map((s) => (
+          <div key={s.ref} className="flex items-center gap-2.5 px-2.5 py-[7px] min-w-0">
+            <span className="text-[11px] font-mono text-muted-foreground truncate">
+              {s.ref}
+            </span>
+            <span className="ml-auto flex items-center gap-2 shrink-0">
+              {s.ceiling ? <Sensitivity tier={s.ceiling} /> : null}
+              <span className="text-[10px] font-mono text-muted-foreground/50">
+                {s.nodes}
+              </span>
+            </span>
+          </div>
+        ))}
+
+        {/* Dashed and dimmed — the §6 "not settled fact" idiom, reused for
+            "not yours to read". */}
+        {data.withheld_sources > 0 || data.withheld_nodes > 0 ? (
+          <div className="flex items-center gap-2.5 mt-2 px-2.5 py-2 rounded-lg border border-dashed border-border/50">
+            <EyeOff
+              className="w-[16px] h-[16px] text-muted-foreground/50 shrink-0"
+              strokeWidth={1.5}
+            />
+            <span className="text-[13px] text-muted-foreground/70">
+              {data.withheld_sources}{" "}
+              {data.withheld_sources === 1 ? "source" : "sources"} and{" "}
+              {data.withheld_nodes} nodes sit outside your grants.
+            </span>
+          </div>
+        ) : (
+          <div className="flex items-center gap-2.5 mt-2 px-2.5 py-2">
+            <span className="text-[13px] text-muted-foreground/70">
+              Nothing in this store is hidden from you.
+            </span>
+          </div>
+        )}
+      </Panel>
+    </div>
+  );
+}
+
+function Panel({
+  title,
+  icon: Icon,
+  children,
+}: {
+  title: string;
+  icon: typeof Network;
+  children: ReactNode;
+}) {
+  return (
+    <Card className="p-2 flex flex-col">
+      <div className="flex items-center gap-2 px-2.5 pt-1.5 pb-2">
+        <Icon className="w-3.5 h-3.5 text-muted-foreground/50 shrink-0" strokeWidth={1.5} />
+        <span className="text-[11px] font-semibold tracking-wider text-muted-foreground/50 uppercase">
+          {title}
+        </span>
+      </div>
+      {children}
+    </Card>
+  );
+}
+
+function NodeRow({
+  node,
+  onOpenNode,
+  trailing,
+}: {
+  node: OverviewNode;
+  onOpenNode: (id: string) => void;
+  trailing: ReactNode;
+}) {
+  const TypeIcon = iconFor(node.type);
+  return (
+    <Row
+      onClick={() => onOpenNode(node.id)}
+      icon={
+        <TypeIcon
+          className="w-[16px] h-[16px] text-muted-foreground/70 group-hover:text-foreground/70 transition-colors shrink-0"
+          strokeWidth={1.5}
+        />
+      }
+      trailing={
+        <>
+          {/* §6: a node's tier is visible wherever its content is. */}
+          <Sensitivity tier={node.sensitivity} />
+          {trailing}
+        </>
+      }
+    >
+      {node.title}
+    </Row>
+  );
+}
+
+function Quiet({ children }: { children: ReactNode }) {
+  return (
+    <p className="px-2.5 py-[7px] text-[13px] text-muted-foreground/50">{children}</p>
+  );
+}
+
+/** Inert placeholder blocks in the fill idiom — no pulse, nothing moves. */
+function LandingSkeleton() {
+  return (
+    <div className="flex flex-col gap-6" aria-hidden>
+      <div className="h-3 w-52 mx-1 rounded-[4px] bg-black/5 dark:bg-white/5" />
+      <div className="grid md:grid-cols-2 gap-6">
+        {[0, 1].map((panel) => (
+          <Card key={panel} className="p-2 flex flex-col gap-0.5">
+            <div className="h-3 w-24 m-2.5 rounded-[4px] bg-black/5 dark:bg-white/5" />
+            {[0, 1, 2, 3, 4, 5, 6, 7].map((row) => (
+              <div key={row} className="h-[30px] mx-1 rounded-[6px] bg-black/5 dark:bg-white/5" />
+            ))}
+          </Card>
+        ))}
+      </div>
     </div>
   );
 }
